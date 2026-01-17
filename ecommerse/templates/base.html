@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Admin Panel{% endblock %}</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        {% comment %} .sidebar {
+            width: 220px;
+            background-color: #1f2937;
+            color: white;
+            padding: 20px;
+        }
+
+        .sidebar a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            margin: 15px 0;
+        }
+
+        .sidebar a:hover {
+            background-color: #374151;
+            padding-left: 10px;
+        } {% endcomment %}
+
+        .content {
+            flex: 1;
+            padding: 25px;
+            background-color: #f9fafb;
+        }
+    </style> 
+</head>
+<body>
+
+<aside class="w-72 hidden md:flex flex-col bg-white rounded-2xl h-full overflow-y-auto scrollbar-hide shrink-0 shadow-lg shadow-black/10">
+<div class="p-6">
+<div class="flex items-center gap-3 mb-8">
+<div class="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined fill">spa</span>
+</div>
+<h1 class="text-text-main text-xl font-bold tracking-tight">Luxe Admin</h1>
+</div>
+<nav class="flex flex-col gap-2">
+<a class="flex items-center gap-3 px-4 py-3 rounded-full bg-secondary text-text-main transition-colors group" href="#">
+<span class="material-symbols-outlined fill text-primary">grid_view</span>
+<span class="font-medium text-sm">Dashboard</span>
+</a>
+<a  href="{% url 'adminpanel:product' %}" class="flex items-center gap-3 px-4 py-3 rounded-full text-text-main hover:bg-secondary/50 transition-colors group" >
+<span class="material-symbols-outlined text-text-muted group-hover:text-primary transition-colors">sell</span>
+<span class="font-medium text-sm">Products</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-full text-text-main hover:bg-secondary/50 transition-colors group" href="#">
+<span class="material-symbols-outlined text-text-muted group-hover:text-primary transition-colors">category</span>
+<span class="font-medium text-sm">Categories</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-full text-text-main hover:bg-secondary/50 transition-colors group" href="#">
+<span class="material-symbols-outlined text-text-muted group-hover:text-primary transition-colors">layers</span>
+<span class="font-medium text-sm">Collections</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-full text-text-main hover:bg-secondary/50 transition-colors group" href="#">
+<span class="material-symbols-outlined text-text-muted group-hover:text-primary transition-colors">shopping_bag</span>
+<span class="font-medium text-sm">Orders</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-full text-text-main hover:bg-secondary/50 transition-colors group" href="#">
+<span class="material-symbols-outlined text-text-muted group-hover:text-primary transition-colors">group</span>
+<span class="font-medium text-sm">Users</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-full text-text-main hover:bg-secondary/50 transition-colors group" href="#">
+<span class="material-symbols-outlined text-text-muted group-hover:text-primary transition-colors">settings</span>
+<span class="font-medium text-sm">Settings</span>
+</a>
+</nav>
+</div>
+<div class="mt-auto p-6 border-t border-[#d1e6d9]">
+<div class="flex items-center gap-3">
+<div class="h-10 w-10 rounded-full bg-cover bg-center border border-[#d1e6d9]" data-alt="Admin user profile picture showing a smiling woman" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAk8wMCsNGuGh8a7KAnLHU9pyP3xXsU5rmZhVyp6n25cWk0hMb9COtsLbtPvGtljOx9QfDwfltDI3GNBqk0zXs5K_mNWfgL7_6iKlpuWTIKbxG_iM7_BoI6eqBCw9OF0a3qBHjHbhv30Y5P5M2ug3Ty7_secTrX2k2ZD0EvOERxC_mFNHk2q7PDyGVXFBIIg3wvkmuzFNHzCY5TzS7jRB_u16CtKHdo6NWJ5ECfkWYcFUg6ieuITFTSTE8Zf5pblL7zPu_3sS3kHgY');"></div>
+<div class="flex flex-col">
+<p class="text-sm font-bold text-text-main">Jane Admin</p>
+<p class="text-xs text-text-muted">Store Manager</p>
+</div>
+</div>
+</div>
+</aside>
+<div class="content">
+<main class="flex-1 overflow-y-auto">
+    {% block content %}{% endblock %}
+</main>
+
+</div>
+
+</div>
+
+</body>
+</html>

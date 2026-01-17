@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>{% block title %}Luxe Admin{% endblock %}</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Spline+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#19b357",
+                        "primary-dark": "#148f45",
+                        "secondary": "#e8f3ec",
+                        "text-main": "#0e1b13",
+                        "text-muted": "#50956c",
+                        "background-light": "#f8fbfa",
+                        "background-dark": "#112118",
+                        "background-green": "#0e2315", // New dark green background
+                    },
+                    fontFamily: {
+                        "display": ["Spline Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "1rem", 
+                        "lg": "1.5rem", 
+                        "xl": "2rem", 
+                        "2xl": "2.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            font-size: 24px;
+        }
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }.scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+{% block extra_head %}{% endblock %}
+
+</head>
+<body class="bg-background-green text-text-main font-display antialiased">
+<div class="flex h-screen w-full p-4 md:p-6 gap-4 md:gap-6">
+<aside class="w-72 hidden md:flex flex-col bg-white rounded-2xl h-full overflow-y-auto scrollbar-hide shrink-0 shadow-lg shadow-black/10">
+<div class="p-6">
+<div class="flex items-center gap-3 mb-8">
+<div class="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined fill">spa</span>
+</div>
+<h1 class="text-text-main text-xl font-bold tracking-tight">Luxe Admin</h1>
+</div>
+<nav class="flex flex-col gap-2">
+<a href="{% url 'adminpanel:dashboard' %}"class="flex items-center gap-3 px-4 py-3 rounded-full bg-secondary text-text-main transition-colors group">
+<span class="material-symbols-outlined fill text-primary">grid_view</span>
+<span class="font-medium text-sm">Dashboard</span>
+</a>
+<a  href="{% url 'adminpanel:product' %}" class="flex items-center gap-3 px-4 py-3 rounded-full text-text-main hover:bg-secondary/50 transition-colors group" >
+<span class="material-symbols-outlined text-text-muted group-hover:text-primary transition-colors">sell</span>
+<span class="font-medium text-sm">Products</span>
+</a>
+<a  href="{% url 'adminpanel:category' %}" class="flex items-center gap-3 px-4 py-3 rounded-full text-text-main hover:bg-secondary/50 transition-colors group" >
+<span class="material-symbols-outlined text-text-muted group-hover:text-primary transition-colors">category</span>
+<span class="font-medium text-sm">Categories</span>
+</a>
+<a href="{% url 'adminpanel:collections' %}" class="flex items-center gap-3 px-4 py-3 rounded-full text-text-main hover:bg-secondary/50 transition-colors group" >
+<span class="material-symbols-outlined text-text-muted group-hover:text-primary transition-colors">layers</span>
+<span class="font-medium text-sm">Collections</span>
+</a>
+<a href="{% url 'adminpanel:orders'%}" class="flex items-center gap-3 px-4 py-3 rounded-full text-text-main hover:bg-secondary/50 transition-colors group" >
+<span class="material-symbols-outlined text-text-muted group-hover:text-primary transition-colors">shopping_bag</span>
+<span class="font-medium text-sm">Orders</span>
+</a>
+<a href="{% url 'adminpanel:users'%}" class="flex items-center gap-3 px-4 py-3 rounded-full text-text-main hover:bg-secondary/50 transition-colors group" >
+<span class="material-symbols-outlined text-text-muted group-hover:text-primary transition-colors">group</span>
+<span class="font-medium text-sm">Users</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-full text-text-main hover:bg-secondary/50 transition-colors group" href="#">
+<span class="material-symbols-outlined text-text-muted group-hover:text-primary transition-colors">settings</span>
+<span class="font-medium text-sm">Settings</span>
+</a>
+</nav>
+</div>
+<div class="mt-auto p-6 border-t border-[#d1e6d9]">
+<div class="flex items-center gap-3">
+<div class="h-10 w-10 rounded-full bg-cover bg-center border border-[#d1e6d9]" data-alt="Admin user profile picture showing a smiling woman" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAk8wMCsNGuGh8a7KAnLHU9pyP3xXsU5rmZhVyp6n25cWk0hMb9COtsLbtPvGtljOx9QfDwfltDI3GNBqk0zXs5K_mNWfgL7_6iKlpuWTIKbxG_iM7_BoI6eqBCw9OF0a3qBHjHbhv30Y5P5M2ug3Ty7_secTrX2k2ZD0EvOERxC_mFNHk2q7PDyGVXFBIIg3wvkmuzFNHzCY5TzS7jRB_u16CtKHdo6NWJ5ECfkWYcFUg6ieuITFTSTE8Zf5pblL7zPu_3sS3kHgY');"></div>
+<div class="flex flex-col">
+<p class="text-sm font-bold text-text-main">Jane Admin</p>
+<p class="text-xs text-text-muted">Store Manager</p>
+</div>
+</div>
+</div>
+</aside>
+<main class="flex-1 overflow-y-auto rounded-2xl">
+        {% block content %}{% endblock %}
+    </main>
+
+</div>
+
+{% block extra_js %}{% endblock %}
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+C

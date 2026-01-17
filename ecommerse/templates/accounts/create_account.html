@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Create Account - Chic Greens</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#4ade80", // Lighter green for accents on dark
+                        "primary-dark": "#22c55e",
+                        "text-main": "#ecfdf5", // Very light mint for main text
+                        "text-secondary": "#a7f3d0", // Light green for secondary text
+                        "background-base": "#022c22", // Very dark green background
+                        "surface-dark": "#064e3b", // Dark green surface
+                        "surface-darker": "#065f46", // Slightly lighter dark green for hover/cards
+                        "border-green": "#10b981", // Border color
+                        "accent-dark": "#134e4a" // Deep teal/green accent
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #022c22; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #065f46; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #10b981; 
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .icon-filled {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background-base text-text-main font-display antialiased min-h-screen flex flex-col selection:bg-primary selection:text-background-base">
+<header class="sticky top-0 z-50 bg-background-base/95 backdrop-blur-md border-b border-white/10 w-full shadow-lg shadow-black/20">
+<div class="px-4 lg:px-10 py-3 flex items-center justify-between">
+<div class="flex items-center gap-8">
+<a class="flex items-center gap-2 group" href="#">
+<div class="size-8 text-primary">
+<svg class="w-full h-full" fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M24 4H6V17.3333V30.6667H24V44H42V30.6667V17.3333H24V4Z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+<h2 class="text-text-main text-xl font-bold tracking-tight group-hover:text-primary transition-colors">Chic Greens</h2>
+</a>
+<nav class="hidden lg:flex items-center gap-6">
+<a class="text-text-secondary text-sm font-semibold hover:text-primary transition-colors" href="#">Shop</a>
+<a class="text-text-secondary text-sm font-semibold hover:text-primary transition-colors" href="#">New Arrivals</a>
+<a class="text-text-secondary text-sm font-semibold hover:text-primary transition-colors" href="#">Sale</a>
+<a class="text-text-secondary text-sm font-semibold hover:text-primary transition-colors" href="#">Sustainable</a>
+<a class="text-text-secondary text-sm font-semibold hover:text-primary transition-colors" href="#">Journal</a>
+</nav>
+</div>
+<div class="flex items-center justify-end gap-4 lg:gap-6 flex-1 max-w-md">
+<label class="hidden md:flex flex-1 relative group">
+<span class="absolute inset-y-0 left-0 flex items-center pl-3 text-text-secondary group-focus-within:text-primary">
+<span class="material-symbols-outlined">search</span>
+</span>
+<input class="w-full bg-surface-dark text-text-main placeholder:text-text-secondary/50 text-sm font-medium rounded-lg border border-white/5 py-2.5 pl-10 pr-4 focus:ring-2 focus:ring-primary/40 focus:bg-surface-darker focus:border-primary/20 transition-all outline-none" placeholder="Search products..." type="text"/>
+</label>
+<div class="flex gap-2">
+<button class="relative flex items-center justify-center p-2 rounded-lg text-text-secondary hover:bg-surface-dark hover:text-primary transition-colors group">
+<span class="material-symbols-outlined group-hover:text-primary">shopping_bag</span>
+<span class="absolute top-1 right-1 size-2 bg-primary rounded-full ring-2 ring-background-base"></span>
+</button>
+<button class="flex items-center justify-center p-2 rounded-lg text-primary bg-surface-dark transition-colors group ring-1 ring-white/10">
+<span class="material-symbols-outlined icon-filled">person</span>
+</button>
+<button class="lg:hidden flex items-center justify-center p-2 rounded-lg text-text-secondary hover:bg-surface-dark hover:text-primary transition-colors">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</div>
+</div>
+</div>
+</header>
+<main class="flex-grow w-full flex items-center justify-center px-4 sm:px-6 lg:px-8 py-8 lg:py-12 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-surface-dark/40 via-background-base to-background-base">
+<div class="w-full max-w-md space-y-8">
+<div class="text-center">
+<div class="mx-auto h-20 w-20 bg-surface-dark rounded-full flex items-center justify-center shadow-xl border border-white/5 mb-6">
+<span class="material-symbols-outlined text-4xl text-primary icon-filled">person_add</span>
+</div>
+<h2 class="text-3xl font-extrabold text-text-main tracking-tight">Create Account</h2>
+<p class="mt-2 text-sm text-text-secondary">Join our community to unlock exclusive rewards and track your sustainable journey.</p>
+</div>
+<div class="bg-surface-dark/30 backdrop-blur-sm border border-white/10 rounded-2xl shadow-2xl p-6 sm:p-8 space-y-6">
+<div class="space-y-4">
+<button class="w-full flex items-center justify-center gap-3 bg-white text-surface-dark font-bold py-3.5 px-4 rounded-xl hover:bg-gray-100 transition-all duration-200 shadow-lg group">
+<img alt="Google logo" class="w-5 h-5" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDnLu5jtRt56UA0IqKzjtOUD6Ri6hYiSkLAQmVh2oyaDItg4BsxHAOJRwFBoTdOffAeZasZOPiECnGVYC8KtlzTl8FY4SRXoxxAIIM4u1zCyzpbYebJNu-rKkNicmzgcWu9IbEbJvGvj8XH93PnocaiBhDb9I5-3VDeB--L8ax2e6RqaEm56S7Rn3WNj7CxSjRmTHcbeYsa_Q4uKUSLRp2rXQAwwnmL2vTIiBDNtT5hUSHwi_tLC2q6guQo_gDD0XhGd1hPBwaYrhY"/>
+<span>Sign up with Google</span>
+</button>
+</div>
+<div class="relative">
+<div class="absolute inset-0 flex items-center">
+<div class="w-full border-t border-white/10"></div>
+</div>
+<div class="relative flex justify-center text-sm">
+<span class="px-2 bg-surface-dark/50 backdrop-blur-md rounded text-text-secondary/80">Or register with email</span>
+</div>
+</div>
+{% if messages %}
+  <div class="messages-container">
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }}">
+        {{ message }}
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
+<form action="" class="space-y-5" method="POST">
+{% csrf_token %}
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+<div class="space-y-1">
+<label class="block text-sm font-medium text-text-secondary" for="first-name">First Name</label>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-text-secondary/50 text-[20px]">badge</span>
+</div>
+<input autocomplete="given-name" class="block w-full pl-10 pr-3 py-3 bg-surface-darker/50 border border-white/10 rounded-xl text-text-main placeholder-text-secondary/30 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 sm:text-sm transition-shadow" id="first-name" name="first_name" placeholder="Jane" required="" type="text"/>
+{{form.first_name.errors}}
+</div>
+</div>
+<div class="space-y-1">
+<label class="block text-sm font-medium text-text-secondary" for="last-name">Last Name</label>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-text-secondary/50 text-[20px]">badge</span>
+</div>
+<input autocomplete="family-name" class="block w-full pl-10 pr-3 py-3 bg-surface-darker/50 border border-white/10 rounded-xl text-text-main placeholder-text-secondary/30 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 sm:text-sm transition-shadow" id="last-name" name="last_name" placeholder="Doe" required="" type="text"/>
+{{form.last_name.errors}}
+
+</div>
+</div>
+</div>
+<div class="space-y-1">
+<label class="block text-sm font-medium text-text-secondary" for="email">Email address</label>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-text-secondary/50 text-[20px]">mail</span>
+</div>
+<input autocomplete="email" class="block w-full pl-10 pr-3 py-3 bg-surface-darker/50 border border-white/10 rounded-xl text-text-main placeholder-text-secondary/30 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 sm:text-sm transition-shadow" id="email" name="email" placeholder="you@example.com" required="" type="email"/>
+{{form.email.errors}}
+</div>
+</div>
+<div class="space-y-1">
+<label class="block text-sm font-medium text-text-secondary" for="password">Password</label>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-text-secondary/50 text-[20px]">lock</span>
+</div>
+<input autocomplete="new-password" class="block w-full pl-10 pr-3 py-3 bg-surface-darker/50 border border-white/10 rounded-xl text-text-main placeholder-text-secondary/30 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 sm:text-sm transition-shadow" id="password" name="password" placeholder="••••••••" required="" type="password"/>
+{{form.password.errors}}
+</div>
+</div>
+<div class="space-y-1">
+<label class="block text-sm font-medium text-text-secondary" for="confirm-password">Confirm Password</label>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-text-secondary/50 text-[20px]">lock_reset</span>
+</div>
+<input autocomplete="new-password" class="block w-full pl-10 pr-3 py-3 bg-surface-darker/50 border border-white/10 rounded-xl text-text-main placeholder-text-secondary/30 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 sm:text-sm transition-shadow" id="confirm-password" name="confirm_password" placeholder="••••••••" required="" type="password"/>
+{{form.confirm_password.errors}}
+
+</div>
+</div>
+<button class="w-full flex items-center justify-center bg-primary text-background-base font-bold py-3.5 px-4 rounded-xl hover:bg-primary-dark transition-all duration-200 shadow-lg shadow-primary/20 hover:shadow-primary/30 mt-2" type="submit">
+                        Create Account
+                    </button>
+</form>
+<div class="mt-6 text-center">
+<p class="text-sm text-text-secondary">
+                        Already have an account? 
+                        <a class="font-bold text-primary hover:text-primary-dark hover:underline transition-colors" href="{% url 'accounts:userlogin' %}">Sign In</a>
+</p>
+</div>
+</div>
+<div class="text-center space-y-4">
+<p class="text-xs text-text-secondary/50">
+                By creating an account, you agree to Chic Greens' 
+                <a class="text-primary hover:text-primary-dark underline underline-offset-2 decoration-primary/30 hover:decoration-primary" href="#">Terms of Service</a> 
+                and 
+                <a class="text-primary hover:text-primary-dark underline underline-offset-2 decoration-primary/30 hover:decoration-primary" href="#">Privacy Policy</a>.
+            </p>
+</div>
+</div>
+</main>
+</body></html>

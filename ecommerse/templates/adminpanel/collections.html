@@ -1,0 +1,318 @@
+{% extends "adminpanel/admin_base.html" %}
+{% block title %}Collection Management{% endblock %}
+{% block content %}
+<header class="sticky top-0 z-50 w-full border-b border-[#112117]/10 bg-white/90 backdrop-blur-xl">
+<div class="mx-auto flex h-16 md:h-20 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+<div class="flex items-center gap-3">
+<div class="flex size-9 items-center justify-center rounded-xl bg-[#112117] text-white shadow-md">
+<span class="material-symbols-outlined text-lg">admin_panel_settings</span>
+</div>
+<div class="flex flex-col">
+<h1 class="text-lg font-bold tracking-tight text-[#112117] leading-none">ELEGANCE</h1>
+<span class="text-[10px] font-semibold uppercase tracking-wider text-[#112117]/60">Admin Dashboard</span>
+</div>
+</div>
+<div class="hidden flex-1 px-4 md:px-12 md:flex max-w-lg">
+<div class="relative w-full">
+<div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-[#112117]/50">
+<span class="material-symbols-outlined text-xl">search</span>
+</div>
+<input class="block w-full rounded-full border border-[#112117]/10 bg-gray-50 py-2.5 pl-11 pr-4 text-sm text-[#112117] placeholder-[#112117]/40 focus:outline-none focus:ring-2 focus:ring-[#112117]/10 focus:bg-white transition-all" placeholder="Search for collections, products, or orders..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<button class="relative flex size-10 items-center justify-center rounded-full text-[#112117] hover:bg-gray-100 transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute right-2 top-2 size-2 rounded-full bg-red-500 border-2 border-white"></span>
+</button>
+<div class="h-8 w-px bg-[#112117]/10 mx-1"></div>
+<button class="flex items-center gap-3 rounded-full pl-1 pr-1 sm:pr-4 py-1 hover:bg-gray-50 transition-colors border border-transparent hover:border-[#112117]/5">
+<div class="size-8 rounded-full bg-[#112117] text-white flex items-center justify-center text-xs font-bold ring-2 ring-white shadow-sm">JD</div>
+<div class="hidden sm:flex flex-col items-start">
+<span class="text-sm font-bold text-[#112117] leading-none">Jane Doe</span>
+<span class="text-[10px] text-[#112117]/60 leading-none mt-1">Super Admin</span>
+</div>
+</button>
+</div>
+</div>
+</header>
+<main class="flex-grow px-4 py-8 sm:px-6 lg:px-8">
+<div class="mx-auto max-w-7xl bg-white rounded-[2rem] p-6 sm:p-10 shadow-2xl">
+<div class="mb-8 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+<div>
+<nav class="flex text-sm text-[#112117]/50 mb-3 font-medium">
+<a class="hover:text-[#112117] transition-colors" href="#">Dashboard</a>
+<span class="mx-2">/</span>
+<a class="hover:text-[#112117] transition-colors" href="#">Products</a>
+<span class="mx-2">/</span>
+<span class="text-[#112117]">Collections</span>
+</nav>
+<h2 class="text-3xl md:text-4xl font-bold tracking-tight text-[#112117]">Collection Management</h2>
+<p class="mt-2 text-[#112117]/70 max-w-2xl">Organize your products into seasonal or thematic groups to enhance customer discovery.</p>
+</div>
+<a href="{% url 'adminpanel:addcollections' %}">
+<button class="group flex items-center gap-2 rounded-full bg-[#112117] px-6 py-3.5 text-sm font-bold text-white shadow-lg shadow-[#112117]/20 transition-all hover:scale-105 active:scale-95 hover:bg-[#1c3326]">
+<span class="material-symbols-outlined text-lg group-hover:rotate-90 transition-transform">add</span>
+                Create New Collection
+            </button></a>
+</div>
+<div class="mb-6 flex flex-col md:flex-row gap-4 justify-between items-center rounded-2xl bg-gray-50 p-2 border border-[#112117]/5">
+<div class="flex flex-col sm:flex-row gap-2 w-full md:w-auto">
+<div class="relative w-full sm:w-72">
+<span class="absolute inset-y-0 left-0 flex items-center pl-3 text-[#112117]/50">
+<span class="material-symbols-outlined text-xl">filter_list</span>
+</span>
+<input class="w-full rounded-xl border-none bg-white py-2.5 pl-10 pr-4 text-sm text-[#112117] focus:ring-2 focus:ring-[#112117]/10 shadow-sm placeholder:text-[#112117]/40" placeholder="Filter by name..." type="text"/>
+</div>
+<div class="relative w-full sm:w-48">
+<select class="w-full rounded-xl border-none bg-white py-2.5 pl-4 pr-10 text-sm text-[#112117] focus:ring-2 focus:ring-[#112117]/10 shadow-sm cursor-pointer appearance-none">
+<option value="">All Statuses</option>
+<option value="active">Active</option>
+<option value="draft">Draft</option>
+<option value="archived">Archived</option>
+</select>
+<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-[#112117]/50">
+<span class="material-symbols-outlined text-lg">expand_more</span>
+</div>
+</div>
+</div>
+<div class="flex gap-2 w-full md:w-auto overflow-x-auto pb-1 md:pb-0">
+<button class="whitespace-nowrap flex items-center justify-center gap-2 rounded-xl bg-white px-4 py-2.5 text-sm font-bold text-[#112117] shadow-sm border border-[#112117]/10 hover:bg-gray-100 transition-colors">
+<span class="material-symbols-outlined text-lg">sort</span> Sort
+                </button>
+<button class="whitespace-nowrap flex items-center justify-center gap-2 rounded-xl bg-white px-4 py-2.5 text-sm font-bold text-[#112117] shadow-sm border border-[#112117]/10 hover:bg-gray-100 transition-colors">
+<span class="material-symbols-outlined text-lg">grid_view</span> View
+                </button>
+</div>
+</div>
+<div class="overflow-hidden rounded-2xl border border-[#112117]/10 bg-white shadow-sm ring-1 ring-black/5">
+<div class="overflow-x-auto">
+<table class="min-w-full text-left text-sm whitespace-nowrap">
+<thead class="bg-gray-50 border-b border-[#112117]/10">
+<tr>
+<th class="px-6 py-4 font-bold text-[#112117]">Collection Name</th>
+<th class="px-6 py-4 font-bold text-[#112117]">Status</th>
+<th class="px-6 py-4 font-bold text-[#112117]">Products</th>
+<th class="px-6 py-4 font-bold text-[#112117]">Visibility</th>
+<th class="px-6 py-4 font-bold text-[#112117] text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-[#112117]/10">
+<tr class="group hover:bg-gray-50/50 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-4">
+<div class="size-12 rounded-lg bg-gray-200 bg-cover bg-center border border-[#112117]/10 shadow-sm" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB2CiXdPs-56d5nkWBPWz2pkzzbjteQ68TMRN5-wLmqcBNev902xwOLbNEe7eqBrnj1NbNUNr1y09Ogc3Q-KN-JMsX_rs-zT3mh50DwKzuVbg6-HVPH8G12OpDVTaMMda23v22JSqpYPEPiwrkuflA1qXW89-uD8LoOzZEm8yrxVPj-I9CIH2TJiSmCtafve9qnLflOWKK69xjphvS19EVtTPmC3zcMEbZRyIasauU3zpdlI13hvElVr-zRRjJi6dvhnI8dzNAvVzw');"></div>
+<div class="flex flex-col">
+<span class="font-bold text-[#112117] text-base">New Arrivals</span>
+<span class="text-xs text-[#112117]/60">Updated 2 hours ago</span>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 rounded-full bg-[#112117]/5 px-3 py-1 text-xs font-bold text-[#112117] border border-[#112117]/10">
+<span class="size-2 rounded-full bg-green-500 animate-pulse"></span> Published
+                                </span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="font-bold text-[#112117]">124</span>
+<span class="text-[#112117]/50 text-xs">items</span>
+</div>
+</td>
+<td class="px-6 py-4 text-[#112117]/70">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-lg">public</span>
+                                    Public
+                                </div>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex justify-end gap-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
+<button class="flex size-9 items-center justify-center rounded-lg text-[#112117]/70 hover:bg-[#112117] hover:text-white transition-all" title="Edit Collection">
+<span class="material-symbols-outlined text-lg">edit</span>
+</button>
+<button class="flex size-9 items-center justify-center rounded-lg text-[#112117]/70 hover:bg-red-50 hover:text-red-600 transition-all" title="Delete Collection">
+<span class="material-symbols-outlined text-lg">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<tr class="group hover:bg-gray-50/50 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-4">
+<div class="size-12 rounded-lg bg-gray-200 bg-cover bg-center border border-[#112117]/10 shadow-sm" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCGXKA0l4g4vV4ADkyr8dYHHBynp6GqlINe7nfXkS3VplJUvhu0ppoXxARhrd9fYXv_7tFqjDwZYmgxpJ5LXS-LL7-AsF5JGvgkxQiKnJpFGrxxln4QzkOShlSVCggRE74iG_PyIwan4sZN3wUJCtZZflHjoO5TWE4dTJ4iJkF7dx3CL1r5CsF_ju4u3zUvxLwq8DBNCKcWrgroyihqQXuocYeAefW122D2Og8Tssu8PgxGRyDdeaZPhYq7ZdNaoPiKqDWHgneUY_w');"></div>
+<div class="flex flex-col">
+<span class="font-bold text-[#112117] text-base">Festive Edit</span>
+<span class="text-xs text-[#112117]/60">Updated yesterday</span>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 rounded-full bg-[#112117]/5 px-3 py-1 text-xs font-bold text-[#112117] border border-[#112117]/10">
+<span class="size-2 rounded-full bg-green-500"></span> Published
+                                </span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="font-bold text-[#112117]">45</span>
+<span class="text-[#112117]/50 text-xs">items</span>
+</div>
+</td>
+<td class="px-6 py-4 text-[#112117]/70">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-lg">schedule</span>
+                                    Scheduled
+                                </div>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex justify-end gap-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
+<button class="flex size-9 items-center justify-center rounded-lg text-[#112117]/70 hover:bg-[#112117] hover:text-white transition-all" title="Edit Collection">
+<span class="material-symbols-outlined text-lg">edit</span>
+</button>
+<button class="flex size-9 items-center justify-center rounded-lg text-[#112117]/70 hover:bg-red-50 hover:text-red-600 transition-all" title="Delete Collection">
+<span class="material-symbols-outlined text-lg">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<tr class="group hover:bg-gray-50/50 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-4">
+<div class="size-12 rounded-lg bg-gray-200 bg-cover bg-center border border-[#112117]/10 shadow-sm" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDUpt5lmNdYFXNrJfaYVX05WOamMnB19Gam5i8x8ZNYh6McUc4nwRGgTCIYODzCsBR84QphxeWuSdRuY2hnbQAlNnoYrf8im9aSXxxhdVjEbF_ZwiFli_-L-HcYleYg1fYvo-33iA0IgtiCiMY7_tmvzd-BwxdQgGbr8KHKU4Pxgw4OWPD2Bp016gLGlXfc9zuekk0NxEQ7rL3Otamy_BGKL5mrk8pLkTnWclyYhVIkqRhvwARZFtBHvyZ5HAbJG3MmhfyIBMzFoeQ');"></div>
+<div class="flex flex-col">
+<span class="font-bold text-[#112117] text-base">Best Sellers</span>
+<span class="text-xs text-[#112117]/60">Updated 3 days ago</span>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 rounded-full bg-[#112117]/5 px-3 py-1 text-xs font-bold text-[#112117] border border-[#112117]/10">
+<span class="size-2 rounded-full bg-green-500"></span> Published
+                                </span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="font-bold text-[#112117]">89</span>
+<span class="text-[#112117]/50 text-xs">items</span>
+</div>
+</td>
+<td class="px-6 py-4 text-[#112117]/70">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-lg">public</span>
+                                    Public
+                                </div>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex justify-end gap-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
+<button class="flex size-9 items-center justify-center rounded-lg text-[#112117]/70 hover:bg-[#112117] hover:text-white transition-all" title="Edit Collection">
+<span class="material-symbols-outlined text-lg">edit</span>
+</button>
+<button class="flex size-9 items-center justify-center rounded-lg text-[#112117]/70 hover:bg-red-50 hover:text-red-600 transition-all" title="Delete Collection">
+<span class="material-symbols-outlined text-lg">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<tr class="group hover:bg-gray-50/50 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-4">
+<div class="size-12 rounded-lg bg-gray-200 bg-cover bg-center border border-[#112117]/10 shadow-sm" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBkUWkbZFEjaZpN8bPLmSGJbSGnLon5jQDdyh4ZRprm3EXRUeXaq-hUjVxFgRbZYy8dm2uSmMowx0sNqkV8gZ1cffCH5NQSG_ZbVJrexf92xDWO-oPjtJktvsuXbwd46t-mnchaqSarpkST69UN7IEqcf4nGzGgafSrxxqENKBp0SiJMdn44sqtFeNUznJlFfTTnGeAzilnlleEijdoaUGSWWmAOAGrxiwYf5Fq-a1bnSBuG7wAaAflhth1cW746v8lrJ4_dtQNddI');"></div>
+<div class="flex flex-col">
+<span class="font-bold text-[#112117] text-base">Summer Dresses</span>
+<span class="text-xs text-[#112117]/60">Created just now</span>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1 text-xs font-bold text-gray-500 border border-gray-200">
+<span class="size-2 rounded-full bg-gray-400"></span> Draft
+                                </span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="font-bold text-[#112117]">15</span>
+<span class="text-[#112117]/50 text-xs">items</span>
+</div>
+</td>
+<td class="px-6 py-4 text-[#112117]/70">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-lg">lock</span>
+                                    Private
+                                </div>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex justify-end gap-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
+<button class="flex size-9 items-center justify-center rounded-lg text-[#112117]/70 hover:bg-[#112117] hover:text-white transition-all" title="Edit Collection">
+<span class="material-symbols-outlined text-lg">edit</span>
+</button>
+<button class="flex size-9 items-center justify-center rounded-lg text-[#112117]/70 hover:bg-red-50 hover:text-red-600 transition-all" title="Delete Collection">
+<span class="material-symbols-outlined text-lg">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<tr class="group hover:bg-gray-50/50 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-4">
+<div class="size-12 rounded-lg bg-gray-200 bg-cover bg-center border border-[#112117]/10 shadow-sm" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCjGog0loESEyyATkA6wWG4D735Nk3kr0jCzTYYhq1aJadiO9gL97LNGulaBavSJ1_O1Ett9hJW8QNIbDfFdfIjug05QP675zbcCu5Ww1hObbAdRH2qKbNzBn085RjXxVtg5UQUcpNIv_dnKSg3nbk1P_D8wyejY-X-giW0nu-aHil1IvWaX-1s_N0H35bWD_JsbxgPuDUuepCWx-eabwbTfeKvRzMupedt7_B2TXfD7nogb5WXO76ymL_EDZK0XrJ1aUPotRlzR3g');"></div>
+<div class="flex flex-col">
+<span class="font-bold text-[#112117] text-base">Essential Tops</span>
+<span class="text-xs text-[#112117]/60">Updated last week</span>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 rounded-full bg-[#112117]/5 px-3 py-1 text-xs font-bold text-[#112117] border border-[#112117]/10">
+<span class="size-2 rounded-full bg-green-500"></span> Published
+                                </span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="font-bold text-[#112117]">62</span>
+<span class="text-[#112117]/50 text-xs">items</span>
+</div>
+</td>
+<td class="px-6 py-4 text-[#112117]/70">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-lg">public</span>
+                                    Public
+                                </div>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex justify-end gap-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
+<button class="flex size-9 items-center justify-center rounded-lg text-[#112117]/70 hover:bg-[#112117] hover:text-white transition-all" title="Edit Collection">
+<span class="material-symbols-outlined text-lg">edit</span>
+</button>
+<button class="flex size-9 items-center justify-center rounded-lg text-[#112117]/70 hover:bg-red-50 hover:text-red-600 transition-all" title="Delete Collection">
+<span class="material-symbols-outlined text-lg">delete</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="flex items-center justify-between border-t border-[#112117]/10 bg-gray-50 px-6 py-4">
+<span class="text-sm text-[#112117]/70">Showing <span class="font-bold text-[#112117]">1</span> to <span class="font-bold text-[#112117]">5</span> of <span class="font-bold text-[#112117]">12</span> collections</span>
+<div class="flex gap-2">
+<button class="flex size-9 items-center justify-center rounded-lg border border-[#112117]/10 bg-white text-[#112117] hover:bg-[#112117] hover:text-white transition-colors disabled:opacity-50 shadow-sm">
+<span class="material-symbols-outlined text-lg">chevron_left</span>
+</button>
+<button class="flex size-9 items-center justify-center rounded-lg border border-[#112117]/10 bg-white text-[#112117] hover:bg-[#112117] hover:text-white transition-colors shadow-sm">
+<span class="material-symbols-outlined text-lg">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<footer class="mt-auto border-t border-white/10 bg-[#112117] py-8">
+<div class="mx-auto max-w-7xl px-4 flex flex-col md:flex-row justify-between items-center gap-4">
+<p class="text-xs text-white/50 font-medium">© 2024 Elegance Inc. Admin Panel v2.0</p>
+<div class="flex gap-6 text-xs font-medium text-white/50">
+<a class="hover:text-white transition-colors" href="#">Documentation</a>
+<a class="hover:text-white transition-colors" href="#">Support</a>
+<a class="hover:text-white transition-colors" href="#">Privacy Policy</a>
+</div>
+</div>
+</footer>
+{% endblock %}

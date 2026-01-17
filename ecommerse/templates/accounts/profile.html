@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>My Account Dashboard - Chic Greens</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#065f46", // Updated: Darker emerald green (Emerald 800) for primary actions
+                        "primary-light": "#d1fae5", // Updated: Light emerald background (Emerald 100)
+                        "text-main": "#022c22", // Updated: Deepest green/black (Emerald 950)
+                        "text-secondary": "#064e3b", // Updated: Darker secondary text (Emerald 900)
+                        "background-base": "#ffffff", // White background
+                        "surface-light": "#ecfdf5", // Updated: Very light emerald surface (Emerald 50)
+                        "surface-lighter": "#ffffff", // White for cards
+                        "border-green": "#6ee7b7", // Updated: Stronger green border (Emerald 300)
+                        "accent-dark": "#022c22" // Updated: Very deep green for gradients
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #ecfdf5; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #065f46; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #047857; 
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .icon-filled {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background-base text-text-main font-display antialiased min-h-screen flex flex-col selection:bg-primary-light selection:text-primary">
+<header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-border-green/30 w-full shadow-sm">
+<div class="px-4 lg:px-10 py-3 flex items-center justify-between">
+<div class="flex items-center gap-8">
+<a class="flex items-center gap-2 group" href="#">
+<div class="size-8 text-primary">
+<svg class="w-full h-full" fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M24 4H6V17.3333V30.6667H24V44H42V30.6667V17.3333H24V4Z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+<h2 class="text-text-main text-xl font-bold tracking-tight group-hover:text-primary transition-colors">Chic Greens</h2>
+</a>
+<nav class="hidden lg:flex items-center gap-6">
+<a class="text-text-secondary text-sm font-semibold hover:text-primary transition-colors" href="#">Shop</a>
+<a class="text-text-secondary text-sm font-semibold hover:text-primary transition-colors" href="#">New Arrivals</a>
+<a class="text-text-secondary text-sm font-semibold hover:text-primary transition-colors" href="#">Sale</a>
+<a class="text-text-secondary text-sm font-semibold hover:text-primary transition-colors" href="#">Sustainable</a>
+<a class="text-text-secondary text-sm font-semibold hover:text-primary transition-colors" href="#">Journal</a>
+</nav>
+</div>
+<div class="flex items-center justify-end gap-4 lg:gap-6 flex-1 max-w-md">
+<label class="hidden md:flex flex-1 relative group">
+<span class="absolute inset-y-0 left-0 flex items-center pl-3 text-text-secondary group-focus-within:text-primary">
+<span class="material-symbols-outlined">search</span>
+</span>
+<input class="w-full bg-surface-light text-text-main placeholder:text-text-secondary/50 text-sm font-medium rounded-lg border border-border-green py-2.5 pl-10 pr-4 focus:ring-2 focus:ring-primary/20 focus:bg-white focus:border-primary transition-all outline-none" placeholder="Search products..." type="text"/>
+</label>
+<div class="flex gap-2">
+<button class="relative flex items-center justify-center p-2 rounded-lg text-text-secondary hover:bg-surface-light hover:text-primary transition-colors group">
+<span class="material-symbols-outlined group-hover:text-primary">shopping_bag</span>
+<span class="absolute top-1 right-1 size-2 bg-primary rounded-full ring-2 ring-white"></span>
+</button>
+<button class="flex items-center justify-center p-2 rounded-lg text-text-secondary hover:bg-surface-light hover:text-primary transition-colors group">
+<span class="material-symbols-outlined group-hover:text-primary">person</span>
+</button>
+<button class="lg:hidden flex items-center justify-center p-2 rounded-lg text-text-secondary hover:bg-surface-light hover:text-primary transition-colors">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</div>
+</div>
+</div>
+</header>
+<div class="flex-grow w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
+<div class="flex flex-col lg:flex-row gap-8 lg:gap-12 h-full">
+<aside class="w-full lg:w-72 flex-shrink-0">
+<div class="bg-white rounded-2xl shadow-lg border border-border-green/20 p-6 sticky top-24">
+<div class="flex items-center gap-4 mb-8">
+<div class="relative group cursor-pointer">
+<div class="size-14 rounded-full overflow-hidden border-2 border-primary/20 ring-2 ring-transparent group-hover:ring-primary/20 transition-all">
+<img alt="Smiling woman portrait" class="w-full h-full object-cover" data-alt="Profile picture of Sarah" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDBQSxYJqUj3VTn365K7wH-Po9zQjc3ElbkEjBvOEPC6B9HIr5--dJOFEthSVmrxd9dFulUIBsqMQuGnjINwK_y8hOYmr648riPTTiIKk6allRdI17NkNMorZmnYwTxFmXlpy4FW1r_5InTTmvT_fEHgDVcJ0PXvqkhWXNbDNRdalZFbj3xps99OiSzvKlYG_lNIG_7j-hzqvsDW6F7v4KyhqgtRLYgtCTLWHYKZXfioZMKH4-nvVA4JN3Z6O3PoSwPVNaqlsGTwnA"/>
+</div>
+<div class="absolute bottom-0 right-0 bg-primary text-white p-1 rounded-full border border-white shadow-sm hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-[10px] block">edit</span>
+</div>
+</div>
+<div class="flex flex-col">
+<h3 class="text-text-main font-bold text-lg leading-tight">Sarah J.</h3>
+<p class="text-text-secondary/70 text-xs font-medium">Member since 2023</p>
+</div>
+</div>
+<nav class="flex flex-col gap-1.5">
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl bg-primary text-white shadow-lg shadow-primary/20 transition-all font-bold" href="#">
+<span class="material-symbols-outlined icon-filled">dashboard</span>
+<span class="text-sm">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-text-secondary hover:bg-primary-light/50 hover:text-primary transition-all group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">shopping_bag</span>
+<span class="text-sm font-medium">My Orders</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-text-secondary hover:bg-primary-light/50 hover:text-primary transition-all group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">favorite</span>
+<span class="text-sm font-medium">Wishlist</span>
+<span class="ml-auto bg-primary-light text-primary text-xs font-bold px-2 py-0.5 rounded-full">12</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-text-secondary hover:bg-primary-light/50 hover:text-primary transition-all group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">location_on</span>
+<span class="text-sm font-medium">Addresses</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-text-secondary hover:bg-primary-light/50 hover:text-primary transition-all group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">credit_card</span>
+<span class="text-sm font-medium">Payment Methods</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-text-secondary hover:bg-primary-light/50 hover:text-primary transition-all group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">settings</span>
+<span class="text-sm font-medium">Account Settings</span>
+</a>
+</nav>
+<div class="mt-8 pt-6 border-t border-border-green/20">
+<a class="flex items-center gap-3 px-4 py-2 text-text-secondary/70 hover:text-red-500 transition-colors text-sm font-semibold group" href="{% url 'accounts:logout' %}">
+<span class="material-symbols-outlined">logout</span>
+<span>Sign Out</span>
+</a>
+</div>
+</div>
+</aside>
+<main class="flex-1 flex flex-col gap-8 min-w-0">
+<div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary to-accent-dark p-8 shadow-xl text-white">
+<div class="relative z-10 flex flex-col gap-2">
+<h1 class="text-white text-3xl font-extrabold tracking-tight">My Account</h1>
+<p class="text-surface-light text-base max-w-xl">Welcome back, Sarah. Here's what's happening with your sustainable wardrobe.</p>
+</div>
+<span class="material-symbols-outlined absolute -bottom-10 -right-8 text-[200px] text-white/10 select-none pointer-events-none rotate-12">eco</span>
+<div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-20"></div>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+<div class="bg-white rounded-xl p-5 border border-border-green/30 shadow-md flex flex-col gap-1 hover:border-primary/50 hover:bg-primary-light/10 transition-all duration-300 cursor-default group">
+<div class="flex items-center justify-between">
+<span class="text-text-secondary text-sm font-semibold">Active Orders</span>
+<span class="material-symbols-outlined text-primary bg-primary-light p-1.5 rounded-lg group-hover:bg-primary group-hover:text-white transition-colors">local_shipping</span>
+</div>
+<p class="text-text-main text-2xl font-bold mt-2">1</p>
+<p class="text-text-secondary/60 text-xs">Arriving tomorrow</p>
+</div>
+<div class="bg-white rounded-xl p-5 border border-border-green/30 shadow-md flex flex-col gap-1 hover:border-primary/50 hover:bg-primary-light/10 transition-all duration-300 cursor-default group">
+<div class="flex items-center justify-between">
+<span class="text-text-secondary text-sm font-semibold">Wishlist Items</span>
+<span class="material-symbols-outlined text-primary bg-primary-light p-1.5 rounded-lg group-hover:bg-primary group-hover:text-white transition-colors">favorite</span>
+</div>
+<p class="text-text-main text-2xl font-bold mt-2">12</p>
+<p class="text-text-secondary/60 text-xs">2 items on sale</p>
+</div>
+<div class="bg-white rounded-xl p-5 border border-border-green/30 shadow-md flex flex-col gap-1 hover:border-primary/50 hover:bg-primary-light/10 transition-all duration-300 cursor-default group">
+<div class="flex items-center justify-between">
+<span class="text-text-secondary text-sm font-semibold">Store Credit</span>
+<span class="material-symbols-outlined text-primary bg-primary-light p-1.5 rounded-lg group-hover:bg-primary group-hover:text-white transition-colors">account_balance_wallet</span>
+</div>
+<p class="text-text-main text-2xl font-bold mt-2">$45.00</p>
+<p class="text-text-secondary/60 text-xs">Available to spend</p>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+<a class="group flex flex-col justify-between bg-white rounded-2xl p-6 border border-border-green/20 shadow-lg hover:shadow-xl hover:shadow-primary/5 hover:border-primary/30 transition-all duration-300" href="#">
+<div class="flex flex-col gap-4">
+<div class="bg-primary-light/50 w-12 h-12 rounded-full flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined">package_2</span>
+</div>
+<div>
+<h2 class="text-text-main text-lg font-bold mb-1 group-hover:text-primary transition-colors">My Orders</h2>
+<p class="text-text-secondary/80 text-sm">Track active shipments, view history, or buy again.</p>
+</div>
+</div>
+<div class="mt-6 flex items-center text-primary font-bold text-sm">
+<span>View History</span>
+<span class="material-symbols-outlined text-sm ml-1 group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</div>
+</a>
+<a class="group flex flex-col justify-between bg-white rounded-2xl p-6 border border-border-green/20 shadow-lg hover:shadow-xl hover:shadow-primary/5 hover:border-primary/30 transition-all duration-300" href="#">
+<div class="flex flex-col gap-4">
+<div class="bg-primary-light/50 w-12 h-12 rounded-full flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined">manage_accounts</span>
+</div>
+<div>
+<h2 class="text-text-main text-lg font-bold mb-1 group-hover:text-primary transition-colors">Account Settings</h2>
+<p class="text-text-secondary/80 text-sm">Edit your profile details, email, and change password.</p>
+</div>
+</div>
+<div class="mt-6 flex items-center text-primary font-bold text-sm">
+<span>Edit Profile</span>
+<span class="material-symbols-outlined text-sm ml-1 group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</div>
+</a>
+<a class="group flex flex-col justify-between bg-white rounded-2xl p-6 border border-border-green/20 shadow-lg hover:shadow-xl hover:shadow-primary/5 hover:border-primary/30 transition-all duration-300" href="#">
+<div class="flex flex-col gap-4">
+<div class="bg-primary-light/50 w-12 h-12 rounded-full flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined">home_pin</span>
+</div>
+<div>
+<h2 class="text-text-main text-lg font-bold mb-1 group-hover:text-primary transition-colors">Shipping Addresses</h2>
+<p class="text-text-secondary/80 text-sm">Manage your delivery locations and preferences.</p>
+</div>
+</div>
+<div class="mt-6 flex items-center text-primary font-bold text-sm">
+<span>Manage Addresses</span>
+<span class="material-symbols-outlined text-sm ml-1 group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</div>
+</a>
+<a class="group flex flex-col justify-between bg-white rounded-2xl p-6 border border-border-green/20 shadow-lg hover:shadow-xl hover:shadow-primary/5 hover:border-primary/30 transition-all duration-300" href="#">
+<div class="flex flex-col gap-4">
+<div class="bg-primary-light/50 w-12 h-12 rounded-full flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined">credit_card</span>
+</div>
+<div>
+<h2 class="text-text-main text-lg font-bold mb-1 group-hover:text-primary transition-colors">Payment Methods</h2>
+<p class="text-text-secondary/80 text-sm">Securely manage your saved cards and billing info.</p>
+</div>
+</div>
+<div class="mt-6 flex items-center text-primary font-bold text-sm">
+<span>View Wallet</span>
+<span class="material-symbols-outlined text-sm ml-1 group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</div>
+</a>
+<a class="group flex flex-col justify-between bg-white rounded-2xl p-6 border border-border-green/20 shadow-lg hover:shadow-xl hover:shadow-primary/5 hover:border-primary/30 transition-all duration-300" href="#">
+<div class="flex flex-col gap-4">
+<div class="bg-primary-light/50 w-12 h-12 rounded-full flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined">favorite</span>
+</div>
+<div>
+<h2 class="text-text-main text-lg font-bold mb-1 group-hover:text-primary transition-colors">My Wishlist</h2>
+<p class="text-text-secondary/80 text-sm">Curate your style and save favorites for later.</p>
+</div>
+</div>
+<div class="mt-6 flex items-center text-primary font-bold text-sm">
+<span>Go to Wishlist</span>
+<span class="material-symbols-outlined text-sm ml-1 group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</div>
+</a>
+<a class="group flex flex-col justify-between bg-white rounded-2xl p-6 border border-border-green/20 shadow-lg hover:shadow-xl hover:shadow-primary/5 hover:border-primary/30 transition-all duration-300" href="#">
+<div class="flex flex-col gap-4">
+<div class="bg-primary-light/50 w-12 h-12 rounded-full flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined">support_agent</span>
+</div>
+<div>
+<h2 class="text-text-main text-lg font-bold mb-1 group-hover:text-primary transition-colors">Help Center</h2>
+<p class="text-text-secondary/80 text-sm">Need assistance? Check our FAQ or contact support.</p>
+</div>
+</div>
+<div class="mt-6 flex items-center text-primary font-bold text-sm">
+<span>Get Help</span>
+<span class="material-symbols-outlined text-sm ml-1 group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</div>
+</a>
+</div>
+</main>
+</div>
+</div>
+</body></html>

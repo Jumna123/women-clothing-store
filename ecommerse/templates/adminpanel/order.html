@@ -1,0 +1,304 @@
+{% extends "adminpanel/admin_base.html" %}
+{% block title %}category Management{% endblock %}
+{% block content %}
+<main class="flex-1 flex flex-col h-full bg-[#112117] relative overflow-hidden p-4 lg:p-8">
+<div class="flex-1 flex flex-col w-full h-full bg-white rounded-2xl shadow-xl overflow-hidden border border-[#d0e7d9]">
+<header class="flex-none px-8 pt-8 pb-4">
+<div class="flex flex-wrap justify-between items-center gap-4 mb-6">
+<div class="flex flex-col gap-1">
+<h1 class="text-text-dark text-3xl font-black leading-tight tracking-[-0.033em]">Order Management</h1>
+<p class="text-text-muted text-base font-normal">Track and manage your customer orders</p>
+</div>
+<button class="flex items-center justify-center gap-2 rounded-lg h-10 px-5 bg-primary hover:bg-primary-hover text-white text-sm font-bold shadow-md transition-all">
+<span class="material-symbols-outlined text-[20px]">download</span>
+<span>Export Orders</span>
+</button>
+</div>
+<div class="flex flex-col lg:flex-row gap-4 items-start lg:items-center justify-between border-b border-[#e7f3ec] pb-6">
+<label class="flex flex-col min-w-[320px] h-11 w-full lg:w-auto">
+<div class="flex w-full flex-1 items-stretch rounded-lg h-full border border-[#d0e7d9] overflow-hidden focus-within:ring-2 focus-within:ring-primary/20 transition-all">
+<div class="flex items-center justify-center pl-3 bg-white">
+<span class="material-symbols-outlined text-text-muted">search</span>
+</div>
+<input class="flex w-full min-w-0 flex-1 resize-none bg-white text-text-dark focus:outline-none h-full placeholder:text-text-muted/70 px-3 text-sm font-normal" placeholder="Search by Order ID, Customer Name or Email" value=""/>
+</div>
+</label>
+<div class="flex gap-2 flex-wrap">
+<button class="flex h-9 items-center gap-2 rounded-full border border-primary bg-primary text-white px-4 transition-all shadow-sm">
+<span class="material-symbols-outlined text-white text-[18px]">view_list</span>
+<span class="text-white text-sm font-medium">All Status</span>
+</button>
+<button class="flex h-9 items-center gap-2 rounded-full border border-[#d0e7d9] bg-white px-4 hover:bg-[#f6f8f7] transition-all">
+<span class="material-symbols-outlined text-text-muted text-[18px]">schedule</span>
+<span class="text-text-dark text-sm font-medium">Placed</span>
+</button>
+<button class="flex h-9 items-center gap-2 rounded-full border border-[#d0e7d9] bg-white px-4 hover:bg-[#f6f8f7] transition-all">
+<span class="material-symbols-outlined text-text-muted text-[18px]">local_shipping</span>
+<span class="text-text-dark text-sm font-medium">Shipped</span>
+</button>
+<button class="flex h-9 items-center gap-2 rounded-full border border-[#d0e7d9] bg-white px-4 hover:bg-[#f6f8f7] transition-all">
+<span class="material-symbols-outlined text-text-muted text-[18px]">check_circle</span>
+<span class="text-text-dark text-sm font-medium">Delivered</span>
+</button>
+<button class="flex h-9 items-center gap-2 rounded-full border border-[#d0e7d9] bg-white px-4 hover:bg-[#f6f8f7] transition-all">
+<span class="material-symbols-outlined text-text-muted text-[18px]">cancel</span>
+<span class="text-text-dark text-sm font-medium">Cancelled</span>
+</button>
+</div>
+</div>
+</header>
+<div class="flex-1 overflow-y-auto px-8 pb-8">
+<div class="w-full rounded-xl border border-[#d0e7d9] bg-white shadow-sm overflow-hidden">
+<table class="w-full">
+<thead class="bg-[#f8fcfa] border-b border-[#d0e7d9]">
+<tr>
+<th class="px-6 py-4 text-left text-xs font-bold text-text-muted uppercase tracking-wider">Order ID</th>
+<th class="px-6 py-4 text-left text-xs font-bold text-text-muted uppercase tracking-wider">Customer</th>
+<th class="px-6 py-4 text-left text-xs font-bold text-text-muted uppercase tracking-wider">Date</th>
+<th class="px-6 py-4 text-left text-xs font-bold text-text-muted uppercase tracking-wider">Total Amount</th>
+<th class="px-6 py-4 text-left text-xs font-bold text-text-muted uppercase tracking-wider">Status</th>
+<th class="px-6 py-4 text-right text-xs font-bold text-text-muted uppercase tracking-wider">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-[#d0e7d9]">
+<tr class="hover:bg-[#f8fcfa] transition-colors group">
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="text-primary font-bold cursor-pointer hover:underline">#ORD-7829</span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="flex items-center gap-3">
+<div class="h-9 w-9 rounded-full bg-gray-200 bg-cover bg-center" data-alt="Customer Sarah Jenkins profile" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAMq7u9jPA4CgNa16BDKAWO4U4Pp7oh3YiCqMXkJE1DCbNbN0WUMlWjuXVrOXxMWBPvp5FgiyV5JrUpYkrElgyh8Dq_z5J97OTeiSZy5POjFMHICUak3Z06iPiiCvZs3_7CiY8UtuqU_VEq9VHLqzuc2d-ZjeGbvOZgBSe_sGMVwQrBW-mOLn4J644cOiX9PYP2wJK2YDwW4Y6LGe9OSLASrId57_cVxVPBzIWbXkFixjhEQRb5lyYNUp0XncYKo0IdzhNdv4TGH5k");'></div>
+<div class="flex flex-col">
+<span class="text-sm font-medium text-text-dark">Sarah Jenkins</span>
+<span class="text-xs text-text-muted">sarah.j@example.com</span>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="text-sm text-text-dark">Oct 24, 2023</span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="text-sm font-medium text-text-dark">$124.50</span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="inline-flex items-center gap-1.5 rounded-full bg-green-100 px-2.5 py-1 text-xs font-medium text-green-800">
+<span class="h-1.5 w-1.5 rounded-full bg-green-600"></span>
+                                        Delivered
+                                    </span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-right">
+<button class="text-text-muted hover:text-primary transition-colors flex items-center justify-end gap-1 ml-auto text-sm font-medium">
+                                        View Details
+                                        <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-[#f8fcfa] transition-colors group">
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="text-primary font-bold cursor-pointer hover:underline">#ORD-7830</span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="flex items-center gap-3">
+<div class="h-9 w-9 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 font-bold text-sm">
+                                            EC
+                                        </div>
+<div class="flex flex-col">
+<span class="text-sm font-medium text-text-dark">Emily Chen</span>
+<span class="text-xs text-text-muted">emily.c@example.com</span>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="text-sm text-text-dark">Oct 24, 2023</span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="text-sm font-medium text-text-dark">$89.00</span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="inline-flex items-center gap-1.5 rounded-full bg-blue-100 px-2.5 py-1 text-xs font-medium text-blue-800">
+<span class="h-1.5 w-1.5 rounded-full bg-blue-600"></span>
+                                        Shipped
+                                    </span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-right">
+<button class="text-text-muted hover:text-primary transition-colors flex items-center justify-end gap-1 ml-auto text-sm font-medium">
+                                        View Details
+                                        <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-[#f8fcfa] transition-colors group">
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="text-primary font-bold cursor-pointer hover:underline">#ORD-7831</span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="flex items-center gap-3">
+<div class="h-9 w-9 rounded-full bg-gray-200 bg-cover bg-center" data-alt="Customer Jessica Alva profile" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAoL55T444Khfwv9w8QXEkCDdR9Zd7XW2j7neKhHyGVrw-AOcOKyqjS0L9DneUihYdprlSLsBr55fIX5KxWAvL8uvonXS_vaN0dL0ZlQAiuombifVu118YA8Kfx_pXJ_0otNwlf0fpIyR5DQwTsOdxeYvPYVu_5-eo30vjMkdnkNzqxx7s3cgv51xJp1AgVYVNghAYgoAeS6Qfc8a7_zkAsijKAKWvbfMKdkTrajyqT8-iDK5ytpNHarn-1TN_M6vPdPd6if92GXaQ");'></div>
+<div class="flex flex-col">
+<span class="text-sm font-medium text-text-dark">Jessica Alva</span>
+<span class="text-xs text-text-muted">jess.alva@example.com</span>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="text-sm text-text-dark">Oct 23, 2023</span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="text-sm font-medium text-text-dark">$210.00</span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="inline-flex items-center gap-1.5 rounded-full bg-yellow-100 px-2.5 py-1 text-xs font-medium text-yellow-800">
+<span class="h-1.5 w-1.5 rounded-full bg-yellow-600"></span>
+                                        Placed
+                                    </span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-right">
+<button class="text-text-muted hover:text-primary transition-colors flex items-center justify-end gap-1 ml-auto text-sm font-medium">
+                                        View Details
+                                        <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-[#f8fcfa] transition-colors group">
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="text-primary font-bold cursor-pointer hover:underline">#ORD-7832</span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="flex items-center gap-3">
+<div class="h-9 w-9 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 font-bold text-sm">
+                                            AL
+                                        </div>
+<div class="flex flex-col">
+<span class="text-sm font-medium text-text-dark">Amanda Low</span>
+<span class="text-xs text-text-muted">amanda.low@example.com</span>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="text-sm text-text-dark">Oct 23, 2023</span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="text-sm font-medium text-text-dark">$55.00</span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="inline-flex items-center gap-1.5 rounded-full bg-red-100 px-2.5 py-1 text-xs font-medium text-red-800">
+<span class="h-1.5 w-1.5 rounded-full bg-red-600"></span>
+                                        Cancelled
+                                    </span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-right">
+<button class="text-text-muted hover:text-primary transition-colors flex items-center justify-end gap-1 ml-auto text-sm font-medium">
+                                        View Details
+                                        <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-[#f8fcfa] transition-colors group">
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="text-primary font-bold cursor-pointer hover:underline">#ORD-7833</span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="flex items-center gap-3">
+<div class="h-9 w-9 rounded-full bg-gray-200 bg-cover bg-center" data-alt="Customer Rachel Green profile" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBJ8YVCkPYnxCtwmI3Vl-d9V_hnykVhzqOQm4-09tDCc8MnG3dOP9mtmkLRUet54Xasuud9lzTitu63ZmubrRhwjLH9OdmxmG_9Acs2OqhL9aYljfTW2c-sb-fFWVPoA7TlEmH6MXXAVfeYaPatQaFUz7ADIyUbOUCcsPezPgkUo4CeuDxlP6obmjWWwoba7RsfFQwRnQlLDHa3ODnMwvTKC3koCj_SwLr40Ll_HojUEf-9zNXXYkIq2ZPXvqahhJ2IxsRe9IdlYYg");'></div>
+<div class="flex flex-col">
+<span class="text-sm font-medium text-text-dark">Rachel Green</span>
+<span class="text-xs text-text-muted">rachel.green@example.com</span>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="text-sm text-text-dark">Oct 22, 2023</span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="text-sm font-medium text-text-dark">$145.20</span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="inline-flex items-center gap-1.5 rounded-full bg-green-100 px-2.5 py-1 text-xs font-medium text-green-800">
+<span class="h-1.5 w-1.5 rounded-full bg-green-600"></span>
+                                        Delivered
+                                    </span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-right">
+<button class="text-text-muted hover:text-primary transition-colors flex items-center justify-end gap-1 ml-auto text-sm font-medium">
+                                        View Details
+                                        <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-[#f8fcfa] transition-colors group">
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="text-primary font-bold cursor-pointer hover:underline">#ORD-7834</span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="flex items-center gap-3">
+<div class="h-9 w-9 rounded-full bg-teal-100 flex items-center justify-center text-teal-600 font-bold text-sm">
+                                            MJ
+                                        </div>
+<div class="flex flex-col">
+<span class="text-sm font-medium text-text-dark">Monica Jones</span>
+<span class="text-xs text-text-muted">monica.j@example.com</span>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="text-sm text-text-dark">Oct 22, 2023</span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="text-sm font-medium text-text-dark">$230.00</span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="inline-flex items-center gap-1.5 rounded-full bg-yellow-100 px-2.5 py-1 text-xs font-medium text-yellow-800">
+<span class="h-1.5 w-1.5 rounded-full bg-yellow-600"></span>
+                                        Placed
+                                    </span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-right">
+<button class="text-text-muted hover:text-primary transition-colors flex items-center justify-end gap-1 ml-auto text-sm font-medium">
+                                        View Details
+                                        <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="flex items-center justify-between border-t border-[#d0e7d9] bg-white px-4 py-3 sm:px-6">
+<div class="flex flex-1 justify-between sm:hidden">
+<a class="relative inline-flex items-center rounded-md border border-[#d0e7d9] bg-white px-4 py-2 text-sm font-medium text-text-dark hover:bg-gray-50" href="#">Previous</a>
+<a class="relative ml-3 inline-flex items-center rounded-md border border-[#d0e7d9] bg-white px-4 py-2 text-sm font-medium text-text-dark hover:bg-gray-50" href="#">Next</a>
+</div>
+<div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
+<div>
+<p class="text-sm text-text-muted">
+                              Showing
+                              <span class="font-medium text-text-dark">1</span>
+                              to
+                              <span class="font-medium text-text-dark">6</span>
+                              of
+                              <span class="font-medium text-text-dark">42</span>
+                              results
+                            </p>
+</div>
+<div>
+<nav aria-label="Pagination" class="isolate inline-flex -space-x-px rounded-md shadow-sm">
+<a class="relative inline-flex items-center rounded-l-md px-2 py-2 text-text-muted ring-1 ring-inset ring-[#d0e7d9] hover:bg-gray-50 focus:z-20 focus:outline-offset-0" href="#">
+<span class="sr-only">Previous</span>
+<span class="material-symbols-outlined text-[20px]">chevron_left</span>
+</a>
+<a aria-current="page" class="relative z-10 inline-flex items-center bg-primary px-4 py-2 text-sm font-semibold text-white focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary" href="#">1</a>
+<a class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-text-dark ring-1 ring-inset ring-[#d0e7d9] hover:bg-gray-50 focus:z-20 focus:outline-offset-0" href="#">2</a>
+<a class="relative hidden items-center px-4 py-2 text-sm font-semibold text-text-dark ring-1 ring-inset ring-[#d0e7d9] hover:bg-gray-50 focus:z-20 focus:outline-offset-0 md:inline-flex" href="#">3</a>
+<span class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-text-muted ring-1 ring-inset ring-[#d0e7d9] focus:outline-offset-0">...</span>
+<a class="relative hidden items-center px-4 py-2 text-sm font-semibold text-text-dark ring-1 ring-inset ring-[#d0e7d9] hover:bg-gray-50 focus:z-20 focus:outline-offset-0 md:inline-flex" href="#">8</a>
+<a class="relative inline-flex items-center rounded-r-md px-2 py-2 text-text-muted ring-1 ring-inset ring-[#d0e7d9] hover:bg-gray-50 focus:z-20 focus:outline-offset-0" href="#">
+<span class="sr-only">Next</span>
+<span class="material-symbols-outlined text-[20px]">chevron_right</span>
+</a>
+</nav>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div></main>
+</div>
+{% endblock %}

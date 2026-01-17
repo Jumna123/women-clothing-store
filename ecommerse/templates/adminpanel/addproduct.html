@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Add New Product - Admin Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Spline+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#11d45f",
+                        "background-light": "#f6f8f7",
+                        "background-dark": "#102217",
+                        "page-bg": "#0e2318", // Dark green background requested
+                        "text-main": "#0d1b13",
+                        "text-secondary": "#4c9a6b",
+                        "border-green": "#cfe7d9",
+                    },
+                    fontFamily: {
+                        "display": ["Spline Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-page-bg font-display text-text-main antialiased overflow-x-hidden">
+<div class="flex h-screen w-full overflow-hidden">
+<aside class="w-72 bg-white border-r border-[#e7f3ec] hidden md:flex flex-col justify-between p-4 h-full shrink-0">
+<div class="flex flex-col gap-8">
+<div class="flex gap-3 px-3 items-center">
+<div class="bg-center bg-no-repeat bg-cover rounded-full size-10" data-alt="Abstract green geometric logo" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuArioUyBIk19o2VfEmK8uppEeLO-_1W1KVhCZybjrBkITtCzzT262aUSYjYN753REWTdoDA8tCOtN2ex1ZQRttaBdsB0-NvfXbGC5zYbhIjNdVPVhM5j2AU6FBfmH4--z8NMFs7h2aiyLc4f0Eu6Wo4Axgb-50ZhemJ10iXrRhJwYJhysV-FOt-SPEybbzT-0-tJK0MG9sRU-z01ZNucW7OR6Y7s3zIk-qSglYZyGvK6AAeNK3BUT44HqEg7d6K81803lcjt93TFgM");'></div>
+<div class="flex flex-col">
+<h1 class="text-text-main text-base font-bold leading-normal">LuxeThreads</h1>
+<p class="text-text-secondary text-sm font-normal leading-normal">Admin Panel</p>
+</div>
+</div>
+<div class="flex flex-col gap-2">
+<a class="flex items-center gap-3 px-3 py-3 rounded-full hover:bg-[#e7f3ec] transition-colors group" href="#">
+<span class="material-symbols-outlined text-text-main group-hover:text-primary">bar_chart</span>
+<p class="text-text-main text-sm font-medium leading-normal">Dashboard</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-3 rounded-full bg-primary/10" href="#">
+<span class="material-symbols-outlined text-text-main font-fill">sell</span>
+<p class="text-text-main text-sm font-bold leading-normal">Products</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-3 rounded-full hover:bg-[#e7f3ec] transition-colors group" href="#">
+<span class="material-symbols-outlined text-text-main group-hover:text-primary">shopping_bag</span>
+<p class="text-text-main text-sm font-medium leading-normal">Orders</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-3 rounded-full hover:bg-[#e7f3ec] transition-colors group" href="#">
+<span class="material-symbols-outlined text-text-main group-hover:text-primary">group</span>
+<p class="text-text-main text-sm font-medium leading-normal">Customers</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-3 rounded-full hover:bg-[#e7f3ec] transition-colors group" href="#">
+<span class="material-symbols-outlined text-text-main group-hover:text-primary">settings</span>
+<p class="text-text-main text-sm font-medium leading-normal">Settings</p>
+</a>
+</div>
+</div>
+<div class="px-3 py-3">
+<div class="flex items-center gap-3">
+<div class="bg-center bg-no-repeat bg-cover rounded-full size-10" data-alt="User profile picture of admin" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBCvWx6QkKt02sHsZA_wnT5JCpyxZcXvEUgCOL7wEGASd4xvVcodp5ToWvksfhEg46Ls92MtwcrJ5ef7e2z7-crVzUNsGwj5c9_TXhPe0vJ6DfNmqIrEXkfLRUPdTx-Yo6ns_c2ATX8F_FZJNG7CjoGX1PMoCqJjdB78CmnekUAR7maJznLoJeMaZdPjp4OW-7IVsytrbd_IZ6tdFsCKM3XBaGqZGs0NOs4q9awkLirk219iQyhfvhaM_226lS8Z9C8H7I5-e011Ro");'></div>
+<div class="flex flex-col">
+<p class="text-text-main text-sm font-bold">Jane Doe</p>
+<p class="text-text-secondary text-xs">Super Admin</p>
+</div>
+</div>
+</div>
+</aside>
+<main class="flex-1 flex flex-col h-full relative overflow-y-auto bg-page-bg">
+<header class="flex items-center justify-between px-8 py-5 sticky top-0 z-20 bg-page-bg">
+<div class="md:hidden">
+<button class="text-white">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</div>
+<div class="hidden md:flex flex-col">
+<div class="flex items-center gap-2 text-sm text-[#88a594] mb-1">
+<a class="hover:text-primary transition-colors" href="#">Dashboard</a>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+<a class="hover:text-primary transition-colors" href="#">Products</a>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+<span class="text-white font-medium">Add New</span>
+</div>
+<h2 class="text-2xl font-bold text-white">Product Management</h2>
+</div>
+<div class="flex items-center gap-4 ml-auto">
+<div class="hidden sm:flex items-center bg-[#173022] h-12 rounded-xl px-4 w-64 border border-[#2a4d38] focus-within:border-primary transition-all shadow-sm">
+<span class="material-symbols-outlined text-[#88a594]">search</span>
+<input class="bg-transparent border-none focus:ring-0 w-full text-white placeholder:text-[#88a594] text-sm" placeholder="Search..." type="text"/>
+</div>
+<button class="size-12 rounded-full bg-[#173022] border border-[#2a4d38] text-white flex items-center justify-center hover:bg-primary/20 transition-colors shadow-sm relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-3 right-3 size-2 bg-red-500 rounded-full border-2 border-[#173022]"></span>
+</button>
+</div>
+</header>
+<div class="px-6 md:px-10 pb-10 max-w-[1200px] mx-auto w-full">
+<div class="mb-8 mt-2">
+<h1 class="text-4xl font-black tracking-tight text-white mb-2">Add New Product</h1>
+<p class="text-[#88a594] max-w-2xl">Create a new product listing for your store. Fill out the details below to ensure accurate inventory management and customer information.</p>
+</div>
+<form class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<div class="lg:col-span-2 flex flex-col gap-6">
+<div class="bg-white p-6 rounded-2xl shadow-sm border border-transparent">
+<h3 class="text-lg font-bold text-text-main mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">edit_note</span>
+                                General Information
+                            </h3>
+<div class="space-y-6">
+<label class="block">
+<span class="text-text-main font-medium mb-2 block">Product Name</span>
+<input class="w-full h-14 bg-[#f8fcfa] border border-border-green rounded-xl px-4 text-text-main placeholder:text-text-secondary focus:ring-0 focus:border-primary transition-colors" placeholder="e.g. Floral Summer Maxi Dress" type="text"/>
+</label>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<label class="block">
+<span class="text-text-main font-medium mb-2 block">Price</span>
+<div class="relative">
+<span class="absolute left-4 top-1/2 -translate-y-1/2 text-text-secondary">$</span>
+<input class="w-full h-14 bg-[#f8fcfa] border border-border-green rounded-xl pl-8 pr-4 text-text-main placeholder:text-text-secondary focus:ring-0 focus:border-primary transition-colors" placeholder="0.00" step="0.01" type="number"/>
+</div>
+</label>
+<label class="block">
+<span class="text-text-main font-medium mb-2 block">Discount Price (Optional)</span>
+<div class="relative">
+<span class="absolute left-4 top-1/2 -translate-y-1/2 text-text-secondary">$</span>
+<input class="w-full h-14 bg-[#f8fcfa] border border-border-green rounded-xl pl-8 pr-4 text-text-main placeholder:text-text-secondary focus:ring-0 focus:border-primary transition-colors" placeholder="0.00" step="0.01" type="number"/>
+</div>
+</label>
+</div>
+<label class="block">
+<span class="text-text-main font-medium mb-2 block">Description</span>
+<div class="bg-[#f8fcfa] border border-border-green rounded-xl overflow-hidden focus-within:border-primary transition-colors">
+<div class="flex items-center gap-2 px-3 py-2 border-b border-border-green bg-white">
+<button class="p-1.5 rounded hover:bg-gray-100 text-text-secondary" type="button"><span class="material-symbols-outlined text-[20px]">format_bold</span></button>
+<button class="p-1.5 rounded hover:bg-gray-100 text-text-secondary" type="button"><span class="material-symbols-outlined text-[20px]">format_italic</span></button>
+<button class="p-1.5 rounded hover:bg-gray-100 text-text-secondary" type="button"><span class="material-symbols-outlined text-[20px]">format_list_bulleted</span></button>
+<button class="p-1.5 rounded hover:bg-gray-100 text-text-secondary" type="button"><span class="material-symbols-outlined text-[20px]">link</span></button>
+</div>
+<textarea class="w-full h-32 bg-transparent border-none p-4 text-text-main placeholder:text-text-secondary focus:ring-0 resize-none" placeholder="Describe the product material, fit, and style details..."></textarea>
+</div>
+</label>
+</div>
+</div>
+<div class="bg-white p-6 rounded-2xl shadow-sm border border-transparent">
+<h3 class="text-lg font-bold text-text-main mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">image</span>
+                                Product Images
+                            </h3>
+<div class="border-2 border-dashed border-border-green rounded-xl p-8 flex flex-col items-center justify-center text-center cursor-pointer hover:bg-[#f8fcfa] transition-colors group">
+<div class="bg-[#e7f3ec] rounded-full p-4 mb-4 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-primary text-[32px]">cloud_upload</span>
+</div>
+<p class="text-text-main font-medium mb-1">Click to upload or drag and drop</p>
+<p class="text-text-secondary text-sm">SVG, PNG, JPG or GIF (max. 800x400px)</p>
+</div>
+<div class="flex gap-4 mt-6 overflow-x-auto pb-2">
+<div class="relative shrink-0 size-24 rounded-lg overflow-hidden border border-border-green group">
+<div class="bg-center bg-no-repeat bg-cover h-full w-full" data-alt="Summer dress detail shot" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDLk_Nw2_CmGVyCEVj3By3EHU30TiOnWLKq6HhWSXxOoy3O0-gPH5vns-GmrBb3hcZSogcZhg93K5m0XTkCpSzLr__PqBirFKQa8oi0AFKTmM9NQ-ms80CZ3xTZ2IHhLeWPhFRKnJCAKTMllQZrX-_bZk8TRjUIg81qTdc3jE1lE7UdHyqnowu8x_MZ-v-YhGkrWkdipKICNStfEzi3iS7zm_nT2qJZ4vwBlBSTQv7AI64hxpc5LGsRaFFZyzP2qGb8L3cI_5fLNR4");'></div>
+<button class="absolute top-1 right-1 bg-white/90 text-red-500 rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-[16px]">close</span>
+</button>
+</div>
+<div class="relative shrink-0 size-24 rounded-lg overflow-hidden border border-border-green flex items-center justify-center bg-[#f8fcfa]">
+<span class="material-symbols-outlined text-border-green">add_photo_alternate</span>
+</div>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-6">
+<div class="bg-white p-6 rounded-2xl shadow-sm border border-transparent">
+<h3 class="text-lg font-bold text-text-main mb-4">Availability</h3>
+<div class="flex items-center justify-between mb-6 p-3 bg-[#f8fcfa] rounded-xl border border-border-green">
+<div class="flex flex-col">
+<span class="text-sm font-bold text-text-main">In Stock</span>
+<span class="text-xs text-text-secondary">Product will be visible</span>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox" value=""/>
+<div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<label class="block mb-4">
+<span class="text-text-main font-medium mb-2 block">Stock Quantity</span>
+<input class="w-full h-12 bg-[#f8fcfa] border border-border-green rounded-xl px-4 text-text-main focus:ring-0 focus:border-primary transition-colors" placeholder="e.g. 100" type="number"/>
+</label>
+<label class="block">
+<span class="text-text-main font-medium mb-2 block">SKU</span>
+<input class="w-full h-12 bg-[#f8fcfa] border border-border-green rounded-xl px-4 text-text-main focus:ring-0 focus:border-primary transition-colors" placeholder="e.g. W-DR-001" type="text"/>
+</label>
+</div>
+<div class="bg-white p-6 rounded-2xl shadow-sm border border-transparent">
+<h3 class="text-lg font-bold text-text-main mb-4">Organization</h3>
+<div class="space-y-4">
+<label class="block">
+<span class="text-text-main font-medium mb-2 block">Category</span>
+<div class="relative">
+<select class="w-full h-12 bg-[#f8fcfa] border border-border-green rounded-xl px-4 text-text-main focus:ring-0 focus:border-primary transition-colors appearance-none">
+<option>Dresses</option>
+<option>Tops &amp; Blouses</option>
+<option>Skirts</option>
+<option>Outerwear</option>
+</select>
+<span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none">expand_more</span>
+</div>
+</label>
+<label class="block">
+<span class="text-text-main font-medium mb-2 block">Season</span>
+<div class="relative">
+<select class="w-full h-12 bg-[#f8fcfa] border border-border-green rounded-xl px-4 text-text-main focus:ring-0 focus:border-primary transition-colors appearance-none">
+<option>Summer 2024</option>
+<option>Spring 2024</option>
+<option>Fall 2023</option>
+<option>Winter 2023</option>
+</select>
+<span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none">expand_more</span>
+</div>
+</label>
+<label class="block">
+<span class="text-text-main font-medium mb-2 block">Color</span>
+<div class="relative">
+<input class="w-full h-12 bg-[#f8fcfa] border border-border-green rounded-xl p-1.5 cursor-pointer focus:ring-0 focus:border-primary transition-colors" type="color" value="#11d45f"/>
+<span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none">palette</span>
+</div>
+</label>
+<label class="block">
+<span class="text-text-main font-medium mb-2 block">Tags</span>
+<input class="w-full h-12 bg-[#f8fcfa] border border-border-green rounded-xl px-4 text-text-main focus:ring-0 focus:border-primary transition-colors" placeholder="Add tags separated by comma" type="text"/>
+<div class="flex flex-wrap gap-2 mt-3">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-[#e7f3ec] text-text-main">
+                                            floral
+                                            <button class="ml-1 text-text-secondary hover:text-text-main" type="button"><span class="material-symbols-outlined text-[14px]">close</span></button>
+</span>
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-[#e7f3ec] text-text-main">
+                                            cotton
+                                            <button class="ml-1 text-text-secondary hover:text-text-main" type="button"><span class="material-symbols-outlined text-[14px]">close</span></button>
+</span>
+</div>
+</label>
+</div>
+</div>
+<div class="flex flex-col gap-3 mt-auto pt-4">
+<button class="w-full h-14 bg-primary hover:bg-[#0ebf55] text-text-main font-bold text-base rounded-full shadow-lg shadow-primary/20 transition-all flex items-center justify-center gap-2" type="button">
+<span class="material-symbols-outlined">save</span>
+                                Save Product
+                            </button>
+<button class="w-full h-14 bg-transparent border-2 border-[#1a3826] hover:bg-[#1a3826] hover:text-white text-[#88a594] font-bold text-base rounded-full transition-colors" type="button">
+                                Cancel
+                            </button>
+</div>
+</div>
+</form>
+</div>
+</main>
+</div>
+</body></html>

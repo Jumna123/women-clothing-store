@@ -1,0 +1,321 @@
+{% extends "adminpanel/admin_base.html" %}
+{% block title %}Product Management{% endblock %}
+{% block content %}
+
+<link href="https://fonts.googleapis.com/css2?family=Spline+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#17cf60",
+                        "background-light": "#ffffff",
+                        "background-dark": "#112117",
+                        "background-page": "#0e2315", // Dark green page background
+                        "text-main": "#0e1b13",
+                        "text-secondary": "#4e976b",
+                        "text-on-dark": "#e7f3ec", // Light text for dark background
+                        "surface-light": "#f8fcfa",
+                        "border-color": "#e7f3ec",
+                        "border-dark": "#1f3b28"
+                    },
+                    fontFamily: {
+                        "display": ["Spline Sans", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+</head>
+
+
+
+
+<div class="max-w-[1440px] mx-auto px-6 md:px-10 py-8 flex flex-col gap-6">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-2">
+<div class="flex flex-col gap-2">
+<h1 class="text-white text-3xl md:text-4xl font-black leading-tight tracking-[-0.033em]">Product Management</h1>
+<p class="text-[#4e976b] text-base font-normal">Manage your inventory, prices, and product availability.</p>
+</div>
+<a href="{% url 'adminpanel:addproduct' %}">
+<button class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-white hover:bg-green-600 transition-colors shadow-sm text-sm font-bold leading-normal tracking-[0.015em] gap-2 ">
+<span class="material-symbols-outlined text-[20px]">add</span>
+<span class="truncate">Add Product</span>
+</button>
+</a>
+</div>
+<div class="flex flex-col lg:flex-row gap-4 mb-0 bg-white p-4 rounded-xl border border-transparent shadow-md">
+<div class="flex-1">
+<label class="flex flex-col h-10 w-full lg:max-w-md">
+<div class="flex w-full flex-1 items-stretch rounded-lg h-full bg-surface-light border border-border-color focus-within:border-primary transition-colors">
+<div class="text-text-secondary flex border-none items-center justify-center pl-3 rounded-l-lg border-r-0">
+<span class="material-symbols-outlined text-[20px]">search</span>
+</div>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-text-main focus:outline-0 focus:ring-0 border-none bg-transparent focus:border-none h-full placeholder:text-text-secondary px-3 rounded-l-none border-l-0 pl-2 text-sm font-normal leading-normal" placeholder="Search by product name, SKU..." value=""/>
+</div>
+</label>
+</div>
+<div class="flex gap-3 overflow-x-auto pb-2 lg:pb-0 scrollbar-hide">
+<button class="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-surface-light border border-border-color pl-4 pr-3 hover:border-primary transition-colors group">
+<p class="text-text-main text-sm font-medium leading-normal">Category</p>
+<span class="material-symbols-outlined text-text-secondary group-hover:text-primary text-[20px]">expand_more</span>
+</button>
+<button class="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-surface-light border border-border-color pl-4 pr-3 hover:border-primary transition-colors group">
+<p class="text-text-main text-sm font-medium leading-normal">Stock Status</p>
+<span class="material-symbols-outlined text-text-secondary group-hover:text-primary text-[20px]">expand_more</span>
+</button>
+<button class="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-surface-light border border-border-color pl-4 pr-3 hover:border-primary transition-colors group">
+<p class="text-text-main text-sm font-medium leading-normal">Price Range</p>
+<span class="material-symbols-outlined text-text-secondary group-hover:text-primary text-[20px]">expand_more</span>
+</button>
+<button class="flex h-10 shrink-0 items-center justify-center rounded-lg bg-surface-light border border-border-color px-3 hover:bg-gray-100 text-text-secondary transition-colors" title="Reset Filters">
+<span class="material-symbols-outlined text-[20px]">filter_alt_off</span>
+</button>
+</div>
+</div>
+<div class="w-full overflow-hidden rounded-xl border border-transparent bg-white shadow-md flex flex-col flex-1">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-light border-b border-border-color">
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-text-secondary w-20">Image</th>
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-text-secondary min-w-[200px]">Product Name</th>
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-text-secondary">Category</th>
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-text-secondary">Price</th>
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-text-secondary">Availability</th>
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-text-secondary text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-border-color bg-white">
+<tr class="group hover:bg-surface-light transition-colors duration-150">
+<td class="px-6 py-4">
+<div class="relative h-12 w-12 overflow-hidden rounded-lg border border-border-color">
+<div class="absolute inset-0 bg-center bg-cover" data-alt="Floral summer dress with vibrant colors" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCW82p1DmRZ707jT327ca779LLXOWR-5wk1EF5TcOCxxdwYLnSn8tqg_UQiYAgCrWhEsurHqUSGz5q8bwEwbv8LIag56V3fKbgOUXNEkGo6ZHmnScbnem-YBa3VcbV0mmOkPDdFkHW-T_M8EH3VUTWfblbJpdFeaIvpsahiXzSPtUELS4rXseP42zxQzr-U9hDeDd8osBWIo35iDqB9DM7FjV_rR6alghw8R33zl1Zj2mEb_KMU1_NkXKHf2y_9EXyPxWWAu7m9RyM");'></div>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex flex-col">
+<span class="font-bold text-text-main text-sm">Floral Summer Maxi</span>
+<span class="text-xs text-text-secondary">SKU: DR-001-FL</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center rounded-full bg-surface-light border border-border-color px-2.5 py-0.5 text-xs font-medium text-text-main">
+                                    Dresses
+                                </span>
+</td>
+<td class="px-6 py-4 text-sm font-medium text-text-main">$89.00</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="relative flex h-2.5 w-2.5">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-primary"></span>
+</span>
+<span class="text-sm font-medium text-text-main">In Stock</span>
+<span class="text-xs text-text-secondary">(45)</span>
+</div>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex items-center justify-end gap-2">
+<button class="flex h-8 w-8 items-center justify-center rounded-lg hover:bg-border-color text-text-secondary hover:text-text-main transition-colors" title="Edit">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button class="flex h-8 w-8 items-center justify-center rounded-lg hover:bg-red-50 text-text-secondary hover:text-red-600 transition-colors" title="Delete">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<tr class="group hover:bg-surface-light transition-colors duration-150">
+<td class="px-6 py-4">
+<div class="relative h-12 w-12 overflow-hidden rounded-lg border border-border-color">
+<div class="absolute inset-0 bg-center bg-cover" data-alt="White linen blouse" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCFXb1mKDRO0rm4rd9pvSroEKODmQUWAQ51lGzMlIiG93wngMUF5yZwwEwequ7WjyMw1Rw9dhJlXcqcpPczQbjnNbw5ANpOhugFDLZnZ39VAKGIL4QUA4RDtZ-SmgOXOW6RsdbN5GOWcddVZsmA0saCN6JCQprtPBMH87rPA9rmB4s0QjS-L0_T5XSKd8Ms1dCNPfZyBVaLp3G81YUS8loV8TJ16k6qKdHSgd4iJoJtiWLDAwNBh1RQ7-b4dvplPy2o8RbDv38nLWk");'></div>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex flex-col">
+<span class="font-bold text-text-main text-sm">Classic Linen Blouse</span>
+<span class="text-xs text-text-secondary">SKU: TP-042-WT</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center rounded-full bg-surface-light border border-border-color px-2.5 py-0.5 text-xs font-medium text-text-main">
+                                    Tops
+                                </span>
+</td>
+<td class="px-6 py-4 text-sm font-medium text-text-main">$55.00</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-orange-400"></span>
+<span class="text-sm font-medium text-text-main">Low Stock</span>
+<span class="text-xs text-text-secondary">(3)</span>
+</div>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex items-center justify-end gap-2">
+<button class="flex h-8 w-8 items-center justify-center rounded-lg hover:bg-border-color text-text-secondary hover:text-text-main transition-colors" title="Edit">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button class="flex h-8 w-8 items-center justify-center rounded-lg hover:bg-red-50 text-text-secondary hover:text-red-600 transition-colors" title="Delete">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<tr class="group hover:bg-surface-light transition-colors duration-150">
+<td class="px-6 py-4">
+<div class="relative h-12 w-12 overflow-hidden rounded-lg border border-border-color">
+<div class="absolute inset-0 bg-center bg-cover" data-alt="Denim high waist jeans" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDwi46X_wEgjFGO_Gu19I0mCVOE5Q9jZ4IM9PnJNfF2jASwCY8LXyGR1MgB8hH58Pq53YqrB_gZNC-yRh93gOctM_WJgs8qrbZrIM4dNFrZZpRwURXjUw0OqBw7ySXiCbmTi8xol8_g2D3Sj616Z8ncqcgcNaa46SNhXVCKrsw68eq89kTboeJLkE_sokYS-bB8VielViBmceuR3xEgI-iajqhfKIgZDcIx0ZDYA_7aHmVcLAoob0PqBhI9jngh_1AXF6-yDjeptpg");'></div>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex flex-col">
+<span class="font-bold text-text-main text-sm">High-Rise Skinny Jeans</span>
+<span class="text-xs text-text-secondary">SKU: BT-101-BL</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center rounded-full bg-surface-light border border-border-color px-2.5 py-0.5 text-xs font-medium text-text-main">
+                                    Bottoms
+                                </span>
+</td>
+<td class="px-6 py-4 text-sm font-medium text-text-main">$79.50</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-primary"></span>
+<span class="text-sm font-medium text-text-main">In Stock</span>
+<span class="text-xs text-text-secondary">(120)</span>
+</div>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex items-center justify-end gap-2">
+<button class="flex h-8 w-8 items-center justify-center rounded-lg hover:bg-border-color text-text-secondary hover:text-text-main transition-colors" title="Edit">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button class="flex h-8 w-8 items-center justify-center rounded-lg hover:bg-red-50 text-text-secondary hover:text-red-600 transition-colors" title="Delete">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<tr class="group hover:bg-surface-light transition-colors duration-150">
+<td class="px-6 py-4">
+<div class="relative h-12 w-12 overflow-hidden rounded-lg border border-border-color">
+<div class="absolute inset-0 bg-center bg-cover" data-alt="Beige trench coat" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBFB7_q9bqZtXdcoEAWZOJ-nJ7MbBZz7sxxnAzxrAN2_Vyv2LkQUxQuSGzoUUPOqCUNZ-EvdYq9-r-GMbG78mg9S7GQ26j2Aj5ZqSaysHC0_DaRqmXP4oXVIiOKCVBepV6CmNDLljjwiBdyKpUvmap2oLiUskehj7iB1CyzzGScDr0drrjc_6Gtgc9axLWZ3fY_WEdnnmFvBpv96YQBIWt8Rv_TaqtM3GLnsQqJKqcwEBPLmVgyXGAENs0kY7M6d_liLDdrw7qia2g");'></div>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex flex-col">
+<span class="font-bold text-text-main text-sm">Everyday Trench Coat</span>
+<span class="text-xs text-text-secondary">SKU: OW-220-BG</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center rounded-full bg-surface-light border border-border-color px-2.5 py-0.5 text-xs font-medium text-text-main">
+                                    Outerwear
+                                </span>
+</td>
+<td class="px-6 py-4 text-sm font-medium text-text-main">$145.00</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-gray-300"></span>
+<span class="text-sm font-medium text-gray-400">Out of Stock</span>
+<span class="text-xs text-text-secondary">(0)</span>
+</div>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex items-center justify-end gap-2">
+<button class="flex h-8 w-8 items-center justify-center rounded-lg hover:bg-border-color text-text-secondary hover:text-text-main transition-colors" title="Edit">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button class="flex h-8 w-8 items-center justify-center rounded-lg hover:bg-red-50 text-text-secondary hover:text-red-600 transition-colors" title="Delete">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<tr class="group hover:bg-surface-light transition-colors duration-150">
+<td class="px-6 py-4">
+<div class="relative h-12 w-12 overflow-hidden rounded-lg border border-border-color">
+<div class="absolute inset-0 bg-center bg-cover" data-alt="Silk floral scarf" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBffyVfwiZGlHkwwLeP9FCN2hL5pFCgChH7iDycdErdbAv7YZV6kKYbdCqtd9Ep7U0NR8al6Fk4zu6_gqJpuzJbdPda39jFy8i5UHVlDb527767TbWskP5nDVyzNjzRSmAxFbTtTachXrnPSyhnRC-nws0GM2fvmnIIuyQFhPJMxOf_TXuBhliTiaEC_OjxiFpGvbBibJcC8FpQEmmFf43KQI4FrgDzWcok3q2Cn_mCzQ0rpIp96xIaHRXeNouWMDXRPEeVw6n0sbs");'></div>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex flex-col">
+<span class="font-bold text-text-main text-sm">Silk Print Scarf</span>
+<span class="text-xs text-text-secondary">SKU: AC-555-PK</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center rounded-full bg-surface-light border border-border-color px-2.5 py-0.5 text-xs font-medium text-text-main">
+                                    Accessories
+                                </span>
+</td>
+<td class="px-6 py-4 text-sm font-medium text-text-main">$35.00</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-primary"></span>
+<span class="text-sm font-medium text-text-main">In Stock</span>
+<span class="text-xs text-text-secondary">(15)</span>
+</div>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex items-center justify-end gap-2">
+<button class="flex h-8 w-8 items-center justify-center rounded-lg hover:bg-border-color text-text-secondary hover:text-text-main transition-colors" title="Edit">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button class="flex h-8 w-8 items-center justify-center rounded-lg hover:bg-red-50 text-text-secondary hover:text-red-600 transition-colors" title="Delete">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="flex items-center justify-between border-t border-border-color bg-surface-light px-6 py-4">
+<div class="flex flex-1 justify-between sm:hidden">
+<button class="relative inline-flex items-center rounded-md border border-border-color bg-white px-4 py-2 text-sm font-medium text-text-secondary hover:bg-gray-50">Previous</button>
+<button class="relative ml-3 inline-flex items-center rounded-md border border-border-color bg-white px-4 py-2 text-sm font-medium text-text-secondary hover:bg-gray-50">Next</button>
+</div>
+<div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
+<div>
+<p class="text-sm text-text-secondary">
+                            Showing
+                            <span class="font-bold text-text-main">1</span>
+                            to
+                            <span class="font-bold text-text-main">5</span>
+                            of
+                            <span class="font-bold text-text-main">97</span>
+                            results
+                        </p>
+</div>
+<div>
+<nav aria-label="Pagination" class="isolate inline-flex -space-x-px rounded-md shadow-sm">
+<button class="relative inline-flex items-center rounded-l-md px-2 py-2 text-text-secondary ring-1 ring-inset ring-border-color hover:bg-white focus:z-20 focus:outline-offset-0">
+<span class="sr-only">Previous</span>
+<span class="material-symbols-outlined text-[20px]">chevron_left</span>
+</button>
+<button aria-current="page" class="relative z-10 inline-flex items-center bg-primary px-4 py-2 text-sm font-semibold text-white focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">1</button>
+<button class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-text-main ring-1 ring-inset ring-border-color hover:bg-white focus:z-20 focus:outline-offset-0">2</button>
+<button class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-text-main ring-1 ring-inset ring-border-color hover:bg-white focus:z-20 focus:outline-offset-0">3</button>
+<span class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-text-secondary ring-1 ring-inset ring-border-color focus:outline-offset-0">...</span>
+<button class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-text-main ring-1 ring-inset ring-border-color hover:bg-white focus:z-20 focus:outline-offset-0">10</button>
+<button class="relative inline-flex items-center rounded-r-md px-2 py-2 text-text-secondary ring-1 ring-inset ring-border-color hover:bg-white focus:z-20 focus:outline-offset-0">
+<span class="sr-only">Next</span>
+<span class="material-symbols-outlined text-[20px]">chevron_right</span>
+</button>
+</nav>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+{% endblock %}
+</body></html>

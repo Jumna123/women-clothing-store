@@ -1,0 +1,208 @@
+{% extends "adminpanel/admin_base.html" %}
+{% block title %}category Management{% endblock %}
+{% block content %}
+
+<!-- Page Header -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div class="flex flex-col gap-1">
+<h2 class="text-text-main text-3xl md:text-4xl font-black tracking-tight">Category Management</h2>
+<p class="text-text-secondary text-base">Organize your inventory structure and product classification.</p>
+</div>
+<button class="flex items-center gap-2 bg-primary hover:bg-green-600 text-white px-6 py-3 rounded-full transition-all shadow-lg shadow-primary/20 hover:shadow-primary/30 active:scale-95">
+<span class="material-symbols-outlined text-[20px]">add</span>
+<span class="text-sm font-bold tracking-wide">Add New Category</span>
+</button>
+</div>
+<!-- Filters & Search -->
+<div class="bg-white rounded-2xl p-2 border border-[#d1e6d9] shadow-sm flex flex-col md:flex-row gap-2">
+<div class="relative flex-1">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-text-secondary">search</span>
+<input class="w-full h-12 pl-12 pr-4 bg-background-light border-transparent focus:bg-white focus:border-primary focus:ring-0 rounded-xl text-text-main placeholder:text-text-secondary/70 text-sm transition-all" placeholder="Search categories..." type="text"/>
+</div>
+<div class="relative w-full md:w-64">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-text-secondary">filter_list</span>
+<select class="w-full h-12 pl-12 pr-10 bg-background-light border-transparent focus:bg-white focus:border-primary focus:ring-0 rounded-xl text-text-main text-sm appearance-none cursor-pointer transition-all">
+<option value="">All Statuses</option>
+<option value="active">Active</option>
+<option value="draft">Draft</option>
+<option value="archived">Archived</option>
+</select>
+<span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none text-[20px]">expand_more</span>
+</div>
+</div>
+<!-- Data Table -->
+<div class="bg-white rounded-2xl border border-[#d1e6d9] shadow-sm overflow-hidden flex flex-col">
+<div class="overflow-x-auto">
+<table class="w-full min-w-[800px] table-auto">
+<thead class="bg-background-light border-b border-[#d1e6d9]">
+<tr>
+<th class="px-6 py-4 text-left text-xs font-bold text-text-secondary uppercase tracking-wider w-24">ID</th>
+<th class="px-6 py-4 text-left text-xs font-bold text-text-secondary uppercase tracking-wider">Category Name</th>
+<th class="px-6 py-4 text-left text-xs font-bold text-text-secondary uppercase tracking-wider">Slug</th>
+<th class="px-6 py-4 text-left text-xs font-bold text-text-secondary uppercase tracking-wider">Product Count</th>
+<th class="px-6 py-4 text-left text-xs font-bold text-text-secondary uppercase tracking-wider">Status</th>
+<th class="px-6 py-4 text-right text-xs font-bold text-text-secondary uppercase tracking-wider w-32">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-[#d1e6d9]">
+<!-- Row 1 -->
+<tr class="hover:bg-background-light/50 transition-colors group">
+<td class="px-6 py-4 text-sm text-text-secondary font-mono">#001</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-lg bg-cover bg-center bg-gray-100 border border-[#d1e6d9]" data-alt="Abstract soft pink gradient representing dresses category" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCYmxlFi6ORLZGKDEb8V14ycTFaWYdb6BXAdBdK9vuX0fia_n7cUY0eR-rNZWQ43jyA6LkFbd3iXraMhynUeb76hK_vKrWzcdrxH92ZGjqTYq32tre8jWVWoFGep3y_MZ5nOnkPx8Ck3oR36AFBqI_8eW2JwhmXXW-pTA3cGDF_p7UpXPIi2MYUARkFzSz9teTLXZXbHqYgIOz5u1CtvIxmK-sAVJtCgj7uKyKBLbNuLIWSz5x488eTHA8dQeK-iD98cAmFY-7IIqY");'></div>
+<span class="text-sm font-bold text-text-main">Dresses</span>
+</div>
+</td>
+<td class="px-6 py-4 text-sm text-text-secondary font-medium">/dresses</td>
+<td class="px-6 py-4 text-sm text-text-main font-medium">240 items</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-primary/10 text-primary border border-primary/20">
+                                                Active
+                                            </span>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="size-8 flex items-center justify-center rounded-full hover:bg-primary/10 text-text-secondary hover:text-primary transition-colors" title="Edit">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button class="size-8 flex items-center justify-center rounded-full hover:bg-red-50 text-text-secondary hover:text-red-500 transition-colors" title="Delete">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-background-light/50 transition-colors group">
+<td class="px-6 py-4 text-sm text-text-secondary font-mono">#002</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-lg bg-cover bg-center bg-gray-100 border border-[#d1e6d9]" data-alt="Abstract sporty texture representing activewear" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBf5oaEZF1vKD3Vt0_J6HtfhaeQAQwK0y8SjCVzwpPiSHZNbDFN7WqQbqk8EilzxD8bAmlwunqu3pzmN-gESYmO_tfDs3tLyaQe2iVPtoUbyrSkRwK6Dek2wInBWsT897oALPVkYUjMZ6OQC6-URotXtzB5CmWMvI551D-VZk7LllL4RXZwG4rAAwIJm4cNqaN1gKUW2K_NMR8WRIEzIDgApqhk6USMIry-Bv_1SSVCR336_j2vhT6zRBQ2Eygduvkwfa0-PJSjA2c");'></div>
+<span class="text-sm font-bold text-text-main">Activewear</span>
+</div>
+</td>
+<td class="px-6 py-4 text-sm text-text-secondary font-medium">/activewear</td>
+<td class="px-6 py-4 text-sm text-text-main font-medium">85 items</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-primary/10 text-primary border border-primary/20">
+                                                Active
+                                            </span>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="size-8 flex items-center justify-center rounded-full hover:bg-primary/10 text-text-secondary hover:text-primary transition-colors" title="Edit">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button class="size-8 flex items-center justify-center rounded-full hover:bg-red-50 text-text-secondary hover:text-red-500 transition-colors" title="Delete">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-background-light/50 transition-colors group">
+<td class="px-6 py-4 text-sm text-text-secondary font-mono">#003</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-lg bg-cover bg-center bg-gray-100 border border-[#d1e6d9]" data-alt="Abstract golden texture for accessories" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBmud10I0Hd9PbEubBXMVtZ945lXRS0dvxcMZmSA2wq31PlaJ56Q-WbD4qY_yHAkbcuTiav8O4nwIRj7Zzi_TLzmXZthpKPfjQrC7Gbu5j60BVyFh9xQqdIz8w28mwJwAlVAjsPm4Ls-zH5dsEbDkMz33elkNhzd-r-4AI6-R6_QlphOlED1doO2wswf9fJBBUdftWXxMvS95TuQBZ0_m_SGF95jsDVVwrZl7Sb9fbEAgXMnrfEVRKovu8Tgjjkie_DCRqDEKpx130");'></div>
+<span class="text-sm font-bold text-text-main">Accessories</span>
+</div>
+</td>
+<td class="px-6 py-4 text-sm text-text-secondary font-medium">/accessories</td>
+<td class="px-6 py-4 text-sm text-text-main font-medium">120 items</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-gray-100 text-gray-600 border border-gray-200">
+                                                Draft
+                                            </span>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="size-8 flex items-center justify-center rounded-full hover:bg-primary/10 text-text-secondary hover:text-primary transition-colors" title="Edit">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button class="size-8 flex items-center justify-center rounded-full hover:bg-red-50 text-text-secondary hover:text-red-500 transition-colors" title="Delete">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-background-light/50 transition-colors group">
+<td class="px-6 py-4 text-sm text-text-secondary font-mono">#004</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-lg bg-cover bg-center bg-gray-100 border border-[#d1e6d9]" data-alt="Close up of leather texture for shoes" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCQbys_PRPxU7xTmxKYbr6gZkVPrJetLGqPP8RJbL2Fzr9nYF2c9V7mjbNYwekHSkzjCk4WF92ok2GOTWFBblNnqWHRZ2qGPJh3mwAmeQ1eK4GR0STWBkOjj5tBBCRlt9HliaO9Iyn9FTJdDQfcaIN9ZAhh9O7MyKK2amToSHzYhmy3M2mLA8fCqO6XYGSDDYUdAy0v6cTTXYhLartQ87xqphOrvdSqgwW8OBZbbAQhxpNFMj3K7W2Wwc9RNCrBYyy8_IQ40_K3rBs");'></div>
+<span class="text-sm font-bold text-text-main">Shoes</span>
+</div>
+</td>
+<td class="px-6 py-4 text-sm text-text-secondary font-medium">/shoes</td>
+<td class="px-6 py-4 text-sm text-text-main font-medium">300 items</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-primary/10 text-primary border border-primary/20">
+                                                Active
+                                            </span>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="size-8 flex items-center justify-center rounded-full hover:bg-primary/10 text-text-secondary hover:text-primary transition-colors" title="Edit">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button class="size-8 flex items-center justify-center rounded-full hover:bg-red-50 text-text-secondary hover:text-red-500 transition-colors" title="Delete">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 5 -->
+<tr class="hover:bg-background-light/50 transition-colors group">
+<td class="px-6 py-4 text-sm text-text-secondary font-mono">#005</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-lg bg-cover bg-center bg-gray-100 border border-[#d1e6d9]" data-alt="Abstract fabric texture for outerwear" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBt8rFkAFzEqKkuJCaVypnveJNzt1jRFnY7-OO227BPwHxlxCwc6QygX3lkTUepvLLm2zs4YEwV28Ylh-W6pTgmTet5EgkKLSc6FhfqW0E4XKX7dFK-GnU32-OizcElWn_wb7HZCyzkZEKVd1YVZI-cFRGBWOEROLCXlJB1yK-IwJglh3TZcwquCwQk6pJ5ZpjsyQJq7KfllFk9NHWL3F-QfAfvLv_VzVPqB0rxe3yA-CrqvzHaB61Zr39qzdoRTT3c-BhzDLZWDTA");'></div>
+<span class="text-sm font-bold text-text-main">Outerwear</span>
+</div>
+</td>
+<td class="px-6 py-4 text-sm text-text-secondary font-medium">/outerwear</td>
+<td class="px-6 py-4 text-sm text-text-main font-medium">45 items</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-gray-100 text-gray-600 border border-gray-200">
+                                                Draft
+                                            </span>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="size-8 flex items-center justify-center rounded-full hover:bg-primary/10 text-text-secondary hover:text-primary transition-colors" title="Edit">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button class="size-8 flex items-center justify-center rounded-full hover:bg-red-50 text-text-secondary hover:text-red-500 transition-colors" title="Delete">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination -->
+<div class="flex items-center justify-between px-6 py-4 border-t border-[#d1e6d9]">
+<p class="text-sm text-text-secondary">Showing <span class="font-bold text-text-main">1</span> to <span class="font-bold text-text-main">5</span> of <span class="font-bold text-text-main">24</span> results</p>
+<div class="flex items-center gap-1">
+<button class="flex size-8 items-center justify-center rounded-full text-text-secondary hover:bg-background-light transition-colors disabled:opacity-50">
+<span class="material-symbols-outlined text-[18px]">chevron_left</span>
+</button>
+<button class="flex size-8 items-center justify-center rounded-full bg-primary text-white text-sm font-bold shadow-md shadow-primary/20">1</button>
+<button class="flex size-8 items-center justify-center rounded-full text-text-main hover:bg-background-light transition-colors text-sm font-medium">2</button>
+<button class="flex size-8 items-center justify-center rounded-full text-text-main hover:bg-background-light transition-colors text-sm font-medium">3</button>
+<span class="flex size-8 items-center justify-center text-text-secondary text-sm">...</span>
+<button class="flex size-8 items-center justify-center rounded-full text-text-main hover:bg-background-light transition-colors text-sm font-medium">12</button>
+<button class="flex size-8 items-center justify-center rounded-full text-text-secondary hover:bg-background-light transition-colors">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+{% endblock %}

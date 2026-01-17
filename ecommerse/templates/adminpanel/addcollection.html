@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Collection Management - Elegance Admin</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Spline+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+        theme: {
+            extend: {
+                colors: {
+                    "primary": "#36e27b",
+                    "primary-dark": "#112117", 
+                    "background-light": "#ffffff",
+                    "surface-light": "#f3f4f3",
+                },
+                fontFamily: {
+                    "display": ["Spline Sans", "sans-serif"]
+                },
+                borderRadius: {
+                    "DEFAULT": "0.5rem", 
+                    "lg": "1rem", 
+                    "xl": "1.5rem", 
+                    "full": "9999px"
+                },
+            },
+        },
+    }
+</script>
+<style>
+    body { font-family: 'Spline Sans', sans-serif; }
+    .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }.custom-scrollbar::-webkit-scrollbar { width: 6px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #2f4538; border-radius: 20px; }
+</style>
+</head>
+<body class="bg-[#112117] text-white min-h-screen flex flex-col font-display antialiased selection:bg-[#36e27b] selection:text-[#112117]">
+<header class="sticky top-0 z-50 w-full border-b border-[#23352a] bg-[#112117]">
+<div class="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-2">
+<div class="flex size-8 items-center justify-center rounded-full bg-white text-[#112117] shadow-md">
+<span class="material-symbols-outlined text-lg">diamond</span>
+</div>
+<h1 class="text-lg font-bold tracking-tight text-white">ELEGANCE <span class="font-normal text-gray-400">Admin</span></h1>
+</div>
+<nav class="hidden md:flex items-center gap-1">
+<a class="rounded-md px-3 py-2 text-sm font-medium text-gray-400 hover:bg-[#ffffff]/10 hover:text-white transition-colors" href="#">Dashboard</a>
+<a class="rounded-md px-3 py-2 text-sm font-medium text-gray-400 hover:bg-[#ffffff]/10 hover:text-white transition-colors" href="#">Products</a>
+<a class="rounded-md bg-[#ffffff]/10 px-3 py-2 text-sm font-bold text-white" href="#">Collections</a>
+<a class="rounded-md px-3 py-2 text-sm font-medium text-gray-400 hover:bg-[#ffffff]/10 hover:text-white transition-colors" href="#">Orders</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="relative rounded-full p-2 text-gray-400 hover:bg-[#ffffff]/10 hover:text-white transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2.5 right-2.5 size-2 rounded-full bg-red-500 border border-[#112117]"></span>
+</button>
+<div class="h-8 w-8 rounded-full bg-gray-700 overflow-hidden border border-gray-600 cursor-pointer">
+<img alt="Admin User" class="h-full w-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC4X-W6k9hu7Bg54ODdBpGGE8gCTKsNSfcfynmuur8rKZo2TfcBkwMUduFBvKci2WD33OMxfg5_7feTwUu-txjQxFJfTH2LB29CeT7FcvL1xGEvYRjgbBmTUotWDycsMsmRTD8GsMA_GNUVLiU-0cWD4imz9-Jvj9R5gnSHxs2j_STgyqR1YnZrCj8KJX2Wc7axzndt9Mvz0BEkTzl9OzeRGYXxnucDFuVqb6kd5XM0vDK-vTmzbSqdfRcwAE__powBnUy-p-kUgXM"/>
+</div>
+</div>
+</div>
+</header>
+<main class="flex-grow bg-[#112117]">
+<div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+<div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+<div>
+<nav class="flex text-sm text-gray-400 mb-2">
+<a class="hover:text-white transition-colors" href="#">Collections</a>
+<span class="mx-2 text-gray-600">/</span>
+<span class="text-white font-medium">Edit Collection</span>
+</nav>
+<h2 class="text-3xl font-bold text-white tracking-tight">Summer Essentials</h2>
+</div>
+<div class="flex gap-3">
+<button class="flex items-center justify-center rounded-lg border border-gray-600 bg-transparent px-5 py-2.5 text-sm font-bold text-white hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all">
+                    Cancel
+                </button>
+<button class="flex items-center justify-center gap-2 rounded-lg bg-white px-6 py-2.5 text-sm font-bold text-[#112117] shadow-lg hover:bg-gray-100 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white transition-all ring-offset-[#112117]">
+<span class="material-symbols-outlined text-lg">save</span>
+                    Save Collection
+                </button>
+</div>
+</div>
+<div class="grid grid-cols-1 gap-8 lg:grid-cols-3">
+<div class="space-y-8 lg:col-span-1">
+<div class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm text-[#112117]">
+<h3 class="text-lg font-bold text-[#112117] mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-gray-400">edit_note</span>
+                        General Information
+                    </h3>
+<div class="space-y-5">
+<div>
+<label class="block text-sm font-bold text-[#112117] mb-2" for="collection-name">Collection Name</label>
+<input class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-[#112117] focus:ring-[#112117] sm:text-sm py-2.5 text-[#112117] font-medium placeholder-gray-400 transition-shadow bg-white" id="collection-name" type="text" value="Summer Essentials"/>
+</div>
+<div>
+<label class="block text-sm font-bold text-[#112117] mb-2" for="description">Description</label>
+<textarea class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-[#112117] focus:ring-[#112117] sm:text-sm py-2.5 text-[#112117] placeholder-gray-400 transition-shadow bg-white" id="description" rows="4">A curated selection of breathable fabrics and light colors perfect for the warm season.</textarea>
+<p class="mt-2 text-xs text-gray-500">This description will be displayed on the collection page.</p>
+</div>
+</div>
+</div>
+<div class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm text-[#112117]">
+<h3 class="text-lg font-bold text-[#112117] mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-gray-400">image</span>
+                         Collection Image
+                    </h3>
+<div class="flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-gray-300 bg-gray-50/50 px-6 py-10 hover:bg-gray-50 hover:border-[#112117]/30 transition-all cursor-pointer group">
+<div class="mb-4 rounded-full bg-white p-3 shadow-sm ring-1 ring-gray-200 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-2xl text-gray-400 group-hover:text-[#112117]">cloud_upload</span>
+</div>
+<div class="text-center">
+<p class="text-sm font-bold text-[#112117]">Click to upload</p>
+<p class="text-xs text-gray-500 mt-1">SVG, PNG, JPG or GIF (max. 2MB)</p>
+</div>
+</div>
+<div class="mt-6">
+<p class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-3">Current Cover</p>
+<div class="relative group rounded-lg overflow-hidden border border-gray-200 shadow-sm">
+<img alt="Current Cover" class="w-full h-48 object-cover opacity-90 group-hover:opacity-100 transition-opacity" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB2CiXdPs-56d5nkWBPWz2pkzzbjteQ68TMRN5-wLmqcBNev902xwOLbNEe7eqBrnj1NbNUNr1y09Ogc3Q-KN-JMsX_rs-zT3mh50DwKzuVbg6-HVPH8G12OpDVTaMMda23v22JSqpYPEPiwrkuflA1qXW89-uD8LoOzZEm8yrxVPj-I9CIH2TJiSmCtafve9qnLflOWKK69xjphvS19EVtTPmC3zcMEbZRyIasauU3zpdlI13hvElVr-zRRjJi6dvhnI8dzNAvVzw"/>
+<div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors"></div>
+<div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="bg-white/95 backdrop-blur p-2 rounded-full text-red-600 hover:bg-red-50 hover:text-red-700 shadow-md transition-all transform hover:scale-105">
+<span class="material-symbols-outlined text-sm">delete</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<div class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm text-[#112117]">
+<h3 class="text-lg font-bold text-[#112117] mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-gray-400">visibility</span>
+                        Availability
+                    </h3>
+<div class="flex items-start">
+<div class="flex h-5 items-center">
+<input checked="" class="h-4 w-4 rounded border-gray-300 text-[#112117] focus:ring-[#112117] cursor-pointer" id="availability" name="availability" type="checkbox"/>
+</div>
+<div class="ml-3 text-sm">
+<label class="font-bold text-[#112117] cursor-pointer" for="availability">Publish on Online Store</label>
+<p class="text-gray-500 mt-0.5">Collection will be visible to all customers.</p>
+</div>
+</div>
+<div class="mt-6 pt-6 border-t border-gray-100">
+<label class="block text-sm font-bold text-[#112117] mb-2">Schedule Publishing</label>
+<div class="relative">
+<span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+<span class="material-symbols-outlined text-lg">calendar_month</span>
+</span>
+<input class="block w-full rounded-lg border-gray-300 pl-10 shadow-sm focus:border-[#112117] focus:ring-[#112117] sm:text-sm py-2.5 text-[#112117] bg-white" type="date"/>
+</div>
+</div>
+</div>
+</div>
+<div class="lg:col-span-2">
+<div class="rounded-2xl border border-gray-200 bg-white shadow-sm flex flex-col h-full min-h-[600px] text-[#112117]">
+<div class="p-6 border-b border-gray-100">
+<div class="flex items-center justify-between mb-6">
+<h3 class="text-lg font-bold text-[#112117] flex items-center gap-2">
+<span class="material-symbols-outlined text-gray-400">inventory_2</span>
+                                Products
+                            </h3>
+<span class="inline-flex items-center rounded-full bg-[#112117] px-3 py-1 text-xs font-bold text-white shadow-sm">
+                                12 assigned
+                            </span>
+</div>
+<div class="space-y-4">
+<label class="block text-sm font-bold text-[#112117]">Assign existing products</label>
+<div class="relative group">
+<div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 transition-colors group-focus-within:text-[#112117] text-gray-400">
+<span class="material-symbols-outlined">search</span>
+</div>
+<input class="block w-full rounded-lg border-gray-300 pl-10 pr-20 py-3 shadow-sm focus:border-[#112117] focus:ring-[#112117] sm:text-sm placeholder-gray-400 transition-all bg-white text-[#112117]" placeholder="Search by product name, tag, or ID..." type="text"/>
+<div class="absolute inset-y-0 right-2 flex items-center">
+<button class="rounded-md bg-gray-100 px-2 py-1 text-xs font-semibold text-gray-500 hover:text-[#112117] hover:bg-gray-200 transition-colors">
+                                        Browse
+                                    </button>
+</div>
+</div>
+</div>
+<div class="mt-6 flex flex-wrap gap-2">
+<div class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gray-50 text-xs font-bold text-[#112117] border border-gray-200">
+                                Filter: In Stock <button class="ml-1 text-gray-400 hover:text-red-500 transition-colors flex items-center"><span class="material-symbols-outlined text-[14px]">close</span></button>
+</div>
+<div class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gray-50 text-xs font-bold text-[#112117] border border-gray-200">
+                                Category: Dresses <button class="ml-1 text-gray-400 hover:text-red-500 transition-colors flex items-center"><span class="material-symbols-outlined text-[14px]">close</span></button>
+</div>
+<button class="text-xs font-bold text-[#112117] hover:underline ml-auto flex items-center gap-1">
+                                Clear all
+                             </button>
+</div>
+</div>
+<div class="flex-grow overflow-hidden">
+<div class="overflow-x-auto">
+<table class="min-w-full text-left text-sm">
+<thead class="bg-gray-50 text-gray-500 border-b border-gray-200">
+<tr>
+<th class="px-6 py-3 font-semibold text-xs uppercase tracking-wider" scope="col">Product</th>
+<th class="px-6 py-3 font-semibold text-xs uppercase tracking-wider" scope="col">Status</th>
+<th class="px-6 py-3 font-semibold text-xs uppercase tracking-wider text-right" scope="col">Inventory</th>
+<th class="px-6 py-3 font-semibold text-xs uppercase tracking-wider text-right" scope="col">Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-gray-100 bg-white">
+<tr class="group hover:bg-gray-50/50 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-4">
+<div class="h-12 w-12 flex-shrink-0 overflow-hidden rounded-md border border-gray-200 group-hover:border-[#112117]/20 transition-colors">
+<img alt="Dress" class="h-full w-full object-cover object-center" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAecZGfkB5bfRImLuM2lCxXariCpiPlrHqiEf00Py6BzCD2Oq79vWcxAF7AfDZhk1CShVXrigc3R3R_LZMwLEbc6VgHnIwkdO1yAgPBLD30sF2rNt0-94cgvmzuEEcdebEMc8n0txg2fHKW54inAxDvoOfyI34aR68PTuqsVgUdSIMzYFvzrHpi9cfDCX3O5tOKZNRn5kbniH7UkQysDo8PYDGh0IegQfRjrTrWVq4fE8p6WSFmb_VGcnMIrpy4Xz7mscpVQTACiio"/>
+</div>
+<div>
+<div class="font-bold text-[#112117]">Floral Summer Dress</div>
+<div class="text-xs text-gray-500 font-medium mt-0.5">$85.00 • SK-10293</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-bold text-green-700 ring-1 ring-inset ring-green-600/20">Active</span>
+</td>
+<td class="px-6 py-4 text-right text-gray-600 font-medium">
+                                            124 in stock
+                                        </td>
+<td class="px-6 py-4 text-right">
+<button class="text-gray-400 hover:text-red-600 hover:bg-red-50 p-2 rounded-full transition-all" title="Remove from collection">
+<span class="material-symbols-outlined text-xl">delete</span>
+</button>
+</td>
+</tr>
+<tr class="group hover:bg-gray-50/50 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-4">
+<div class="h-12 w-12 flex-shrink-0 overflow-hidden rounded-md border border-gray-200 group-hover:border-[#112117]/20 transition-colors">
+<img alt="Blouse" class="h-full w-full object-cover object-center" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAalC4-u9CCaqm9D-0F5W8ueXQ22xLfzmX7kxDZ1mqGddkusYovBWHMjF54R_wogeWJGyvxN09uu9A2F-klVsGOmB0pwktHxwGfN6M90DJnU7m0sVaLODv7cqAvBTpOrBVxQ4ldYFPbJqO3a1YPdl27XGJ5okYAijcCe8Hm80aXlEgkNJIge59cS7Pm-pXPUAk5NF5o1mH1RFoho7zDeGr0iLPJx3gVcVU_apYs9yFypFIr_byZADvDxu1SBU_saVD_utIC1bv-7gg"/>
+</div>
+<div>
+<div class="font-bold text-[#112117]">Classic Silk Blouse</div>
+<div class="text-xs text-gray-500 font-medium mt-0.5">$45.00 • SK-33211</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-bold text-green-700 ring-1 ring-inset ring-green-600/20">Active</span>
+</td>
+<td class="px-6 py-4 text-right text-gray-600 font-medium">
+                                            45 in stock
+                                        </td>
+<td class="px-6 py-4 text-right">
+<button class="text-gray-400 hover:text-red-600 hover:bg-red-50 p-2 rounded-full transition-all" title="Remove from collection">
+<span class="material-symbols-outlined text-xl">delete</span>
+</button>
+</td>
+</tr>
+<tr class="group hover:bg-gray-50/50 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-4">
+<div class="h-12 w-12 flex-shrink-0 overflow-hidden rounded-md border border-gray-200 group-hover:border-[#112117]/20 transition-colors">
+<img alt="Pants" class="h-full w-full object-cover object-center" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDpMsGyQD-UJOcPKkh9-zrcpv-sCTPIbITMlMd3hP4bg3m1pwx4w_IuapGVZiJ_srTx6fBy-Nnxv65oOjSf0mXfr7UfjRApPwzyi7EbGVsObFj0TwL78sLdccSoqU9cd2q4d7XS5nNs6WShhbZAmEGX7egTP8oJL6UdxyZ_wSykq0vv616guqJh17Iy3XugwOzh1UX3557pPX_8785sFLWJOfK-1fE46gA86-C7yOKZC4wfCFo7LQckBSzNdze09U8cgVD-O9aoXu8"/>
+</div>
+<div>
+<div class="font-bold text-[#112117]">Tailored Linen Pant</div>
+<div class="text-xs text-gray-500 font-medium mt-0.5">$60.00 • SK-99120</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center rounded-md bg-yellow-50 px-2 py-1 text-xs font-bold text-yellow-800 ring-1 ring-inset ring-yellow-600/20">Low Stock</span>
+</td>
+<td class="px-6 py-4 text-right text-gray-600 font-medium">
+                                            8 in stock
+                                        </td>
+<td class="px-6 py-4 text-right">
+<button class="text-gray-400 hover:text-red-600 hover:bg-red-50 p-2 rounded-full transition-all" title="Remove from collection">
+<span class="material-symbols-outlined text-xl">delete</span>
+</button>
+</td>
+</tr>
+<tr class="group hover:bg-gray-50/50 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-4">
+<div class="h-12 w-12 flex-shrink-0 overflow-hidden rounded-md border border-gray-200 group-hover:border-[#112117]/20 transition-colors">
+<img alt="Kurti" class="h-full w-full object-cover object-center" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDIYiMfVwOkT9F5AqdP3-JCq-OzVKPBCa51W457NI4ZYCF150-XrwbM-2lP8ODh8J-MJ9_p7zBGlGQ6R1oblHoXau0MIXB79R39dd7QOFSb36EhhcZDTLFGA-bMFkEndW-REV4QUj39FYpBQgIu-wGJ1YSbnOrMfTtjswyvr6AQNBjpYJD-e2w8wJ7A2jnBvHCUHX1BDUzIMOiRewLVfI1ztZfLn1DWUqThfpjgIck6-TUr5B7pSXyUO-c4-p1ppT191Mmaj_kWpNg"/>
+</div>
+<div>
+<div class="font-bold text-[#112117]">Embroidered Kurti</div>
+<div class="text-xs text-gray-500 font-medium mt-0.5">$55.00 • SK-77281</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-bold text-gray-600 ring-1 ring-inset ring-gray-500/10">Draft</span>
+</td>
+<td class="px-6 py-4 text-right text-gray-600 font-medium">
+                                            200 in stock
+                                        </td>
+<td class="px-6 py-4 text-right">
+<button class="text-gray-400 hover:text-red-600 hover:bg-red-50 p-2 rounded-full transition-all" title="Remove from collection">
+<span class="material-symbols-outlined text-xl">delete</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="border-t border-gray-100 p-4 sm:px-6">
+<div class="flex items-center justify-between">
+<div class="text-xs text-gray-500 font-medium">
+                                Showing <span class="font-bold text-[#112117]">1</span> to <span class="font-bold text-[#112117]">4</span> of <span class="font-bold text-[#112117]">12</span> results
+                            </div>
+<div class="flex items-center gap-2">
+<button class="rounded-md border border-gray-200 bg-white px-3 py-1 text-xs font-bold text-[#112117] hover:bg-gray-50 hover:border-gray-300 transition-all disabled:opacity-50">Previous</button>
+<button class="rounded-md border border-gray-200 bg-white px-3 py-1 text-xs font-bold text-[#112117] hover:bg-gray-50 hover:border-gray-300 transition-all">Next</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+
+</body></html>
