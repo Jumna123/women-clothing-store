@@ -1,0 +1,292 @@
+{% extends "adminpanel/admin_base.html" %}
+
+{% block title %}User Management{% endblock %}
+
+{% block content %}
+<!-- Cropper.js CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" />
+<style>
+    .cropper-container {
+        width: 100%;
+        max-height: 500px;
+    }
+
+    .cropper-view-box,
+    .cropper-face {
+        border-radius: 50%;
+    }
+
+    /* The below allows the image outside the circle to be "dimmed" correctly while showing the circle clearly */
+    .cropper-view-box {
+        outline: 0;
+        box-shadow: 0 0 0 1px #39f;
+    }
+</style>
+
+
+<div class="flex h-screen w-full overflow-hidden">
+
+    <main class="flex-1 flex flex-col h-full relative overflow-y-auto bg-dark-green-bg">
+        <div class="w-full max-w-[1000px] mx-auto px-6 py-8 md:px-12 md:py-10 flex flex-col gap-8">
+            <div class="flex flex-col gap-6">
+                <div class="flex items-center gap-2 text-sm">
+                    <a class="text-primary font-medium hover:underline" href="#">Categories</a>
+                    <span class="text-gray-600">/</span>
+                    <span class="text-white font-medium">Add New</span>
+                </div>
+                <div class="flex flex-col gap-2">
+                    <h2 class="text-white text-3xl md:text-4xl font-black leading-tight tracking-tight">
+                        Add New Category
+                    </h2>
+                    <p class="text-gray-400 text-base font-normal max-w-2xl">
+                        Create a new product category to organize your inventory.
+                    </p>
+                </div>
+            </div>
+            <div class="w-full bg-white border border-border-green/50 rounded-xl p-6 md:p-8 shadow-sm">
+                <form method="POST" enctype="multipart/form-data" class="flex flex-col gap-8">
+
+                    {% csrf_token %}
+
+                
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        
+                        
+                        <label class="flex flex-col gap-2">
+                            <span class="text-text-dark-green text-sm font-semibold">
+                                Category Name
+                            </span>
+
+                            <input
+                                type="text"
+                                name="category_name"
+                                placeholder="e.g., Summer Dresses"
+                                required
+                                value="{{ request.POST.category_name }}"
+                                class="form-input w-full h-12 px-4 rounded-lg bg-[#f8fbfa] border border-border-green text-text-dark-green placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-normal"
+                            />
+                        </label>
+
+                        <label class="flex flex-col gap-2">
+                            <span class="text-text-dark-green text-sm font-semibold">Slug / URL</span>
+                            <input
+                                class="form-input w-full h-12 px-4 rounded-lg bg-[#f8fbfa] border border-border-green text-text-dark-green placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-normal"
+                                placeholder="e.g., summer-dresses" type="text" />
+                        </label>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <label class="flex flex-col gap-2">
+                            <span class="text-text-dark-green text-sm font-semibold">Parent Category <span
+                                    class="text-gray-400 font-normal">(Optional)</span></span>
+                            <div class="relative">
+                                <select
+                                    class="form-select w-full h-12 px-4 pr-10 rounded-lg bg-[#f8fbfa] border border-border-green text-text-dark-green focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-normal appearance-none cursor-pointer">
+                                    <option disabled="" selected="" value="">Select parent category...</option>
+                                    <option value="clothing">Clothing</option>
+                                    <option value="accessories">Accessories</option>
+                                    <option value="shoes">Shoes</option>
+                                    <option value="sale">Sale</option>
+                                </select>
+                                <span
+                                    class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-primary">
+                                    <span class="material-symbols-outlined">expand_more</span>
+                                </span>
+                            </div>
+                        </label>
+                        <div class="flex flex-col gap-2">
+                            <span class="text-text-dark-green text-sm font-semibold">Visibility</span>
+                            <div class="flex items-center h-12 gap-3">
+                                <label class="relative inline-flex items-center cursor-pointer group">
+                                    <input checked="" class="sr-only peer" type="checkbox" value="" />
+                                    <div
+                                        class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary/30 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary">
+                                    </div>
+                                    <span class="ml-3 text-sm font-medium text-text-dark-green">Visible on site</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <label class="flex flex-col gap-3">
+                        <span class="text-text-dark-green text-sm font-semibold">Banner Image <span
+                                class="text-gray-400 font-normal">(Optional)</span></span>
+                        <div id="uploadContainer" class="w-full">
+                            <label
+                                class="w-full flex justify-center rounded-lg border-2 border-dashed border-border-green px-6 py-10 transition-colors hover:bg-[#f8fbfa] hover:border-primary/50 group cursor-pointer bg-white">
+                                <div class="text-center">
+                                    <div
+                                        class="mx-auto flex h-12 w-12 text-gray-300 group-hover:text-primary transition-colors">
+                                        <span class="material-symbols-outlined text-[48px]">cloud_upload</span>
+                                    </div>
+                                    <div class="mt-4 flex text-sm leading-6 text-gray-600 justify-center">
+                                        <span
+                                            class="relative rounded-md bg-white font-semibold text-primary focus-within:outline-none focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2 hover:text-primary/80">
+                                            <span>Upload a file</span>
+                                            <input class="sr-only" id="categoryImageInput" name="file-upload"
+                                                type="file" accept="image/*" />
+                                        </span>
+                                        <p class="pl-1">or drag and drop</p>
+                                    </div>
+                                    <p class="text-xs leading-5 text-gray-500 mt-1">PNG, JPG, GIF up to 10MB</p>
+                                </div>
+                            </label>
+                        </div>
+                        <!-- Result Area -->
+                        <div id="resultContainer"
+                            class="hidden w-full bg-white border border-border-green rounded-lg p-4 relative">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-sm font-semibold text-text-dark-green">Selected Image</span>
+                                <button type="button" id="removeImageBtn"
+                                    class="text-red-500 hover:text-red-700 text-sm font-medium">Remove</button>
+                            </div>
+                            <div
+                                class="h-48 w-48 bg-gray-100 rounded-full overflow-hidden flex items-center justify-center border border-gray-200 mx-auto">
+                                <img id="finalCroppedImage" src="" class="h-full w-full object-cover">
+                            </div>
+                        </div>
+                    </label>
+                    <label class="flex flex-col gap-2">
+                        <span class="text-text-dark-green text-sm font-semibold">Description <span
+                                class="text-gray-400 font-normal">(Optional)</span></span>
+                        <textarea
+                            class="form-textarea w-full min-h-[120px] p-4 rounded-lg bg-[#f8fbfa] border border-border-green text-text-dark-green placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-normal resize-y"
+                            placeholder="Add a description for SEO and internal use..."></textarea>
+                    </label>
+                    <div class="h-px w-full bg-border-green/50 my-2"></div>
+                    <div class="flex items-center justify-end gap-4">
+                        <button
+                            class="px-6 py-3 rounded-lg text-sm font-semibold text-primary hover:bg-primary/5 hover:text-primary transition-colors border border-transparent hover:border-primary/10"
+                            type="button">
+                            Cancel
+                        </button>
+                        <button
+                            class="px-8 py-3 rounded-lg text-sm font-semibold text-white bg-primary hover:bg-primary/90 transition-all shadow-sm shadow-primary/30 flex items-center gap-2"
+                            type="submit">
+                            <span class="material-symbols-outlined text-[20px]">check</span>
+                            Save Category
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Cropper Modal -->
+<div id="cropperModal" class="hidden fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog"
+    aria-modal="true">
+    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        <!-- Background overlay -->
+        <div class="fixed inset-0 bg-gray-900 bg-opacity-75 transition-opacity" aria-hidden="true"
+            onclick="closeCropperModal()"></div>
+
+        <!-- Modal panel -->
+        <div
+            class="inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-3xl sm:w-full">
+            <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                <div class="sm:flex sm:items-start">
+                    <div class="mt-3 text-center sm:mt-0 sm:text-left w-full">
+                        <h3 class="text-xl leading-6 font-bold text-gray-900" id="modal-title">
+                            Crop Image
+                        </h3>
+                        <div class="mt-4">
+                            <div
+                                class="relative h-[500px] w-full bg-gray-50 rounded-lg overflow-hidden border border-gray-200">
+                                <img id="imageToCrop" src="" alt="Picture to crop" class="max-w-full block">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse gap-2">
+                <button type="button" id="performCropBtn"
+                    class="w-full inline-flex justify-center rounded-xl border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm">
+                    Crop & Save
+                </button>
+                <button type="button" onclick="closeCropperModal()"
+                    class="mt-3 w-full inline-flex justify-center rounded-xl border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+<script>
+    let cropper;
+    const itemInput = document.getElementById('categoryImageInput');
+    const cropperModal = document.getElementById('cropperModal');
+    const imageToCrop = document.getElementById('imageToCrop');
+    const performCropBtn = document.getElementById('performCropBtn');
+
+    // Result areas
+    const uploadContainer = document.getElementById('uploadContainer');
+    const resultContainer = document.getElementById('resultContainer');
+    const finalCroppedImage = document.getElementById('finalCroppedImage');
+    const removeImageBtn = document.getElementById('removeImageBtn');
+
+    function closeCropperModal() {
+        cropperModal.classList.add('hidden');
+        if (cropper) {
+            cropper.destroy();
+            cropper = null;
+        }
+        itemInput.value = ''; // Reset input so same file triggers change again if needed
+    }
+
+    itemInput.addEventListener('change', function (e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                // Wait for image to load before init cropper
+                imageToCrop.onload = function () {
+                    if (cropper) {
+                        cropper.destroy();
+                    }
+                    cropper = new Cropper(imageToCrop, {
+                        aspectRatio: 1, // Change as needed
+                        viewMode: 1,
+                        autoCropArea: 0.8,
+                        zoomable: true,
+                        background: false
+                    });
+                }
+                imageToCrop.src = e.target.result;
+
+                // Show modal
+                cropperModal.classList.remove('hidden');
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    performCropBtn.addEventListener('click', function () {
+        if (cropper) {
+            const canvas = cropper.getCroppedCanvas({
+                width: 600, // Adjust output size
+                height: 600
+            });
+
+            // Set result image
+            finalCroppedImage.src = canvas.toDataURL();
+
+            // Create a blob for form submission if needed, but for now we visual
+            // To actually submit, we might need a hidden input with base64 or blob.
+
+            // UI Toggle
+            uploadContainer.classList.add('hidden');
+            resultContainer.classList.remove('hidden');
+
+            closeCropperModal();
+        }
+    });
+
+    removeImageBtn.addEventListener('click', function () {
+        resultContainer.classList.add('hidden');
+        uploadContainer.classList.remove('hidden');
+        finalCroppedImage.src = '';
+        itemInput.value = '';
+    });
+</script>
+{% endblock %}

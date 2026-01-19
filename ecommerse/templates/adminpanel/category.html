@@ -1,52 +1,62 @@
 {% extends "adminpanel/admin_base.html" %}
-{% block title %}category Management{% endblock %}
+{% block title %}Collection Management{% endblock %}
 {% block content %}
+<main class="min-h-screen bg-[#0b1f16]">
+  <div class="max-w-7xl mx-auto px-6 py-10 space-y-6">
 
-<!-- Page Header -->
-<div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-<div class="flex flex-col gap-1">
-<h2 class="text-text-main text-3xl md:text-4xl font-black tracking-tight">Category Management</h2>
-<p class="text-text-secondary text-base">Organize your inventory structure and product classification.</p>
-</div>
-<button class="flex items-center gap-2 bg-primary hover:bg-green-600 text-white px-6 py-3 rounded-full transition-all shadow-lg shadow-primary/20 hover:shadow-primary/30 active:scale-95">
-<span class="material-symbols-outlined text-[20px]">add</span>
-<span class="text-sm font-bold tracking-wide">Add New Category</span>
-</button>
-</div>
-<!-- Filters & Search -->
-<div class="bg-white rounded-2xl p-2 border border-[#d1e6d9] shadow-sm flex flex-col md:flex-row gap-2">
-<div class="relative flex-1">
-<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-text-secondary">search</span>
-<input class="w-full h-12 pl-12 pr-4 bg-background-light border-transparent focus:bg-white focus:border-primary focus:ring-0 rounded-xl text-text-main placeholder:text-text-secondary/70 text-sm transition-all" placeholder="Search categories..." type="text"/>
-</div>
-<div class="relative w-full md:w-64">
-<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-text-secondary">filter_list</span>
-<select class="w-full h-12 pl-12 pr-10 bg-background-light border-transparent focus:bg-white focus:border-primary focus:ring-0 rounded-xl text-text-main text-sm appearance-none cursor-pointer transition-all">
-<option value="">All Statuses</option>
-<option value="active">Active</option>
-<option value="draft">Draft</option>
-<option value="archived">Archived</option>
-</select>
-<span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none text-[20px]">expand_more</span>
-</div>
-</div>
-<!-- Data Table -->
-<div class="bg-white rounded-2xl border border-[#d1e6d9] shadow-sm overflow-hidden flex flex-col">
-<div class="overflow-x-auto">
-<table class="w-full min-w-[800px] table-auto">
-<thead class="bg-background-light border-b border-[#d1e6d9]">
-<tr>
-<th class="px-6 py-4 text-left text-xs font-bold text-text-secondary uppercase tracking-wider w-24">ID</th>
-<th class="px-6 py-4 text-left text-xs font-bold text-text-secondary uppercase tracking-wider">Category Name</th>
-<th class="px-6 py-4 text-left text-xs font-bold text-text-secondary uppercase tracking-wider">Slug</th>
-<th class="px-6 py-4 text-left text-xs font-bold text-text-secondary uppercase tracking-wider">Product Count</th>
-<th class="px-6 py-4 text-left text-xs font-bold text-text-secondary uppercase tracking-wider">Status</th>
-<th class="px-6 py-4 text-right text-xs font-bold text-text-secondary uppercase tracking-wider w-32">Actions</th>
-</tr>
-</thead>
-<tbody class="divide-y divide-[#d1e6d9]">
-<!-- Row 1 -->
-<tr class="hover:bg-background-light/50 transition-colors group">
+    <!-- Header -->
+    <div class="flex items-center justify-between">
+      <div>
+        <h1 class="text-3xl font-bold text-white">Category Management</h1>
+        <p class="text-green-200 text-sm">
+          Organize your inventory structure and product classification
+        </p>
+      </div>
+      <a href="{% url 'adminpanel:add-category' %}">
+      <button class="bg-green-500 hover:bg-green-600 text-white px-5 py-2.5 rounded-xl font-semibold flex items-center gap-2 shadow">
+        <span class="material-symbols-outlined">add</span>
+        Add Category
+      </button>
+      </a>
+    </div>
+
+    <!-- Card -->
+    <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+
+      <!-- Controls -->
+      <div class="p-5 border-b flex flex-col md:flex-row gap-4">
+        <div class="relative flex-1">
+          <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+            search
+          </span>
+          <input
+            class="w-full h-11 pl-11 pr-4 rounded-lg border border-gray-200 focus:ring-green-500 focus:border-green-500"
+            placeholder="Search categories…"
+          />
+        </div>
+
+        <select class="h-11 px-4 rounded-lg border border-gray-200">
+          <option>All Statuses</option>
+          <option>Active</option>
+          <option>Draft</option>
+        </select>
+      </div>
+
+      <!-- Table -->
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead class="bg-gray-50 text-gray-600">
+            <tr>
+              <th class="px-6 py-4 text-left">ID</th>
+              <th class="px-6 py-4 text-left">Category</th>
+              <th class="px-6 py-4 text-left">Slug</th>
+              <th class="px-6 py-4 text-left">Products</th>
+              <th class="px-6 py-4 text-left">Status</th>
+              <th class="px-6 py-4 text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y">
+            <tr class="hover:bg-background-light/50 transition-colors group">
 <td class="px-6 py-4 text-sm text-text-secondary font-mono">#001</td>
 <td class="px-6 py-4">
 <div class="flex items-center gap-3">
@@ -72,137 +82,196 @@
 </div>
 </td>
 </tr>
-<!-- Row 2 -->
-<tr class="hover:bg-background-light/50 transition-colors group">
-<td class="px-6 py-4 text-sm text-text-secondary font-mono">#002</td>
-<td class="px-6 py-4">
-<div class="flex items-center gap-3">
-<div class="size-10 rounded-lg bg-cover bg-center bg-gray-100 border border-[#d1e6d9]" data-alt="Abstract sporty texture representing activewear" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBf5oaEZF1vKD3Vt0_J6HtfhaeQAQwK0y8SjCVzwpPiSHZNbDFN7WqQbqk8EilzxD8bAmlwunqu3pzmN-gESYmO_tfDs3tLyaQe2iVPtoUbyrSkRwK6Dek2wInBWsT897oALPVkYUjMZ6OQC6-URotXtzB5CmWMvI551D-VZk7LllL4RXZwG4rAAwIJm4cNqaN1gKUW2K_NMR8WRIEzIDgApqhk6USMIry-Bv_1SSVCR336_j2vhT6zRBQ2Eygduvkwfa0-PJSjA2c");'></div>
-<span class="text-sm font-bold text-text-main">Activewear</span>
-</div>
-</td>
-<td class="px-6 py-4 text-sm text-text-secondary font-medium">/activewear</td>
-<td class="px-6 py-4 text-sm text-text-main font-medium">85 items</td>
-<td class="px-6 py-4">
-<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-primary/10 text-primary border border-primary/20">
-                                                Active
-                                            </span>
-</td>
-<td class="px-6 py-4 text-right">
-<div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-<button class="size-8 flex items-center justify-center rounded-full hover:bg-primary/10 text-text-secondary hover:text-primary transition-colors" title="Edit">
-<span class="material-symbols-outlined text-[18px]">edit</span>
-</button>
-<button class="size-8 flex items-center justify-center rounded-full hover:bg-red-50 text-text-secondary hover:text-red-500 transition-colors" title="Delete">
-<span class="material-symbols-outlined text-[18px]">delete</span>
-</button>
-</div>
-</td>
-</tr>
-<!-- Row 3 -->
-<tr class="hover:bg-background-light/50 transition-colors group">
-<td class="px-6 py-4 text-sm text-text-secondary font-mono">#003</td>
-<td class="px-6 py-4">
-<div class="flex items-center gap-3">
-<div class="size-10 rounded-lg bg-cover bg-center bg-gray-100 border border-[#d1e6d9]" data-alt="Abstract golden texture for accessories" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBmud10I0Hd9PbEubBXMVtZ945lXRS0dvxcMZmSA2wq31PlaJ56Q-WbD4qY_yHAkbcuTiav8O4nwIRj7Zzi_TLzmXZthpKPfjQrC7Gbu5j60BVyFh9xQqdIz8w28mwJwAlVAjsPm4Ls-zH5dsEbDkMz33elkNhzd-r-4AI6-R6_QlphOlED1doO2wswf9fJBBUdftWXxMvS95TuQBZ0_m_SGF95jsDVVwrZl7Sb9fbEAgXMnrfEVRKovu8Tgjjkie_DCRqDEKpx130");'></div>
-<span class="text-sm font-bold text-text-main">Accessories</span>
-</div>
-</td>
-<td class="px-6 py-4 text-sm text-text-secondary font-medium">/accessories</td>
-<td class="px-6 py-4 text-sm text-text-main font-medium">120 items</td>
-<td class="px-6 py-4">
-<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-gray-100 text-gray-600 border border-gray-200">
-                                                Draft
-                                            </span>
-</td>
-<td class="px-6 py-4 text-right">
-<div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-<button class="size-8 flex items-center justify-center rounded-full hover:bg-primary/10 text-text-secondary hover:text-primary transition-colors" title="Edit">
-<span class="material-symbols-outlined text-[18px]">edit</span>
-</button>
-<button class="size-8 flex items-center justify-center rounded-full hover:bg-red-50 text-text-secondary hover:text-red-500 transition-colors" title="Delete">
-<span class="material-symbols-outlined text-[18px]">delete</span>
-</button>
-</div>
-</td>
-</tr>
-<!-- Row 4 -->
-<tr class="hover:bg-background-light/50 transition-colors group">
-<td class="px-6 py-4 text-sm text-text-secondary font-mono">#004</td>
-<td class="px-6 py-4">
-<div class="flex items-center gap-3">
-<div class="size-10 rounded-lg bg-cover bg-center bg-gray-100 border border-[#d1e6d9]" data-alt="Close up of leather texture for shoes" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCQbys_PRPxU7xTmxKYbr6gZkVPrJetLGqPP8RJbL2Fzr9nYF2c9V7mjbNYwekHSkzjCk4WF92ok2GOTWFBblNnqWHRZ2qGPJh3mwAmeQ1eK4GR0STWBkOjj5tBBCRlt9HliaO9Iyn9FTJdDQfcaIN9ZAhh9O7MyKK2amToSHzYhmy3M2mLA8fCqO6XYGSDDYUdAy0v6cTTXYhLartQ87xqphOrvdSqgwW8OBZbbAQhxpNFMj3K7W2Wwc9RNCrBYyy8_IQ40_K3rBs");'></div>
-<span class="text-sm font-bold text-text-main">Shoes</span>
-</div>
-</td>
-<td class="px-6 py-4 text-sm text-text-secondary font-medium">/shoes</td>
-<td class="px-6 py-4 text-sm text-text-main font-medium">300 items</td>
-<td class="px-6 py-4">
-<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-primary/10 text-primary border border-primary/20">
-                                                Active
-                                            </span>
-</td>
-<td class="px-6 py-4 text-right">
-<div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-<button class="size-8 flex items-center justify-center rounded-full hover:bg-primary/10 text-text-secondary hover:text-primary transition-colors" title="Edit">
-<span class="material-symbols-outlined text-[18px]">edit</span>
-</button>
-<button class="size-8 flex items-center justify-center rounded-full hover:bg-red-50 text-text-secondary hover:text-red-500 transition-colors" title="Delete">
-<span class="material-symbols-outlined text-[18px]">delete</span>
-</button>
-</div>
-</td>
-</tr>
-<!-- Row 5 -->
-<tr class="hover:bg-background-light/50 transition-colors group">
-<td class="px-6 py-4 text-sm text-text-secondary font-mono">#005</td>
-<td class="px-6 py-4">
-<div class="flex items-center gap-3">
-<div class="size-10 rounded-lg bg-cover bg-center bg-gray-100 border border-[#d1e6d9]" data-alt="Abstract fabric texture for outerwear" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBt8rFkAFzEqKkuJCaVypnveJNzt1jRFnY7-OO227BPwHxlxCwc6QygX3lkTUepvLLm2zs4YEwV28Ylh-W6pTgmTet5EgkKLSc6FhfqW0E4XKX7dFK-GnU32-OizcElWn_wb7HZCyzkZEKVd1YVZI-cFRGBWOEROLCXlJB1yK-IwJglh3TZcwquCwQk6pJ5ZpjsyQJq7KfllFk9NHWL3F-QfAfvLv_VzVPqB0rxe3yA-CrqvzHaB61Zr39qzdoRTT3c-BhzDLZWDTA");'></div>
-<span class="text-sm font-bold text-text-main">Outerwear</span>
-</div>
-</td>
-<td class="px-6 py-4 text-sm text-text-secondary font-medium">/outerwear</td>
-<td class="px-6 py-4 text-sm text-text-main font-medium">45 items</td>
-<td class="px-6 py-4">
-<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-gray-100 text-gray-600 border border-gray-200">
-                                                Draft
-                                            </span>
-</td>
-<td class="px-6 py-4 text-right">
-<div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-<button class="size-8 flex items-center justify-center rounded-full hover:bg-primary/10 text-text-secondary hover:text-primary transition-colors" title="Edit">
-<span class="material-symbols-outlined text-[18px]">edit</span>
-</button>
-<button class="size-8 flex items-center justify-center rounded-full hover:bg-red-50 text-text-secondary hover:text-red-500 transition-colors" title="Delete">
-<span class="material-symbols-outlined text-[18px]">delete</span>
-</button>
-</div>
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-<!-- Pagination -->
-<div class="flex items-center justify-between px-6 py-4 border-t border-[#d1e6d9]">
-<p class="text-sm text-text-secondary">Showing <span class="font-bold text-text-main">1</span> to <span class="font-bold text-text-main">5</span> of <span class="font-bold text-text-main">24</span> results</p>
-<div class="flex items-center gap-1">
-<button class="flex size-8 items-center justify-center rounded-full text-text-secondary hover:bg-background-light transition-colors disabled:opacity-50">
-<span class="material-symbols-outlined text-[18px]">chevron_left</span>
-</button>
-<button class="flex size-8 items-center justify-center rounded-full bg-primary text-white text-sm font-bold shadow-md shadow-primary/20">1</button>
-<button class="flex size-8 items-center justify-center rounded-full text-text-main hover:bg-background-light transition-colors text-sm font-medium">2</button>
-<button class="flex size-8 items-center justify-center rounded-full text-text-main hover:bg-background-light transition-colors text-sm font-medium">3</button>
-<span class="flex size-8 items-center justify-center text-text-secondary text-sm">...</span>
-<button class="flex size-8 items-center justify-center rounded-full text-text-main hover:bg-background-light transition-colors text-sm font-medium">12</button>
-<button class="flex size-8 items-center justify-center rounded-full text-text-secondary hover:bg-background-light transition-colors">
-<span class="material-symbols-outlined text-[18px]">chevron_right</span>
-</button>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
+             
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pagination -->
+      <div class="px-6 py-4 flex justify-between items-center bg-gray-50">
+        <p class="text-sm text-gray-500">
+          Showing <b>1–5</b> of <b>24</b> results
+        </p>
+
+        <div class="flex items-center gap-2">
+          <button class="px-3 py-1 rounded-lg hover:bg-gray-200">‹</button>
+          <button class="px-3 py-1 rounded-lg bg-green-500 text-white">1</button>
+          <button class="px-3 py-1 rounded-lg hover:bg-gray-200">2</button>
+          <button class="px-3 py-1 rounded-lg hover:bg-gray-200">3</button>
+          <span>…</span>
+          <button class="px-3 py-1 rounded-lg hover:bg-gray-200">12</button>
+          <button class="px-3 py-1 rounded-lg hover:bg-gray-200">›</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</main>
+<script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+            /* =========================================================
+               MAIN PRODUCT IMAGE (FIXED TO USE Django field)
+               ========================================================= */
+
+            const uploadTrigger = document.getElementById("uploadTrigger");
+            const productImageInput = document.getElementById("id_main_image");
+
+            let cropper = null;
+            let activeInput = productImageInput;
+
+            const cropModal = document.getElementById("cropperModal");
+            const cropImage = document.getElementById("cropperImage");
+            const cropConfirmBtn = document.getElementById("cropConfirm");
+            const cropCancelBtn = document.getElementById("cropCancel");
+            const previewContainer = document.getElementById("mainImagePreview");
+
+            /* NEW: modal elements */
+            const imagePreviewModal = document.getElementById("imagePreviewModal");
+            const imagePreviewModalImg = document.getElementById("imagePreviewModalImg");
+            const mainImagePreviewRow = document.getElementById("mainImagePreviewRow");
+
+
+
+            /* OPEN CROPPER WHEN FILE SELECTED */
+            productImageInput.addEventListener("change", function () {
+                if (!this.files || !this.files[0]) return;
+
+                const file = this.files[0];
+
+                if (!file.type.startsWith("image/")) {
+                    alert("Please select a valid image file.");
+                    this.value = "";
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    cropImage.src = e.target.result;
+                    cropModal.classList.remove("hidden");
+
+                    if (cropper) cropper.destroy();
+
+                    cropper = new Cropper(cropImage, {
+                        aspectRatio: 4 / 5,
+                        viewMode: 0,
+                        dragMode: "move",
+                        autoCropArea: 0.9,
+                        background: false,
+                        guides: true,
+                        center: true,
+                        highlight: false,
+                        cropBoxMovable: true,
+                        cropBoxResizable: true,
+                        toggleDragModeOnDblclick: false,
+                    });
+                };
+
+                reader.readAsDataURL(file);
+            });
+
+            /* CONFIRM CROP */
+            cropConfirmBtn.addEventListener("click", function () {
+                if (!cropper || !activeInput) return;
+
+                cropper.getCroppedCanvas({
+                    width: 1200,
+                    height: 1500,
+                }).toBlob(blob => {
+                    if (!blob) return;
+
+                    const croppedFile = new File(
+                        [blob],
+                        "cropped.jpg",
+                        { type: "image/jpeg" }
+                    );
+
+                    const dt = new DataTransfer();
+                    dt.items.add(croppedFile);
+                    activeInput.files = dt.files;
+
+                    showPreview(croppedFile);
+
+                    cropper.destroy();
+                    cropper = null;
+                    cropModal.classList.add("hidden");
+                }, "image/jpeg", 0.9);
+            });
+
+            /* CANCEL CROP */
+            cropCancelBtn.addEventListener("click", function () {
+                if (cropper) cropper.destroy();
+                cropper = null;
+
+                if (activeInput) activeInput.value = "";
+                cropModal.classList.add("hidden");
+            });
+
+            /* PREVIEW + DELETE + STORE URL FOR MODAL */
+
+            function activatePreview(src, name = "") {
+                const previewContainer = document.getElementById("mainImagePreview");
+                const img = document.getElementById("mainImagePreviewImg");
+                const removeBtn = document.getElementById("mainImageRemove");
+                const nameEl = previewContainer.querySelector("p.text-xs.font-medium");
+
+                // show preview
+                previewContainer.classList.remove("hidden");
+
+                // set image
+                img.src = src;
+
+                // filename
+                if (name && nameEl) {
+                    nameEl.textContent = name;
+                }
+
+                // enable large preview
+                if (imagePreviewModalImg) {
+                    imagePreviewModalImg.dataset.src = src;
+                }
+
+                // delete button (UI only)
+                if (removeBtn) {
+                    removeBtn.onclick = function (e) {
+                        e.stopPropagation();
+                        previewContainer.classList.add("hidden");
+                        img.src = "";
+                        productImageInput.value = "";
+                    };
+                }
+            }
+
+            function showPreview(file) {
+                const objectUrl = URL.createObjectURL(file);
+                activatePreview(objectUrl, file.name);
+            }
+
+            /* NEW: open/close big preview */
+            if (mainImagePreviewRow && imagePreviewModal && imagePreviewModalImg) {
+                mainImagePreviewRow.addEventListener("click", function () {
+                    const src = imagePreviewModalImg.dataset.src;
+                    if (!src) return;
+                    imagePreviewModalImg.src = src;
+                    imagePreviewModal.classList.remove("hidden");
+                });
+
+                imagePreviewModal.addEventListener("click", function (e) {
+                    if (e.target === imagePreviewModal) {
+                        imagePreviewModal.classList.add("hidden");
+                        imagePreviewModalImg.src = "";
+                    }
+                });
+            }
+
+            // EDIT MODE: show existing main image if provided by Django
+            if (window.existingMainImage) {
+                activatePreview(
+                    window.existingMainImage.url,
+                    window.existingMainImage.name
+                );
+            }
+
+        });
+    </script>
 {% endblock %}

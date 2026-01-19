@@ -51,6 +51,7 @@
             -ms-overflow-style: none;
             scrollbar-width: none;
         }
+        
     </style>
 {% block extra_head %}{% endblock %}
 
@@ -66,31 +67,32 @@
 <h1 class="text-text-main text-xl font-bold tracking-tight">Luxe Admin</h1>
 </div>
 <nav class="flex flex-col gap-2">
-<a href="{% url 'adminpanel:dashboard' %}"class="flex items-center gap-3 px-4 py-3 rounded-full bg-secondary text-text-main transition-colors group">
-<span class="material-symbols-outlined fill text-primary">grid_view</span>
+<a href="{% url 'adminpanel:dashboard' %}"class="flex items-center gap-3 px-4 py-3 rounded-full text-text-main transition-colors group">
+<span class="material-symbols-outlined ">grid_view</span>
 <span class="font-medium text-sm">Dashboard</span>
 </a>
-<a  href="{% url 'adminpanel:product' %}" class="flex items-center gap-3 px-4 py-3 rounded-full text-text-main hover:bg-secondary/50 transition-colors group" >
+<a  href="{% url 'adminpanel:product' %}" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-full transition-colors group"> 
 <span class="material-symbols-outlined text-text-muted group-hover:text-primary transition-colors">sell</span>
 <span class="font-medium text-sm">Products</span>
 </a>
-<a  href="{% url 'adminpanel:category' %}" class="flex items-center gap-3 px-4 py-3 rounded-full text-text-main hover:bg-secondary/50 transition-colors group" >
+<a  href="{% url 'adminpanel:category' %}" 
+class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-full transition-colors group">
 <span class="material-symbols-outlined text-text-muted group-hover:text-primary transition-colors">category</span>
 <span class="font-medium text-sm">Categories</span>
 </a>
-<a href="{% url 'adminpanel:collections' %}" class="flex items-center gap-3 px-4 py-3 rounded-full text-text-main hover:bg-secondary/50 transition-colors group" >
+<a href="{% url 'adminpanel:collections' %}" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-full transition-colors group " >
 <span class="material-symbols-outlined text-text-muted group-hover:text-primary transition-colors">layers</span>
 <span class="font-medium text-sm">Collections</span>
 </a>
-<a href="{% url 'adminpanel:orders'%}" class="flex items-center gap-3 px-4 py-3 rounded-full text-text-main hover:bg-secondary/50 transition-colors group" >
+<a href="{% url 'adminpanel:orders'%}" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-full transition-colors group" >
 <span class="material-symbols-outlined text-text-muted group-hover:text-primary transition-colors">shopping_bag</span>
 <span class="font-medium text-sm">Orders</span>
 </a>
-<a href="{% url 'adminpanel:users'%}" class="flex items-center gap-3 px-4 py-3 rounded-full text-text-main hover:bg-secondary/50 transition-colors group" >
+<a href="{% url 'adminpanel:users'%}" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-full transition-colors group" >
 <span class="material-symbols-outlined text-text-muted group-hover:text-primary transition-colors">group</span>
 <span class="font-medium text-sm">Users</span>
 </a>
-<a class="flex items-center gap-3 px-4 py-3 rounded-full text-text-main hover:bg-secondary/50 transition-colors group" href="#">
+<a  href="{% url 'adminpanel:settings'%}" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-full transition-colors group" >
 <span class="material-symbols-outlined text-text-muted group-hover:text-primary transition-colors">settings</span>
 <span class="font-medium text-sm">Settings</span>
 </a>
@@ -113,20 +115,37 @@
 </div>
 
 {% block extra_js %}{% endblock %}
+
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const currentPath = window.location.pathname;
+    const links = document.querySelectorAll(".sidebar-link");
+
+    links.forEach(link => {
+        const linkPath = new URL(link.href).pathname;
+
+        if (currentPath === linkPath) {
+            // Active button styles
+            link.classList.add("bg-secondary", "text-text-main");
+
+            const icon = link.querySelector(".material-symbols-outlined");
+            if (icon) {
+                icon.classList.add("fill", "text-primary");
+                icon.classList.remove("text-text-muted");
+            }
+        }
+    });
+});
+</script>
+
+
+
+
+
 </body>
 </html>
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-C
