@@ -90,191 +90,105 @@
 <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-text-secondary text-right">Actions</th>
 </tr>
 </thead>
-<tbody class="divide-y divide-border-color bg-white">
+ <tbody class="divide-y divide-border-color bg-white">
+{% for product in products %}
 <tr class="group hover:bg-surface-light transition-colors duration-150">
-<td class="px-6 py-4">
-<div class="relative h-12 w-12 overflow-hidden rounded-lg border border-border-color">
-<div class="absolute inset-0 bg-center bg-cover" data-alt="Floral summer dress with vibrant colors" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCW82p1DmRZ707jT327ca779LLXOWR-5wk1EF5TcOCxxdwYLnSn8tqg_UQiYAgCrWhEsurHqUSGz5q8bwEwbv8LIag56V3fKbgOUXNEkGo6ZHmnScbnem-YBa3VcbV0mmOkPDdFkHW-T_M8EH3VUTWfblbJpdFeaIvpsahiXzSPtUELS4rXseP42zxQzr-U9hDeDd8osBWIo35iDqB9DM7FjV_rR6alghw8R33zl1Zj2mEb_KMU1_NkXKHf2y_9EXyPxWWAu7m9RyM");'></div>
-</div>
-</td>
-<td class="px-6 py-4">
-<div class="flex flex-col">
-<span class="font-bold text-text-main text-sm">Floral Summer Maxi</span>
-<span class="text-xs text-text-secondary">SKU: DR-001-FL</span>
-</div>
-</td>
-<td class="px-6 py-4">
-<span class="inline-flex items-center rounded-full bg-surface-light border border-border-color px-2.5 py-0.5 text-xs font-medium text-text-main">
-                                    Dresses
-                                </span>
-</td>
-<td class="px-6 py-4 text-sm font-medium text-text-main">$89.00</td>
-<td class="px-6 py-4">
-<div class="flex items-center gap-2">
-<span class="relative flex h-2.5 w-2.5">
-<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-<span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-primary"></span>
-</span>
-<span class="text-sm font-medium text-text-main">In Stock</span>
-<span class="text-xs text-text-secondary">(45)</span>
-</div>
-</td>
-<td class="px-6 py-4 text-right">
-<div class="flex items-center justify-end gap-2">
-<button class="flex h-8 w-8 items-center justify-center rounded-lg hover:bg-border-color text-text-secondary hover:text-text-main transition-colors" title="Edit">
-<span class="material-symbols-outlined text-[18px]">edit</span>
-</button>
-<button class="flex h-8 w-8 items-center justify-center rounded-lg hover:bg-red-50 text-text-secondary hover:text-red-600 transition-colors" title="Delete">
-<span class="material-symbols-outlined text-[18px]">delete</span>
-</button>
-</div>
-</td>
+
+  <!-- IMAGE -->
+  <td class="px-6 py-4">
+    <div class="relative h-12 w-12 overflow-hidden rounded-lg border border-border-color">
+      {% if product.images.first %}
+        <img
+          src="{{ product.images.first.image.url }}"
+          class="h-full w-full object-cover"
+          alt="{{ product.product_name }}"
+        />
+      {% else %}
+        <div class="h-full w-full bg-gray-100 flex items-center justify-center text-xs text-gray-400">
+          No Image
+        </div>
+      {% endif %}
+    </div>
+  </td>
+
+  <!-- PRODUCT NAME -->
+  <td class="px-6 py-4">
+    <div class="flex flex-col">
+      <span class="font-bold text-text-main text-sm">
+        {{ product.product_name }}
+      </span>
+      <span class="text-xs text-text-secondary">
+        SKU: {{ product.product_code }}
+      </span>
+    </div>
+  </td>
+
+  <!-- CATEGORY -->
+  <td class="px-6 py-4">
+    <span class="inline-flex items-center rounded-full bg-surface-light border border-border-color px-2.5 py-0.5 text-xs font-medium text-text-main">
+      {{ product.category.category_name }}
+    </span>
+  </td>
+
+  <!-- PRICE -->
+  <td class="px-6 py-4 text-sm font-medium text-text-main">
+    {% if product.discount_price %}
+      <span class="line-through text-text-secondary text-xs mr-1">
+        ₹{{ product.price }}
+      </span>
+      ₹{{ product.discount_price }}
+    {% else %}
+      ₹{{ product.price }}
+    {% endif %}
+  </td>
+
+  <!-- AVAILABILITY -->
+  <td class="px-6 py-4">
+    {% if product.is_available %}
+      <div class="flex items-center gap-2">
+        <span class="relative flex h-2.5 w-2.5">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-primary"></span>
+        </span>
+        <span class="text-sm font-medium text-text-main">In Stock</span>
+        <span class="text-xs text-text-secondary">
+          ({{ product.stock_quantity }})
+        </span>
+      </div>
+    {% else %}
+      <span class="text-sm text-red-500 font-medium">Out of Stock</span>
+    {% endif %}
+  </td>
+
+  <!-- ACTIONS -->
+  <td class="px-6 py-4 text-right">
+    <div class="flex items-center justify-end gap-2">
+
+      <a href="#"
+         class="flex h-8 w-8 items-center justify-center rounded-lg hover:bg-border-color text-text-secondary hover:text-text-main transition-colors"
+         title="Edit">
+        <span class="material-symbols-outlined text-[18px]">edit</span>
+      </a>
+
+      <a href="#"
+         class="flex h-8 w-8 items-center justify-center rounded-lg hover:bg-red-50 text-text-secondary hover:text-red-600 transition-colors"
+         title="Delete">
+        <span class="material-symbols-outlined text-[18px]">delete</span>
+      </a>
+
+    </div>
+  </td>
+
 </tr>
-<tr class="group hover:bg-surface-light transition-colors duration-150">
-<td class="px-6 py-4">
-<div class="relative h-12 w-12 overflow-hidden rounded-lg border border-border-color">
-<div class="absolute inset-0 bg-center bg-cover" data-alt="White linen blouse" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCFXb1mKDRO0rm4rd9pvSroEKODmQUWAQ51lGzMlIiG93wngMUF5yZwwEwequ7WjyMw1Rw9dhJlXcqcpPczQbjnNbw5ANpOhugFDLZnZ39VAKGIL4QUA4RDtZ-SmgOXOW6RsdbN5GOWcddVZsmA0saCN6JCQprtPBMH87rPA9rmB4s0QjS-L0_T5XSKd8Ms1dCNPfZyBVaLp3G81YUS8loV8TJ16k6qKdHSgd4iJoJtiWLDAwNBh1RQ7-b4dvplPy2o8RbDv38nLWk");'></div>
-</div>
-</td>
-<td class="px-6 py-4">
-<div class="flex flex-col">
-<span class="font-bold text-text-main text-sm">Classic Linen Blouse</span>
-<span class="text-xs text-text-secondary">SKU: TP-042-WT</span>
-</div>
-</td>
-<td class="px-6 py-4">
-<span class="inline-flex items-center rounded-full bg-surface-light border border-border-color px-2.5 py-0.5 text-xs font-medium text-text-main">
-                                    Tops
-                                </span>
-</td>
-<td class="px-6 py-4 text-sm font-medium text-text-main">$55.00</td>
-<td class="px-6 py-4">
-<div class="flex items-center gap-2">
-<span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-orange-400"></span>
-<span class="text-sm font-medium text-text-main">Low Stock</span>
-<span class="text-xs text-text-secondary">(3)</span>
-</div>
-</td>
-<td class="px-6 py-4 text-right">
-<div class="flex items-center justify-end gap-2">
-<button class="flex h-8 w-8 items-center justify-center rounded-lg hover:bg-border-color text-text-secondary hover:text-text-main transition-colors" title="Edit">
-<span class="material-symbols-outlined text-[18px]">edit</span>
-</button>
-<button class="flex h-8 w-8 items-center justify-center rounded-lg hover:bg-red-50 text-text-secondary hover:text-red-600 transition-colors" title="Delete">
-<span class="material-symbols-outlined text-[18px]">delete</span>
-</button>
-</div>
-</td>
+{% empty %}
+<tr>
+  <td colspan="6" class="text-center py-6 text-text-secondary">
+    No products found.
+  </td>
 </tr>
-<tr class="group hover:bg-surface-light transition-colors duration-150">
-<td class="px-6 py-4">
-<div class="relative h-12 w-12 overflow-hidden rounded-lg border border-border-color">
-<div class="absolute inset-0 bg-center bg-cover" data-alt="Denim high waist jeans" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDwi46X_wEgjFGO_Gu19I0mCVOE5Q9jZ4IM9PnJNfF2jASwCY8LXyGR1MgB8hH58Pq53YqrB_gZNC-yRh93gOctM_WJgs8qrbZrIM4dNFrZZpRwURXjUw0OqBw7ySXiCbmTi8xol8_g2D3Sj616Z8ncqcgcNaa46SNhXVCKrsw68eq89kTboeJLkE_sokYS-bB8VielViBmceuR3xEgI-iajqhfKIgZDcIx0ZDYA_7aHmVcLAoob0PqBhI9jngh_1AXF6-yDjeptpg");'></div>
-</div>
-</td>
-<td class="px-6 py-4">
-<div class="flex flex-col">
-<span class="font-bold text-text-main text-sm">High-Rise Skinny Jeans</span>
-<span class="text-xs text-text-secondary">SKU: BT-101-BL</span>
-</div>
-</td>
-<td class="px-6 py-4">
-<span class="inline-flex items-center rounded-full bg-surface-light border border-border-color px-2.5 py-0.5 text-xs font-medium text-text-main">
-                                    Bottoms
-                                </span>
-</td>
-<td class="px-6 py-4 text-sm font-medium text-text-main">$79.50</td>
-<td class="px-6 py-4">
-<div class="flex items-center gap-2">
-<span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-primary"></span>
-<span class="text-sm font-medium text-text-main">In Stock</span>
-<span class="text-xs text-text-secondary">(120)</span>
-</div>
-</td>
-<td class="px-6 py-4 text-right">
-<div class="flex items-center justify-end gap-2">
-<button class="flex h-8 w-8 items-center justify-center rounded-lg hover:bg-border-color text-text-secondary hover:text-text-main transition-colors" title="Edit">
-<span class="material-symbols-outlined text-[18px]">edit</span>
-</button>
-<button class="flex h-8 w-8 items-center justify-center rounded-lg hover:bg-red-50 text-text-secondary hover:text-red-600 transition-colors" title="Delete">
-<span class="material-symbols-outlined text-[18px]">delete</span>
-</button>
-</div>
-</td>
-</tr>
-<tr class="group hover:bg-surface-light transition-colors duration-150">
-<td class="px-6 py-4">
-<div class="relative h-12 w-12 overflow-hidden rounded-lg border border-border-color">
-<div class="absolute inset-0 bg-center bg-cover" data-alt="Beige trench coat" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBFB7_q9bqZtXdcoEAWZOJ-nJ7MbBZz7sxxnAzxrAN2_Vyv2LkQUxQuSGzoUUPOqCUNZ-EvdYq9-r-GMbG78mg9S7GQ26j2Aj5ZqSaysHC0_DaRqmXP4oXVIiOKCVBepV6CmNDLljjwiBdyKpUvmap2oLiUskehj7iB1CyzzGScDr0drrjc_6Gtgc9axLWZ3fY_WEdnnmFvBpv96YQBIWt8Rv_TaqtM3GLnsQqJKqcwEBPLmVgyXGAENs0kY7M6d_liLDdrw7qia2g");'></div>
-</div>
-</td>
-<td class="px-6 py-4">
-<div class="flex flex-col">
-<span class="font-bold text-text-main text-sm">Everyday Trench Coat</span>
-<span class="text-xs text-text-secondary">SKU: OW-220-BG</span>
-</div>
-</td>
-<td class="px-6 py-4">
-<span class="inline-flex items-center rounded-full bg-surface-light border border-border-color px-2.5 py-0.5 text-xs font-medium text-text-main">
-                                    Outerwear
-                                </span>
-</td>
-<td class="px-6 py-4 text-sm font-medium text-text-main">$145.00</td>
-<td class="px-6 py-4">
-<div class="flex items-center gap-2">
-<span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-gray-300"></span>
-<span class="text-sm font-medium text-gray-400">Out of Stock</span>
-<span class="text-xs text-text-secondary">(0)</span>
-</div>
-</td>
-<td class="px-6 py-4 text-right">
-<div class="flex items-center justify-end gap-2">
-<button class="flex h-8 w-8 items-center justify-center rounded-lg hover:bg-border-color text-text-secondary hover:text-text-main transition-colors" title="Edit">
-<span class="material-symbols-outlined text-[18px]">edit</span>
-</button>
-<button class="flex h-8 w-8 items-center justify-center rounded-lg hover:bg-red-50 text-text-secondary hover:text-red-600 transition-colors" title="Delete">
-<span class="material-symbols-outlined text-[18px]">delete</span>
-</button>
-</div>
-</td>
-</tr>
-<tr class="group hover:bg-surface-light transition-colors duration-150">
-<td class="px-6 py-4">
-<div class="relative h-12 w-12 overflow-hidden rounded-lg border border-border-color">
-<div class="absolute inset-0 bg-center bg-cover" data-alt="Silk floral scarf" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBffyVfwiZGlHkwwLeP9FCN2hL5pFCgChH7iDycdErdbAv7YZV6kKYbdCqtd9Ep7U0NR8al6Fk4zu6_gqJpuzJbdPda39jFy8i5UHVlDb527767TbWskP5nDVyzNjzRSmAxFbTtTachXrnPSyhnRC-nws0GM2fvmnIIuyQFhPJMxOf_TXuBhliTiaEC_OjxiFpGvbBibJcC8FpQEmmFf43KQI4FrgDzWcok3q2Cn_mCzQ0rpIp96xIaHRXeNouWMDXRPEeVw6n0sbs");'></div>
-</div>
-</td>
-<td class="px-6 py-4">
-<div class="flex flex-col">
-<span class="font-bold text-text-main text-sm">Silk Print Scarf</span>
-<span class="text-xs text-text-secondary">SKU: AC-555-PK</span>
-</div>
-</td>
-<td class="px-6 py-4">
-<span class="inline-flex items-center rounded-full bg-surface-light border border-border-color px-2.5 py-0.5 text-xs font-medium text-text-main">
-                                    Accessories
-                                </span>
-</td>
-<td class="px-6 py-4 text-sm font-medium text-text-main">$35.00</td>
-<td class="px-6 py-4">
-<div class="flex items-center gap-2">
-<span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-primary"></span>
-<span class="text-sm font-medium text-text-main">In Stock</span>
-<span class="text-xs text-text-secondary">(15)</span>
-</div>
-</td>
-<td class="px-6 py-4 text-right">
-<div class="flex items-center justify-end gap-2">
-<button class="flex h-8 w-8 items-center justify-center rounded-lg hover:bg-border-color text-text-secondary hover:text-text-main transition-colors" title="Edit">
-<span class="material-symbols-outlined text-[18px]">edit</span>
-</button>
-<button class="flex h-8 w-8 items-center justify-center rounded-lg hover:bg-red-50 text-text-secondary hover:text-red-600 transition-colors" title="Delete">
-<span class="material-symbols-outlined text-[18px]">delete</span>
-</button>
-</div>
-</td>
-</tr>
+{% endfor %}
 </tbody>
+
 </table>
 </div>
 <div class="flex items-center justify-between border-t border-border-color bg-surface-light px-6 py-4">

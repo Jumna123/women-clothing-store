@@ -3,9 +3,10 @@ from django.utils.text import slugify
 
 
 class Category(models.Model):
-    category_image = models.ImageField(upload_to="categories/")
+    category_image = models.ImageField(upload_to="categories/",blank=True,null=True)
     category_name = models.CharField(max_length=50)
     slug = models.SlugField(unique=True, blank=True)
+    quantity = models.PositiveIntegerField(default=0)
 
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -24,26 +25,30 @@ class Product(models.Model):
     category = models.ForeignKey(
         Category,
         on_delete=models.CASCADE,
-        related_name='products'
+        related_name="products"
     )
 
     product_name = models.CharField(max_length=50)
-    product_code = models.CharField(max_length=20)
+    
     slug = models.SlugField(unique=True, blank=True)
 
-    description = models.TextField()
-    fabric = models.CharField(max_length=20)
-    colour = models.CharField(max_length=30)
-    size = models.CharField(max_length=10)
+    description = models.TextField(blank=True)
+    fabric = models.CharField(max_length=20, blank=True)
+    colour = models.CharField(max_length=30, blank=True,null=True)
+    size = models.CharField(max_length=100, blank=True)
 
     price = models.DecimalField(max_digits=10, decimal_places=2)
     discount_price = models.DecimalField(
-        max_digits=10, decimal_places=2,
-        null=True, blank=True
+        max_digits=10,
+        decimal_places=2,
+        null=True,
+        blank=True
     )
 
-    stock_quantity = models.IntegerField()
+    stock_quantity = models.IntegerField(default=0)
     is_available = models.BooleanField(default=True)
+
+    image = models.ImageField(upload_to="products/",null=True,blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -53,9 +58,6 @@ class Product(models.Model):
             self.slug = slugify(self.product_name)
         super().save(*args, **kwargs)
 
-    def __str__(self):
-        return self.product_name
-
 
 class ProductImage(models.Model):
     product = models.ForeignKey(
@@ -63,6 +65,7 @@ class ProductImage(models.Model):
         on_delete=models.CASCADE,
         related_name='images'
     )
+    
     image = models.ImageField(upload_to='products/')
     is_primary = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)

@@ -70,8 +70,13 @@
                         <label class="flex flex-col gap-2">
                             <span class="text-text-dark-green text-sm font-semibold">Slug / URL</span>
                             <input
-                                class="form-input w-full h-12 px-4 rounded-lg bg-[#f8fbfa] border border-border-green text-text-dark-green placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-normal"
-                                placeholder="e.g., summer-dresses" type="text" />
+                                type="text"
+                                name="slug"
+                                placeholder="e.g., summer-dresses"
+                                value="{{ request.POST.slug }}"
+                                class="form-input w-full h-12 px-4 rounded-lg bg-[#f8fbfa] border border-border-green ..."
+                            />
+
                         </label>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -80,7 +85,10 @@
                                     class="text-gray-400 font-normal">(Optional)</span></span>
                             <div class="relative">
                                 <select
-                                    class="form-select w-full h-12 px-4 pr-10 rounded-lg bg-[#f8fbfa] border border-border-green text-text-dark-green focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-normal appearance-none cursor-pointer">
+                                    name="parent"
+                                    class="form-select w-full h-12 px-4 pr-10 rounded-lg bg-[#f8fbfa] border border-border-green ...">
+
+
                                     <option disabled="" selected="" value="">Select parent category...</option>
                                     <option value="clothing">Clothing</option>
                                     <option value="accessories">Accessories</option>
@@ -93,11 +101,19 @@
                                 </span>
                             </div>
                         </label>
+
                         <div class="flex flex-col gap-2">
                             <span class="text-text-dark-green text-sm font-semibold">Visibility</span>
                             <div class="flex items-center h-12 gap-3">
                                 <label class="relative inline-flex items-center cursor-pointer group">
-                                    <input checked="" class="sr-only peer" type="checkbox" value="" />
+                                    <input
+                                        type="checkbox"
+                                        name="is_active"
+                                        value="1"
+                                        checked
+                                        class="sr-only peer"
+                                    />
+
                                     <div
                                         class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary/30 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary">
                                     </div>
@@ -107,49 +123,79 @@
                         </div>
                     </div>
                     <label class="flex flex-col gap-3">
-                        <span class="text-text-dark-green text-sm font-semibold">Banner Image <span
-                                class="text-gray-400 font-normal">(Optional)</span></span>
-                        <div id="uploadContainer" class="w-full">
-                            <label
-                                class="w-full flex justify-center rounded-lg border-2 border-dashed border-border-green px-6 py-10 transition-colors hover:bg-[#f8fbfa] hover:border-primary/50 group cursor-pointer bg-white">
-                                <div class="text-center">
-                                    <div
-                                        class="mx-auto flex h-12 w-12 text-gray-300 group-hover:text-primary transition-colors">
-                                        <span class="material-symbols-outlined text-[48px]">cloud_upload</span>
-                                    </div>
-                                    <div class="mt-4 flex text-sm leading-6 text-gray-600 justify-center">
-                                        <span
-                                            class="relative rounded-md bg-white font-semibold text-primary focus-within:outline-none focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2 hover:text-primary/80">
-                                            <span>Upload a file</span>
-                                            <input class="sr-only" id="categoryImageInput" name="file-upload"
-                                                type="file" accept="image/*" />
-                                        </span>
-                                        <p class="pl-1">or drag and drop</p>
-                                    </div>
-                                    <p class="text-xs leading-5 text-gray-500 mt-1">PNG, JPG, GIF up to 10MB</p>
+                    <span class="text-text-dark-green text-sm font-semibold">
+                        Banner Image <span class="text-gray-400 font-normal">(Optional)</span>
+                    </span>
+
+                    <!-- REAL FILE INPUT (OUTSIDE UI) -->
+                    <input
+                        id="categoryImageInput"
+                        name="category_image"
+                        type="file"
+                        accept="image/*"
+                        class="hidden"
+                        required
+                    />
+
+                    <!-- UPLOAD UI -->
+                    <div id="uploadContainer" class="w-full">
+                        <label
+                            for="categoryImageInput"
+                            class="w-full flex justify-center rounded-lg border-2 border-dashed border-border-green px-6 py-10 transition-colors hover:bg-[#f8fbfa] hover:border-primary/50 group cursor-pointer bg-white">
+
+                            <div class="text-center">
+                                <div class="mx-auto flex h-12 w-12 text-gray-300 group-hover:text-primary transition-colors">
+                                    <span class="material-symbols-outlined text-[48px]">cloud_upload</span>
                                 </div>
-                            </label>
-                        </div>
-                        <!-- Result Area -->
-                        <div id="resultContainer"
-                            class="hidden w-full bg-white border border-border-green rounded-lg p-4 relative">
-                            <div class="flex items-center justify-between mb-2">
-                                <span class="text-sm font-semibold text-text-dark-green">Selected Image</span>
-                                <button type="button" id="removeImageBtn"
-                                    class="text-red-500 hover:text-red-700 text-sm font-medium">Remove</button>
+
+                                <div class="mt-4 flex text-sm leading-6 text-gray-600 justify-center">
+                                    <span class="font-semibold text-primary">Upload a file</span>
+                                    <p class="pl-1">or drag and drop</p>
+                                </div>
+
+                                <p class="text-xs leading-5 text-gray-500 mt-1">
+                                    PNG, JPG, GIF up to 10MB
+                                </p>
                             </div>
-                            <div
-                                class="h-48 w-48 bg-gray-100 rounded-full overflow-hidden flex items-center justify-center border border-gray-200 mx-auto">
-                                <img id="finalCroppedImage" src="" class="h-full w-full object-cover">
-                            </div>
+                        </label>
+                    </div>
+
+                    <!-- ✅ RESULT / PREVIEW AREA (THIS WAS MISSING) -->
+                    <div id="resultContainer"
+                        class="hidden w-full bg-white border border-border-green rounded-lg p-4 relative mt-4">
+
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-sm font-semibold text-text-dark-green">
+                                Selected Image
+                            </span>
+                            <button
+                                type="button"
+                                id="removeImageBtn"
+                                class="text-red-500 hover:text-red-700 text-sm font-medium">
+                                Remove
+                            </button>
                         </div>
-                    </label>
+
+                        <div class="h-48 w-48 bg-gray-100 rounded-full overflow-hidden flex items-center justify-center border border-gray-200 mx-auto">
+                            <img
+                                id="finalCroppedImage"
+                                src=""
+                                class="h-full w-full object-cover"
+                            >
+                        </div>
+                    </div>
+                </label>
+
+
                     <label class="flex flex-col gap-2">
                         <span class="text-text-dark-green text-sm font-semibold">Description <span
                                 class="text-gray-400 font-normal">(Optional)</span></span>
                         <textarea
-                            class="form-textarea w-full min-h-[120px] p-4 rounded-lg bg-[#f8fbfa] border border-border-green text-text-dark-green placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-normal resize-y"
-                            placeholder="Add a description for SEO and internal use..."></textarea>
+                            name="description"
+                            class="form-textarea w-full min-h-[120px] p-4 rounded-lg ..."
+                            placeholder="Add a description for SEO and internal use..."
+                        >{{ request.POST.description }}</textarea>
+
                     </label>
                     <div class="h-px w-full bg-border-green/50 my-2"></div>
                     <div class="flex items-center justify-end gap-4">
@@ -159,11 +205,14 @@
                             Cancel
                         </button>
                         <button
-                            class="px-8 py-3 rounded-lg text-sm font-semibold text-white bg-primary hover:bg-primary/90 transition-all shadow-sm shadow-primary/30 flex items-center gap-2"
-                            type="submit">
-                            <span class="material-symbols-outlined text-[20px]">check</span>
-                            Save Category
-                        </button>
+                                id="submitBtn"
+                                type="submit"
+                                disabled
+                                class="px-8 py-3 rounded-lg text-sm font-semibold text-white bg-primary opacity-50 cursor-not-allowed"
+                            >
+                                Save Category
+                            </button>
+
                     </div>
                 </form>
             </div>
@@ -214,12 +263,12 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
 <script>
     let cropper;
+
     const itemInput = document.getElementById('categoryImageInput');
     const cropperModal = document.getElementById('cropperModal');
     const imageToCrop = document.getElementById('imageToCrop');
     const performCropBtn = document.getElementById('performCropBtn');
 
-    // Result areas
     const uploadContainer = document.getElementById('uploadContainer');
     const resultContainer = document.getElementById('resultContainer');
     const finalCroppedImage = document.getElementById('finalCroppedImage');
@@ -231,62 +280,75 @@
             cropper.destroy();
             cropper = null;
         }
-        itemInput.value = ''; // Reset input so same file triggers change again if needed
     }
 
+    // OPEN CROPPER
     itemInput.addEventListener('change', function (e) {
         const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                // Wait for image to load before init cropper
-                imageToCrop.onload = function () {
-                    if (cropper) {
-                        cropper.destroy();
-                    }
-                    cropper = new Cropper(imageToCrop, {
-                        aspectRatio: 1, // Change as needed
-                        viewMode: 1,
-                        autoCropArea: 0.8,
-                        zoomable: true,
-                        background: false
-                    });
-                }
-                imageToCrop.src = e.target.result;
+        if (!file) return;
 
-                // Show modal
-                cropperModal.classList.remove('hidden');
+        const reader = new FileReader();
+        reader.onload = function (event) {
+            imageToCrop.src = event.target.result;
+            cropperModal.classList.remove('hidden');
+
+            imageToCrop.onload = function () {
+                if (cropper) cropper.destroy();
+                cropper = new Cropper(imageToCrop, {
+                    aspectRatio: 1,
+                    viewMode: 1,
+                    autoCropArea: 0.8,
+                    background: false,
+                    zoomable: true
+                });
             };
-            reader.readAsDataURL(file);
-        }
+        };
+        reader.readAsDataURL(file);
     });
 
+    // CROP & SAVE
     performCropBtn.addEventListener('click', function () {
-        if (cropper) {
-            const canvas = cropper.getCroppedCanvas({
-                width: 600, // Adjust output size
-                height: 600
-            });
+        if (!cropper) return;
 
-            // Set result image
-            finalCroppedImage.src = canvas.toDataURL();
+        const canvas = cropper.getCroppedCanvas({
+            width: 600,
+            height: 600
+        });
 
-            // Create a blob for form submission if needed, but for now we visual
-            // To actually submit, we might need a hidden input with base64 or blob.
+        canvas.toBlob(function (blob) {
+            const file = new File([blob], "category.jpg", { type: "image/jpeg" });
 
-            // UI Toggle
+            const dataTransfer = new DataTransfer();
+            dataTransfer.items.add(file);
+            itemInput.files = dataTransfer.files;
+
+            finalCroppedImage.src = URL.createObjectURL(blob);
+
             uploadContainer.classList.add('hidden');
             resultContainer.classList.remove('hidden');
 
+            // ENABLE SUBMIT
+            const submitBtn = document.getElementById("submitBtn");
+            submitBtn.disabled = false;
+            submitBtn.classList.remove("opacity-50", "cursor-not-allowed");
+
             closeCropperModal();
-        }
+        });
     });
 
+    // REMOVE IMAGE
     removeImageBtn.addEventListener('click', function () {
+        itemInput.value = "";
+        finalCroppedImage.src = "";
         resultContainer.classList.add('hidden');
         uploadContainer.classList.remove('hidden');
-        finalCroppedImage.src = '';
-        itemInput.value = '';
+
+        const submitBtn = document.getElementById("submitBtn");
+        submitBtn.disabled = true;
+        submitBtn.classList.add("opacity-50", "cursor-not-allowed");
     });
 </script>
+
+
+
 {% endblock %}
