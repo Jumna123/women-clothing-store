@@ -121,48 +121,55 @@
 </div>
 </section>
 <section class="mx-auto max-w-7xl px-4 py-12 md:py-16 sm:px-6 lg:px-8">
-<div class="flex flex-col items-start sm:flex-row sm:items-end justify-between gap-4 mb-8 md:mb-10">
-<h3 class="text-2xl md:text-3xl font-bold text-white tracking-tight">Shop by Category</h3>
-<a class="group flex items-center gap-1 text-sm font-semibold text-primary hover:text-white transition-colors" href="#">
-                    View all categories
-                    <span class="material-symbols-outlined text-lg transition-transform group-hover:translate-x-1">arrow_right_alt</span>
-</a>
+
+  <!-- Heading row -->
+<div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8 md:mb-10">
+  <h3 class="text-2xl md:text-3xl font-bold text-white tracking-tight">
+    Shop by Category
+  </h3>
+
+  <a href="#"
+     class="group flex items-center gap-1 text-sm font-semibold text-primary hover:text-white transition-colors">
+    View all categories
+    <span class="material-symbols-outlined text-lg transition-transform group-hover:translate-x-1">
+      arrow_right_alt
+    </span>
+  </a>
 </div>
+
+<!-- Categories grid -->
 <div class="grid grid-cols-2 gap-4 sm:gap-6 md:grid-cols-4">
-<a class="group flex flex-col items-center gap-3 sm:gap-4" href="#">
-<div class="aspect-square w-full overflow-hidden rounded-full border-2 border-[#254632] p-1 transition-colors group-hover:border-primary/50 group-hover:shadow-[0_0_20px_rgba(54,226,123,0.15)]">
-<div class="h-full w-full overflow-hidden rounded-full bg-gradient-to-br from-[#1c3326] to-[#112117]">
-<div class="h-full w-full bg-cover bg-center transition-transform duration-500 group-hover:scale-110" data-alt="Close up of a silk blouse texture" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCjGog0loESEyyATkA6wWG4D735Nk3kr0jCzTYYhq1aJadiO9gL97LNGulaBavSJ1_O1Ett9hJW8QNIbDfFdfIjug05QP675zbcCu5Ww1hObbAdRH2qKbNzBn085RjXxVtg5UQUcpNIv_dnKSg3nbk1P_D8wyejY-X-giW0nu-aHil1IvWaX-1s_N0H35bWD_JsbxgPuDUuepCWx-eabwbTfeKvRzMupedt7_B2TXfD7nogb5WXO76ymL_EDZK0XrJ1aUPotRlzR3g');"></div>
+  {% for category in categories %}
+    {% if category.slug %}
+      <a href="{% url 'home:category_products' category.slug %}"
+         class="group flex flex-col items-center gap-3 sm:gap-4">
+    {% else %}
+      <div class="group flex flex-col items-center gap-3 sm:gap-4">
+    {% endif %}
+            
+
+      <!-- card -->
+      <div class="aspect-square w-full overflow-hidden rounded-full border-2 border-[#254632] p-1">
+        {% if category.category_image %}
+          <img src="{{ category.category_image.url }}"
+               alt="{{ category.category_name }}"
+               class="w-full h-full object-cover rounded-full">
+        {% endif %}
+      </div>
+
+      <span class="text-white font-medium">{{ category.category_name }}</span>
+
+    {% if category.slug %}
+      </a>
+    {% else %}
+      </div>
+    {% endif %}
+  {% endfor %}
 </div>
-</div>
-<span class="text-base sm:text-lg font-medium text-white group-hover:text-primary transition-colors">Tops</span>
-</a>
-<a class="group flex flex-col items-center gap-3 sm:gap-4" href="#">
-<div class="aspect-square w-full overflow-hidden rounded-full border-2 border-[#254632] p-1 transition-colors group-hover:border-primary/50 group-hover:shadow-[0_0_20px_rgba(54,226,123,0.15)]">
-<div class="h-full w-full overflow-hidden rounded-full bg-gradient-to-br from-[#1c3326] to-[#112117]">
-<div class="h-full w-full bg-cover bg-center transition-transform duration-500 group-hover:scale-110" data-alt="Detail of fabric on denim jeans" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAiCFtnVOVwq_6PDbPSlHgjoF33ABS6xfWaHhM_CbCd8489ngiPFT4kggrYMVQjXoB_CTuR4pdlSOrw34aPcOSIl8VOzwH-EV7EO9sHHgoceJx4RgQ3ZlqhXykEvf-ZwUdj76tigdK92hsMHu5s-hCjJh9JGUGfj0ad_IluPsM0hKeoOUXx7C2rnET1Qz8oH-bZAgYq4R8BgkPuTu1G3eg5K4Xr_TEFR2NPEwbADAuECN3oytsl8jhERcCerKzCt1esksNouvM3Cvw');"></div>
-</div>
-</div>
-<span class="text-base sm:text-lg font-medium text-white group-hover:text-primary transition-colors">Pants</span>
-</a>
-<a class="group flex flex-col items-center gap-3 sm:gap-4" href="#">
-<div class="aspect-square w-full overflow-hidden rounded-full border-2 border-[#254632] p-1 transition-colors group-hover:border-primary/50 group-hover:shadow-[0_0_20px_rgba(54,226,123,0.15)]">
-<div class="h-full w-full overflow-hidden rounded-full bg-gradient-to-br from-[#1c3326] to-[#112117]">
-<div class="h-full w-full bg-cover bg-center transition-transform duration-500 group-hover:scale-110" data-alt="Traditional Indian ethnic wear pattern detail" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDIYiMfVwOkT9F5AqdP3-JCq-OzVKPBCa51W457NI4ZYCF150-XrwbM-2lP8ODh8J-MJ9_p7zBGlGQ6R1oblHoXau0MIXB79R39dd7QOFSb36EhhcZDTLFGA-bMFkEndW-REV4QUj39FYpBQgIu-wGJ1YSbnOrMfTtjswyvr6AQNBjpYJD-e2w8wJ7A2jnBvHCUHX1BDUzIMOiRewLVfI1ztZfLn1DWUqThfpjgIck6-TUr5B7pSXyUO-c4-p1ppT191Mmaj_kWpNg');"></div>
-</div>
-</div>
-<span class="text-base sm:text-lg font-medium text-white group-hover:text-primary transition-colors">Salwar Kurtis</span>
-</a>
-<a class="group flex flex-col items-center gap-3 sm:gap-4" href="#">
-<div class="aspect-square w-full overflow-hidden rounded-full border-2 border-[#254632] p-1 transition-colors group-hover:border-primary/50 group-hover:shadow-[0_0_20px_rgba(54,226,123,0.15)]">
-<div class="h-full w-full overflow-hidden rounded-full bg-gradient-to-br from-[#1c3326] to-[#112117]">
-<div class="h-full w-full bg-cover bg-top transition-transform duration-500 group-hover:scale-110" data-alt="Flowing summer dress fabric" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBkUWkbZFEjaZpN8bPLmSGJbSGnLon5jQDdyh4ZRprm3EXRUeXaq-hUjVxFgRbZYy8dm2uSmMowx0sNqkV8gZ1cffCH5NQSG_ZbVJrexf92xDWO-oPjtJktvsuXbwd46t-mnchaqSarpkST69UN7IEqcf4nGzGgafSrxxqENKBp0SiJMdn44sqtFeNUznJlFfTTnGeAzilnlleEijdoaUGSWWmAOAGrxiwYf5Fq-a1bnSBuG7wAaAflhth1cW746v8lrJ4_dtQNddI');"></div>
-</div>
-</div>
-<span class="text-base sm:text-lg font-medium text-white group-hover:text-primary transition-colors">Dresses</span>
-</a>
-</div>
+
+
 </section>
+
 <section class="bg-gradient-to-b from-[#1c3326]/30 to-transparent py-12 md:py-16">
 <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 <div class="mb-8 md:mb-10 text-center">
@@ -170,39 +177,39 @@
 <p class="mt-2 text-sm md:text-base text-gray-400">Handpicked selections just for you</p>
 </div>
 <div class="grid gap-6 md:grid-cols-3">
-<div class="group relative overflow-hidden rounded-2xl bg-surface-dark h-80 sm:h-96 shadow-lg hover:shadow-xl transition-shadow">
-<div class="absolute inset-0 z-0 h-full w-full bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="Model posing in modern office wear jacket" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB2CiXdPs-56d5nkWBPWz2pkzzbjteQ68TMRN5-wLmqcBNev902xwOLbNEe7eqBrnj1NbNUNr1y09Ogc3Q-KN-JMsX_rs-zT3mh50DwKzuVbg6-HVPH8G12OpDVTaMMda23v22JSqpYPEPiwrkuflA1qXW89-uD8LoOzZEm8yrxVPj-I9CIH2TJiSmCtafve9qnLflOWKK69xjphvS19EVtTPmC3zcMEbZRyIasauU3zpdlI13hvElVr-zRRjJi6dvhnI8dzNAvVzw');"></div>
-<div class="absolute inset-0 bg-gradient-to-t from-[#0b160f] via-[#0b160f]/30 to-transparent"></div>
-<div class="relative z-10 flex h-full flex-col justify-end p-6">
-<h4 class="text-xl md:text-2xl font-bold text-white">New Arrivals</h4>
-<p class="mb-4 text-sm text-gray-300">Fresh styles added daily.</p>
-<button class="w-fit rounded-full bg-white/95 px-6 py-2 text-sm font-bold text-background-dark backdrop-blur-sm transition-all hover:bg-white hover:scale-105">
-                                Explore
-                            </button>
-</div>
-</div>
-<div class="group relative overflow-hidden rounded-2xl bg-surface-dark h-80 sm:h-96 shadow-lg hover:shadow-xl transition-shadow">
-<div class="absolute inset-0 z-0 h-full w-full bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="Traditional festive wear with golden embroidery" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCGXKA0l4g4vV4ADkyr8dYHHBynp6GqlINe7nfXkS3VplJUvhu0ppoXxARhrd9fYXv_7tFqjDwZYmgxpJ5LXS-LL7-AsF5JGvgkxQiKnJpFGrxxln4QzkOShlSVCggRE74iG_PyIwan4sZN3wUJCtZZflHjoO5TWE4dTJ4iJkF7dx3CL1r5CsF_ju4u3zUvxLwq8DBNCKcWrgroyihqQXuocYeAefW122D2Og8Tssu8PgxGRyDdeaZPhYq7ZdNaoPiKqDWHgneUY_w');"></div>
-<div class="absolute inset-0 bg-gradient-to-t from-[#0b160f] via-[#0b160f]/30 to-transparent"></div>
-<div class="relative z-10 flex h-full flex-col justify-end p-6">
-<h4 class="text-xl md:text-2xl font-bold text-white">Festive Edit</h4>
-<p class="mb-4 text-sm text-gray-300">Shine bright this season.</p>
-<button class="w-fit rounded-full bg-white/95 px-6 py-2 text-sm font-bold text-background-dark backdrop-blur-sm transition-all hover:bg-white hover:scale-105">
-                                Explore
-                            </button>
-</div>
-</div>
-<div class="group relative overflow-hidden rounded-2xl bg-surface-dark h-80 sm:h-96 shadow-lg hover:shadow-xl transition-shadow">
-<div class="absolute inset-0 z-0 h-full w-full bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="Woman wearing stylish casual outfit walking in city" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDUpt5lmNdYFXNrJfaYVX05WOamMnB19Gam5i8x8ZNYh6McUc4nwRGgTCIYODzCsBR84QphxeWuSdRuY2hnbQAlNnoYrf8im9aSXxxhdVjEbF_ZwiFli_-L-HcYleYg1fYvo-33iA0IgtiCiMY7_tmvzd-BwxdQgGbr8KHKU4Pxgw4OWPD2Bp016gLGlXfc9zuekk0NxEQ7rL3Otamy_BGKL5mrk8pLkTnWclyYhVIkqRhvwARZFtBHvyZ5HAbJG3MmhfyIBMzFoeQ');"></div>
-<div class="absolute inset-0 bg-gradient-to-t from-[#0b160f] via-[#0b160f]/30 to-transparent"></div>
-<div class="relative z-10 flex h-full flex-col justify-end p-6">
-<h4 class="text-xl md:text-2xl font-bold text-white">Best Sellers</h4>
-<p class="mb-4 text-sm text-gray-300">Loved by everyone.</p>
-<button class="w-fit rounded-full bg-white/95 px-6 py-2 text-sm font-bold text-background-dark backdrop-blur-sm transition-all hover:bg-white hover:scale-105">
-                                Explore
-                            </button>
-</div>
-</div>
+    {% for collection in collections %}
+    <div class="group relative overflow-hidden rounded-2xl bg-surface-dark h-80 sm:h-96 shadow-lg hover:shadow-xl transition-shadow">
+
+        <!-- Background Image -->
+        {% if collection.image %}
+        <div class="absolute inset-0 z-0 h-full w-full bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
+             style="background-image: url('{{ collection.image.url }}');">
+        </div>
+        {% endif %}
+
+        <!-- Overlay -->
+        <div class="absolute inset-0 bg-gradient-to-t from-[#0b160f] via-[#0b160f]/30 to-transparent"></div>
+
+        <!-- Content -->
+        <div class="relative z-10 flex h-full flex-col justify-end p-6">
+            <h4 class="text-xl md:text-2xl font-bold text-white">
+                {{ collection.name }}
+            </h4>
+
+            <p class="mb-4 text-sm text-gray-300">
+                {{ collection.description }}
+            </p>
+
+            {% if collection.slug %}
+            <a href="{% url 'home:category_products' category.slug %}"
+               class="w-fit rounded-full bg-white/95 px-6 py-2 text-sm font-bold text-background-dark backdrop-blur-sm transition-all hover:bg-white hover:scale-105">
+                Explore
+            </a>
+            {% endif %}
+        </div>
+
+    </div>
+    {% endfor %}
 </div>
 </div>
 </section>

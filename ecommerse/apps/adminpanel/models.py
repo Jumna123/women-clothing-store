@@ -20,6 +20,20 @@ class Category(models.Model):
     def __str__(self):
         return self.category_name
 
+class Collection(models.Model):
+    name = models.CharField(max_length=255)
+    description = models.TextField(blank=True)
+    image = models.ImageField(upload_to="collections/", blank=True, null=True)
+    is_active = models.BooleanField(default=True)
+    publish_at = models.DateField(blank=True, null=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name
+
+
 
 class Product(models.Model):
     category = models.ForeignKey(
@@ -27,6 +41,12 @@ class Product(models.Model):
         on_delete=models.CASCADE,
         related_name="products"
     )
+    collections = models.ManyToManyField(
+        Collection,
+        blank=True,
+        related_name='products'
+    )
+
 
     product_name = models.CharField(max_length=50)
     
@@ -72,3 +92,6 @@ class ProductImage(models.Model):
 
     def __str__(self):
         return f"Image for {self.product.product_name}"
+
+
+

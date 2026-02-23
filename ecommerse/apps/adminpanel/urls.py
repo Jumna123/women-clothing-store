@@ -3,14 +3,16 @@ from .views.dashboard import admin_dashboard
 from .views.products import product
 from .views.products import addproduct
 from .views.category import category,add_category
-from .views.collections import collections
-from .views.collections import addcollections
+from .views.collections import collections,addcollections,edit_collection,delete_collection
 from .views.orders import orders
 from .views.admin_settings import admin_settings
 from .views.user import user_management, block_user, activate_user
 from .views.category import category_toggle_status
 from .views.category import edit_category
 from .views.category import delete_category
+from .views.products import delete_Product
+from .views.products import edit_product
+
 
 
 
@@ -25,6 +27,8 @@ urlpatterns = [
     path('addproduct/',addproduct,name='addproduct'),
     path('collections/',collections,name='collections'),
     path('addcollections/',addcollections,name='addcollections'),
+    path("collections/edit/<int:id>/", edit_collection, name="editcollection"),
+    path("collections/delete/<int:id>/", delete_collection, name="deletecollection"),
     path('orders/',orders,name='orders'),
     path('users/',user_management,name='users'),
     path('settings/',admin_settings,name='settings'),
@@ -33,6 +37,11 @@ urlpatterns = [
     path('category/toggle-status/<int:pk>/', category_toggle_status, name='toggle-category-status'),
     path("category/edit/<int:pk>/",edit_category,name="edit-category"),
     path("category/delete/<int:pk>/",delete_category,name="delete-category"),
+    path("Product/delete/<int:pk>/",delete_Product,name="delete-product"),
+    path("Product/edit/<int:pk>/",edit_product,name="edit-product"),
+
+
+
 
 
 

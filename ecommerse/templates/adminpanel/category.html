@@ -100,7 +100,9 @@
 
               <!-- Products -->
               <td class="px-6 py-4">
-                   {{ category.quantity }} items
+                {{ category.product_count|default:"NOT FOUND" }}
+
+
 
               </td>
 

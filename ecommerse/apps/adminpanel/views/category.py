@@ -5,6 +5,8 @@ from django.shortcuts import get_object_or_404, redirect
 from django.contrib import messages
 from apps.adminpanel.models import Category
 from ..forms import CategoryForm
+from django.db.models import Count
+
 
 
 from ..models import Category
@@ -14,7 +16,9 @@ from django.views.decorators.http import require_POST
 
 
 def category(request):
-    categories = Category.objects.all()
+    categories = Category.objects.annotate(
+        product_count=Count('products')
+    )
     return render(request, "adminpanel/category.html", {
         "categories": categories
     })
@@ -22,7 +26,6 @@ def category(request):
 @login_required
 def add_category(request):
     if request.method == "POST":
-        print (request.POST)
         category_name = request.POST.get("category_name")
         category_image = request.FILES.get("category_image")
         is_active = bool(request.POST.get("is_active"))
@@ -95,22 +98,10 @@ def edit_category(request, pk):
         }
     )
 
-def edit_category(request, pk):
-    category = get_object_or_404(Category, pk=pk)
-
-    if request.method == "POST":
-        form = CategoryForm(request.POST, request.FILES, instance=category)
-        if form.is_valid():
-            form.save()
-            return redirect("adminpanel:category")
-    else:
-        form = CategoryForm(instance=category)
-
-    return render(request, "adminpanel/category_form.html", {
-        "form": form,
-        "category": category,
-        "mode": "edit",
+def category_list(request):
+    categories = Category.objects.annotate(
+        product_count=Count('products')
+    )
+    return render(request, "adminpanel/category_list.html", {
+        "categories": categories
     })
-
-
-

@@ -1,6 +1,9 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,get_object_or_404
 from django.contrib import messages
 from ..models import Product, Category, ProductImage
+from ..models import Product
+from django.views.decorators.http import require_POST
+from ..forms import ProductForm
 
 
 def product(request):
@@ -14,73 +17,83 @@ def addproduct(request):
     categories = Category.objects.all()
 
     if request.method == "POST":
-        # ---------- READ FORM DATA ----------
-        product_name = request.POST.get("product_name")
-        
-        price = request.POST.get("price")
-        discount_price = request.POST.get("discount_price")
-        description = request.POST.get("description")
-        colour = request.POST.get("colour")
-        sizes = request.POST.getlist("size")
-        stock_quantity = request.POST.get("stock_quantity")
-        is_available = request.POST.get("is_available")
-        category_id = request.POST.get("category")
-        
+        form = ProductForm(request.POST)
 
-        # ---------- BASIC VALIDATION ----------
-        if not product_name or not price or not category_id:
-            messages.error(request, "Required fields are missing")
-            return redirect("adminpanel:addproduct")
+        if form.is_valid():
+            product = form.save(commit=False)
 
-        # ---------- STOCK LOGIC ----------
-        if is_available:
-            stock_quantity = int(stock_quantity) if stock_quantity else 0
-        else:
-            stock_quantity = 0
-            is_available = False
+            # custom logic
+            if not product.is_available:
+                product.stock_quantity = 0
 
-        # ---------- DISCOUNT VALIDATION ----------
-        if discount_price:
-            if float(discount_price) >= float(price):
+            if product.discount_price and product.discount_price >= product.price:
                 messages.error(request, "Discount price must be less than price")
-                return redirect("addproduct")
-        else:
-            discount_price = None
+                return redirect("adminpanel:addproduct")
 
-        # ---------- SIZE LOGIC (✅ CORRECT PLACE) ----------
-        size_string = ",".join(sizes)
+            product.save()
 
-        # ---------- CREATE PRODUCT ----------
-        product = Product.objects.create(
-            product_name=product_name,
-            
-            price=price,
-            discount_price=discount_price,
-            description=description,
-            colour=colour,
-            size=size_string,            # ✅ FIXED
-            stock_quantity=stock_quantity,
-            is_available=bool(is_available),
-            category_id=category_id,
-        )
-        print('Test')
+            # handle multiple images
+            images = request.FILES.getlist("images")
+            for index, image in enumerate(images):
+                ProductImage.objects.create(
+                    product=product,
+                    image=image,
+                    is_primary=(index == 0)
+                )
 
-        # ---------- MULTIPLE IMAGES ----------
-        images = request.FILES.getlist("images")
-        print(request.FILES)
-        print(images)
-        for index, image in enumerate(images):
-            ProductImage.objects.create(
-                product=product,
-                image=image,
-                is_primary=(index == 0)
-            )
+            messages.success(request, "Product added successfully")
+            return redirect("adminpanel:product")
+    else:
+        form = ProductForm()
 
-        messages.success(request, "Product added successfully")
-        return redirect("adminpanel:product")
+    return render(
+        request,
+        "adminpanel/addproduct.html",
+        {
+            "form": form,
+            "categories": categories,
+            "is_edit": False,
+        }
+    )
 
-    return render(request, "adminpanel/addproduct.html", {
-        "categories": categories
-    })
+
+
+@require_POST
+def delete_Product(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+    product.delete()
+    messages.success(request, "Product deleted successfully.")
+    return redirect("adminpanel:product")
+
+def edit_product(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+
+    if request.method == "POST":
+        form = ProductForm(request.POST, instance=product)
+
+        if form.is_valid():
+            product = form.save(commit=False)
+            product.save()
+
+            images = request.FILES.getlist("images")
+            for image in images:
+                ProductImage.objects.create(product=product, image=image)
+
+            messages.success(request, "Product updated successfully")
+            return redirect("adminpanel:product")
+    else:
+        form = ProductForm(instance=product)
+
+    return render(
+        request,
+        "adminpanel/addproduct.html",  
+        {
+            "form": form,
+            "is_edit": True,
+            "product": product,
+        }
+    )
+
+
 
 
