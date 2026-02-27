@@ -65,9 +65,17 @@
 <button class="flex size-9 md:size-10 items-center justify-center rounded-full text-white hover:bg-[#1c3326] transition-colors md:hidden">
 <span class="material-symbols-outlined text-xl">search</span>
 </button>
-<button class="hidden sm:flex size-10 items-center justify-center rounded-full text-white hover:bg-[#1c3326] transition-colors">
-<span class="material-symbols-outlined">favorite</span>
-</button>
+<a href="{% url 'home:wishlist_view' %}"
+   class="group relative flex size-10 items-center justify-center rounded-full text-white hover:bg-[#1c3326] transition-colors">
+
+    <span class="material-symbols-outlined">favorite</span>
+
+    {% if wishlist_count > 0 %}
+    <span class="absolute -right-1 -top-1 flex size-4 items-center justify-center rounded-full bg-white text-[10px] font-bold text-background-dark group-hover:bg-primary">
+        {{ wishlist_count }}
+    </span>
+    {% endif %}
+</a>
 {% if user.is_authenticated %}
     <a href="{% url 'accounts:profile'  %}">
 <button class="flex size-9 md:size-10 items-center justify-center rounded-full text-white hover:bg-[#1c3326] transition-colors">
@@ -83,10 +91,19 @@
 {% endif %}
 
 
-<button class="group relative flex size-9 md:size-10 items-center justify-center rounded-full bg-gradient-to-b from-primary to-[#2ec56a] text-background-dark hover:to-white transition-all shadow-[0_0_10px_rgba(54,226,123,0.2)]">
-<span class="material-symbols-outlined text-xl md:text-2xl">shopping_cart</span>
-<span class="absolute -right-1 -top-1 flex size-4 items-center justify-center rounded-full bg-white text-[10px] font-bold text-background-dark group-hover:bg-primary">2</span>
-</button>
+<a href="{% url 'home:cart_view' %}"
+   class="group relative flex size-9 md:size-10 items-center justify-center rounded-full bg-gradient-to-b from-primary to-[#2ec56a] text-background-dark hover:to-white transition-all shadow-[0_0_10px_rgba(54,226,123,0.2)]">
+
+    <span class="material-symbols-outlined text-xl md:text-2xl">
+        shopping_cart
+    </span>
+
+    {% if cart_count > 0 %}
+    <span class="absolute -right-1 -top-1 flex size-4 items-center justify-center rounded-full bg-white text-[10px] font-bold text-background-dark group-hover:bg-primary">
+        {{ cart_count }}
+    </span>
+    {% endif %}
+</a>
 </div>
 </div>
 </header>

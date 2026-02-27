@@ -120,7 +120,22 @@
 <div class="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
 
 {% for product in products %}
-<div class="group flex flex-col bg-white border border-gray-100 product-card-shadow">
+<div class="group relative flex flex-col bg-white border border-gray-100 product-card-shadow">
+
+    <a href="{% url 'home:add_to_wishlist' product.id %}"
+   class="absolute top-3 right-3 z-20 bg-white rounded-full p-2 shadow hover:bg-gray-100 transition">
+
+    <span class="material-symbols-outlined text-xl
+        {% if product.id in wishlist_products %}
+            text-red-600
+        {% else %}
+            text-gray-400
+        {% endif %}
+    ">
+        favorite
+    </span>
+
+</a>
 
     <!-- Image -->
     <div class="w-full h-80 overflow-hidden bg-gray-100">
