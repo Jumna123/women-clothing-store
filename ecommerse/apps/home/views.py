@@ -258,3 +258,18 @@ def move_to_wishlist(request, item_id):
         cart_item.delete()
 
     return redirect("home:cart_view")
+
+def product_detail(request, slug):
+
+    product = Product.objects.get(slug=slug)
+
+    images = product.images.all()
+    sizes = product.size.split(",")
+
+
+    return render(request, "user/product_view.html", {
+        "product": product,
+        "images": images,
+        "sizes": sizes
+
+    })

@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Checkout - GreenStyle</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#064e3b", // Dark green
+                        "primary-hover": "#065f46",
+                        "brand-bg": "#ffffff",
+                        "card-bg": "#ffffff",
+                        "card-accent": "#f9fafb", // Very light grey
+                        "text-main": "#064e3b",
+                        "text-secondary": "#374151",
+                        "border-color": "#d1fae5" // Subtle green border
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        @layer base {
+            ::-webkit-scrollbar {
+                width: 8px;
+            }
+            ::-webkit-scrollbar-track {
+                background: #f9fafb;
+            }
+            ::-webkit-scrollbar-thumb {
+                background-color: #064e3b;
+                border-radius: 20px;
+            }
+            body {
+                @apply bg-brand-bg text-text-main;
+            }
+            input[type="radio"], input[type="checkbox"] {
+                @apply text-primary focus:ring-primary border-primary/30;
+            }
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="font-display antialiased selection:bg-primary/10 selection:text-primary bg-brand-bg">
+<div class="flex min-h-screen flex-col">
+<header class="sticky top-0 z-50 flex items-center justify-between whitespace-nowrap border-b border-gray-100 bg-white/80 px-6 py-4 backdrop-blur-md md:px-10">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-3 group cursor-pointer">
+<div class="size-8 text-primary">
+<span class="material-symbols-outlined text-[32px]">eco</span>
+</div>
+<h2 class="text-xl font-bold leading-tight tracking-tight text-primary">GreenStyle</h2>
+</div>
+</div>
+<div class="flex items-center gap-4 text-sm font-medium text-text-secondary">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">lock</span> Secure Checkout</span>
+</div>
+</header>
+<main class="flex-1 px-4 py-8 md:px-10 lg:px-20 xl:px-40">
+<div class="mx-auto max-w-7xl">
+<nav class="mb-8 flex items-center gap-2 text-sm font-medium">
+<a class="text-text-secondary hover:text-primary transition-colors" href="#">Cart</a>
+<span class="material-symbols-outlined text-xs text-text-secondary/50">chevron_right</span>
+<span class="text-primary font-bold">Information</span>
+<span class="material-symbols-outlined text-xs text-text-secondary/50">chevron_right</span>
+<span class="text-text-secondary/50">Payment</span>
+</nav>
+<div class="flex flex-col gap-10 lg:flex-row lg:items-start">
+<div class="flex flex-1 flex-col gap-6">
+<div class="overflow-hidden rounded-xl border border-border-color bg-card-bg shadow-sm">
+<div class="flex items-center justify-between bg-card-accent p-4 border-b border-border-color">
+<div class="flex items-center gap-3">
+<span class="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-sm font-bold text-white">1</span>
+<h2 class="text-lg font-bold text-primary">Shipping Address</h2>
+</div>
+<button class="text-sm font-semibold text-primary hover:underline transition-colors">Edit</button>
+</div>
+<div class="p-6">
+<form class="grid grid-cols-1 gap-4 md:grid-cols-2">
+<div class="md:col-span-2">
+<label class="mb-1.5 block text-sm font-semibold text-primary">Full Name</label>
+<input class="w-full rounded-lg border-primary/20 bg-white py-2.5 text-sm text-primary focus:border-primary focus:ring-primary placeholder:text-gray-300" placeholder="Jane Doe" type="text"/>
+</div>
+<div class="md:col-span-2">
+<label class="mb-1.5 block text-sm font-semibold text-primary">Address</label>
+<input class="w-full rounded-lg border-primary/20 bg-white py-2.5 text-sm text-primary focus:border-primary focus:ring-primary placeholder:text-gray-300" placeholder="123 Green Street" type="text"/>
+</div>
+<div>
+<label class="mb-1.5 block text-sm font-semibold text-primary">City</label>
+<input class="w-full rounded-lg border-primary/20 bg-white py-2.5 text-sm text-primary focus:border-primary focus:ring-primary placeholder:text-gray-300" placeholder="Portland" type="text"/>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div>
+<label class="mb-1.5 block text-sm font-semibold text-primary">State</label>
+<input class="w-full rounded-lg border-primary/20 bg-white py-2.5 text-sm text-primary focus:border-primary focus:ring-primary placeholder:text-gray-300" placeholder="OR" type="text"/>
+</div>
+<div>
+<label class="mb-1.5 block text-sm font-semibold text-primary">ZIP Code</label>
+<input class="w-full rounded-lg border-primary/20 bg-white py-2.5 text-sm text-primary focus:border-primary focus:ring-primary placeholder:text-gray-300" placeholder="97201" type="text"/>
+</div>
+</div>
+</form>
+</div>
+</div>
+<div class="overflow-hidden rounded-xl border border-border-color bg-card-bg shadow-sm">
+<div class="flex items-center gap-3 bg-card-accent p-4 border-b border-border-color">
+<span class="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-sm font-bold text-white">2</span>
+<h2 class="text-lg font-bold text-primary">Delivery Method</h2>
+</div>
+<div class="p-6">
+<div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+<label class="relative flex cursor-pointer items-start gap-4 rounded-xl border-2 border-primary bg-primary/5 p-4 transition-all">
+<input checked="" class="mt-1" name="delivery" type="radio"/>
+<div class="flex flex-col">
+<span class="font-bold text-primary">Standard Delivery</span>
+<span class="text-xs text-text-secondary">3-5 Business Days</span>
+<span class="mt-2 text-sm font-bold text-primary">Free</span>
+</div>
+</label>
+<label class="relative flex cursor-pointer items-start gap-4 rounded-xl border-2 border-transparent bg-gray-50 p-4 transition-all hover:border-primary/20">
+<input class="mt-1" name="delivery" type="radio"/>
+<div class="flex flex-col">
+<span class="font-bold text-primary">Express Delivery</span>
+<span class="text-xs text-text-secondary">1-2 Business Days</span>
+<span class="mt-2 text-sm font-bold text-primary">$15.00</span>
+</div>
+</label>
+</div>
+</div>
+</div>
+<div class="overflow-hidden rounded-xl border border-border-color bg-card-bg shadow-sm">
+<div class="flex items-center gap-3 bg-card-accent p-4 border-b border-border-color">
+<span class="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-sm font-bold text-white">3</span>
+<h2 class="text-lg font-bold text-primary">Payment Method</h2>
+</div>
+<div class="p-6">
+<div class="space-y-6">
+<div class="rounded-xl border border-border-color bg-primary/5 p-4">
+<div class="mb-4 flex items-center justify-between">
+<label class="flex items-center gap-3 cursor-pointer">
+<input checked="" class="text-primary focus:ring-primary" name="payment" type="radio"/>
+<span class="font-bold text-primary">Credit / Debit Card</span>
+</label>
+<div class="flex gap-1 opacity-40">
+<div class="h-5 w-8 rounded bg-primary" title="Visa"></div>
+<div class="h-5 w-8 rounded bg-primary" title="Mastercard"></div>
+</div>
+</div>
+<div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+<div class="md:col-span-2">
+<label class="mb-1.5 block text-xs font-bold uppercase text-primary/70">Card Number</label>
+<div class="relative">
+<input class="w-full rounded-lg border-primary/20 bg-white py-2.5 text-sm text-primary focus:border-primary focus:ring-primary placeholder:text-gray-300" placeholder="0000 0000 0000 0000" type="text"/>
+<span class="material-symbols-outlined absolute right-3 top-2.5 text-primary/50">credit_card</span>
+</div>
+</div>
+<div>
+<label class="mb-1.5 block text-xs font-bold uppercase text-primary/70">Expiry Date</label>
+<input class="w-full rounded-lg border-primary/20 bg-white py-2.5 text-sm text-primary focus:border-primary focus:ring-primary placeholder:text-gray-300" placeholder="MM/YY" type="text"/>
+</div>
+<div>
+<label class="mb-1.5 block text-xs font-bold uppercase text-primary/70">CVV</label>
+<input class="w-full rounded-lg border-primary/20 bg-white py-2.5 text-sm text-primary focus:border-primary focus:ring-primary placeholder:text-gray-300" placeholder="123" type="text"/>
+</div>
+</div>
+</div>
+<label class="flex cursor-pointer items-center justify-between rounded-xl border border-border-color p-4 transition-colors hover:bg-primary/5">
+<div class="flex items-center gap-3">
+<input class="text-primary focus:ring-primary" name="payment" type="radio"/>
+<span class="font-bold text-primary">Cash on Delivery</span>
+</div>
+<span class="material-symbols-outlined text-primary/50">payments</span>
+</label>
+</div>
+</div>
+</div>
+</div>
+<div class="w-full lg:sticky lg:top-28 lg:max-w-[400px]">
+<div class="rounded-xl bg-card-bg p-6 shadow-sm border border-border-color">
+<h2 class="mb-6 text-xl font-bold text-primary">Order Summary</h2>
+<div class="mb-6 space-y-4">
+<div class="flex items-center gap-4">
+<div class="relative h-16 w-14 shrink-0 overflow-hidden rounded-lg bg-gray-50 border border-gray-100">
+<img alt="Item" class="h-full w-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBoGVzLeth1F29Z-gYrMb0O4jIreVcf3NVY0xtmRFv__ykQQqX_Q6yMwvgYBxuFrcLIb7NcA2x0MfkyjTaHnVJjNvBNC13zwE39XpIP6PEC8Qe-3KyYQcKBKiNasY5Rg0IKmn9Vdm09mFV8fv4SW8VLgTO_sgqG49BwKfJBe7IYfm1pAwLUe1hq2hxddaYSWmn_dgU5uPJRF6HoO1p5QwjA0Xln5uZMMDM-MkukzO0qOE_I1WRdGgs3srsLJf4ljDy8TIfR7eP2kA4"/>
+<span class="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-white">1</span>
+</div>
+<div class="flex flex-1 flex-col overflow-hidden">
+<p class="truncate text-sm font-bold text-primary">Floral Summer Dress</p>
+<p class="text-xs text-text-secondary">Emerald Green / S</p>
+</div>
+<p class="text-sm font-bold text-primary">$45.00</p>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative h-16 w-14 shrink-0 overflow-hidden rounded-lg bg-gray-50 border border-gray-100">
+<img alt="Item" class="h-full w-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBEBVXVnlamb-nIz2X6EPCpqSgqJvjVmdHHrIxcqrFx-J7bF3OyjZt0yWh7oV6t4UFWrtU6WQhBSgBGYTZXtmWSyhbe7PxivYTmfZ4X9yrY_vxW10x0XZ67f2AsGweD4nETtm7LUtkhO7Tv8jfukXFt1lXyOsoyUCsA0zgYQrHWYYxm6emdSYHaoURQONSZDMb5o7FMx1hiGiW1CO4lhB7lXsyk2QGN-L2_C5mH8cLUJntLwRXH8aW315sf8IrZybBFlrIU5Is6vz4"/>
+<span class="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-white">1</span>
+</div>
+<div class="flex flex-1 flex-col overflow-hidden">
+<p class="truncate text-sm font-bold text-primary">Casual Linen Trousers</p>
+<p class="text-xs text-text-secondary">Beige / 8</p>
+</div>
+<p class="text-sm font-bold text-primary">$60.00</p>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative h-16 w-14 shrink-0 overflow-hidden rounded-lg bg-gray-50 border border-gray-100">
+<img alt="Item" class="h-full w-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDhiaqAOnHmgPb_tyb-_b_y-Ppv9rWyyBda8aYgGqBoLhFBo5y842aLw7BMZQVmF009DtZNw7cXfFrCt-CE-2wwV8zrFloQ-Hn0jfBeLXbex5JoOiTGOjCvEDrOrTkXWvQndN7dhNASJsKIdzL-SoE7FecCYHTCW1qO3iI_M2HiEFcdAtV1L6wOGu8Fyg29C_B45Ww5whp6SxTEAAJXds3LCoKasCJgdKGmu4q_clZLm5aM_VWC2P2Rep-jno2cuE5pA14qxOJESWA"/>
+<span class="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-white">1</span>
+</div>
+<div class="flex flex-1 flex-col overflow-hidden">
+<p class="truncate text-sm font-bold text-primary">Organic Cotton Tee</p>
+<p class="text-xs text-text-secondary">White / M</p>
+</div>
+<p class="text-sm font-bold text-primary">$35.00</p>
+</div>
+</div>
+<div class="space-y-3 border-t border-border-color pt-6">
+<div class="flex justify-between text-sm text-text-secondary">
+<span>Subtotal</span>
+<span class="font-medium text-primary">$140.00</span>
+</div>
+<div class="flex justify-between text-sm text-text-secondary">
+<span>Shipping</span>
+<span class="font-medium text-primary">Free</span>
+</div>
+<div class="flex justify-between text-sm text-text-secondary">
+<span>Tax</span>
+<span class="font-medium text-primary">$12.00</span>
+</div>
+<div class="flex items-center justify-between border-t border-border-color pt-4">
+<span class="text-base font-bold text-primary">Total</span>
+<span class="text-2xl font-extrabold text-primary">$152.00</span>
+</div>
+</div>
+<button class="mt-8 flex w-full items-center justify-center gap-2 rounded-xl bg-primary py-4 text-base font-bold text-white shadow-lg shadow-primary/20 transition-all hover:bg-primary-hover active:scale-[0.98]">
+                            Pay Now — $152.00
+                        </button>
+<p class="mt-4 text-center text-xs text-text-secondary">
+                            By placing your order, you agree to our 
+                            <a class="underline text-primary hover:text-primary-hover" href="#">Terms of Service</a> and 
+                            <a class="underline text-primary hover:text-primary-hover" href="#">Privacy Policy</a>.
+                        </p>
+</div>
+<div class="mt-6 flex items-center justify-center gap-4 grayscale opacity-40">
+<div class="h-8 w-12 rounded bg-gray-200"></div>
+<div class="h-8 w-12 rounded bg-gray-200"></div>
+<div class="h-8 w-12 rounded bg-gray-200"></div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<footer class="mt-20 border-t border-gray-100 bg-gray-50 py-12">
+<div class="mx-auto max-w-7xl px-6 text-center">
+<div class="flex items-center justify-center gap-2 text-primary mb-4">
+<span class="material-symbols-outlined">eco</span>
+<span class="font-bold">GreenStyle</span>
+</div>
+<p class="text-sm text-text-secondary">© 2024 GreenStyle. All rights reserved.</p>
+</div>
+</footer>
+</div>
+
+</body></html>

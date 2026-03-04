@@ -10,8 +10,8 @@
     {% endif %}
 </h1>
 
-<main class="flex-1 flex flex-col h-full relative overflow-y-auto bg-page-bg">
-<header class="flex items-center justify-between px-8 py-5 sticky top-0 z-20 bg-page-bg">
+<main class="flex-1 flex flex-col relative bg-page-bg">
+  <header class="flex items-center justify-between px-8 py-5 sticky top-0 z-20 bg-page-bg">
 <div class="md:hidden">
 <button class="text-white">
 <span class="material-symbols-outlined">menu</span>
@@ -85,191 +85,304 @@
 </label>
 </div>
 </div>
-<div class="bg-white p-6 rounded-2xl shadow-sm border border-transparent">
-<h3 class="text-lg font-bold text-text-main mb-6 flex items-center gap-2">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+<!-- LEFT COLUMN : PRODUCT IMAGES -->
+<div class="bg-white dark:bg-[#0b1a12] p-6 rounded-2xl shadow-sm border border-[#e7f3ec] dark:border-[#1a3826] h-fit">
+
+<h3 class="text-lg font-bold text-text-main dark:text-white mb-6 flex items-center gap-2">
 <span class="material-symbols-outlined text-primary">image</span>
-                                Product Images
-                            </h3>
+Product Images
+</h3>
+
 <label
-  id="uploadBox"
-  for="productImage"
-  class="border-2 border-dashed border-border-green rounded-xl p-8 flex flex-col items-center justify-center text-center cursor-pointer hover:bg-[#f8fcfa] transition-colors group"
+id="uploadBox"
+for="productImage"
+class="border-2 border-dashed border-border-green rounded-xl p-8 flex flex-col items-center justify-center text-center cursor-pointer hover:bg-[#f8fcfa] dark:hover:bg-[#152e20] transition-colors group"
 >
 
-  <div class="bg-[#e7f3ec] rounded-full p-4 mb-4 group-hover:scale-110 transition-transform">
-    <span class="material-symbols-outlined text-primary text-[32px]">cloud_upload</span>
-  </div>
-  <p class="text-text-main font-medium mb-1">Click to upload or drag and drop</p>
-  <p class="text-text-secondary text-sm">SVG, PNG, JPG or GIF</p>
+<div class="bg-[#e7f3ec] rounded-full p-4 mb-4 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-primary text-[32px]">cloud_upload</span>
+</div>
 
-  <!-- ✅ REQUIRED FOR DJANGO -->
-  <input
-  type="file"
-  name="images"
-  id="productImage"
-  accept="image/*"
-  multiple
-  class="hidden"
+<p class="text-text-main dark:text-white font-medium mb-1">
+Click to upload or drag and drop
+</p>
+
+<p class="text-text-secondary text-sm">
+SVG, PNG, JPG or GIF
+</p>
+
+<input
+type="file"
+name="images"
+id="productImage"
+accept="image/*"
+multiple
+class="hidden"
 />
 
 </label>
-                        
+
 <div class="flex gap-4 mt-6 overflow-x-auto pb-2">
+
 <div class="relative shrink-0 size-24 rounded-lg overflow-hidden border border-border-green group">
 
 <div
-  id="imagePreview"
-  class="w-full h-full bg-center bg-no-repeat bg-cover"
-  style="display:none; min-height:96px;">
+id="imagePreview"
+class="w-full h-full bg-center bg-no-repeat bg-cover"
+style="display:none; min-height:96px;">
 </div>
-
 
 <button class="absolute top-1 right-1 bg-white/90 text-red-500 rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
 <span class="material-symbols-outlined text-[16px]">close</span>
 </button>
+
 </div>
+
 <label
-  for="productImage"
-  class="relative shrink-0 size-24 rounded-lg overflow-hidden border border-border-green flex items-center justify-center bg-[#f8fcfa] cursor-pointer hover:bg-[#eef6f1]"
+for="productImage"
+class="relative shrink-0 size-24 rounded-lg overflow-hidden border border-border-green flex items-center justify-center bg-[#f8fcfa] dark:bg-[#152e20] cursor-pointer hover:bg-[#eef6f1]"
 >
-  <span class="material-symbols-outlined text-border-green">
-    add_photo_alternate
-  </span>
+<span class="material-symbols-outlined text-border-green">
+add_photo_alternate
+</span>
 </label>
 
 </div>
 </div>
-</div>
+
+
+<!-- RIGHT COLUMN -->
 <div class="flex flex-col gap-6">
+
+<!-- Availability -->
 <div class="bg-white dark:bg-[#0b1a12] p-6 rounded-2xl shadow-sm border border-[#e7f3ec] dark:border-[#1a3826]">
-<h3 class="text-lg font-bold text-text-main dark:text-white mb-4">Availability</h3>
+
+<h3 class="text-lg font-bold text-text-main dark:text-white mb-4">
+Availability
+</h3>
+
 <div class="flex items-center justify-between mb-6 p-3 bg-[#f8fcfa] dark:bg-[#152e20] rounded-xl border border-border-green dark:border-[#2a4d38]">
+
 <div class="flex flex-col">
-<span class="text-sm font-bold text-text-main dark:text-white">In Stock</span>
-<span class="text-xs text-text-secondary">Visible to customers</span>
+<span class="text-sm font-bold text-text-main dark:text-white">
+In Stock
+</span>
+
+<span class="text-xs text-text-secondary">
+Visible to customers
+</span>
 </div>
+
 <label class="relative inline-flex items-center cursor-pointer">
 {{ form.is_available }}
 
+<div class="w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
 
-<div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
 </label>
+
 </div>
+
 <label class="block">
-<span class="text-text-main dark:text-gray-200 font-medium mb-2 block">Stock Quantity</span>
+<span class="text-text-main dark:text-white font-medium mb-2 block">
+Stock Quantity
+</span>
+
 {{ form.stock_quantity }}
 
 </label>
+
 </div>
-<div class="bg-white p-6 rounded-2xl shadow-sm border border-transparent">
-<h3 class="text-lg font-bold text-text-main mb-4">Organization</h3>
-<div class="space-y-4">
+
+
+<!-- Category -->
+<div class="bg-white dark:bg-[#0b1a12] p-6 rounded-2xl shadow-sm border border-[#e7f3ec] dark:border-[#1a3826] appearance-none">
+
 <label class="block">
-<span class="text-text-main font-medium mb-2 block">Category</span>
+
+<span class="text-text-main dark:text-white font-medium mb-2 block">
+Category
+</span>
+
 <div class="relative">
+
 {{ form.category }}
 
-  <option value="" disabled selected>Select category</option>
+<span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none">
+expand_more
+</span>
 
-  {% for category in categories %}
-    <option value="{{ category.id }}">
-      {{ category.category_name }}
-    </option>
-  {% endfor %}
+</div>
+
+</label>
+
+</div>
+
+
+<!-- Sizes -->
+<div class="bg-white dark:bg-[#0b1a12] p-6 rounded-2xl shadow-sm border border-[#e7f3ec] dark:border-[#1a3826]">
+
+<label class="block">
+
+<span class="text-text-main dark:text-white font-medium mb-2 block">
+Available Sizes
+</span>
+
+<div id="sizeContainer" class="flex flex-wrap gap-2 mb-3"></div>
+
+<div class="relative">
+
+<select
+id="sizeSelect"
+class="w-full h-12 bg-[#f8fcfa] dark:bg-[#152e20] border border-border-green dark:border-[#2a4d38] rounded-xl px-4 text-text-main dark:text-white focus:ring-0 focus:border-primary transition-colors appearance-none"
+>
+
+<option disabled selected value="">Add sizes...</option>
+<option value="XS">XS</option>
+<option value="S">S</option>
+<option value="M">M</option>
+<option value="L">L</option>
+<option value="XL">XL</option>
+<option value="XXL">XXL</option>
+<option value="One Size">One Size</option>
+
 </select>
 
-<span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none">expand_more</span>
+<span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none">
+add
+</span>
+
 </div>
-</label>
-<label class="block">
-  <span class="text-text-main dark:text-gray-200 font-medium mb-2 block">
-    Available Sizes
-  </span>
 
-  <!-- Selected sizes -->
-  <div id="sizeContainer" class="flex flex-wrap gap-2 mb-3"></div>
-
-  <!-- Size selector -->
-  <div class="relative">
-    <select
-      id="sizeSelect"
-      class="w-full h-12 bg-[#f8fcfa] dark:bg-[#152e20] border border-border-green dark:border-[#2a4d38] rounded-xl px-4 text-text-main dark:text-white focus:ring-0 focus:border-primary transition-colors appearance-none"
-    >
-      <option disabled selected value="">Add another size...</option>
-      <option value="XS">XS</option>
-      <option value="S">S</option>
-      <option value="M">M</option>
-      <option value="L">L</option>
-      <option value="XL">XL</option>
-      <option value="XXL">XXL</option>
-      <option value="One Size">One Size</option>
-    </select>
-
-    <span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none">
-      add
-    </span>
-  </div>
 </label>
 
+</div>
+
+
+
+<div class="bg-white dark:bg-[#0b1a12] p-6 rounded-2xl shadow-sm border border-[#e7f3ec] dark:border-[#1a3826]">
+
 <label class="block">
-<span class="text-text-main font-medium mb-2 block">Color</span>
+<span class="text-text-main dark:text-white font-medium mb-2 block">
+Color
+</span>
+
 <div class="relative">
-<input class="w-full h-12 bg-[#f8fcfa] border border-border-green rounded-xl p-1.5 cursor-pointer focus:ring-0 focus:border-primary transition-colors" type="color" value="#11d45f"/>
-<span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none">palette</span>
+
+<input
+class="w-full h-12 bg-[#f8fcfa] dark:bg-[#152e20] border border-border-green dark:border-[#2a4d38] rounded-xl p-1.5 cursor-pointer focus:ring-0 focus:border-primary transition-colors"
+type="color"
+value="#11d45f"
+/>
+
+<span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none">
+palette
+</span>
+
 </div>
+
 </label>
-<div class="mt-6">
-    <label class="block text-sm font-semibold text-gray-700 mb-2">
-        Collections
-    </label>
 
-    <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
-        {% for collection in collections %}
-            <label class="flex items-center gap-2 text-sm">
-                <input
-                    type="checkbox"
-                    name="collections"
-                    value="{{ collection.id }}"
-                    class="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
-
-                    {% if is_edit and collection in product.collections.all %}
-                        checked
-                    {% endif %}
-                >
-                {{ collection.name }}
-            </label>
-        {% endfor %}
-    </div>
 </div>
+
+
+<div class="flex flex-col gap-6 mt-6">
+<div class="bg-white dark:bg-[#0b1a12] p-6 rounded-2xl shadow-sm border border-[#e7f3ec] dark:border-[#1a3826]">
+
+<label class="block text-sm font-semibold text-text-main dark:text-white mb-3">
+Collections
+</label>
+
+<div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+
+{% for collection in collections %}
+
+<label class="flex items-center gap-2 text-sm text-text-main dark:text-gray-200">
+
+<input
+type="checkbox"
+name="collections"
+value="{{ collection.id }}"
+class="w-4 h-4 text-primary border-border-green rounded focus:ring-primary dark:bg-[#152e20] dark:border-[#2a4d38]"
+
+{% if is_edit and collection in product.collections.all %}
+checked
+{% endif %}
+>
+
+{{ collection.name }}
+
+</label>
+
+{% endfor %}
+
+</div>
+
+</div>
+
 
 <label class="block">
-<span class="text-text-main font-medium mb-2 block">Tags</span>
-<input class="w-full h-12 bg-[#f8fcfa] border border-border-green rounded-xl px-4 text-text-main focus:ring-0 focus:border-primary transition-colors" placeholder="Add tags separated by comma" type="text"/>
+
+<div class="bg-white dark:bg-[#0b1a12] p-6 rounded-2xl shadow-sm border border-[#e7f3ec] dark:border-[#1a3826]">
+
+<label class="block">
+
+<span class="text-text-main dark:text-white font-medium mb-2 block">
+Tags
+</span>
+
+<input
+class="w-full h-12 bg-[#f8fcfa] dark:bg-[#152e20] border border-border-green dark:border-[#2a4d38] rounded-xl px-4 text-text-main dark:text-white focus:ring-0 focus:border-primary transition-colors"
+placeholder="Add tags separated by comma"
+type="text"
+/>
+
 <div class="flex flex-wrap gap-2 mt-3">
-<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-[#e7f3ec] text-text-main">
-                                            floral
-                                            <button class="ml-1 text-text-secondary hover:text-text-main" type="button"><span class="material-symbols-outlined text-[14px]">close</span></button>
+
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-[#e7f3ec] dark:bg-[#152e20] text-text-main dark:text-white">
+floral
+<button class="ml-1 text-text-secondary hover:text-red-500" type="button">
+<span class="material-symbols-outlined text-[14px]">close</span>
+</button>
 </span>
-<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-[#e7f3ec] text-text-main">
-                                            cotton
-                                            <button class="ml-1 text-text-secondary hover:text-text-main" type="button"><span class="material-symbols-outlined text-[14px]">close</span></button>
+
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-[#e7f3ec] dark:bg-[#152e20] text-text-main dark:text-white">
+cotton
+<button class="ml-1 text-text-secondary hover:text-red-500" type="button">
+<span class="material-symbols-outlined text-[14px]">close</span>
+</button>
 </span>
+
+</div>
+
+</label>
+
+</div>
+</div>
+
 </div>
 </label>
-</div>
-</div>
-<div class="flex flex-col gap-3 mt-auto pt-4">
-<button type="submit" class="btn-primary">
-    {% if is_edit %}
-        Update Product
-    {% else %}
-        Add Product
-    {% endif %}
+<div class="flex justify-end gap-4 mt-8">
+
+<button
+type="button"
+class="px-6 h-12 border border-[#1a3826] text-[#88a594] rounded-xl font-semibold hover:bg-[#1a3826] hover:text-white transition">
+Cancel
 </button>
 
-<button class="w-full h-14 bg-transparent border-2 border-[#1a3826] hover:bg-[#1a3826] hover:text-white text-[#88a594] font-bold text-base rounded-full transition-colors" type="button">
-                                Cancel
-                            </button>
+<button
+type="submit"
+class="px-8 h-12 bg-primary text-white font-semibold rounded-xl shadow-sm hover:opacity-90 transition">
+
+{% if is_edit %}
+Update Product
+{% else %}
+Add Product
+{% endif %}
+
+</button>
+
 </div>
 </div>
 </form>

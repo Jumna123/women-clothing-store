@@ -14,31 +14,32 @@ class ProductForm(forms.ModelForm):
         model = Product
         fields = "__all__"
         widgets = {
-            "description": forms.Textarea(attrs={
-                "class": "w-full h-32 bg-transparent border-none p-4 resize-none",
-                "placeholder": "Describe the product material, fit, and style details...",
-            }),
             "product_name": forms.TextInput(attrs={
-                "class": "w-full h-14 bg-[#f8fcfa] border border-border-green rounded-xl px-4",
+                "class": "w-full h-14 bg-[#f8fcfa] border border-border-green rounded-xl px-4 focus:border-primary focus:ring-0 transition-colors",
                 "placeholder": "e.g. Floral Summer Maxi Dress",
             }),
+
             "price": forms.NumberInput(attrs={
-                "class": "w-full h-14 bg-[#f8fcfa] border border-border-green rounded-xl pl-8 pr-4",
+                "class": "w-full h-14 bg-[#f8fcfa] border border-border-green rounded-xl pl-8 pr-4 focus:border-primary focus:ring-0 transition-colors",
             }),
+
             "discount_price": forms.NumberInput(attrs={
-                "class": "w-full h-14 bg-[#f8fcfa] border border-border-green rounded-xl pl-8 pr-4",
+                "class": "w-full h-14 bg-[#f8fcfa] border border-border-green rounded-xl pl-8 pr-4 focus:border-primary focus:ring-0 transition-colors",
             }),
+
             "description": forms.Textarea(attrs={
                 "class": "w-full h-32 bg-transparent border-none p-4 resize-none",
                 "placeholder": "Describe the product material, fit, and style details...",
             }),
+
             "stock_quantity": forms.NumberInput(attrs={
-                "class": "w-full h-12 bg-[#f8fcfa] border border-border-green rounded-xl px-4",
-            }),
-            "category": forms.Select(attrs={
-                "class": "w-full h-12 bg-[#f8fcfa] border border-border-green rounded-xl px-4",
+                "class": "w-full h-12 bg-[#f8fcfa] border border-border-green rounded-xl px-4 focus:border-primary focus:ring-0 transition-colors",
             }),
 
+            # 🔥 CLEAN CATEGORY DROPDOWN
+            "category": forms.Select(attrs={
+                "class": "w-full h-12 bg-white border border-border-green rounded-xl px-4 focus:border-primary focus:ring-0 transition-colors cursor-pointer",
+            }),
         }
 
 
