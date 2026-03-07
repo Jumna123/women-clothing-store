@@ -1,409 +1,295 @@
 <!DOCTYPE html>
-
-<html class="dark" lang="en"><head>
+<html lang="en"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Elegance - Women's Fashion</title>
-<!-- Fonts -->
+<title>My Account Dashboard - Chic Greens</title>
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="https://fonts.googleapis.com/css2?family=Spline+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
-<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<!-- Tailwind CSS -->
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<!-- Theme Config -->
 <script id="tailwind-config">
         tailwind.config = {
-            darkMode: "class",
             theme: {
                 extend: {
                     colors: {
-                        "primary": "#36e27b",
-                        "background-light": "#f6f8f7",
-                        "background-dark": "#112117",
-                        "surface-dark": "#1c3326",
+                        "primary": "#065f46", // Updated: Darker emerald green (Emerald 800) for primary actions
+                        "primary-light": "#d1fae5", // Updated: Light emerald background (Emerald 100)
+                        "text-main": "#022c22", // Updated: Deepest green/black (Emerald 950)
+                        "text-secondary": "#064e3b", // Updated: Darker secondary text (Emerald 900)
+                        "background-base": "#ffffff", // White background
+                        "surface-light": "#ecfdf5", // Updated: Very light emerald surface (Emerald 50)
+                        "surface-lighter": "#ffffff", // White for cards
+                        "border-green": "#6ee7b7", // Updated: Stronger green border (Emerald 300)
+                        "accent-dark": "#022c22" // Updated: Very deep green for gradients
                     },
                     fontFamily: {
-                        "display": ["Spline Sans", "sans-serif"]
+                        "display": ["Manrope", "sans-serif"]
                     },
-                    borderRadius: {
-                        "DEFAULT": "1rem", 
-                        "lg": "2rem", 
-                        "xl": "3rem", 
-                        "full": "9999px"
-                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "full": "9999px"},
                 },
             },
         }
     </script>
 <style>
-        /* Custom utilities for smooth scrolling if needed, though no animations requested */
-        html {
-            scroll-behavior: smooth;
+        ::-webkit-scrollbar {
+            width: 8px;
         }
-        body {
-            font-family: 'Spline Sans', sans-serif;
+        ::-webkit-scrollbar-track {
+            background: #ecfdf5; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #065f46; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #047857; 
         }
         .material-symbols-outlined {
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
         }
+        .icon-filled {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
     </style>
 </head>
-<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white min-h-screen flex flex-col font-display selection:bg-primary selection:text-background-dark">
-<!-- Sticky Header -->
-<header class="sticky top-0 z-50 w-full border-b border-[#254632] bg-background-dark/95 backdrop-blur-md">
-<div class="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-<!-- Logo -->
-<div class="flex items-center gap-2">
-<div class="flex size-8 items-center justify-center rounded-full bg-primary text-background-dark">
-<span class="material-symbols-outlined text-2xl">diamond</span>
+<body class="bg-background-base text-text-main font-display antialiased min-h-screen flex flex-col selection:bg-primary-light selection:text-primary">
+<header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-border-green/30 w-full shadow-sm">
+<div class="px-4 lg:px-10 py-3 flex items-center justify-between">
+<div class="flex items-center gap-8">
+<a class="flex items-center gap-2 group" href="#">
+<div class="size-8 text-primary">
+<svg class="w-full h-full" fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M24 4H6V17.3333V30.6667H24V44H42V30.6667V17.3333H24V4Z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
 </div>
-<h1 class="text-xl font-bold tracking-tight text-white">ELEGANCE</h1>
+<h2 class="text-text-main text-xl font-bold tracking-tight group-hover:text-primary transition-colors">Chic Greens</h2>
+</a>
+<nav class="hidden lg:flex items-center gap-6">
+<a class="text-text-secondary text-sm font-semibold hover:text-primary transition-colors" href="#">Shop</a>
+<a class="text-text-secondary text-sm font-semibold hover:text-primary transition-colors" href="#">New Arrivals</a>
+<a class="text-text-secondary text-sm font-semibold hover:text-primary transition-colors" href="#">Sale</a>
+<a class="text-text-secondary text-sm font-semibold hover:text-primary transition-colors" href="#">Sustainable</a>
+<a class="text-text-secondary text-sm font-semibold hover:text-primary transition-colors" href="#">Journal</a>
+</nav>
 </div>
-<!-- Search Bar (Hidden on mobile, visible on tablet+) -->
-<div class="hidden flex-1 px-8 md:flex max-w-md">
-<div class="relative w-full">
-<div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-primary/70">
-<span class="material-symbols-outlined text-xl">search</span>
-</div>
-<input class="block w-full rounded-full border-none bg-[#1c3326] py-2.5 pl-11 pr-4 text-sm text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/50" placeholder="Search for styles, trends, etc..." type="text"/>
-</div>
-</div>
-<!-- Icons -->
-<div class="flex items-center gap-3">
-<button class="flex size-10 items-center justify-center rounded-full text-white hover:bg-[#1c3326] transition-colors md:hidden">
+<div class="flex items-center justify-end gap-4 lg:gap-6 flex-1 max-w-md">
+<label class="hidden md:flex flex-1 relative group">
+<span class="absolute inset-y-0 left-0 flex items-center pl-3 text-text-secondary group-focus-within:text-primary">
 <span class="material-symbols-outlined">search</span>
+</span>
+<input class="w-full bg-surface-light text-text-main placeholder:text-text-secondary/50 text-sm font-medium rounded-lg border border-border-green py-2.5 pl-10 pr-4 focus:ring-2 focus:ring-primary/20 focus:bg-white focus:border-primary transition-all outline-none" placeholder="Search products..." type="text"/>
+</label>
+<div class="flex gap-2">
+<button class="relative flex items-center justify-center p-2 rounded-lg text-text-secondary hover:bg-surface-light hover:text-primary transition-colors group">
+<span class="material-symbols-outlined group-hover:text-primary">shopping_bag</span>
+<span class="absolute top-1 right-1 size-2 bg-primary rounded-full ring-2 ring-white"></span>
 </button>
-<button class="flex size-10 items-center justify-center rounded-full text-white hover:bg-[#1c3326] transition-colors">
-<span class="material-symbols-outlined">favorite</span>
+<button class="flex items-center justify-center p-2 rounded-lg text-text-secondary hover:bg-surface-light hover:text-primary transition-colors group">
+<span class="material-symbols-outlined group-hover:text-primary">person</span>
 </button>
-<button class="flex size-10 items-center justify-center rounded-full text-white hover:bg-[#1c3326] transition-colors">
-<span class="material-symbols-outlined">person</span>
+<button class="lg:hidden flex items-center justify-center p-2 rounded-lg text-text-secondary hover:bg-surface-light hover:text-primary transition-colors">
+<span class="material-symbols-outlined">menu</span>
 </button>
-<button class="group relative flex size-10 items-center justify-center rounded-full bg-primary text-background-dark hover:bg-white transition-colors">
-<span class="material-symbols-outlined">shopping_cart</span>
-<span class="absolute -right-1 -top-1 flex size-4 items-center justify-center rounded-full bg-white text-[10px] font-bold text-background-dark group-hover:bg-primary">2</span>
-</button>
+</div>
 </div>
 </div>
 </header>
-<!-- Main Content -->
-<main class="flex-grow">
-<!-- Hero Section -->
-<section class="relative mx-auto max-w-7xl px-4 pt-6 sm:px-6 lg:px-8">
-<div class="relative overflow-hidden rounded-2xl bg-[#1c3326]">
-<div class="absolute inset-0 z-0">
-<div class="h-full w-full bg-cover bg-center opacity-60 mix-blend-overlay" data-alt="Elegant woman in green dress standing in a minimalist concrete space" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBl4aXu1VhlRpi-v8I954Cp_DOwEii3j73oexmm0WvsuLgFsH5JXb9_B2EgE7CpQ3-5OyjSnrED-pbyUrp4Ejsnu5K5ByQPTR1D4P1WqSGaT7AfnM0eV-UFaIqImlJQX4F06sNXyuA92KAwvDv_rHFGjlo_se3QRHXal15OEAJwjwtyMEa0xr7DnWMiL-Yy1D1Jvn-arAMM4E7es7fGjlQecnX-2Nks8ZfcJRoSKu2ZO2XheeNMQis3WB1Lhm0yf1QCCBNvU7TeX4U');"></div>
-<div class="absolute inset-0 bg-gradient-to-r from-background-dark via-background-dark/80 to-transparent"></div>
+<div class="flex-grow w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
+<div class="flex flex-col lg:flex-row gap-8 lg:gap-12 h-full">
+<aside class="w-full lg:w-72 flex-shrink-0">
+<div class="bg-white rounded-2xl shadow-lg border border-border-green/20 p-6 sticky top-24">
+<div class="flex items-center gap-4 mb-8">
+<div class="relative group cursor-pointer">
+<div class="size-14 rounded-full overflow-hidden border-2 border-primary/20 ring-2 ring-transparent group-hover:ring-primary/20 transition-all">
+<img alt="Smiling woman portrait" class="w-full h-full object-cover" data-alt="Profile picture of Sarah" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDBQSxYJqUj3VTn365K7wH-Po9zQjc3ElbkEjBvOEPC6B9HIr5--dJOFEthSVmrxd9dFulUIBsqMQuGnjINwK_y8hOYmr648riPTTiIKk6allRdI17NkNMorZmnYwTxFmXlpy4FW1r_5InTTmvT_fEHgDVcJ0PXvqkhWXNbDNRdalZFbj3xps99OiSzvKlYG_lNIG_7j-hzqvsDW6F7v4KyhqgtRLYgtCTLWHYKZXfioZMKH4-nvVA4JN3Z6O3PoSwPVNaqlsGTwnA"/>
 </div>
-<div class="relative z-10 flex min-h-[500px] flex-col justify-center px-6 py-12 sm:px-12 lg:w-2/3">
-<span class="mb-4 inline-block w-fit rounded-full bg-primary/20 px-4 py-1.5 text-xs font-bold uppercase tracking-wide text-primary border border-primary/20">
-                        New Collection 2024
-                    </span>
-<h2 class="mb-6 text-4xl font-black leading-tight tracking-tight text-white sm:text-5xl lg:text-6xl">
-                        Style that speaks <br/>
-<span class="text-primary">Elegance</span>
+<div class="absolute bottom-0 right-0 bg-primary text-white p-1 rounded-full border border-white shadow-sm hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-[10px] block">edit</span>
+</div>
+</div>
+<div class="flex flex-col">
+<h3 class="text-text-main font-bold text-lg leading-tight">{{user.username}}</h3>
+<p class="text-text-secondary/70 text-xs font-medium">Member since 2023</p>
+</div>
+</div>
+<nav class="flex flex-col gap-1.5">
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl bg-primary text-white shadow-lg shadow-primary/20 transition-all font-bold" href="#">
+<span class="material-symbols-outlined icon-filled">dashboard</span>
+<span class="text-sm">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-text-secondary hover:bg-primary-light/50 hover:text-primary transition-all group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">shopping_bag</span>
+<span class="text-sm font-medium">My Orders</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-text-secondary hover:bg-primary-light/50 hover:text-primary transition-all group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">favorite</span>
+<span class="text-sm font-medium">Wishlist</span>
+<span class="ml-auto bg-primary-light text-primary text-xs font-bold px-2 py-0.5 rounded-full">12</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-text-secondary hover:bg-primary-light/50 hover:text-primary transition-all group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">location_on</span>
+<span class="text-sm font-medium">Addresses</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-text-secondary hover:bg-primary-light/50 hover:text-primary transition-all group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">credit_card</span>
+<span class="text-sm font-medium">Payment Methods</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-text-secondary hover:bg-primary-light/50 hover:text-primary transition-all group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">settings</span>
+<span class="text-sm font-medium">Account Settings</span>
+</a>
+</nav>
+<div class="mt-8 pt-6 border-t border-border-green/20">
+<a class="flex items-center gap-3 px-4 py-2 text-text-secondary/70 hover:text-red-500 transition-colors text-sm font-semibold group" href="{% url 'accounts:logout' %}">
+<span class="material-symbols-outlined">logout</span>
+<span>Sign Out</span>
+</a>
+</div>
+</div>
+</aside>
+<main class="flex-1 flex flex-col gap-8 min-w-0">
+<div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary to-accent-dark p-8 shadow-xl text-white">
+<div class="relative z-10 flex flex-col gap-2">
+<h1 class="text-white text-3xl font-extrabold tracking-tight">My Account</h1>
+<p class="text-surface-light text-base max-w-xl">Welcome back, Sarah. Here's what's happening with your sustainable wardrobe.</p>
+</div>
+<span class="material-symbols-outlined absolute -bottom-10 -right-8 text-[200px] text-white/10 select-none pointer-events-none rotate-12">eco</span>
+<div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-20"></div>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+<div class="bg-white rounded-xl p-5 border border-border-green/30 shadow-md flex flex-col gap-1 hover:border-primary/50 hover:bg-primary-light/10 transition-all duration-300 cursor-default group">
+<div class="flex items-center justify-between">
+<span class="text-text-secondary text-sm font-semibold">Active Orders</span>
+<span class="material-symbols-outlined text-primary bg-primary-light p-1.5 rounded-lg group-hover:bg-primary group-hover:text-white transition-colors">local_shipping</span>
+</div>
+<p class="text-text-main text-2xl font-bold mt-2">1</p>
+<p class="text-text-secondary/60 text-xs">Arriving tomorrow</p>
+</div>
+<div class="bg-white rounded-xl p-5 border border-border-green/30 shadow-md flex flex-col gap-1 hover:border-primary/50 hover:bg-primary-light/10 transition-all duration-300 cursor-default group">
+<div class="flex items-center justify-between">
+<span class="text-text-secondary text-sm font-semibold">Wishlist Items</span>
+<span class="material-symbols-outlined text-primary bg-primary-light p-1.5 rounded-lg group-hover:bg-primary group-hover:text-white transition-colors">favorite</span>
+</div>
+<p class="text-text-main text-2xl font-bold mt-2">12</p>
+<p class="text-text-secondary/60 text-xs">2 items on sale</p>
+</div>
+<div class="bg-white rounded-xl p-5 border border-border-green/30 shadow-md flex flex-col gap-1 hover:border-primary/50 hover:bg-primary-light/10 transition-all duration-300 cursor-default group">
+<div class="flex items-center justify-between">
+<span class="text-text-secondary text-sm font-semibold">Store Credit</span>
+<span class="material-symbols-outlined text-primary bg-primary-light p-1.5 rounded-lg group-hover:bg-primary group-hover:text-white transition-colors">account_balance_wallet</span>
+</div>
+<p class="text-text-main text-2xl font-bold mt-2">$45.00</p>
+<p class="text-text-secondary/60 text-xs">Available to spend</p>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+<a class="group flex flex-col justify-between bg-white rounded-2xl p-6 border border-border-green/20 shadow-lg hover:shadow-xl hover:shadow-primary/5 hover:border-primary/30 transition-all duration-300" href="#">
+<div class="flex flex-col gap-4">
+<div class="bg-primary-light/50 w-12 h-12 rounded-full flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined">package_2</span>
+</div>
+<div>
+<h2 class="text-text-main text-lg font-bold mb-1 group-hover:text-primary transition-colors">My Orders</h2>
+<p class="text-text-secondary/80 text-sm">Track active shipments, view history, or buy again.</p>
+</div>
+</div>
+<div class="mt-6 flex items-center text-primary font-bold text-sm">
+<span>View History</span>
+<span class="material-symbols-outlined text-sm ml-1 group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</div>
+</a>
+<a class="group flex flex-col justify-between bg-white rounded-2xl p-6 border border-border-green/20 shadow-lg hover:shadow-xl hover:shadow-primary/5 hover:border-primary/30 transition-all duration-300" href="#">
+<div class="flex flex-col gap-4">
+<div class="bg-primary-light/50 w-12 h-12 rounded-full flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined">manage_accounts</span>
+</div>
+<div>
+<h2 class="text-text-main text-lg font-bold mb-1 group-hover:text-primary transition-colors">Account Settings</h2>
+<p class="text-text-secondary/80 text-sm">Edit your profile details, email, and change password.</p>
+</div>
+</div>
+<div class="mt-6 flex items-center text-primary font-bold text-sm">
+<span>Edit Profile</span>
+<span class="material-symbols-outlined text-sm ml-1 group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</div>
+</a>
+<a href="{% url 'accounts:add_address' %}"
+class="group flex flex-col justify-between bg-white rounded-2xl p-6 border border-border-green/20 shadow-lg hover:shadow-xl hover:shadow-primary/5 hover:border-primary/30 transition-all duration-300">
+
+<div class="flex flex-col gap-4">
+
+<div class="bg-primary-light/50 w-12 h-12 rounded-full flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined">home_pin</span>
+</div>
+
+<div>
+<h2 class="text-text-main text-lg font-bold mb-1 group-hover:text-primary transition-colors">
+Shipping Addresses
 </h2>
-<p class="mb-8 max-w-lg text-lg text-gray-300">
-                        Discover the latest trends in women's fashion. Timeless pieces designed for the modern woman who values comfort and sophistication.
-                    </p>
-<div class="flex gap-4">
-<button class="flex items-center gap-2 rounded-full bg-primary px-8 py-3.5 text-base font-bold text-background-dark transition-transform hover:scale-105 active:scale-95">
-                            Shop Now
-                            <span class="material-symbols-outlined text-sm">arrow_forward</span>
-</button>
-<button class="flex items-center gap-2 rounded-full bg-white/10 px-8 py-3.5 text-base font-bold text-white backdrop-blur-sm transition-colors hover:bg-white/20">
-                            View Lookbook
-                        </button>
+
+<p class="text-text-secondary/80 text-sm">
+Manage your delivery locations and preferences.
+</p>
 </div>
+
 </div>
+
+<div class="mt-6 flex items-center text-primary font-bold text-sm">
+<span>Manage Addresses</span>
+<span class="material-symbols-outlined text-sm ml-1 group-hover:translate-x-1 transition-transform">
+arrow_forward
+</span>
 </div>
-</section>
-<!-- Categories Section -->
-<section class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-<div class="flex flex-col items-center justify-between gap-4 sm:flex-row sm:items-end mb-10">
-<h3 class="text-3xl font-bold text-white tracking-tight">Shop by Category</h3>
-<a class="group flex items-center gap-1 text-sm font-semibold text-primary hover:text-white transition-colors" href="#">
-                    View all categories
-                    <span class="material-symbols-outlined text-lg transition-transform group-hover:translate-x-1">arrow_right_alt</span>
+
 </a>
+<a class="group flex flex-col justify-between bg-white rounded-2xl p-6 border border-border-green/20 shadow-lg hover:shadow-xl hover:shadow-primary/5 hover:border-primary/30 transition-all duration-300" href="#">
+<div class="flex flex-col gap-4">
+<div class="bg-primary-light/50 w-12 h-12 rounded-full flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined">credit_card</span>
 </div>
-<div class="grid grid-cols-2 gap-6 md:grid-cols-4">
-<!-- Category 1 -->
-<a class="group flex flex-col items-center gap-4" href="#">
-<div class="aspect-square w-full overflow-hidden rounded-full border-2 border-[#254632] p-1 transition-colors group-hover:border-primary">
-<div class="h-full w-full overflow-hidden rounded-full bg-[#1c3326]">
-<div class="h-full w-full bg-cover bg-center transition-transform duration-500 group-hover:scale-110" data-alt="Close up of a silk blouse texture" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCjGog0loESEyyATkA6wWG4D735Nk3kr0jCzTYYhq1aJadiO9gL97LNGulaBavSJ1_O1Ett9hJW8QNIbDfFdfIjug05QP675zbcCu5Ww1hObbAdRH2qKbNzBn085RjXxVtg5UQUcpNIv_dnKSg3nbk1P_D8wyejY-X-giW0nu-aHil1IvWaX-1s_N0H35bWD_JsbxgPuDUuepCWx-eabwbTfeKvRzMupedt7_B2TXfD7nogb5WXO76ymL_EDZK0XrJ1aUPotRlzR3g');"></div>
-</div>
-</div>
-<span class="text-lg font-medium text-white group-hover:text-primary">Tops</span>
-</a>
-<!-- Category 2 -->
-<a class="group flex flex-col items-center gap-4" href="#">
-<div class="aspect-square w-full overflow-hidden rounded-full border-2 border-[#254632] p-1 transition-colors group-hover:border-primary">
-<div class="h-full w-full overflow-hidden rounded-full bg-[#1c3326]">
-<div class="h-full w-full bg-cover bg-center transition-transform duration-500 group-hover:scale-110" data-alt="Detail of fabric on denim jeans" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAiCFtnVOVwq_6PDbPSlHgjoF33ABS6xfWaHhM_CbCd8489ngiPFT4kggrYMVQjXoB_CTuR4pdlSOrw34aPcOSIl8VOzwH-EV7EO9sHHgoceJx4RgQ3ZlqhXykEvf-ZwUdj76tigdK92hsMHu5s-hCjJh9JGUGfj0ad_IluPsM0hKeoOUXx7C2rnET1Qz8oH-bZAgYq4R8BgkPuTu1G3eg5K4Xr_TEFR2NPEwbADAuECN3oytsl8jhERcCerKzCt1esksNouvM3Cvw');"></div>
-</div>
-</div>
-<span class="text-lg font-medium text-white group-hover:text-primary">Pants</span>
-</a>
-<!-- Category 3 -->
-<a class="group flex flex-col items-center gap-4" href="#">
-<div class="aspect-square w-full overflow-hidden rounded-full border-2 border-[#254632] p-1 transition-colors group-hover:border-primary">
-<div class="h-full w-full overflow-hidden rounded-full bg-[#1c3326]">
-<div class="h-full w-full bg-cover bg-center transition-transform duration-500 group-hover:scale-110" data-alt="Traditional Indian ethnic wear pattern detail" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDIYiMfVwOkT9F5AqdP3-JCq-OzVKPBCa51W457NI4ZYCF150-XrwbM-2lP8ODh8J-MJ9_p7zBGlGQ6R1oblHoXau0MIXB79R39dd7QOFSb36EhhcZDTLFGA-bMFkEndW-REV4QUj39FYpBQgIu-wGJ1YSbnOrMfTtjswyvr6AQNBjpYJD-e2w8wJ7A2jnBvHCUHX1BDUzIMOiRewLVfI1ztZfLn1DWUqThfpjgIck6-TUr5B7pSXyUO-c4-p1ppT191Mmaj_kWpNg');"></div>
-</div>
-</div>
-<span class="text-lg font-medium text-white group-hover:text-primary">Salwar Kurtis</span>
-</a>
-<!-- Category 4 -->
-<a class="group flex flex-col items-center gap-4" href="#">
-<div class="aspect-square w-full overflow-hidden rounded-full border-2 border-[#254632] p-1 transition-colors group-hover:border-primary">
-<div class="h-full w-full overflow-hidden rounded-full bg-[#1c3326]">
-<div class="h-full w-full bg-cover bg-top transition-transform duration-500 group-hover:scale-110" data-alt="Flowing summer dress fabric" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBkUWkbZFEjaZpN8bPLmSGJbSGnLon5jQDdyh4ZRprm3EXRUeXaq-hUjVxFgRbZYy8dm2uSmMowx0sNqkV8gZ1cffCH5NQSG_ZbVJrexf92xDWO-oPjtJktvsuXbwd46t-mnchaqSarpkST69UN7IEqcf4nGzGgafSrxxqENKBp0SiJMdn44sqtFeNUznJlFfTTnGeAzilnlleEijdoaUGSWWmAOAGrxiwYf5Fq-a1bnSBuG7wAaAflhth1cW746v8lrJ4_dtQNddI');"></div>
-</div>
-</div>
-<span class="text-lg font-medium text-white group-hover:text-primary">Dresses</span>
-</a>
-</div>
-</section>
-<!-- Collections Section -->
-<section class="bg-[#1c3326]/30 py-16">
-<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-<div class="mb-10 text-center">
-<h3 class="text-3xl font-bold text-white tracking-tight">Curated Collections</h3>
-<p class="mt-2 text-gray-400">Handpicked selections just for you</p>
-</div>
-<div class="grid gap-6 md:grid-cols-3">
-<!-- Collection Card 1 -->
-<div class="group relative overflow-hidden rounded-2xl bg-surface-dark">
-<div class="absolute inset-0 z-0 h-full w-full bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="Model posing in modern office wear jacket" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB2CiXdPs-56d5nkWBPWz2pkzzbjteQ68TMRN5-wLmqcBNev902xwOLbNEe7eqBrnj1NbNUNr1y09Ogc3Q-KN-JMsX_rs-zT3mh50DwKzuVbg6-HVPH8G12OpDVTaMMda23v22JSqpYPEPiwrkuflA1qXW89-uD8LoOzZEm8yrxVPj-I9CIH2TJiSmCtafve9qnLflOWKK69xjphvS19EVtTPmC3zcMEbZRyIasauU3zpdlI13hvElVr-zRRjJi6dvhnI8dzNAvVzw');"></div>
-<div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
-<div class="relative z-10 flex h-96 flex-col justify-end p-6">
-<h4 class="text-2xl font-bold text-white">New Arrivals</h4>
-<p class="mb-4 text-sm text-gray-300">Fresh styles added daily.</p>
-<button class="w-fit rounded-full bg-white px-6 py-2 text-sm font-bold text-background-dark opacity-90 transition-all hover:opacity-100">
-                                Explore
-                            </button>
-</div>
-</div>
-<!-- Collection Card 2 -->
-<div class="group relative overflow-hidden rounded-2xl bg-surface-dark">
-<div class="absolute inset-0 z-0 h-full w-full bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="Traditional festive wear with golden embroidery" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCGXKA0l4g4vV4ADkyr8dYHHBynp6GqlINe7nfXkS3VplJUvhu0ppoXxARhrd9fYXv_7tFqjDwZYmgxpJ5LXS-LL7-AsF5JGvgkxQiKnJpFGrxxln4QzkOShlSVCggRE74iG_PyIwan4sZN3wUJCtZZflHjoO5TWE4dTJ4iJkF7dx3CL1r5CsF_ju4u3zUvxLwq8DBNCKcWrgroyihqQXuocYeAefW122D2Og8Tssu8PgxGRyDdeaZPhYq7ZdNaoPiKqDWHgneUY_w');"></div>
-<div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
-<div class="relative z-10 flex h-96 flex-col justify-end p-6">
-<h4 class="text-2xl font-bold text-white">Festive Edit</h4>
-<p class="mb-4 text-sm text-gray-300">Shine bright this season.</p>
-<button class="w-fit rounded-full bg-white px-6 py-2 text-sm font-bold text-background-dark opacity-90 transition-all hover:opacity-100">
-                                Explore
-                            </button>
-</div>
-</div>
-<!-- Collection Card 3 -->
-<div class="group relative overflow-hidden rounded-2xl bg-surface-dark">
-<div class="absolute inset-0 z-0 h-full w-full bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="Woman wearing stylish casual outfit walking in city" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDUpt5lmNdYFXNrJfaYVX05WOamMnB19Gam5i8x8ZNYh6McUc4nwRGgTCIYODzCsBR84QphxeWuSdRuY2hnbQAlNnoYrf8im9aSXxxhdVjEbF_ZwiFli_-L-HcYleYg1fYvo-33iA0IgtiCiMY7_tmvzd-BwxdQgGbr8KHKU4Pxgw4OWPD2Bp016gLGlXfc9zuekk0NxEQ7rL3Otamy_BGKL5mrk8pLkTnWclyYhVIkqRhvwARZFtBHvyZ5HAbJG3MmhfyIBMzFoeQ');"></div>
-<div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
-<div class="relative z-10 flex h-96 flex-col justify-end p-6">
-<h4 class="text-2xl font-bold text-white">Best Sellers</h4>
-<p class="mb-4 text-sm text-gray-300">Loved by everyone.</p>
-<button class="w-fit rounded-full bg-white px-6 py-2 text-sm font-bold text-background-dark opacity-90 transition-all hover:opacity-100">
-                                Explore
-                            </button>
-</div>
-</div>
-</div>
-</div>
-</section>
-<!-- Featured Products -->
-<section class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-<div class="mb-10 flex items-center justify-between">
-<h3 class="text-3xl font-bold text-white tracking-tight">Trending Now</h3>
-<div class="flex gap-2">
-<button class="flex size-10 items-center justify-center rounded-full border border-[#254632] text-white hover:bg-[#254632]">
-<span class="material-symbols-outlined">chevron_left</span>
-</button>
-<button class="flex size-10 items-center justify-center rounded-full border border-[#254632] text-white hover:bg-[#254632]">
-<span class="material-symbols-outlined">chevron_right</span>
-</button>
-</div>
-</div>
-<div class="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
-<!-- Product 1 -->
-<div class="group relative">
-<div class="relative aspect-[3/4] w-full overflow-hidden rounded-2xl bg-[#1c3326]">
-<div class="h-full w-full bg-cover bg-center transition-transform duration-500 group-hover:scale-105" data-alt="White silk blouse on hanger" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAalC4-u9CCaqm9D-0F5W8ueXQ22xLfzmX7kxDZ1mqGddkusYovBWHMjF54R_wogeWJGyvxN09uu9A2F-klVsGOmB0pwktHxwGfN6M90DJnU7m0sVaLODv7cqAvBTpOrBVxQ4ldYFPbJqO3a1YPdl27XGJ5okYAijcCe8Hm80aXlEgkNJIge59cS7Pm-pXPUAk5NF5o1mH1RFoho7zDeGr0iLPJx3gVcVU_apYs9yFypFIr_byZADvDxu1SBU_saVD_utIC1bv-7gg');"></div>
-<!-- Hover Actions -->
-<div class="absolute right-3 top-3 flex flex-col gap-2 opacity-0 transition-opacity group-hover:opacity-100">
-<button class="flex size-9 items-center justify-center rounded-full bg-white/90 text-background-dark shadow-sm hover:bg-white">
-<span class="material-symbols-outlined text-lg">favorite</span>
-</button>
-</div>
-<div class="absolute bottom-0 left-0 right-0 p-4 opacity-0 transition-opacity group-hover:opacity-100">
-<button class="w-full rounded-full bg-primary py-3 text-sm font-bold text-background-dark shadow-lg hover:bg-[#2ec56a]">
-                                Add to Cart
-                            </button>
-</div>
-</div>
-<div class="mt-4 flex justify-between">
 <div>
-<h3 class="text-base font-semibold text-white">Classic Silk Blouse</h3>
-<p class="mt-1 text-sm text-gray-400">Tops</p>
-</div>
-<p class="text-base font-bold text-primary">$45.00</p>
+<h2 class="text-text-main text-lg font-bold mb-1 group-hover:text-primary transition-colors">Payment Methods</h2>
+<p class="text-text-secondary/80 text-sm">Securely manage your saved cards and billing info.</p>
 </div>
 </div>
-<!-- Product 2 -->
-<div class="group relative">
-<div class="relative aspect-[3/4] w-full overflow-hidden rounded-2xl bg-[#1c3326]">
-<div class="h-full w-full bg-cover bg-center transition-transform duration-500 group-hover:scale-105" data-alt="Beige linen pants folded" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDpMsGyQD-UJOcPKkh9-zrcpv-sCTPIbITMlMd3hP4bg3m1pwx4w_IuapGVZiJ_srTx6fBy-Nnxv65oOjSf0mXfr7UfjRApPwzyi7EbGVsObFj0TwL78sLdccSoqU9cd2q4d7XS5nNs6WShhbZAmEGX7egTP8oJL6UdxyZ_wSykq0vv616guqJh17Iy3XugwOzh1UX3557pPX_8785sFLWJOfK-1fE46gA86-C7yOKZC4wfCFo7LQckBSzNdze09U8cgVD-O9aoXu8');"></div>
-<div class="absolute right-3 top-3 flex flex-col gap-2 opacity-0 transition-opacity group-hover:opacity-100">
-<button class="flex size-9 items-center justify-center rounded-full bg-white/90 text-background-dark shadow-sm hover:bg-white">
-<span class="material-symbols-outlined text-lg">favorite</span>
-</button>
+<div class="mt-6 flex items-center text-primary font-bold text-sm">
+<span>View Wallet</span>
+<span class="material-symbols-outlined text-sm ml-1 group-hover:translate-x-1 transition-transform">arrow_forward</span>
 </div>
-<div class="absolute bottom-0 left-0 right-0 p-4 opacity-0 transition-opacity group-hover:opacity-100">
-<button class="w-full rounded-full bg-primary py-3 text-sm font-bold text-background-dark shadow-lg hover:bg-[#2ec56a]">
-                                Add to Cart
-                            </button>
+</a>
+<a class="group flex flex-col justify-between bg-white rounded-2xl p-6 border border-border-green/20 shadow-lg hover:shadow-xl hover:shadow-primary/5 hover:border-primary/30 transition-all duration-300" href="#">
+<div class="flex flex-col gap-4">
+<div class="bg-primary-light/50 w-12 h-12 rounded-full flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined">favorite</span>
 </div>
-</div>
-<div class="mt-4 flex justify-between">
 <div>
-<h3 class="text-base font-semibold text-white">Tailored Linen Pant</h3>
-<p class="mt-1 text-sm text-gray-400">Pants</p>
-</div>
-<p class="text-base font-bold text-primary">$60.00</p>
+<h2 class="text-text-main text-lg font-bold mb-1 group-hover:text-primary transition-colors">My Wishlist</h2>
+<p class="text-text-secondary/80 text-sm">Curate your style and save favorites for later.</p>
 </div>
 </div>
-<!-- Product 3 -->
-<div class="group relative">
-<div class="relative aspect-[3/4] w-full overflow-hidden rounded-2xl bg-[#1c3326]">
-<div class="h-full w-full bg-cover bg-center transition-transform duration-500 group-hover:scale-105" data-alt="Floral summer dress on mannequin" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAecZGfkB5bfRImLuM2lCxXariCpiPlrHqiEf00Py6BzCD2Oq79vWcxAF7AfDZhk1CShVXrigc3R3R_LZMwLEbc6VgHnIwkdO1yAgPBLD30sF2rNt0-94cgvmzuEEcdebEMc8n0txg2fHKW54inAxDvoOfyI34aR68PTuqsVgUdSIMzYFvzrHpi9cfDCX3O5tOKZNRn5kbniH7UkQysDo8PYDGh0IegQfRjrTrWVq4fE8p6WSFmb_VGcnMIrpy4Xz7mscpVQTACiio');"></div>
-<div class="absolute right-3 top-3 flex flex-col gap-2 opacity-0 transition-opacity group-hover:opacity-100">
-<button class="flex size-9 items-center justify-center rounded-full bg-white/90 text-background-dark shadow-sm hover:bg-white">
-<span class="material-symbols-outlined text-lg">favorite</span>
-</button>
+<div class="mt-6 flex items-center text-primary font-bold text-sm">
+<span>Go to Wishlist</span>
+<span class="material-symbols-outlined text-sm ml-1 group-hover:translate-x-1 transition-transform">arrow_forward</span>
 </div>
-<div class="absolute bottom-0 left-0 right-0 p-4 opacity-0 transition-opacity group-hover:opacity-100">
-<button class="w-full rounded-full bg-primary py-3 text-sm font-bold text-background-dark shadow-lg hover:bg-[#2ec56a]">
-                                Add to Cart
-                            </button>
+</a>
+<a class="group flex flex-col justify-between bg-white rounded-2xl p-6 border border-border-green/20 shadow-lg hover:shadow-xl hover:shadow-primary/5 hover:border-primary/30 transition-all duration-300" href="#">
+<div class="flex flex-col gap-4">
+<div class="bg-primary-light/50 w-12 h-12 rounded-full flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined">support_agent</span>
 </div>
-</div>
-<div class="mt-4 flex justify-between">
 <div>
-<h3 class="text-base font-semibold text-white">Floral Summer Dress</h3>
-<p class="mt-1 text-sm text-gray-400">Dresses</p>
-</div>
-<p class="text-base font-bold text-primary">$85.00</p>
+<h2 class="text-text-main text-lg font-bold mb-1 group-hover:text-primary transition-colors">Help Center</h2>
+<p class="text-text-secondary/80 text-sm">Need assistance? Check our FAQ or contact support.</p>
 </div>
 </div>
-<!-- Product 4 -->
-<div class="group relative">
-<div class="relative aspect-[3/4] w-full overflow-hidden rounded-2xl bg-[#1c3326]">
-<div class="absolute top-3 left-3 z-10 rounded-full bg-red-500 px-2 py-1 text-xs font-bold text-white shadow-sm">SALE</div>
-<div class="h-full w-full bg-cover bg-center transition-transform duration-500 group-hover:scale-105" data-alt="Embroidered kurti flat lay" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDpaIlim6rO9S4NS3ls457zGChjRIH_AYSKyIEnyGQWAdoTFWi5h3zn2Q_sYFTSWlOOsmU0_gxqUAWIBgogybLTDJDqKRab6fhlsXDs3q1UPhRkUwysQADFzjsoPu4DkXIh06kv8hRATTZWW0SZB5SbMR4-jbQ1rZas7IlKhU8gvaM6U34U5636kDC5oiO5sC7wUL_mkIY9x46K8bfKqCyZmu2RxkZOTB_xKoun3NlqvF3QRpw_OZWFGgWwDBFn0a-tcNa4vwh43BY');"></div>
-<div class="absolute right-3 top-3 flex flex-col gap-2 opacity-0 transition-opacity group-hover:opacity-100">
-<button class="flex size-9 items-center justify-center rounded-full bg-white/90 text-background-dark shadow-sm hover:bg-white">
-<span class="material-symbols-outlined text-lg">favorite</span>
-</button>
+<div class="mt-6 flex items-center text-primary font-bold text-sm">
+<span>Get Help</span>
+<span class="material-symbols-outlined text-sm ml-1 group-hover:translate-x-1 transition-transform">arrow_forward</span>
 </div>
-<div class="absolute bottom-0 left-0 right-0 p-4 opacity-0 transition-opacity group-hover:opacity-100">
-<button class="w-full rounded-full bg-primary py-3 text-sm font-bold text-background-dark shadow-lg hover:bg-[#2ec56a]">
-                                Add to Cart
-                            </button>
+</a>
 </div>
-</div>
-<div class="mt-4 flex justify-between">
-<div>
-<h3 class="text-base font-semibold text-white">Embroidered Kurti</h3>
-<p class="mt-1 text-sm text-gray-400">Ethnic</p>
-</div>
-<div class="text-right">
-<p class="text-xs text-gray-500 line-through">$70.00</p>
-<p class="text-base font-bold text-primary">$55.00</p>
-</div>
-</div>
-</div>
-</div>
-<div class="mt-12 text-center">
-<button class="rounded-full border border-gray-600 px-8 py-3 text-sm font-bold text-white hover:bg-white hover:text-background-dark transition-colors">
-                    View All Products
-                </button>
-</div>
-</section>
-<!-- Newsletter / CTA -->
-<section class="bg-primary px-4 py-16 text-center text-background-dark">
-<div class="mx-auto max-w-2xl">
-<h2 class="mb-4 text-3xl font-black">Join the Elegance Club</h2>
-<p class="mb-8 font-medium">Subscribe to receive updates, access to exclusive deals, and more.</p>
-<form class="flex flex-col gap-3 sm:flex-row sm:justify-center">
-<input class="w-full rounded-full border-none px-6 py-3 text-background-dark focus:ring-2 focus:ring-black/20 sm:w-80" placeholder="Enter your email address" type="email"/>
-<button class="rounded-full bg-background-dark px-8 py-3 font-bold text-white transition-opacity hover:opacity-90" type="button">
-                        Subscribe
-                    </button>
-</form>
-</div>
-</section>
 </main>
-<!-- Footer -->
-<footer class="bg-background-dark border-t border-[#254632] pt-16 pb-8">
-<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-<div class="grid gap-12 sm:grid-cols-2 lg:grid-cols-4">
-<!-- Brand -->
-<div class="space-y-4">
-<div class="flex items-center gap-2">
-<div class="flex size-6 items-center justify-center rounded-full bg-primary text-background-dark">
-<span class="material-symbols-outlined text-sm">diamond</span>
-</div>
-<span class="text-lg font-bold text-white">ELEGANCE</span>
-</div>
-<p class="text-sm text-gray-400 leading-relaxed">
-                        Redefining women's fashion with a blend of modern trends and timeless elegance. Quality you can trust, style you will love.
-                    </p>
-<div class="flex gap-4 pt-2">
-<a class="text-gray-400 hover:text-primary transition-colors" href="#"><span class="sr-only">Facebook</span><svg class="h-5 w-5" fill="currentColor" viewbox="0 0 24 24"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"></path></svg></a>
-<a class="text-gray-400 hover:text-primary transition-colors" href="#"><span class="sr-only">Instagram</span><svg class="h-5 w-5" fill="currentColor" viewbox="0 0 24 24"><path clip-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.468 2.53c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z" fill-rule="evenodd"></path></svg></a>
 </div>
 </div>
-<!-- Column 2 -->
-<div>
-<h4 class="mb-6 font-bold text-white">Shop</h4>
-<ul class="space-y-3 text-sm text-gray-400">
-<li><a class="hover:text-primary transition-colors" href="#">New Arrivals</a></li>
-<li><a class="hover:text-primary transition-colors" href="#">Best Sellers</a></li>
-<li><a class="hover:text-primary transition-colors" href="#">Clothing</a></li>
-<li><a class="hover:text-primary transition-colors" href="#">Accessories</a></li>
-<li><a class="hover:text-primary transition-colors" href="#">Sale</a></li>
-</ul>
-</div>
-<!-- Column 3 -->
-<div>
-<h4 class="mb-6 font-bold text-white">Support</h4>
-<ul class="space-y-3 text-sm text-gray-400">
-<li><a class="hover:text-primary transition-colors" href="#">Order Status</a></li>
-<li><a class="hover:text-primary transition-colors" href="#">Shipping &amp; Returns</a></li>
-<li><a class="hover:text-primary transition-colors" href="#">Size Guide</a></li>
-<li><a class="hover:text-primary transition-colors" href="#">Contact Us</a></li>
-<li><a class="hover:text-primary transition-colors" href="#">FAQ</a></li>
-</ul>
-</div>
-<!-- Column 4 -->
-<div>
-<h4 class="mb-6 font-bold text-white">Legal</h4>
-<ul class="space-y-3 text-sm text-gray-400">
-<li><a class="hover:text-primary transition-colors" href="#">Privacy Policy</a></li>
-<li><a class="hover:text-primary transition-colors" href="#">Terms of Service</a></li>
-<li><a class="hover:text-primary transition-colors" href="#">Return Policy</a></li>
-<li><a class="hover:text-primary transition-colors" href="#">Cookie Policy</a></li>
-</ul>
-</div>
-</div>
-<div class="mt-12 border-t border-[#254632] pt-8 text-center text-sm text-gray-500">
-<p>© 2024 Elegance Fashion. All rights reserved.</p>
-</div>
-</div>
-</footer>
 </body></html>

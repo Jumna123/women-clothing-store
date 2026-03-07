@@ -18,6 +18,10 @@ urlpatterns = [
     path("remove-cart-item/<int:item_id>/", views.remove_cart_item, name="remove_cart_item"),
     path("move-to-wishlist/<int:item_id>/", views.move_to_wishlist, name="move_to_wishlist"),
     path('product/<slug:slug>/', views.product_detail, name='product_detail'),
+    path("checkout/", views.checkout, name="checkout"),
+    path("orders/", views.user_orders, name="user_orders"),
+    path("orders/<int:order_id>/", views.order_detail, name="order_detail"),
+
 
 
 ]

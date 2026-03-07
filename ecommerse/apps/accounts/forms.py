@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
-from .models import User, EmailVerificationRequest
+from .models import User, EmailVerificationRequest,Address
 
 
 
@@ -39,6 +39,11 @@ class SignupForm(forms.Form):
 
         return cleaned_data
     
+
+class AddressForm(forms.ModelForm):
+    class Meta:
+        model = Address
+        exclude = ['user']
     
 
 

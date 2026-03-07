@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>My Orders - Chic Greens</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#064e3b",
+                        "primary-hover": "#022c22",
+                        "primary-light": "#ecfdf5",
+                        "text-main": "#022c22",
+                        "text-secondary": "#064e3b",
+                        "background-base": "#ffffff",
+                        "surface-light": "#f0fdf4",
+                        "surface-lighter": "#ffffff",
+                        "border-green": "#059669",
+                        "accent-dark": "#022c22"
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f0fdf4;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #064e3b;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #022c22;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .icon-filled {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background-base text-text-main font-display antialiased min-h-screen flex flex-col selection:bg-primary-light selection:text-primary">
+<header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-border-green/20 w-full shadow-sm">
+<div class="px-4 lg:px-10 py-3 flex items-center justify-between">
+<div class="flex items-center gap-8">
+<a class="flex items-center gap-2 group" href="#">
+<div class="size-8 text-primary">
+<svg class="w-full h-full" fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M24 4H6V17.3333V30.6667H24V44H42V30.6667V17.3333H24V4Z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+<h2 class="text-text-main text-xl font-bold tracking-tight group-hover:text-primary transition-colors">Chic Greens</h2>
+</a>
+<nav class="hidden lg:flex items-center gap-6">
+<a class="text-text-secondary text-sm font-semibold hover:text-primary transition-colors" href="#">Shop</a>
+<a class="text-text-secondary text-sm font-semibold hover:text-primary transition-colors" href="#">New Arrivals</a>
+<a class="text-text-secondary text-sm font-semibold hover:text-primary transition-colors" href="#">Sale</a>
+<a class="text-text-secondary text-sm font-semibold hover:text-primary transition-colors" href="#">Sustainable</a>
+</nav>
+</div>
+<div class="flex items-center justify-end gap-4 lg:gap-6 flex-1 max-w-md">
+<label class="hidden md:flex flex-1 relative group">
+<span class="absolute inset-y-0 left-0 flex items-center pl-3 text-text-secondary group-focus-within:text-primary">
+<span class="material-symbols-outlined">search</span>
+</span>
+<input class="w-full bg-surface-light text-text-main placeholder:text-text-secondary/50 text-sm font-medium rounded-lg border border-border-green/20 py-2.5 pl-10 pr-4 focus:ring-2 focus:ring-primary/20 focus:bg-white focus:border-primary transition-all outline-none" placeholder="Search styles..." type="text"/>
+</label>
+<div class="flex gap-2">
+<button class="relative flex items-center justify-center p-2 rounded-lg text-text-secondary hover:bg-surface-light hover:text-primary transition-colors group">
+<span class="material-symbols-outlined group-hover:text-primary">shopping_bag</span>
+</button>
+<button class="flex items-center justify-center p-2 rounded-lg text-text-secondary hover:bg-surface-light hover:text-primary transition-colors group">
+<span class="material-symbols-outlined group-hover:text-primary">person</span>
+</button>
+</div>
+</div>
+</div>
+</header>
+<div class="flex-grow w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-10">
+<nav class="flex items-center gap-2 text-sm font-medium text-text-secondary/60 mb-8">
+<a class="hover:text-primary transition-colors" href="#">Account</a>
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+<span class="text-primary font-bold">My Orders</span>
+</nav>
+<div class="flex flex-col lg:flex-row gap-8 lg:gap-10">
+{% include "accounts/profile_sidebar.html" %}
+
+<main class="flex-1 flex flex-col">
+<div class="mb-10 text-center lg:text-left">
+<h1 class="text-3xl lg:text-4xl font-extrabold text-text-main mb-2">My Orders</h1>
+<p class="text-text-secondary/60 font-medium">Track your open orders &amp; view the summary of your past orders</p>
+</div>
+<div class="mb-8">
+<div class="inline-block min-w-[200px]">
+<label class="block text-[10px] font-bold text-text-secondary/60 uppercase tracking-widest mb-1 ml-1">Orders Period</label>
+<div class="relative">
+<select class="w-full appearance-none bg-white border border-border-green/20 rounded-lg px-4 py-3 pr-10 text-sm font-bold text-text-main focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none cursor-pointer">
+<option>Last 6 months</option>
+<option>2023</option>
+<option>2022</option>
+<option>Older</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-text-secondary">expand_more</span>
+</div>
+</div>
+</div>
+{% if orders %}
+
+<div class="space-y-8">
+
+{% for order in orders %}
+
+<div>
+<h2 class="text-sm font-bold text-text-secondary/60 mb-3 ml-1">
+Order ID : {{ order.order_id }}
+</h2>
+
+<div class="bg-white rounded-2xl border border-border-green/10 shadow-sm overflow-hidden divide-y divide-border-green/5">
+
+{% for item in order.items.all %}
+
+<a class="flex items-center p-4 lg:p-6 hover:bg-surface-light/30 transition-colors group"
+   href="{% url 'orders:order_detail' order.id %}">
+
+<div class="size-24 lg:size-28 flex-shrink-0 rounded-lg overflow-hidden bg-surface-light">
+
+<img class="w-full h-full object-cover"
+     src="{{ item.product.image.url }}">
+
+</div>
+
+<div class="ml-6 flex-grow">
+
+<h3 class="text-lg font-bold text-text-main">
+
+Arriving by {{ order.created_at|date:"D, d M" }}
+
+</h3>
+
+<p class="text-sm font-medium text-text-secondary/60 mt-1 uppercase">
+
+Qty : {{ item.quantity }}
+
+</p>
+
+</div>
+
+<span class="material-symbols-outlined text-text-secondary/30 group-hover:text-primary transition-colors">
+chevron_right
+</span>
+
+</a>
+
+{% endfor %}
+
+</div>
+</div>
+
+{% endfor %}
+
+</div>
+
+{% else %}
+<div class="flex-1 flex flex-col items-center justify-center py-16 px-4">
+
+<div class="size-24 lg:size-32 bg-primary-light rounded-full flex items-center justify-center text-primary mb-8">
+
+<span class="material-symbols-outlined !text-6xl lg:!text-7xl">
+
+shopping_bag
+
+</span>
+
+</div>
+
+<h3 class="text-2xl lg:text-3xl font-extrabold text-text-main mb-3 text-center">
+
+You have no orders yet
+
+</h3>
+
+<p class="text-text-secondary/60 font-medium text-center max-w-md mb-10">
+
+Start exploring our latest collections and find something you love.
+
+</p>
+
+<a href="{% url 'home:home' %}"
+class="inline-flex items-center justify-center px-8 py-4 bg-primary hover:bg-primary-hover text-white font-bold rounded-xl shadow-xl shadow-primary/20 transition-all transform hover:-translate-y-0.5">
+
+Start Shopping
+
+</a>
+
+</div>
+{% endif %}
+</main>
+</div>
+</div>
+<div class="bg-white border-t border-border-green/10 py-16">
+<div class="max-w-[1440px] mx-auto px-4 lg:px-8 grid grid-cols-1 md:grid-cols-3 gap-12">
+<div class="flex flex-col items-center text-center">
+<div class="size-16 rounded-full bg-surface-light flex items-center justify-center text-primary mb-6">
+<span class="material-symbols-outlined !text-3xl">keyboard_return</span>
+</div>
+<h4 class="text-sm font-black text-text-main tracking-widest uppercase mb-1">Easy Exchange</h4>
+</div>
+<div class="flex flex-col items-center text-center">
+<div class="size-16 rounded-full bg-surface-light flex items-center justify-center text-primary mb-6">
+<span class="material-symbols-outlined !text-3xl">favorite</span>
+</div>
+<h4 class="text-sm font-black text-text-main tracking-widest uppercase mb-1">100% Handpicked</h4>
+</div>
+<div class="flex flex-col items-center text-center">
+<div class="size-16 rounded-full bg-surface-light flex items-center justify-center text-primary mb-6">
+<span class="material-symbols-outlined !text-3xl">verified</span>
+</div>
+<h4 class="text-sm font-black text-text-main tracking-widest uppercase mb-1">Assured Quality</h4>
+</div>
+</div>
+</div>
+<footer class="bg-primary-hover text-white pt-20 pb-10">
+<div class="max-w-[1440px] mx-auto px-4 lg:px-8">
+<div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-12 mb-20">
+<div class="lg:col-span-1">
+<a class="flex items-center gap-2 mb-8 group" href="#">
+<div class="size-8 text-primary-light">
+<svg class="w-full h-full" fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M24 4H6V17.3333V30.6667H24V44H42V30.6667V17.3333H24V4Z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+<h2 class="text-white text-xl font-bold tracking-tight">Chic Greens</h2>
+</a>
+<p class="text-primary-light/60 text-sm leading-relaxed mb-8">Elevating sustainable women's fashion with consciously crafted designs that don't compromise on style or ethics.</p>
+</div>
+<div>
+<h3 class="text-sm font-bold uppercase tracking-widest text-primary-light mb-8">Help</h3>
+<ul class="space-y-4">
+<li><a class="text-sm text-primary-light/60 hover:text-white transition-colors" href="#">Track Your Order</a></li>
+<li><a class="text-sm text-primary-light/60 hover:text-white transition-colors" href="#">Frequently Asked Questions</a></li>
+<li><a class="text-sm text-primary-light/60 hover:text-white transition-colors" href="#">Returns &amp; Exchanges</a></li>
+<li><a class="text-sm text-primary-light/60 hover:text-white transition-colors" href="#">Shipping Information</a></li>
+</ul>
+</div>
+<div>
+<h3 class="text-sm font-bold uppercase tracking-widest text-primary-light mb-8">Shop by</h3>
+<ul class="space-y-4">
+<li><a class="text-sm text-primary-light/60 hover:text-white transition-colors" href="#">New Arrivals</a></li>
+<li><a class="text-sm text-primary-light/60 hover:text-white transition-colors" href="#">Women's Collection</a></li>
+<li><a class="text-sm text-primary-light/60 hover:text-white transition-colors" href="#">Best Sellers</a></li>
+<li><a class="text-sm text-primary-light/60 hover:text-white transition-colors" href="#">Sustainable Edit</a></li>
+</ul>
+</div>
+<div>
+<h3 class="text-sm font-bold uppercase tracking-widest text-primary-light mb-8">Follow us</h3>
+<ul class="space-y-4">
+<li><a class="text-sm text-primary-light/60 hover:text-white transition-colors flex items-center gap-2" href="#">Facebook</a></li>
+<li><a class="text-sm text-primary-light/60 hover:text-white transition-colors flex items-center gap-2" href="#">Instagram - @chic_greens</a></li>
+<li><a class="text-sm text-primary-light/60 hover:text-white transition-colors flex items-center gap-2" href="#">Pinterest</a></li>
+<li><a class="text-sm text-primary-light/60 hover:text-white transition-colors flex items-center gap-2" href="#">Twitter</a></li>
+</ul>
+</div>
+</div>
+<div class="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-6">
+<p class="text-primary-light/40 text-[10px] font-bold uppercase tracking-widest">Chic Greens © 2024. All rights reserved.</p>
+<div class="flex gap-8">
+<a class="text-[10px] font-bold uppercase tracking-widest text-primary-light/40 hover:text-white transition-colors" href="#">Privacy Policy</a>
+<a class="text-[10px] font-bold uppercase tracking-widest text-primary-light/40 hover:text-white transition-colors" href="#">Terms of Service</a>
+</div>
+</div>
+</div>
+</footer>
+
+</body></html>

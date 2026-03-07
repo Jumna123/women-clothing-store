@@ -34,6 +34,17 @@
 <h1 class="text-4xl font-black tracking-tight text-white mb-2">Add New Product</h1>
 <p class="text-[#88a594] max-w-2xl">Create a new product listing for your store. Fill out the details below to ensure accurate inventory management and customer information.</p>
 </div>
+
+{% if messages %}
+    {% for message in messages %}
+      <div class="mb-4 px-4 py-3 rounded-xl text-sm font-medium
+        {% if message.tags == 'error' %}bg-red-100 text-red-700 border border-red-300
+        {% else %}bg-green-100 text-green-700 border border-green-300{% endif %}">
+        {{ message }}
+      </div>
+    {% endfor %}
+  {% endif %}
+
 <form method="POST" enctype="multipart/form-data">
   {% csrf_token %}
 <div class="lg:col-span-2 flex flex-col gap-6">
@@ -42,11 +53,15 @@
 <span class="material-symbols-outlined text-primary">edit_note</span>
                                 General Information
                             </h3>
-<div class="space-y-6">
-<label class="block">
-<span class="text-text-main font-medium mb-2 block">Product Name</span>
-{{ form.product_name }}
 
+<label class="block">
+  <span class="text-text-main font-medium mb-2 block">Product Name</span>
+  {{ form.product_name }}
+  <!-- ✅ show error below the field -->
+  {% if form.product_name.errors %}
+    <p class="text-red-500 text-xs mt-1">{{ form.product_name.errors.0 }}</p>
+  {% endif %}
+</label>
 
 </label>
 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -90,73 +105,58 @@
 <!-- LEFT COLUMN : PRODUCT IMAGES -->
 <div class="bg-white dark:bg-[#0b1a12] p-6 rounded-2xl shadow-sm border border-[#e7f3ec] dark:border-[#1a3826] h-fit">
 
-<h3 class="text-lg font-bold text-text-main dark:text-white mb-6 flex items-center gap-2">
-<span class="material-symbols-outlined text-primary">image</span>
-Product Images
-</h3>
+  <h3 class="text-lg font-bold text-text-main dark:text-white mb-6 flex items-center gap-2">
+    <span class="material-symbols-outlined text-primary">image</span>
+    Product Images
+  </h3>
 
-<label
-id="uploadBox"
-for="productImage"
-class="border-2 border-dashed border-border-green rounded-xl p-8 flex flex-col items-center justify-center text-center cursor-pointer hover:bg-[#f8fcfa] dark:hover:bg-[#152e20] transition-colors group"
->
+  <label
+    id="uploadBox"
+    for="productImage"
+    class="border-2 border-dashed border-border-green rounded-xl p-8 flex flex-col items-center justify-center text-center cursor-pointer hover:bg-[#f8fcfa] dark:hover:bg-[#152e20] transition-colors group"
+  >
+    <div class="bg-[#e7f3ec] rounded-full p-4 mb-4 group-hover:scale-110 transition-transform">
+      <span class="material-symbols-outlined text-primary text-[32px]">cloud_upload</span>
+    </div>
+    <p class="text-text-main dark:text-white font-medium mb-1">Click to upload or drag and drop</p>
+    <p class="text-text-secondary text-sm">SVG, PNG, JPG or GIF</p>
 
-<div class="bg-[#e7f3ec] rounded-full p-4 mb-4 group-hover:scale-110 transition-transform">
-<span class="material-symbols-outlined text-primary text-[32px]">cloud_upload</span>
-</div>
+    <input type="file" name="images" id="productImage" accept="image/*" multiple class="hidden" />
+  </label>
 
-<p class="text-text-main dark:text-white font-medium mb-1">
-Click to upload or drag and drop
-</p>
+  <div class="flex gap-4 mt-6 overflow-x-auto pb-2" id="imagePreviewContainer">
 
-<p class="text-text-secondary text-sm">
-SVG, PNG, JPG or GIF
-</p>
+    <!-- ✅ Show existing images in edit mode -->
+    {% if is_edit %}
+      {% for img in product.images.all %}
+      <div class="relative shrink-0 size-24 rounded-lg overflow-hidden border border-border-green group">
+        <div class="w-full h-full bg-center bg-cover" style="background-image: url('{{ img.image.url }}');"></div>
+        <button
+          type="button"
+          class="absolute top-1 right-1 bg-white/90 text-red-500 rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-opacity delete-image-btn"
+          data-image-id="{{ img.id }}"
+        >
+          <span class="material-symbols-outlined text-[16px]">close</span>
+        </button>
+      </div>
+      {% endfor %}
+    {% endif %}
 
-<input
-type="file"
-name="images"
-id="productImage"
-accept="image/*"
-multiple
-class="hidden"
-/>
+    <!-- Add more images button -->
+    <label
+      for="productImage"
+      class="relative shrink-0 size-24 rounded-lg overflow-hidden border border-border-green flex items-center justify-center bg-[#f8fcfa] dark:bg-[#152e20] cursor-pointer hover:bg-[#eef6f1]"
+    >
+      <span class="material-symbols-outlined text-border-green">add_photo_alternate</span>
+    </label>
 
-</label>
-
-<div class="flex gap-4 mt-6 overflow-x-auto pb-2">
-
-<div class="relative shrink-0 size-24 rounded-lg overflow-hidden border border-border-green group">
-
-<div
-id="imagePreview"
-class="w-full h-full bg-center bg-no-repeat bg-cover"
-style="display:none; min-height:96px;">
-</div>
-
-<button class="absolute top-1 right-1 bg-white/90 text-red-500 rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
-<span class="material-symbols-outlined text-[16px]">close</span>
-</button>
-
-</div>
-
-<label
-for="productImage"
-class="relative shrink-0 size-24 rounded-lg overflow-hidden border border-border-green flex items-center justify-center bg-[#f8fcfa] dark:bg-[#152e20] cursor-pointer hover:bg-[#eef6f1]"
->
-<span class="material-symbols-outlined text-border-green">
-add_photo_alternate
-</span>
-</label>
-
-</div>
+  </div>
 </div>
 
 
 <!-- RIGHT COLUMN -->
 <div class="flex flex-col gap-6">
 
-<!-- Availability -->
 <div class="bg-white dark:bg-[#0b1a12] p-6 rounded-2xl shadow-sm border border-[#e7f3ec] dark:border-[#1a3826]">
 
 <h3 class="text-lg font-bold text-text-main dark:text-white mb-4">
@@ -176,23 +176,22 @@ Visible to customers
 </div>
 
 <label class="relative inline-flex items-center cursor-pointer">
-{{ form.is_available }}
 
-<div class="w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+{{ form.is_available }}
+<div class="w-11 h-6 bg-gray-200 rounded-full relative peer-checked:bg-primary dark:bg-gray-700
+after:content-[''] after:absolute after:top-[2px] after:left-[2px]
+after:bg-white after:border after:rounded-full after:h-5 after:w-5
+after:transition-all peer-checked:after:translate-x-full"></div>
 
 </label>
 
 </div>
 
-<label class="block">
-<span class="text-text-main dark:text-white font-medium mb-2 block">
-Stock Quantity
-</span>
-
-{{ form.stock_quantity }}
-
-</label>
-
+<div class="bg-white dark:bg-[#0b1a12] p-6 rounded-2xl shadow-sm border border-[#e7f3ec] dark:border-[#1a3826]">
+  <label class="block">
+    <span class="text-text-main dark:text-white font-medium mb-2 block">Stock Quantity</span>
+    {{ form.stock_quantity }}
+  </label>
 </div>
 
 
@@ -223,39 +222,59 @@ expand_more
 <!-- Sizes -->
 <div class="bg-white dark:bg-[#0b1a12] p-6 rounded-2xl shadow-sm border border-[#e7f3ec] dark:border-[#1a3826]">
 
-<label class="block">
 
 <span class="text-text-main dark:text-white font-medium mb-2 block">
 Available Sizes
 </span>
 
-<div id="sizeContainer" class="flex flex-wrap gap-2 mb-3"></div>
+<div id="sizeContainer" class="flex flex-wrap gap-2 mb-3">
 
-<div class="relative">
+{% if is_edit %}
+{% for size in sizes %}
 
-<select
-id="sizeSelect"
-class="w-full h-12 bg-[#f8fcfa] dark:bg-[#152e20] border border-border-green dark:border-[#2a4d38] rounded-xl px-4 text-text-main dark:text-white focus:ring-0 focus:border-primary transition-colors appearance-none"
->
+<div class="size-chip flex items-center gap-1">
 
-<option disabled selected value="">Add sizes...</option>
-<option value="XS">XS</option>
-<option value="S">S</option>
-<option value="M">M</option>
-<option value="L">L</option>
-<option value="XL">XL</option>
-<option value="XXL">XXL</option>
-<option value="One Size">One Size</option>
+<span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-bold bg-[#e7f3ec] text-text-main border border-border-green">
 
-</select>
+{{ size }}
 
-<span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none">
-add
+<button type="button"
+class="ml-2 text-text-secondary hover:text-red-500 remove-size">
+
+<span class="material-symbols-outlined text-[14px]">close</span>
+
+</button>
+
 </span>
+
+<input type="hidden" name="size" value="{{ size }}">
 
 </div>
 
-</label>
+{% endfor %}
+{% endif %}
+
+</div>
+<div class="relative">
+  <select
+    id="sizeSelect"
+    class="w-full h-12 bg-[#f8fcfa] dark:bg-[#152e20] border border-border-green dark:border-[#2a4d38] rounded-xl px-4 text-text-main dark:text-white focus:ring-0 focus:border-primary transition-colors appearance-none"
+  >
+    <option disabled selected value="">Add sizes...</option>
+    <option value="XS">XS</option>
+    <option value="S">S</option>
+    <option value="M">M</option>
+    <option value="L">L</option>
+    <option value="XL">XL</option>
+    <option value="XXL">XXL</option>
+    <option value="One Size">One Size</option>
+  </select>
+
+  <span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none">
+    add
+  </span>
+</div>
+
 
 </div>
 
@@ -263,26 +282,41 @@ add
 
 <div class="bg-white dark:bg-[#0b1a12] p-6 rounded-2xl shadow-sm border border-[#e7f3ec] dark:border-[#1a3826]">
 
-<label class="block">
-<span class="text-text-main dark:text-white font-medium mb-2 block">
-Color
-</span>
+  <!-- Color Picker -->
+  <label class="block mb-4">
+    <span class="text-text-main dark:text-white font-medium mb-2 block">Color</span>
+    <div class="relative">
+      <input
+        type="color"
+        id="colorPicker"
+        value="{% if is_edit %}{{ product.color_hex }}{% else %}#11d45f{% endif %}"
+        class="w-full h-12 bg-[#f8fcfa] dark:bg-[#152e20] border border-border-green dark:border-[#2a4d38] rounded-xl p-1.5 cursor-pointer focus:ring-0 focus:border-primary transition-colors"
+      />
+      <span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none">
+        palette
+      </span>
+    </div>
+  </label>
 
-<div class="relative">
+  <!-- Color Name -->
+  <label class="block">
+    <span class="text-text-main dark:text-white font-medium mb-2 block">Color Name</span>
+    <div class="relative">
+      <input
+        type="text"
+        name="color_name"
+        placeholder="e.g. Forest Green"
+        value="{% if is_edit %}{{ product.color_name }}{% else %}{% endif %}"
+        class="w-full h-12 bg-[#f8fcfa] dark:bg-[#152e20] border border-border-green dark:border-[#2a4d38] rounded-xl px-4 text-text-main dark:text-white placeholder:text-text-secondary focus:ring-0 focus:border-primary transition-colors"
+      />
+      <span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none">
+        label
+      </span>
+    </div>
+  </label>
 
-<input
-class="w-full h-12 bg-[#f8fcfa] dark:bg-[#152e20] border border-border-green dark:border-[#2a4d38] rounded-xl p-1.5 cursor-pointer focus:ring-0 focus:border-primary transition-colors"
-type="color"
-value="#11d45f"
-/>
-
-<span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none">
-palette
-</span>
-
-</div>
-
-</label>
+  <!-- Hidden input to actually submit the hex value -->
+  {{ form.color_hex }}
 
 </div>
 
@@ -391,28 +425,36 @@ Add Product
 </div>
 <script>
 const imageInput = document.getElementById("productImage");
-const previewContainer = document.querySelector(".flex.gap-4.mt-6");
+const previewContainer = document.getElementById("imagePreviewContainer"); // ✅ use id now
 
 imageInput.addEventListener("change", function () {
   const files = this.files;
-
   for (let file of files) {
     const url = URL.createObjectURL(file);
-
     const wrapper = document.createElement("div");
-    wrapper.className =
-      "relative shrink-0 size-24 rounded-lg overflow-hidden border border-border-green";
-
+    wrapper.className = "relative shrink-0 size-24 rounded-lg overflow-hidden border border-border-green group";
     const preview = document.createElement("div");
     preview.className = "w-full h-full bg-center bg-cover";
     preview.style.backgroundImage = `url(${url})`;
-
     wrapper.appendChild(preview);
     previewContainer.insertBefore(wrapper, previewContainer.lastElementChild);
   }
-
-  // reset input so same file can be selected again
 });
+
+// ✅ Delete existing images via AJAX
+document.addEventListener("click", function (e) {
+  const btn = e.target.closest(".delete-image-btn");
+  if (btn) {
+    const imageId = btn.dataset.imageId;
+    fetch(`/dashboard/product-image/delete/${imageId}/`, {
+      method: "POST",
+      headers: { "X-CSRFToken": "{{ csrf_token }}" },
+    }).then(res => {
+      if (res.ok) btn.closest(".relative").remove();
+    });
+  }
+});
+
 const sizeSelect = document.getElementById("sizeSelect");
 const sizeContainer = document.getElementById("sizeContainer");
 
@@ -426,36 +468,50 @@ sizeSelect.addEventListener("change", function () {
     return;
   }
 
-  // chip wrapper
+  // wrapper
+  const wrapper = document.createElement("div");
+  wrapper.className = "size-chip flex items-center gap-1";
+
   const chip = document.createElement("span");
   chip.className =
     "inline-flex items-center px-3 py-1.5 rounded-full text-xs font-bold bg-[#e7f3ec] text-text-main border border-border-green";
 
   chip.innerHTML = `
     ${size}
-    <button type="button" class="ml-2 text-text-secondary hover:text-red-500">
+    <button type="button" class="ml-2 text-text-secondary hover:text-red-500 remove-size">
       <span class="material-symbols-outlined text-[14px]">close</span>
     </button>
   `;
 
-  // hidden input (THIS is what Django reads)
   const hiddenInput = document.createElement("input");
   hiddenInput.type = "hidden";
   hiddenInput.name = "size";
   hiddenInput.value = size;
 
-  chip.querySelector("button").onclick = () => {
-    chip.remove();
-    hiddenInput.remove();
-  };
+  wrapper.appendChild(chip);
+  wrapper.appendChild(hiddenInput);
 
-  sizeContainer.appendChild(chip);
-  sizeContainer.appendChild(hiddenInput);
+  sizeContainer.appendChild(wrapper);
 
-  // reset select
   this.value = "";
 });
+document.addEventListener("click", function(e) {
+  if (e.target.closest(".remove-size")) {
+    const chip = e.target.closest(".size-chip");
+    chip.remove();
+  }
+});
 
+const colorPicker = document.getElementById('colorPicker');
+  const colorHexInput = document.querySelector('input[name="color_hex"]');
+
+  // Sync on page load
+  if (colorHexInput) colorHexInput.value = colorPicker.value;
+
+  // Sync on change
+  colorPicker.addEventListener('input', () => {
+    if (colorHexInput) colorHexInput.value = colorPicker.value;
+  });
 </script>
 
 

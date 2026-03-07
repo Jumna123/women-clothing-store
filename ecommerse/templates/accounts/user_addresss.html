@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Shipping Addresses - Verdant Style</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1B4D3E","primary-dark": "#12382D","background-light": "#F5F8F6","background-dark": "#0A1410","surface-light": "#ffffff",
+                        "surface-dark": "#16261F","text-main": "#0D261C","text-muted": "#5C7A6B","border-light": "#DEE8E3","border-dark": "#2A4538",},
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem", 
+                        "lg": "0.5rem", 
+                        "xl": "0.75rem", 
+                        "2xl": "1rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Manrope', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-text-main transition-colors duration-200 min-h-screen flex flex-col font-display">
+<header class="sticky top-0 z-50 bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-sm border-b border-border-light dark:border-border-dark w-full">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex items-center justify-between h-16">
+<div class="flex items-center gap-8">
+<a class="flex items-center gap-3 text-text-main dark:text-white group" href="#">
+<div class="size-8 text-primary">
+<svg class="w-full h-full transition-transform group-hover:scale-110" fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path d="M44 11.2727C44 14.0109 39.8386 16.3957 33.69 17.6364C39.8386 18.877 44 21.2618 44 24C44 26.7382 39.8386 29.123 33.69 30.3636C39.8386 31.6043 44 33.9891 44 36.7273C44 40.7439 35.0457 44 24 44C12.9543 44 4 40.7439 4 36.7273C4 33.9891 8.16144 31.6043 14.31 30.3636C8.16144 29.123 4 26.7382 4 24C4 21.2618 8.16144 18.877 14.31 17.6364C8.16144 16.3957 4 14.0109 4 11.2727C4 7.25611 12.9543 4 24 4C35.0457 4 44 7.25611 44 11.2727Z" fill="currentColor"></path>
+</svg>
+</div>
+<h2 class="text-xl font-bold tracking-tight">Verdant Style</h2>
+</a>
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-text-main dark:text-white text-sm font-medium hover:text-primary transition-colors" href="#">Shop New</a>
+<a class="text-text-main dark:text-white text-sm font-medium hover:text-primary transition-colors" href="#">Dresses</a>
+<a class="text-text-main dark:text-white text-sm font-medium hover:text-primary transition-colors" href="#">Tops</a>
+<a class="text-text-main dark:text-white text-sm font-medium hover:text-primary transition-colors" href="#">Bottoms</a>
+<a class="text-text-muted dark:text-gray-400 text-sm font-medium hover:text-primary transition-colors" href="#">Sale</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden md:flex items-center bg-surface-light dark:bg-surface-dark border border-border-light dark:border-border-dark rounded-lg h-10 w-64 overflow-hidden focus-within:ring-2 focus-within:ring-primary/20">
+<div class="pl-3 pr-2 text-text-muted">
+<span class="material-symbols-outlined text-[20px]">search</span>
+</div>
+<input class="w-full bg-transparent border-none text-sm text-text-main dark:text-white placeholder-text-muted focus:ring-0 p-0 h-full" placeholder="Search" type="text"/>
+</div>
+<button class="p-2 rounded-lg text-text-main dark:text-white hover:bg-border-light dark:hover:bg-border-dark transition-colors">
+<span class="material-symbols-outlined">person</span>
+</button>
+<button class="relative p-2 rounded-lg text-text-main dark:text-white hover:bg-border-light dark:hover:bg-border-dark transition-colors">
+<span class="material-symbols-outlined">shopping_bag</span>
+<span class="absolute top-1.5 right-1.5 size-2 rounded-full bg-primary"></span>
+</button>
+</div>
+</div>
+</div>
+</header>
+<div class="flex-grow max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8">
+<div class="flex flex-col lg:flex-row gap-8 lg:gap-12">
+{% include "accounts/profile_sidebar.html" %}
+
+<main class="flex-1 min-w-0">
+<div class="flex flex-wrap items-center gap-2 text-sm text-text-muted mb-6">
+<a class="hover:text-primary transition-colors" href="#">Home</a>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+<a class="hover:text-primary transition-colors" href="#">My Account</a>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+<span class="text-text-main dark:text-white font-medium">Addresses</span>
+</div>
+<div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8 border-b border-border-light dark:border-border-dark pb-6">
+<div class="max-w-2xl">
+<h2 class="text-3xl md:text-4xl font-black tracking-tight text-text-main dark:text-white mb-3">Shipping Addresses</h2>
+<p class="text-text-muted text-base leading-relaxed">
+                        Manage your shipping locations. Your default address will be used automatically at checkout.
+                    </p>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+<div class="group relative flex flex-col justify-between bg-surface-light dark:bg-surface-dark border-2 border-primary/30 hover:border-primary rounded-xl p-6 shadow-sm transition-all duration-300 hover:shadow-md h-full">
+<div class="absolute top-4 right-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-primary text-white shadow-sm">
+                            Default
+                        </span>
+</div>
+<div class="mb-6">
+<div class="flex items-center gap-3 mb-2">
+<span class="material-symbols-outlined text-primary">home</span>
+<h3 class="text-lg font-bold text-text-main dark:text-white">Jane Doe</h3>
+</div>
+<div class="pl-9 space-y-1 text-sm text-text-main/80 dark:text-white/80">
+<p>123 Fashion Avenue, Apt 4B</p>
+<p>New York, NY 10012</p>
+<p>United States</p>
+<p class="mt-3 flex items-center gap-2 text-text-muted">
+<span class="material-symbols-outlined text-[16px]">call</span>
+                                +1 (555) 012-3456
+                            </p>
+</div>
+</div>
+<div class="flex items-center gap-3 pt-4 border-t border-border-light dark:border-border-dark pl-9">
+<button class="text-sm font-bold text-text-main dark:text-white hover:text-primary transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+                            Edit
+                        </button>
+<span class="text-border-light dark:text-border-dark">|</span>
+<button class="text-sm font-medium text-text-muted hover:text-red-500 transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+                            Remove
+                        </button>
+</div>
+</div>
+<div class="group relative flex flex-col justify-between bg-surface-light dark:bg-surface-dark border border-border-light dark:border-border-dark hover:border-primary/50 rounded-xl p-6 shadow-sm transition-all duration-300 hover:shadow-md h-full">
+<div class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="text-xs font-medium text-primary hover:underline">Set as Default</button>
+</div>
+<div class="mb-6">
+<div class="flex items-center gap-3 mb-2">
+<span class="material-symbols-outlined text-text-muted">location_city</span>
+<h3 class="text-lg font-bold text-text-main dark:text-white">Jane Doe (Work)</h3>
+</div>
+<div class="pl-9 space-y-1 text-sm text-text-main/80 dark:text-white/80">
+<p>456 Corporate Blvd, Suite 200</p>
+<p>San Francisco, CA 94107</p>
+<p>United States</p>
+<p class="mt-3 flex items-center gap-2 text-text-muted">
+<span class="material-symbols-outlined text-[16px]">call</span>
+                                +1 (555) 987-6543
+                            </p>
+</div>
+</div>
+<div class="flex items-center gap-3 pt-4 border-t border-border-light dark:border-border-dark pl-9">
+<button class="text-sm font-bold text-text-main dark:text-white hover:text-primary transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+                            Edit
+                        </button>
+<span class="text-border-light dark:text-border-dark">|</span>
+<button class="text-sm font-medium text-text-muted hover:text-red-500 transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+                            Remove
+                        </button>
+</div>
+</div>
+</div>
+<div class="bg-surface-light dark:bg-surface-dark rounded-xl border border-border-light dark:border-border-dark p-6 md:p-8">
+<div class="mb-6">
+<h3 class="text-xl font-bold text-text-main dark:text-white flex items-center gap-2">
+<span class="flex items-center justify-center size-8 rounded-full bg-primary/15 text-primary">
+<span class="material-symbols-outlined text-[20px]">add</span>
+</span>
+                        Add New Address
+                    </h3>
+</div>
+<form action="#" class="space-y-6">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="col-span-1 md:col-span-2">
+<label class="block text-sm font-semibold text-text-main dark:text-white mb-2" for="fullname">Full Name</label>
+<input class="w-full rounded-lg bg-background-light dark:bg-background-dark border-border-dark/20 dark:border-border-light/10 text-text-main dark:text-white focus:ring-primary focus:border-primary px-4 py-2.5 transition-shadow" id="fullname" placeholder="e.g. Jane Doe" type="text"/>
+</div>
+<div class="col-span-1 md:col-span-2">
+<label class="block text-sm font-semibold text-text-main dark:text-white mb-2" for="country">Country / Region</label>
+<div class="relative">
+<select class="w-full rounded-lg bg-background-light dark:bg-background-dark border-border-dark/20 dark:border-border-light/10 text-text-main dark:text-white focus:ring-primary focus:border-primary px-4 py-2.5 appearance-none pr-10" id="country">
+<option>United States</option>
+<option>Canada</option>
+<option>United Kingdom</option>
+<option>Australia</option>
+</select>
+<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-text-main dark:text-white">
+<span class="material-symbols-outlined text-[20px]">expand_more</span>
+</div>
+</div>
+</div>
+<div class="col-span-1 md:col-span-2">
+<label class="block text-sm font-semibold text-text-main dark:text-white mb-2" for="address1">Street Address</label>
+<input class="w-full rounded-lg bg-background-light dark:bg-background-dark border-border-dark/20 dark:border-border-light/10 text-text-main dark:text-white focus:ring-primary focus:border-primary px-4 py-2.5 mb-3 transition-shadow" id="address1" placeholder="House number and street name" type="text"/>
+<input class="w-full rounded-lg bg-background-light dark:bg-background-dark border-border-dark/20 dark:border-border-light/10 text-text-main dark:text-white focus:ring-primary focus:border-primary px-4 py-2.5 transition-shadow" id="address2" placeholder="Apartment, suite, unit, etc. (optional)" type="text"/>
+</div>
+<div>
+<label class="block text-sm font-semibold text-text-main dark:text-white mb-2" for="city">City</label>
+<input class="w-full rounded-lg bg-background-light dark:bg-background-dark border-border-dark/20 dark:border-border-light/10 text-text-main dark:text-white focus:ring-primary focus:border-primary px-4 py-2.5 transition-shadow" id="city" type="text"/>
+</div>
+<div>
+<label class="block text-sm font-semibold text-text-main dark:text-white mb-2" for="state">State / Province</label>
+<input class="w-full rounded-lg bg-background-light dark:bg-background-dark border-border-dark/20 dark:border-border-light/10 text-text-main dark:text-white focus:ring-primary focus:border-primary px-4 py-2.5 transition-shadow" id="state" type="text"/>
+</div>
+<div>
+<label class="block text-sm font-semibold text-text-main dark:text-white mb-2" for="zip">Zip / Postal Code</label>
+<input class="w-full rounded-lg bg-background-light dark:bg-background-dark border-border-dark/20 dark:border-border-light/10 text-text-main dark:text-white focus:ring-primary focus:border-primary px-4 py-2.5 transition-shadow" id="zip" type="text"/>
+</div>
+<div>
+<label class="block text-sm font-semibold text-text-main dark:text-white mb-2" for="phone">Phone Number</label>
+<input class="w-full rounded-lg bg-background-light dark:bg-background-dark border-border-dark/20 dark:border-border-light/10 text-text-main dark:text-white focus:ring-primary focus:border-primary px-4 py-2.5 transition-shadow" id="phone" placeholder="+1 (000) 000-0000" type="tel"/>
+</div>
+</div>
+<div class="flex items-center gap-3 pt-2">
+<div class="flex h-6 items-center">
+<input class="size-5 rounded border-gray-300 text-primary focus:ring-primary/20 bg-background-light dark:bg-background-dark dark:border-gray-600" id="default-address" type="checkbox"/>
+</div>
+<div class="text-sm leading-6">
+<label class="font-medium text-text-main dark:text-white" for="default-address">Set as default shipping address</label>
+<p class="text-text-muted text-xs">This address will be automatically selected for future orders.</p>
+</div>
+</div>
+<div class="flex flex-col sm:flex-row gap-4 pt-4 border-t border-border-light dark:border-border-dark mt-4">
+<button class="flex-1 sm:flex-none justify-center rounded-lg bg-primary px-8 py-3 text-sm font-bold text-white shadow-sm hover:bg-primary-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-colors" type="button">
+                            Save Address
+                        </button>
+<button class="flex-1 sm:flex-none justify-center rounded-lg bg-transparent border border-border-dark/20 dark:border-border-light/20 px-8 py-3 text-sm font-bold text-text-main dark:text-white hover:bg-black/5 dark:hover:bg-white/5 transition-colors" type="button">
+                            Cancel
+                        </button>
+</div>
+</form>
+</div>
+</main>
+</div>
+</div>
+
+</body></html>

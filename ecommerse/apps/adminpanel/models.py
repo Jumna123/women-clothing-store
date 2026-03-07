@@ -54,7 +54,8 @@ class Product(models.Model):
 
     description = models.TextField(blank=True)
     fabric = models.CharField(max_length=20, blank=True)
-    colour = models.CharField(max_length=30, blank=True,null=True)
+    color_hex = models.CharField(max_length=7, blank=True, null=True)   
+    color_name = models.CharField(max_length=50, blank=True, null=True)  
     size = models.CharField(max_length=100, blank=True)
 
     price = models.DecimalField(max_digits=10, decimal_places=2)

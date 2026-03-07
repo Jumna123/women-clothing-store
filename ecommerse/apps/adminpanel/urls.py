@@ -10,7 +10,7 @@ from .views.user import user_management, block_user, activate_user
 from .views.category import category_toggle_status
 from .views.category import edit_category
 from .views.category import delete_category
-from .views.products import delete_Product
+from .views.products import delete_Product,delete_product_image
 from .views.products import edit_product
 
 
@@ -39,6 +39,7 @@ urlpatterns = [
     path("category/delete/<int:pk>/",delete_category,name="delete-category"),
     path("Product/delete/<int:pk>/",delete_Product,name="delete-product"),
     path("Product/edit/<int:pk>/",edit_product,name="edit-product"),
+    path("product-image/delete/<int:pk>/", delete_product_image, name="delete_product_image"),
 
 
 

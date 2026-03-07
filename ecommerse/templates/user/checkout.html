@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en"><head>
 <meta charset="utf-8"/>
@@ -90,28 +91,48 @@
 </div>
 <div class="p-6">
 <form class="grid grid-cols-1 gap-4 md:grid-cols-2">
+
 <div class="md:col-span-2">
 <label class="mb-1.5 block text-sm font-semibold text-primary">Full Name</label>
-<input class="w-full rounded-lg border-primary/20 bg-white py-2.5 text-sm text-primary focus:border-primary focus:ring-primary placeholder:text-gray-300" placeholder="Jane Doe" type="text"/>
+<input class="w-full rounded-lg border-primary/20 bg-white py-2.5 text-sm text-primary focus:border-primary focus:ring-primary placeholder:text-gray-300"
+ type="text"/>
 </div>
+
+<div>
+<label class="mb-1.5 block text-sm font-semibold text-primary">Phone Number</label>
+<input class="w-full rounded-lg border-primary/20 bg-white py-2.5 text-sm text-primary focus:border-primary focus:ring-primary placeholder:text-gray-300"
+placeholder="+91" type="tel"/>
+</div>
+
+<div>
+<label class="mb-1.5 block text-sm font-semibold text-primary">Country</label>
+<input class="w-full rounded-lg border-primary/20 bg-white py-2.5 text-sm text-primary focus:border-primary focus:ring-primary placeholder:text-gray-300"
+placeholder="United States" type="text"/>
+</div>
+
 <div class="md:col-span-2">
 <label class="mb-1.5 block text-sm font-semibold text-primary">Address</label>
-<input class="w-full rounded-lg border-primary/20 bg-white py-2.5 text-sm text-primary focus:border-primary focus:ring-primary placeholder:text-gray-300" placeholder="123 Green Street" type="text"/>
+<input class="w-full rounded-lg border-primary/20 bg-white py-2.5 text-sm text-primary focus:border-primary focus:ring-primary placeholder:text-gray-300"
+placeholder="123 Green Street" type="text"/>
 </div>
+
 <div>
 <label class="mb-1.5 block text-sm font-semibold text-primary">City</label>
-<input class="w-full rounded-lg border-primary/20 bg-white py-2.5 text-sm text-primary focus:border-primary focus:ring-primary placeholder:text-gray-300" placeholder="Portland" type="text"/>
+<input class="w-full rounded-lg border-primary/20 bg-white py-2.5 text-sm text-primary focus:border-primary focus:ring-primary placeholder="Portland" type="text"/>
 </div>
+
 <div class="grid grid-cols-2 gap-4">
 <div>
 <label class="mb-1.5 block text-sm font-semibold text-primary">State</label>
-<input class="w-full rounded-lg border-primary/20 bg-white py-2.5 text-sm text-primary focus:border-primary focus:ring-primary placeholder:text-gray-300" placeholder="OR" type="text"/>
+<input class="w-full rounded-lg border-primary/20 bg-white py-2.5 text-sm text-primary focus:border-primary focus:ring-primary placeholder="OR" type="text"/>
 </div>
+
 <div>
-<label class="mb-1.5 block text-sm font-semibold text-primary">ZIP Code</label>
-<input class="w-full rounded-lg border-primary/20 bg-white py-2.5 text-sm text-primary focus:border-primary focus:ring-primary placeholder:text-gray-300" placeholder="97201" type="text"/>
+<label class="mb-1.5 block text-sm font-semibold text-primary">PIN Code</label>
+<input class="w-full rounded-lg border-primary/20 bg-white py-2.5 text-sm text-primary focus:border-primary focus:ring-primary placeholder="97201" type="text"/>
 </div>
 </div>
+
 </form>
 </div>
 </div>
@@ -189,88 +210,111 @@
 </div>
 </div>
 <div class="w-full lg:sticky lg:top-28 lg:max-w-[400px]">
+
 <div class="rounded-xl bg-card-bg p-6 shadow-sm border border-border-color">
+
 <h2 class="mb-6 text-xl font-bold text-primary">Order Summary</h2>
+
 <div class="mb-6 space-y-4">
+
+{% for item in cart_items %}
+
 <div class="flex items-center gap-4">
+
 <div class="relative h-16 w-14 shrink-0 overflow-hidden rounded-lg bg-gray-50 border border-gray-100">
-<img alt="Item" class="h-full w-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBoGVzLeth1F29Z-gYrMb0O4jIreVcf3NVY0xtmRFv__ykQQqX_Q6yMwvgYBxuFrcLIb7NcA2x0MfkyjTaHnVJjNvBNC13zwE39XpIP6PEC8Qe-3KyYQcKBKiNasY5Rg0IKmn9Vdm09mFV8fv4SW8VLgTO_sgqG49BwKfJBe7IYfm1pAwLUe1hq2hxddaYSWmn_dgU5uPJRF6HoO1p5QwjA0Xln5uZMMDM-MkukzO0qOE_I1WRdGgs3srsLJf4ljDy8TIfR7eP2kA4"/>
-<span class="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-white">1</span>
+
+{% if item.product.images.all %}
+<img src="{{ item.product.images.first.image.url }}" class="h-full w-full object-cover">
+{% else %}
+<img src="{% static 'images/default.png' %}" class="h-full w-full object-cover">
+{% endif %}
+
+<span class="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-white">
+{{ item.quantity }}
+</span>
+
 </div>
+
 <div class="flex flex-1 flex-col overflow-hidden">
-<p class="truncate text-sm font-bold text-primary">Floral Summer Dress</p>
-<p class="text-xs text-text-secondary">Emerald Green / S</p>
+
+<p class="truncate text-sm font-bold text-primary">
+{{ item.product.product_name }}
+</p>
+
+<p class="text-xs text-text-secondary">
+{{ item.product.colour }} / {{ item.size }}
+</p>
+
 </div>
-<p class="text-sm font-bold text-primary">$45.00</p>
+
+<p class="text-sm font-bold text-primary">
+₹ {{ item.total_price }}
+</p>
+
 </div>
-<div class="flex items-center gap-4">
-<div class="relative h-16 w-14 shrink-0 overflow-hidden rounded-lg bg-gray-50 border border-gray-100">
-<img alt="Item" class="h-full w-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBEBVXVnlamb-nIz2X6EPCpqSgqJvjVmdHHrIxcqrFx-J7bF3OyjZt0yWh7oV6t4UFWrtU6WQhBSgBGYTZXtmWSyhbe7PxivYTmfZ4X9yrY_vxW10x0XZ67f2AsGweD4nETtm7LUtkhO7Tv8jfukXFt1lXyOsoyUCsA0zgYQrHWYYxm6emdSYHaoURQONSZDMb5o7FMx1hiGiW1CO4lhB7lXsyk2QGN-L2_C5mH8cLUJntLwRXH8aW315sf8IrZybBFlrIU5Is6vz4"/>
-<span class="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-white">1</span>
+
+{% endfor %}
+
 </div>
-<div class="flex flex-1 flex-col overflow-hidden">
-<p class="truncate text-sm font-bold text-primary">Casual Linen Trousers</p>
-<p class="text-xs text-text-secondary">Beige / 8</p>
-</div>
-<p class="text-sm font-bold text-primary">$60.00</p>
-</div>
-<div class="flex items-center gap-4">
-<div class="relative h-16 w-14 shrink-0 overflow-hidden rounded-lg bg-gray-50 border border-gray-100">
-<img alt="Item" class="h-full w-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDhiaqAOnHmgPb_tyb-_b_y-Ppv9rWyyBda8aYgGqBoLhFBo5y842aLw7BMZQVmF009DtZNw7cXfFrCt-CE-2wwV8zrFloQ-Hn0jfBeLXbex5JoOiTGOjCvEDrOrTkXWvQndN7dhNASJsKIdzL-SoE7FecCYHTCW1qO3iI_M2HiEFcdAtV1L6wOGu8Fyg29C_B45Ww5whp6SxTEAAJXds3LCoKasCJgdKGmu4q_clZLm5aM_VWC2P2Rep-jno2cuE5pA14qxOJESWA"/>
-<span class="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-white">1</span>
-</div>
-<div class="flex flex-1 flex-col overflow-hidden">
-<p class="truncate text-sm font-bold text-primary">Organic Cotton Tee</p>
-<p class="text-xs text-text-secondary">White / M</p>
-</div>
-<p class="text-sm font-bold text-primary">$35.00</p>
-</div>
-</div>
+
+
+<!-- PRICE SUMMARY -->
+
 <div class="space-y-3 border-t border-border-color pt-6">
+
 <div class="flex justify-between text-sm text-text-secondary">
 <span>Subtotal</span>
-<span class="font-medium text-primary">$140.00</span>
+<span class="font-medium text-primary">₹ {{ subtotal }}</span>
 </div>
+
 <div class="flex justify-between text-sm text-text-secondary">
 <span>Shipping</span>
-<span class="font-medium text-primary">Free</span>
+<span class="font-medium text-primary">
+{% if shipping == 0 %}
+Free
+{% else %}
+₹ {{ shipping }}
+{% endif %}
+</span>
 </div>
+
 <div class="flex justify-between text-sm text-text-secondary">
 <span>Tax</span>
-<span class="font-medium text-primary">$12.00</span>
+<span class="font-medium text-primary">₹ {{ tax }}</span>
 </div>
+
 <div class="flex items-center justify-between border-t border-border-color pt-4">
 <span class="text-base font-bold text-primary">Total</span>
-<span class="text-2xl font-extrabold text-primary">$152.00</span>
+<span class="text-2xl font-extrabold text-primary">₹ {{ total }}</span>
 </div>
+
 </div>
+
+
+<!-- PAY BUTTON -->
+
 <button class="mt-8 flex w-full items-center justify-center gap-2 rounded-xl bg-primary py-4 text-base font-bold text-white shadow-lg shadow-primary/20 transition-all hover:bg-primary-hover active:scale-[0.98]">
-                            Pay Now — $152.00
-                        </button>
+Pay Now — ₹ {{ total }}
+</button>
+
+
 <p class="mt-4 text-center text-xs text-text-secondary">
-                            By placing your order, you agree to our 
-                            <a class="underline text-primary hover:text-primary-hover" href="#">Terms of Service</a> and 
-                            <a class="underline text-primary hover:text-primary-hover" href="#">Privacy Policy</a>.
-                        </p>
+By placing your order, you agree to our 
+<a class="underline text-primary hover:text-primary-hover" href="#">Terms of Service</a> and 
+<a class="underline text-primary hover:text-primary-hover" href="#">Privacy Policy</a>.
+</p>
+
 </div>
+
+
+<!-- PAYMENT ICONS -->
+
 <div class="mt-6 flex items-center justify-center gap-4 grayscale opacity-40">
 <div class="h-8 w-12 rounded bg-gray-200"></div>
 <div class="h-8 w-12 rounded bg-gray-200"></div>
 <div class="h-8 w-12 rounded bg-gray-200"></div>
 </div>
-</div>
-</div>
-</div>
-</main>
-<footer class="mt-20 border-t border-gray-100 bg-gray-50 py-12">
-<div class="mx-auto max-w-7xl px-6 text-center">
-<div class="flex items-center justify-center gap-2 text-primary mb-4">
-<span class="material-symbols-outlined">eco</span>
-<span class="font-bold">GreenStyle</span>
-</div>
-<p class="text-sm text-text-secondary">© 2024 GreenStyle. All rights reserved.</p>
-</div>
-</footer>
+
 </div>
 
 </body></html>

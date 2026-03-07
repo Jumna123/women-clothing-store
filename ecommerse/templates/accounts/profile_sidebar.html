@@ -1,0 +1,81 @@
+<aside class="w-full lg:w-72 flex-shrink-0">
+<div class="bg-white rounded-2xl shadow-xl shadow-primary/5 border border-border-green/10 p-6 sticky top-24">
+
+<div class="flex items-center gap-4 mb-8">
+<div class="relative">
+<div class="size-14 rounded-full overflow-hidden border-2 border-primary">
+<img class="w-full h-full object-cover"
+src="https://lh3.googleusercontent.com/aida-public/AB6AXuDBQSxYJqUj3VTn365K7wH-Po9zQjc3ElbkEjBvOEPC6B9HIr5--dJOFEthSVmrxd9dFulUIBsqMQuGnjINwK_y8hOYmr648riPTTiIKk6allRdI17NkNMorZmnYwTxFmXlpy4FW1r_5InTTmvT_fEHgDVcJ0PXvqkhWXNbDNRdalZFbj3xps99OiSzvKlYG_lNIG_7j-hzqvsDW6F7v4KyhqgtRLYgtCTLWHYKZXfioZMKH4-nvVA4JN3Z6O3PoSwPVNaqlsGTwnA"/>
+</div>
+</div>
+
+<div>
+<h3 class="font-bold text-lg">{{ user.username }}</h3>
+</div>
+</div>
+
+<nav class="flex flex-col gap-1.5">
+
+<a href="{% url 'accounts:profile' %}"
+class="flex items-center gap-3 px-4 py-3 rounded-xl
+{% if active_page == 'dashboard' %}
+bg-primary text-white font-bold
+{% else %}
+hover:bg-primary-light hover:text-primary
+{% endif %}">
+<span class="material-symbols-outlined">dashboard</span>
+<span>Dashboard</span>
+</a>
+
+<a href="{% url 'home:user_orders' %}"
+class="flex items-center gap-3 px-4 py-3 rounded-xl
+{% if active_page == 'orders' %}
+bg-primary text-white font-bold
+{% else %}
+hover:bg-primary-light hover:text-primary
+{% endif %}">
+<span class="material-symbols-outlined">shopping_bag</span>
+<span>My Orders</span>
+</a>
+
+<a href="{% url 'home:wishlist_view' %}?from=profile"
+class="flex items-center gap-3 px-4 py-3 rounded-xl
+{% if active_page == 'wishlist' %}
+bg-primary text-white font-bold
+{% else %}
+hover:bg-primary-light hover:text-primary
+{% endif %}">
+<span class="material-symbols-outlined">favorite</span>
+<span>Wishlist</span>
+</a>
+
+<a href="{% url 'accounts:add_address' %}"
+class="flex items-center gap-3 px-4 py-3 rounded-xl
+{% if active_page == 'addresses' %}
+bg-primary text-white font-bold
+{% else %}
+hover:bg-primary-light hover:text-primary
+{% endif %}">
+<span class="material-symbols-outlined">location_on</span>
+<span>Shipping Addresses</span>
+</a>
+<form method="POST" action="{% url 'accounts:logout' %}" class="mt-8">
+    {% csrf_token %}
+
+    <button type="submit"
+        class="flex items-center gap-3 w-full px-4 py-3 rounded-xl
+               text-red-600 font-semibold
+               hover:bg-red-50 transition">
+
+        <span class="material-symbols-outlined">
+            logout
+        </span>
+
+        Logout
+    </button>
+</form>
+
+</nav>
+
+</div>
+</aside>

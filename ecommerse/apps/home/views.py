@@ -3,8 +3,7 @@ from django.db.models import Prefetch
 from apps.adminpanel.models import Category, Product, ProductImage
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .models import Wishlist
-from .models import Cart
+from .models import Wishlist,Cart,Order
 from apps.adminpanel.models import Product
 from django.http import JsonResponse
 from decimal import Decimal
@@ -81,9 +80,13 @@ def wishlist_view(request):
         user=request.user
     ).select_related('product')
 
+    # check if opened from profile
+    from_profile = request.GET.get("from") == "profile"
+
     context = {
         'wishlist_items': wishlist_items,
-        'wishlist_count': wishlist_items.count(),  
+        'wishlist_count': wishlist_items.count(),
+        'from_profile': from_profile   # send to template
     }
 
     return render(request, 'user/wishlist.html', context)
@@ -273,3 +276,69 @@ def product_detail(request, slug):
         "sizes": sizes
 
     })
+
+
+
+@login_required(login_url='accounts:userlogin')
+def checkout(request):
+
+    cart_items = Cart.objects.filter(
+        user=request.user
+    ).select_related("product")
+
+
+    # SUBTOTAL
+    subtotal = sum(item.total_price() for item in cart_items)
+
+
+    # SHIPPING
+    shipping = Decimal("0")
+
+    if subtotal > Decimal("0") and subtotal < Decimal("1000"):
+        shipping = Decimal("50")
+
+
+    # TAX (5%)
+    tax = subtotal * Decimal("0.05")
+
+
+    # TOTAL
+    total = subtotal + shipping + tax
+
+
+    context = {
+        "cart_items": cart_items,
+        "subtotal": subtotal,
+        "shipping": shipping,
+        "tax": tax,
+        "total": total
+    }
+
+
+    return render(request, "user/checkout.html", context)
+
+@login_required
+def user_orders(request):
+
+    orders = Order.objects.filter(
+        user=request.user
+    ).order_by("-created_at")
+
+    return render(request, "user/orders.html", {
+        "orders": orders
+    })
+
+
+@login_required
+def order_detail(request, order_id):
+
+    order = get_object_or_404(
+        Order,
+        id=order_id,
+        user=request.user
+    )
+
+    return render(request, "orders/order_detail.html", {
+        "order": order
+    }) 
+

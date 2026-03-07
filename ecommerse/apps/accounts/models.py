@@ -3,6 +3,8 @@ from django.db import models
 from django.utils import timezone
 from datetime import timedelta
 import random
+from django.conf import settings
+
 
 
 
@@ -36,3 +38,21 @@ class EmailVerificationRequest(models.Model):
 
     def __str__(self):
         return self.email
+
+class Address(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="addresses")
+
+    full_name = models.CharField(max_length=100)
+    phone = models.CharField(max_length=15)
+
+    house_name = models.CharField(max_length=150)
+    street = models.CharField(max_length=150)
+    city = models.CharField(max_length=100)
+    state = models.CharField(max_length=100)
+    pincode = models.CharField(max_length=10)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.full_name} - {self.city}"
+    

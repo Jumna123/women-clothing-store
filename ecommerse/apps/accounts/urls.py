@@ -1,12 +1,7 @@
 from django.urls import path
 from .views.admin_auth import admin_login
-from .views.user_auth import signup_view
-from .views.user_auth import userlogin
-from .views.user_auth import verify_email_view
-from .views.user_auth import profile
-from .views.user_auth import user_logout
-from .views.user_auth import forgot_password
-from .views.user_auth import reset_password
+from .views.user_auth import signup_view,userlogin,verify_email_view,profile,user_logout,forgot_password
+from .views.user_auth import reset_password,add_address
 
 
 app_name='accounts'
@@ -20,6 +15,9 @@ urlpatterns = [
     path("logout/", user_logout, name="logout"),
     path("forgot-password/",forgot_password, name="forgot_password"),
     path("forgot-password/reset/",reset_password, name="reset_password"),
+    path("address/add/", add_address, name="add_address"),
+    
+
 
 ]
 

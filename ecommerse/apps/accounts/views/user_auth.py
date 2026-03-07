@@ -9,9 +9,9 @@ from django.contrib.auth import authenticate, login,logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
-from ..forms import SignupForm
+from ..forms import SignupForm,AddressForm
 from ..utils import generate_otp
-from ..models import EmailVerificationRequest, User
+from ..models import EmailVerificationRequest, User,Address
 
 def send_verification_email(email, otp):
     send_mail(
@@ -237,4 +237,26 @@ def reset_password(request):
     return render(request, "accounts/reset_password.html")
 
 
+
+@login_required
+def add_address(request):
+
+    if request.method == "POST":
+        form = AddressForm(request.POST)
+
+        if form.is_valid():
+            address = form.save(commit=False)
+            address.user = request.user
+            address.save()
+
+            return redirect("accounts:dashboard")
+
+    else:
+        form = AddressForm()
+
+    context = {
+        "form": form
+    }
+
+    return render(request, "accounts/user_addresss.html", context)
 
