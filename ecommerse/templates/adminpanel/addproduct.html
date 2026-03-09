@@ -141,7 +141,13 @@
       </div>
       {% endfor %}
     {% endif %}
-
+    
+    {% if not is_edit %}
+  <p class="text-xs text-[#88a594] mt-2 flex items-center gap-1">
+    <span class="material-symbols-outlined text-[14px]">info</span>
+    If the form has errors, you'll need to re-select your images.
+  </p>
+{% endif %}
     <!-- Add more images button -->
     <label
       for="productImage"

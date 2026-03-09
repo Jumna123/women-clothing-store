@@ -49,7 +49,7 @@ hover:bg-primary-light hover:text-primary
 <span>Wishlist</span>
 </a>
 
-<a href="{% url 'accounts:add_address' %}"
+<a href="{% url 'accounts:address_list' %}"
 class="flex items-center gap-3 px-4 py-3 rounded-xl
 {% if active_page == 'addresses' %}
 bg-primary text-white font-bold
@@ -59,21 +59,13 @@ hover:bg-primary-light hover:text-primary
 <span class="material-symbols-outlined">location_on</span>
 <span>Shipping Addresses</span>
 </a>
-<form method="POST" action="{% url 'accounts:logout' %}" class="mt-8">
-    {% csrf_token %}
-
-    <button type="submit"
-        class="flex items-center gap-3 w-full px-4 py-3 rounded-xl
-               text-red-600 font-semibold
-               hover:bg-red-50 transition">
-
-        <span class="material-symbols-outlined">
-            logout
-        </span>
-
-        Logout
-    </button>
-</form>
+<!-- simplest fix — change to a GET link instead of a form -->
+<a href="{% url 'accounts:logout' %}"
+   class="flex items-center gap-3 w-full px-4 py-3 rounded-xl text-red-600 font-semibold hover:bg-red-50 transition"
+   onclick="return confirm('Are you sure you want to logout?')">
+  <span class="material-symbols-outlined">logout</span>
+  Logout
+</a>
 
 </nav>
 

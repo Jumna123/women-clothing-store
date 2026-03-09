@@ -218,8 +218,8 @@
             </p>
 
             {% if collection.slug %}
-            <a href="{% url 'home:category_products' category.slug %}"
-               class="w-fit rounded-full bg-white/95 px-6 py-2 text-sm font-bold text-background-dark backdrop-blur-sm transition-all hover:bg-white hover:scale-105">
+            <a href="{% url 'home:collection_products' collection.pk %}"
+            class="w-fit rounded-full bg-white/95 px-6 py-2 text-sm font-bold text-background-dark backdrop-blur-sm transition-all hover:bg-white hover:scale-105">
                 Explore
             </a>
             {% endif %}

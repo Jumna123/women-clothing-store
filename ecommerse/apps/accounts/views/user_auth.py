@@ -8,6 +8,7 @@ from django.conf import settings
 from django.contrib.auth import authenticate, login,logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404
 
 from ..forms import SignupForm,AddressForm
 from ..utils import generate_otp
@@ -157,7 +158,7 @@ def profile(request):
 
 def user_logout(request):
     logout(request)
-    return redirect("accounts:userlogin")  
+    return redirect("accounts:userlogin") 
 
 # -----forget password-------
 def forgot_password(request):
@@ -239,24 +240,60 @@ def reset_password(request):
 
 
 @login_required
-def add_address(request):
+def address_list(request):
+    addresses = Address.objects.filter(user=request.user).order_by('-created_at')
+    form = AddressForm()
+    return render(request, "accounts/user_addresss.html", {
+        "addresses": addresses,
+        "form": form,
+    })
 
+
+@login_required
+def add_address(request):
     if request.method == "POST":
         form = AddressForm(request.POST)
-
         if form.is_valid():
             address = form.save(commit=False)
             address.user = request.user
+            # ✅ if no default exists, make this one default
+            if not Address.objects.filter(user=request.user, is_default=True).exists():
+                address.is_default = True
             address.save()
+            messages.success(request, "Address added successfully.")
+        else:
+            messages.error(request, "Please fix the errors below.")
+    return redirect("accounts:address_list")
 
-            return redirect("accounts:dashboard")
 
-    else:
-        form = AddressForm()
+@login_required
+def edit_address(request, pk):
+    address = get_object_or_404(Address, pk=pk, user=request.user)
+    if request.method == "POST":
+        form = AddressForm(request.POST, instance=address)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Address updated successfully.")
+        else:
+            messages.error(request, "Please fix the errors below.")
+    return redirect("accounts:address_list")
 
-    context = {
-        "form": form
-    }
 
-    return render(request, "accounts/user_addresss.html", context)
+@login_required
+def delete_address(request, pk):
+    address = get_object_or_404(Address, pk=pk, user=request.user)
+    address.delete()
+    messages.success(request, "Address removed.")
+    return redirect("accounts:address_list")
+
+
+@login_required
+def set_default_address(request, pk):
+    # ✅ remove default from all, then set on selected
+    Address.objects.filter(user=request.user).update(is_default=False)
+    address = get_object_or_404(Address, pk=pk, user=request.user)
+    address.is_default = True
+    address.save()
+    messages.success(request, "Default address updated.")
+    return redirect("accounts:address_list")
 
