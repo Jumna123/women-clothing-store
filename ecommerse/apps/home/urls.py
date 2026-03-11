@@ -23,5 +23,6 @@ urlpatterns = [
     path("orders/<int:order_id>/", views.order_detail, name="order_detail"),
     path("checkout/place-order/", views.place_order, name="place_order"),
     path("collection/<int:pk>/", views.collection_products, name="collection_products"),
+    path('search/', views.search_products, name='search_products'),
 
 ]

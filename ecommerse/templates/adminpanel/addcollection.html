@@ -3,226 +3,358 @@
 
 {% block content %}
 
+<!-- Toast Notification -->
+<div id="toast" class="fixed top-6 right-6 z-[9999] flex items-center gap-3 px-5 py-4 rounded-xl shadow-2xl border transition-all duration-500 max-w-sm" style="transform: translateX(120%); opacity: 0;" role="alert">
+  <span id="toastIcon" class="material-symbols-outlined text-xl flex-shrink-0"></span>
+  <div>
+    <p id="toastTitle" class="text-sm font-bold leading-tight"></p>
+    <p id="toastMsg" class="text-xs mt-0.5 opacity-80"></p>
+  </div>
+  <button onclick="hideToast()" class="ml-auto pl-3 opacity-60 hover:opacity-100 transition-opacity">
+    <span class="material-symbols-outlined text-base">close</span>
+  </button>
+</div>
 
 <body class="bg-gradient-to-br from-[#0b1f16] via-[#0f2a1d] to-[#0b1f16] text-white min-h-screen flex flex-col font-display antialiased selection:bg-[#36e27b] selection:text-[#112117]">
+
 <header class="sticky top-0 z-50 w-full border-b border-[#23352a] bg-[#112117]">
-<div class="mx-auto flex h-16 max-w-[1600px] items-center justify-between px-4 sm:px-6 lg:px-8">
-<div class="flex items-center gap-8">
-<div class="flex items-center gap-2">
-<div class="flex size-8 items-center justify-center rounded-full bg-white text-[#112117] shadow-md">
-<span class="material-symbols-outlined text-lg">diamond</span>
-</div>
-<h1 class="text-lg font-bold tracking-tight text-white">ELEGANCE <span class="font-normal text-gray-400">Admin</span></h1>
-</div>
-<nav class="hidden md:flex items-center gap-1">
-<a class="rounded-md px-3 py-2 text-sm font-medium text-gray-400 hover:bg-[#ffffff]/10 hover:text-white transition-colors" href="#">Dashboard</a>
-<a class="rounded-md px-3 py-2 text-sm font-medium text-gray-400 hover:bg-[#ffffff]/10 hover:text-white transition-colors" href="#">Products</a>
-<a class="rounded-md bg-[#ffffff]/10 px-3 py-2 text-sm font-bold text-white" href="#">Collections</a>
-<a class="rounded-md px-3 py-2 text-sm font-medium text-gray-400 hover:bg-[#ffffff]/10 hover:text-white transition-colors" href="#">Orders</a>
-</nav>
-</div>
-<div class="flex items-center gap-4">
-<button class="relative rounded-full p-2 text-gray-400 hover:bg-[#ffffff]/10 hover:text-white transition-colors">
-<span class="material-symbols-outlined">notifications</span>
-<span class="absolute top-2.5 right-2.5 size-2 rounded-full bg-red-500 border border-[#112117]"></span>
-</button>
-<div class="h-8 w-8 rounded-full bg-gray-700 overflow-hidden border border-gray-600 cursor-pointer">
-<img alt="Admin User" class="h-full w-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC4X-W6k9hu7Bg54ODdBpGGE8gCTKsNSfcfynmuur8rKZo2TfcBkwMUduFBvKci2WD33OMxfg5_7feTwUu-txjQxFJfTH2LB29CeT7FcvL1xGEvYRjgbBmTUotWDycsMsmRTD8GsMA_GNUVLiU-0cWD4imz9-Jvj9R5gnSHxs2j_STgyqR1YnZrCj8KJX2Wc7axzndt9Mvz0BEkTzl9OzeRGYXxnucDFuVqb6kd5XM0vDK-vTmzbSqdfRcwAE__powBnUy-p-kUgXM"/>
-</div>
-</div>
-</div>
+  <div class="mx-auto flex h-16 max-w-[1600px] items-center justify-between px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center gap-8">
+      <div class="flex items-center gap-2">
+        <div class="flex size-8 items-center justify-center rounded-full bg-white text-[#112117] shadow-md">
+          <span class="material-symbols-outlined text-lg">diamond</span>
+        </div>
+        <h1 class="text-lg font-bold tracking-tight text-white">ELEGANCE <span class="font-normal text-gray-400">Admin</span></h1>
+      </div>
+      <nav class="hidden md:flex items-center gap-1">
+        <a class="rounded-md px-3 py-2 text-sm font-medium text-gray-400 hover:bg-[#ffffff]/10 hover:text-white transition-colors" href="#">Dashboard</a>
+        <a class="rounded-md px-3 py-2 text-sm font-medium text-gray-400 hover:bg-[#ffffff]/10 hover:text-white transition-colors" href="#">Products</a>
+        <a class="rounded-md bg-[#ffffff]/10 px-3 py-2 text-sm font-bold text-white" href="#">Collections</a>
+        <a class="rounded-md px-3 py-2 text-sm font-medium text-gray-400 hover:bg-[#ffffff]/10 hover:text-white transition-colors" href="#">Orders</a>
+      </nav>
+    </div>
+    <div class="flex items-center gap-4">
+      <button class="relative rounded-full p-2 text-gray-400 hover:bg-[#ffffff]/10 hover:text-white transition-colors">
+        <span class="material-symbols-outlined">notifications</span>
+        <span class="absolute top-2.5 right-2.5 size-2 rounded-full bg-red-500 border border-[#112117]"></span>
+      </button>
+      <div class="h-8 w-8 rounded-full bg-gray-700 overflow-hidden border border-gray-600 cursor-pointer">
+        <img alt="Admin User" class="h-full w-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC4X-W6k9hu7Bg54ODdBpGGE8gCTKsNSfcfynmuur8rKZo2TfcBkwMUduFBvKci2WD33OMxfg5_7feTwUu-txjQxFJfTH2LB29CeT7FcvL1xGEvYRjgbBmTUotWDycsMsmRTD8GsMA_GNUVLiU-0cWD4imz9-Jvj9R5gnSHxs2j_STgyqR1YnZrCj8KJX2Wc7axzndt9Mvz0BEkTzl9OzeRGYXxnucDFuVqb6kd5XM0vDK-vTmzbSqdfRcwAE__powBnUy-p-kUgXM"/>
+      </div>
+    </div>
+  </div>
 </header>
+
 <main class="flex-grow bg-[#112117]">
-    <form method="POST" enctype="multipart/form-data">
+  <form method="POST" enctype="multipart/form-data" id="collectionForm">
     {% csrf_token %}
 
-<div class="mx-auto max-w-[1600px] px-4 py-8 sm:px-6 lg:px-8">
-<div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-<div>
-<nav class="flex text-sm text-gray-400 mb-2">
-<a class="hover:text-white transition-colors" href="#">Collections</a>
-<span class="mx-2 text-gray-600">/</span>
-<span class="text-white font-medium">Edit Collection</span>
-</nav>
-<h2 class="text-3xl font-bold text-white tracking-tight">Summer Essentials</h2>
-</div>
-<div class="flex gap-3">
-<button class="flex items-center justify-center rounded-lg border border-gray-600 bg-transparent px-5 py-2.5 text-sm font-bold text-white hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all">
-                    Cancel
-                </button>
-<button
-  type="submit"
-  class="flex items-center justify-center gap-2 rounded-lg bg-white px-6 py-2.5 text-sm font-bold text-[#112117] shadow-lg hover:bg-gray-100 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white transition-all ring-offset-[#112117]"
->
-  <span class="material-symbols-outlined text-lg">save</span>
-  Save Collection
-</button>
+    <div class="mx-auto max-w-[1600px] px-4 py-8 sm:px-6 lg:px-8">
 
-</div>
-</div>
-<div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-<div class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm text-[#112117] h-full">
-<h3 class="text-xl font-bold text-[#112117] mb-8 flex items-center gap-2">
-<span class="material-symbols-outlined text-gray-400">edit_note</span>
-                    General Information
-                </h3>
-<div class="space-y-6">
-<div>
-<label class="block text-sm font-bold text-[#112117] mb-2" for="collection-name">Collection Name</label>
-<input
-  type="text"
-  name="name"
-  id="collection-name"
-  value="{{ form.name.value|default:'' }}"
-  class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm py-3 text-[#112117] font-medium bg-white"
-/>
-
-</div>
-<div>
-<label class="block text-sm font-bold text-[#112117] mb-2" for="description">Description</label>
-<textarea
-  name="description"
-  id="description"
-  rows="8"
-  class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm py-3 text-[#112117] bg-white"
->{{ form.description.value|default:'' }}</textarea>
-<p class="mt-2 text-xs text-gray-500 font-medium">This description will be displayed on the collection page.</p>
-</div>
-</div>
-</div>
-<div class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm text-[#112117] h-full">
-<h3 class="text-xl font-bold text-[#112117] mb-8 flex items-center gap-2">
-<span class="material-symbols-outlined text-gray-400">image</span>
-                    Collection Image
-                </h3>
-<div class="relative group rounded-xl overflow-hidden border-2 border-dashed border-gray-300 bg-gray-50/50 transition-all cursor-pointer">
-
-  <input
-    type="file"
-    name="image"
-    id="image-upload"
-    accept="image/*"
-    class="hidden"
-    onchange="previewImage(event)"
-  />
-
-  <!-- Instant preview (JS) -->
-  <img
-    id="image-preview"
-    class="hidden w-full h-full object-cover rounded-xl"
-  />
-
-  {% if form.instance.pk and form.instance.image %}
-
-    <!-- ✅ EDIT MODE (image exists) -->
-    <div class="aspect-square w-full">
-      <img
-        src="{{ form.instance.image.url }}"
-        alt="Collection Image"
-        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-      />
-    </div>
-
-    <div class="absolute inset-0 bg-[#112117]/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-4 p-4 text-center">
-      <div class="flex flex-col gap-2 w-full max-w-[200px]">
-        <button
-          type="button"
-          onclick="document.getElementById('image-upload').click()"
-          class="flex items-center justify-center gap-2 rounded-lg bg-white px-4 py-3 text-sm font-bold text-[#112117] shadow-xl hover:bg-gray-100 transition-all"
-        >
-          <span class="material-symbols-outlined text-xl">upload</span>
-          Edit Image
-        </button>
+      <!-- Page Header -->
+      <div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <nav class="flex text-sm text-gray-400 mb-2">
+            <a class="hover:text-white transition-colors" href="#">Collections</a>
+            <span class="mx-2 text-gray-600">/</span>
+            <span class="text-white font-medium">
+              {% if form.instance.pk %}Edit Collection{% else %}Add Collection{% endif %}
+            </span>
+          </nav>
+          <h2 class="text-3xl font-bold text-white tracking-tight">
+            {% if form.instance.pk %}{{ form.instance.name }}{% else %}New Collection{% endif %}
+          </h2>
+        </div>
+        <div class="flex gap-3">
+          <a href="#" class="flex items-center justify-center rounded-lg border border-gray-600 bg-transparent px-5 py-2.5 text-sm font-bold text-white hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all">
+            Cancel
+          </a>
+          <button
+            type="submit"
+            class="flex items-center justify-center gap-2 rounded-lg bg-white px-6 py-2.5 text-sm font-bold text-[#112117] shadow-lg hover:bg-gray-100 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white transition-all ring-offset-[#112117]"
+          >
+            <span class="material-symbols-outlined text-lg">save</span>
+            Save Collection
+          </button>
+        </div>
       </div>
 
-      <p class="text-xs text-white/90 font-medium bg-[#112117]/50 backdrop-blur px-3 py-1.5 rounded-full">
-        SVG, PNG, JPG or GIF (max. 2MB)
-      </p>
+      <!-- 3-Column Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+
+        <!-- Card 1: General Information -->
+        <div class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm text-[#112117]">
+          <h3 class="text-xl font-bold text-[#112117] mb-6 flex items-center gap-2">
+            <span class="material-symbols-outlined text-gray-400">edit_note</span>
+            General Information
+          </h3>
+          <div class="space-y-6">
+            <div>
+              <label class="block text-sm font-bold text-[#112117] mb-2" for="collection-name">Collection Name</label>
+              <input
+                type="text"
+                name="name"
+                id="collection-name"
+                value="{{ form.name.value|default:'' }}"
+                placeholder="e.g. Summer Essentials"
+                class="block w-full rounded-lg border border-gray-300 shadow-sm focus:border-green-500 focus:ring-2 focus:ring-green-500/20 sm:text-sm px-4 py-3 text-[#112117] font-medium bg-white outline-none transition-all"
+              />
+            </div>
+            <div>
+              <label class="block text-sm font-bold text-[#112117] mb-2" for="description">Description</label>
+              <textarea
+                name="description"
+                id="description"
+                rows="8"
+                placeholder="Describe this collection…"
+                class="block w-full rounded-lg border border-gray-300 shadow-sm focus:border-green-500 focus:ring-2 focus:ring-green-500/20 sm:text-sm px-4 py-3 text-[#112117] bg-white outline-none transition-all resize-none"
+              >{{ form.description.value|default:'' }}</textarea>
+              <p class="mt-2 text-xs text-gray-400">This description will be displayed on the collection page.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2: Collection Image -->
+        <div class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm text-[#112117]">
+          <h3 class="text-xl font-bold text-[#112117] mb-6 flex items-center gap-2">
+            <span class="material-symbols-outlined text-gray-400">image</span>
+            Collection Image
+          </h3>
+
+          <input type="file" name="image" id="image-upload" accept="image/*" class="hidden"/>
+          <input type="hidden" name="cropped_image" id="croppedImageData"/>
+
+          <!-- State 1: Upload prompt -->
+          <div id="uploadPrompt"
+            onclick="document.getElementById('image-upload').click()"
+            class="flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-gray-300 bg-gray-50 cursor-pointer hover:bg-gray-100 hover:border-gray-400 transition-all group mb-4"
+            style="min-height: 220px;">
+            <div class="mb-3 rounded-full bg-white p-3 shadow-sm ring-1 ring-gray-200 group-hover:scale-110 transition-transform">
+              <span class="material-symbols-outlined text-2xl text-gray-400 group-hover:text-[#112117]">cloud_upload</span>
+            </div>
+            <p class="text-sm font-bold text-[#112117]">Click to upload</p>
+            <p class="text-xs text-gray-400 mt-1">SVG, PNG, JPG or GIF — max 2 MB</p>
+          </div>
+
+          <!-- State 2: Existing image (edit mode) -->
+          {% if form.instance.pk and form.instance.image %}
+          <div id="existingImageWrapper" class="mb-4 rounded-xl overflow-hidden border border-gray-200">
+            <img src="{{ form.instance.image.url }}" class="w-full h-48 object-cover"/>
+            <p class="text-xs text-center text-gray-400 py-2">Current image — upload a new one to replace</p>
+          </div>
+          {% endif %}
+
+          <!-- State 3: Cropper (after file chosen) -->
+          <div id="cropperSection" class="hidden">
+            <div class="relative rounded-xl overflow-hidden border border-gray-200 mb-4 bg-gray-900" style="max-height: 320px;">
+              <img id="cropTarget" class="block w-full" style="max-height: 320px; object-fit: contain;"/>
+            </div>
+            <div class="flex flex-wrap gap-2 mb-4">
+              <button type="button" onclick="cropper.rotate(-90)" class="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-gray-100 text-xs font-bold text-[#112117] hover:bg-gray-200 transition-colors">
+                <span class="material-symbols-outlined text-[16px]">rotate_left</span> Rotate L
+              </button>
+              <button type="button" onclick="cropper.rotate(90)" class="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-gray-100 text-xs font-bold text-[#112117] hover:bg-gray-200 transition-colors">
+                <span class="material-symbols-outlined text-[16px]">rotate_right</span> Rotate R
+              </button>
+              <button type="button" onclick="cropper.reset()" class="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-gray-100 text-xs font-bold text-[#112117] hover:bg-gray-200 transition-colors">
+                <span class="material-symbols-outlined text-[16px]">refresh</span> Reset
+              </button>
+              <button type="button" onclick="document.getElementById('image-upload').click()" class="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-gray-100 text-xs font-bold text-[#112117] hover:bg-gray-200 transition-colors">
+                <span class="material-symbols-outlined text-[16px]">upload</span> Change
+              </button>
+              <button type="button" onclick="applyCrop()" class="flex items-center gap-1 px-4 py-1.5 rounded-lg bg-[#112117] text-xs font-bold text-white hover:bg-[#1c3326] transition-colors ml-auto">
+                <span class="material-symbols-outlined text-[16px]">check</span> Apply Crop
+              </button>
+            </div>
+          </div>
+
+          <!-- State 4: Cropped preview -->
+          <div id="croppedPreviewWrapper" class="hidden mb-4 rounded-xl overflow-hidden border border-green-200 bg-green-50">
+            <img id="croppedPreview" class="w-full h-48 object-cover"/>
+            <div class="flex items-center justify-between px-4 py-2">
+              <p class="text-xs text-green-700 font-semibold flex items-center gap-1">
+                <span class="material-symbols-outlined text-sm">check_circle</span> Cropped image ready
+              </p>
+              <button type="button" onclick="resetImageUpload()" class="text-xs text-gray-400 hover:text-red-500 transition-colors font-medium">
+                Remove
+              </button>
+            </div>
+          </div>
+
+          <p class="text-xs text-gray-400 text-center">Upload and crop your collection image before saving.</p>
+        </div>
+
+        <!-- Card 3: Availability -->
+        <div class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm text-[#112117]">
+          <h3 class="text-xl font-bold text-[#112117] mb-6 flex items-center gap-2">
+            <span class="material-symbols-outlined text-gray-400">visibility</span>
+            Availability
+          </h3>
+
+          <div class="bg-gray-50 rounded-xl p-5 border border-gray-100 space-y-6">
+            <label class="flex items-start gap-4 cursor-pointer group">
+              <div class="flex h-5 items-center mt-0.5">
+                <input
+                  type="checkbox"
+                  name="is_active"
+                  id="availability"
+                  {% if form.is_active.value %}checked{% endif %}
+                  class="h-5 w-5 rounded border-gray-300 text-green-600 focus:ring-green-500 cursor-pointer"
+                />
+              </div>
+              <div>
+                <span class="block text-sm font-bold text-[#112117] group-hover:text-green-700 transition-colors">Publish on Online Store</span>
+                <span class="block text-xs text-gray-400 mt-1 leading-relaxed">Make this collection visible to all customers immediately after saving.</span>
+              </div>
+            </label>
+
+            <div class="border-t border-gray-200 pt-5">
+              <label class="block text-sm font-bold text-[#112117] mb-3">Schedule Publishing</label>
+              <div class="relative w-full">
+                <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400 pointer-events-none">
+                  <span class="material-symbols-outlined text-lg">calendar_month</span>
+                </span>
+                <input
+                  type="date"
+                  name="publish_at"
+                  value="{{ form.publish_at.value|default:'' }}"
+                  min="{{ today }}"
+                  class="block w-full rounded-lg border border-gray-300 pl-10 shadow-sm focus:border-green-500 focus:ring-2 focus:ring-green-500/20 sm:text-sm py-3 text-[#112117] bg-white outline-none transition-all"
+                />
+              </div>
+              <p class="mt-2 text-xs text-gray-400">Leave blank to publish immediately when active.</p>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /grid -->
     </div>
-
-  {% else %}
-
-    <!-- ✅ ADD MODE (no image yet) -->
-    <div
-      onclick="document.getElementById('image-upload').click()"
-      class="flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-gray-300 bg-gray-50/50 px-6 py-10 hover:bg-gray-50 hover:border-[#112117]/30 transition-all group"
-    >
-      <div class="mb-4 rounded-full bg-white p-3 shadow-sm ring-1 ring-gray-200 group-hover:scale-110 transition-transform">
-        <span class="material-symbols-outlined text-2xl text-gray-400 group-hover:text-[#112117]">
-          cloud_upload
-        </span>
-      </div>
-      <div class="text-center">
-        <p class="text-sm font-bold text-[#112117]">Click to upload</p>
-        <p class="text-xs text-gray-500 mt-1">SVG, PNG, JPG or GIF (max. 2MB)</p>
-      </div>
-    </div>
-
-  {% endif %}
-
-</div>
-
-<p class="mt-6 text-sm text-gray-500 leading-relaxed text-center italic">Hover over the image to update or remove the collection cover.</p>
-</div>
-<div class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm text-[#112117] h-full">
-<h3 class="text-xl font-bold text-[#112117] mb-8 flex items-center gap-2">
-<span class="material-symbols-outlined text-gray-400">visibility</span>
-                    Availability
-                </h3>
-<div class="bg-gray-50 rounded-xl p-6 border border-gray-100 h-[calc(100%-4rem)] flex flex-col justify-between">
-<div>
-<div class="flex items-start">
-<div class="flex h-5 items-center">
-<input
-  type="checkbox"
-  name="is_active"
-  {% if form.is_active.value %}checked{% endif %}
-  class="h-5 w-5 rounded border-gray-300 text-green-600 focus:ring-green-500"
-/>
-</div>
-<div class="ml-4 text-sm">
-<label class="font-bold text-[#112117] text-base cursor-pointer" for="availability">Publish on Online Store</label>
-<p class="text-gray-500 mt-1">Make this collection visible to all customers immediately after saving.</p>
-</div>
-</div>
-</div>
-<div class="mt-8 pt-8 border-t border-gray-200">
-<label class="block text-sm font-bold text-[#112117] mb-3">Schedule Publishing</label>
-<div class="relative w-full">
-<span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
-<span class="material-symbols-outlined text-lg">calendar_month</span>
-</span>
-<input
-  type="date"
-  name="publish_at"
-  value="{{ form.publish_at.value|default:'' }}"
-  class="block w-full rounded-lg border-gray-300 pl-10 shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm py-3 text-[#112117] bg-white"
-/>
-</div>
-<p class="mt-3 text-xs text-gray-500">Leave blank to publish immediately.</p>
-</div>
-</div>
-</div>
-</div>
-</div>
+  </form>
 </main>
+
+<!-- Cropper.js -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+
 <script>
-function previewImage(event) {
-  const input = event.target;
-  const preview = document.getElementById("image-preview");
+/* ── Toast ───────────────────────────────────────────── */
+function showToast(type, title, msg) {
+  const toast = document.getElementById('toast');
+  const icon  = document.getElementById('toastIcon');
+  const tit   = document.getElementById('toastTitle');
+  const txt   = document.getElementById('toastMsg');
 
-  if (input.files && input.files[0]) {
-    const reader = new FileReader();
+  const styles = {
+    success: { bg: 'bg-white', border: 'border-green-200', text: 'text-green-800', icon: 'check_circle', iconColor: 'text-green-500' },
+    error:   { bg: 'bg-white', border: 'border-red-200',   text: 'text-red-800',   icon: 'error',        iconColor: 'text-red-500'   },
+    info:    { bg: 'bg-white', border: 'border-blue-200',  text: 'text-blue-800',  icon: 'info',         iconColor: 'text-blue-500'  },
+  };
+  const s = styles[type] || styles.info;
 
-    reader.onload = function (e) {
-      preview.src = e.target.result;
-      preview.classList.remove("hidden");
-    };
+  toast.className = `fixed top-6 right-6 z-[9999] flex items-center gap-3 px-5 py-4 rounded-xl shadow-2xl border transition-all duration-500 max-w-sm ${s.bg} ${s.border} ${s.text}`;
+  icon.className  = `material-symbols-outlined text-xl flex-shrink-0 ${s.iconColor}`;
+  icon.textContent = s.icon;
+  tit.textContent  = title;
+  txt.textContent  = msg;
 
-    reader.readAsDataURL(input.files[0]);
-  }
+  toast.style.transform = 'translateX(0)';
+  toast.style.opacity   = '1';
+
+  clearTimeout(toast._timer);
+  toast._timer = setTimeout(hideToast, 4000);
 }
-</script>
 
+function hideToast() {
+  const toast = document.getElementById('toast');
+  toast.style.transform = 'translateX(120%)';
+  toast.style.opacity   = '0';
+}
+
+/* ── Fire Django messages as toasts on page load ─────── */
+{% if messages %}
+window.addEventListener('DOMContentLoaded', function () {
+  {% for message in messages %}
+    showToast(
+      '{{ message.tags|default:"info" }}',
+      '{% if message.tags == "success" %}Success{% elif message.tags == "error" %}Error{% else %}Notice{% endif %}',
+      '{{ message|escapejs }}'
+    );
+  {% endfor %}
+});
+{% endif %}
+
+/* ── Cropper ─────────────────────────────────────────── */
+let cropper = null;
+
+document.getElementById('image-upload').addEventListener('change', function () {
+  const file = this.files[0];
+  if (!file) return;
+
+  if (file.size > 2 * 1024 * 1024) {
+    showToast('error', 'File too large', 'Please upload an image under 2 MB.');
+    this.value = '';
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = function (e) {
+    const cropTarget            = document.getElementById('cropTarget');
+    const uploadPrompt          = document.getElementById('uploadPrompt');
+    const cropperSection        = document.getElementById('cropperSection');
+    const existingWrapper       = document.getElementById('existingImageWrapper');
+    const croppedPreviewWrapper = document.getElementById('croppedPreviewWrapper');
+
+    if (existingWrapper) existingWrapper.classList.add('hidden');
+    uploadPrompt.classList.add('hidden');
+    croppedPreviewWrapper.classList.add('hidden');
+    document.getElementById('croppedImageData').value = '';
+
+    cropTarget.src = e.target.result;
+    cropperSection.classList.remove('hidden');
+
+    if (cropper) { cropper.destroy(); cropper = null; }
+
+    cropper = new Cropper(cropTarget, {
+      aspectRatio: 1,
+      viewMode: 1,
+      autoCropArea: 0.9,
+      movable: true,
+      zoomable: true,
+      rotatable: true,
+      scalable: true,
+    });
+  };
+  reader.readAsDataURL(file);
+});
+
+function applyCrop() {
+  if (!cropper) return;
+  const canvas = cropper.getCroppedCanvas({ width: 800, height: 800 });
+  const dataURL = canvas.toDataURL('image/jpeg', 0.9);
+
+  document.getElementById('croppedImageData').value = dataURL;
+  document.getElementById('croppedPreview').src = dataURL;
+  document.getElementById('croppedPreviewWrapper').classList.remove('hidden');
+  document.getElementById('cropperSection').classList.add('hidden');
+
+  cropper.destroy();
+  cropper = null;
+
+  showToast('success', 'Crop applied', 'Your image is ready. Save the collection to confirm.');
+}
+
+function resetImageUpload() {
+  document.getElementById('croppedPreviewWrapper').classList.add('hidden');
+  document.getElementById('uploadPrompt').classList.remove('hidden');
+  document.getElementById('croppedImageData').value = '';
+  document.getElementById('image-upload').value = '';
+  const ew = document.getElementById('existingImageWrapper');
+  if (ew) ew.classList.remove('hidden');
+}
+
+document.getElementById('collectionForm').addEventListener('submit', function () {
+  showToast('info', 'Saving…', 'Please wait while your collection is being saved.');
+});
+</script>
 
 {% endblock %}

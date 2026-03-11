@@ -84,35 +84,42 @@
 </div>
 </td>
 
+<!-- STATUS column -->
 <td class="px-6 py-4">
-{% if collection.status == "published" %}
-<span class="inline-flex items-center gap-1.5 rounded-full bg-[#112117]/5 px-3 py-1 text-xs font-bold text-[#112117] border border-[#112117]/10">
-<span class="size-2 rounded-full bg-green-500"></span> Published
-</span>
-{% else %}
-<span class="inline-flex items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1 text-xs font-bold text-gray-500 border border-gray-200">
-<span class="size-2 rounded-full bg-gray-400"></span> Draft
-</span>
-{% endif %}
+  {% if collection.computed_status == "published" %}
+    <span class="inline-flex items-center gap-1.5 rounded-full bg-[#112117]/5 px-3 py-1 text-xs font-bold text-[#112117] border border-[#112117]/10">
+      <span class="size-2 rounded-full bg-green-500"></span> Published
+    </span>
+  {% elif collection.is_scheduled %}
+    <span class="inline-flex items-center gap-1.5 rounded-full bg-yellow-50 px-3 py-1 text-xs font-bold text-yellow-700 border border-yellow-200">
+      <span class="size-2 rounded-full bg-yellow-400"></span>
+      Scheduled · {{ collection.publish_at }}
+    </span>
+  {% else %}
+    <span class="inline-flex items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1 text-xs font-bold text-gray-500 border border-gray-200">
+      <span class="size-2 rounded-full bg-gray-400"></span> Draft
+    </span>
+  {% endif %}
 </td>
 
+<!-- add this td after the visibility td -->
 <td class="px-6 py-4">
-<div class="flex items-center gap-2">
-<span class="font-bold text-[#112117]">
-    {{ collection.products_count }}
-</span>
-<span class="text-[#112117]/50 text-xs">items</span>
-</div>
+  <div class="flex items-center gap-2">
+    <span class="font-bold text-[#112117]">{{ collection.products_count }}</span>
+    <span class="text-[#112117]/50 text-xs">items</span>
+  </div>
 </td>
 
+<!-- VISIBILITY column -->
 <td class="px-6 py-4 text-[#112117]/70">
-<div class="flex items-center gap-1.5">
-<span class="material-symbols-outlined text-lg">
-{% if collection.visibility == "public" %}public{% else %}lock{% endif %}
-</span>
-{{ collection.visibility|title }}
-</div>
+  <div class="flex items-center gap-1.5">
+    <span class="material-symbols-outlined text-lg">
+      {% if collection.computed_visibility == "public" %}public{% else %}lock{% endif %}
+    </span>
+    {{ collection.computed_visibility|title }}
+  </div>
 </td>
+
 
 <td class="px-6 py-4 text-right">
 <div class="flex justify-end gap-1">
@@ -143,8 +150,9 @@ No collections found
 </table>
 </div>
 <div class="flex items-center justify-between border-t border-[#112117]/10 bg-gray-50 px-6 py-4">
-<span class="text-sm text-[#112117]/70">Showing {{ collections.start_index }} to {{ collections.end_index }}
-of {{ collections.paginator.count }} collections
+<span class="text-sm text-[#112117]/70">
+  {{ collections|length }} collection{{ collections|length|pluralize }}
+</span>
 
 <div class="flex gap-2">
 <button class="flex size-9 items-center justify-center rounded-lg border border-[#112117]/10 bg-white text-[#112117] hover:bg-[#112117] hover:text-white transition-colors disabled:opacity-50 shadow-sm">

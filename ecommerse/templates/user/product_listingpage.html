@@ -83,6 +83,23 @@
 </div>
 </header>
 <main class="flex-grow">
+    <!-- Page heading — works for both category and collection pages -->
+<section class="mx-auto max-w-7xl px-4 pt-8 pb-4 sm:px-6 lg:px-8">
+  <div class="flex items-center gap-2 text-sm text-gray-400 mb-3">
+    <a href="{% url 'home:home' %}" class="hover:text-dark-green transition-colors">Home</a>
+    <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+    <span class="text-dark-green font-medium">
+    {% if is_collection %}{{ category.name }}{% else %}{{ category.category_name }}{% endif %}
+    </span>
+  </div>
+  <h1 class="text-3xl md:text-4xl font-bold text-dark-green tracking-tight">
+  {% if is_collection %}{{ category.name }}{% else %}{{ category.category_name }}{% endif %}
+</h1>
+  {% if is_collection %}
+    <p class="mt-2 text-sm text-gray-500">{{ category.description }}</p>
+  {% endif %}
+  <p class="mt-1 text-sm text-gray-400">{{ products|length }} product{{ products|length|pluralize }}</p>
+</section>
 <section class="border-b border-gray-200 bg-white/50">
 <div class="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
 <div class="flex flex-wrap items-center justify-between gap-4">

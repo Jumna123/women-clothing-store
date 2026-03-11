@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+  <!-- copy the exact same <head> from your home.html -->
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Search — Elegance</title>
+  <link href="https://fonts.googleapis.com/css2?family=Spline+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#36e27b",
+            "background-light": "#f6f8f7",
+            "background-dark": "#112117",
+            "surface-dark": "#1c3326",
+          },
+          fontFamily: { "display": ["Spline Sans", "sans-serif"] },
+          borderRadius: {
+            "DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"
+          },
+        },
+      },
+    }
+  </script>
+  <style>
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Spline Sans', sans-serif; }
+    .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  </style>
+</head>
+<body class="bg-background-light dark:bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] dark:from-[#1a3023] dark:via-[#112117] dark:to-[#0b160f] text-slate-900 dark:text-white min-h-screen flex flex-col font-display selection:bg-primary selection:text-background-dark">
+
+<!-- paste your exact header from home.html here -->
+<header class="sticky top-0 z-50 w-full border-b border-[#254632] bg-background-dark/80 backdrop-blur-xl">
+  ... same header as home.html ...
+</header>
+
+<main class="flex-grow">
+  <section class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+
+    <div class="mb-8">
+      <h2 class="text-2xl md:text-3xl font-bold text-white tracking-tight">
+        {% if query %}
+          Search results for <span class="text-primary">"{{ query }}"</span>
+        {% else %}
+          Search Products
+        {% endif %}
+      </h2>
+      {% if products %}
+        <p class="mt-2 text-gray-400 text-sm">{{ products|length }} result{{ products|length|pluralize }} found</p>
+      {% endif %}
+    </div>
+
+    {% if not query %}
+      <p class="text-gray-400">Enter a search term above to find products.</p>
+
+    {% elif not products %}
+      <div class="text-center py-20">
+        <span class="material-symbols-outlined text-5xl text-gray-600">search_off</span>
+        <p class="mt-4 text-gray-400 text-lg">No products found for "{{ query }}"</p>
+        <a href="{% url 'home:home' %}" class="mt-6 inline-block rounded-full border border-gray-600 px-8 py-3 text-sm font-bold text-white hover:bg-white hover:text-background-dark transition-all">
+          Back to Home
+        </a>
+      </div>
+
+    {% else %}
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 gap-y-8 sm:gap-x-6 sm:gap-y-10">
+        {% for product in products %}
+        {% with image=product.images.first %}
+        <div class="group relative">
+          <a href="{% url 'home:product_detail' product.slug %}">
+            <div class="relative aspect-[3/4] w-full overflow-hidden rounded-2xl bg-gradient-to-b from-[#1c3326] to-[#15251c] shadow-md">
+              {% if image %}
+              <img src="{{ image.image.url }}" alt="{{ product.product_name }}"
+                   class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"/>
+              {% endif %}
+              <div class="absolute right-3 top-3 opacity-0 transition-opacity group-hover:opacity-100">
+                <a href="{% url 'home:add_to_wishlist' product.id %}"
+                   class="flex size-9 items-center justify-center rounded-full bg-white/90 text-background-dark shadow-sm hover:bg-white hover:text-red-500 transition-colors">
+                  <span class="material-symbols-outlined text-lg {% if product.id in wishlist_products %}text-red-500{% endif %}">favorite</span>
+                </a>
+              </div>
+            </div>
+          </a>
+          <div class="mt-4 flex flex-col sm:flex-row sm:justify-between sm:items-start gap-1">
+            <div>
+              <h3 class="text-sm md:text-base font-semibold text-white">{{ product.product_name }}</h3>
+              <p class="text-xs md:text-sm text-gray-400">{{ product.category.category_name }}</p>
+            </div>
+            <p class="text-sm md:text-base font-bold text-primary">₹{{ product.price }}</p>
+          </div>
+        </div>
+        {% endwith %}
+        {% endfor %}
+      </div>
+    {% endif %}
+
+  </section>
+</main>
+
+
+<section class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+  <div class="mb-8">
+    <h2 class="text-2xl md:text-3xl font-bold text-white tracking-tight">
+      {% if query %}
+        Search results for <span class="text-primary">"{{ query }}"</span>
+      {% else %}
+        Search Products
+      {% endif %}
+    </h2>
+    {% if products %}
+      <p class="mt-2 text-gray-400 text-sm">{{ products|length }} result{{ products|length|pluralize }} found</p>
+    {% endif %}
+  </div>
+
+  {% if not query %}
+    <p class="text-gray-400">Enter a search term above to find products.</p>
+  {% elif not products %}
+    <div class="text-center py-20">
+      <span class="material-symbols-outlined text-5xl text-gray-600">search_off</span>
+      <p class="mt-4 text-gray-400 text-lg">No products found for "{{ query }}"</p>
+      <a href="{% url 'home:home' %}" class="mt-6 inline-block rounded-full border border-gray-600 px-8 py-3 text-sm font-bold text-white hover:bg-white hover:text-background-dark transition-all">
+        Back to Home
+      </a>
+    </div>
+  {% else %}
+    <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 gap-y-8 sm:gap-x-6 sm:gap-y-10">
+      {% for product in products %}
+      {% with image=product.images.first %}
+      <div class="group relative">
+        <a href="{% url 'home:product_detail' product.slug %}">
+          <div class="relative aspect-[3/4] w-full overflow-hidden rounded-2xl bg-gradient-to-b from-[#1c3326] to-[#15251c] shadow-md">
+            {% if image %}
+            <img src="{{ image.image.url }}" alt="{{ product.product_name }}"
+                 class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"/>
+            {% endif %}
+            <div class="absolute right-3 top-3 opacity-0 transition-opacity group-hover:opacity-100">
+              <a href="{% url 'home:add_to_wishlist' product.id %}"
+                 class="flex size-9 items-center justify-center rounded-full bg-white/90 text-background-dark shadow-sm hover:bg-white hover:text-red-500 transition-colors">
+                <span class="material-symbols-outlined text-lg {% if product.id in wishlist_products %}text-red-500{% endif %}">favorite</span>
+              </a>
+            </div>
+          </div>
+        </a>
+        <div class="mt-4 flex flex-col sm:flex-row sm:justify-between sm:items-start gap-1">
+          <div>
+            <h3 class="text-sm md:text-base font-semibold text-white">{{ product.product_name }}</h3>
+            <p class="text-xs md:text-sm text-gray-400">{{ product.category.category_name }}</p>
+          </div>
+          <p class="text-sm md:text-base font-bold text-primary">₹{{ product.price }}</p>
+        </div>
+      </div>
+      {% endwith %}
+      {% endfor %}
+    </div>
+  {% endif %}
+</section>
+
+</body>
+</html>

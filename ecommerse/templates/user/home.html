@@ -55,11 +55,18 @@
 </div>
 <div class="hidden flex-1 px-4 md:px-8 md:flex max-w-md">
 <div class="relative w-full">
-<div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-primary/70">
-<span class="material-symbols-outlined text-xl">search</span>
-</div>
-<input class="block w-full rounded-full border-none bg-[#1c3326]/50 py-2.5 pl-11 pr-4 text-sm text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all hover:bg-[#1c3326]/80" placeholder="Search for styles, trends, etc..." type="text"/>
-</div>
+<form method="GET" action="{% url 'home:search_products' %}" class="relative w-full">
+  <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-primary/70">
+    <span class="material-symbols-outlined text-xl">search</span>
+  </div>
+  <input
+    name="q"
+    class="block w-full rounded-full border-none bg-[#1c3326]/50 py-2.5 pl-11 pr-4 text-sm text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all hover:bg-[#1c3326]/80"
+    placeholder="Search for styles, trends, etc..."
+    type="text"
+    autocomplete="off"
+  />
+</form>
 </div>
 <div class="flex items-center gap-2 md:gap-3">
 <button class="flex size-9 md:size-10 items-center justify-center rounded-full text-white hover:bg-[#1c3326] transition-colors md:hidden">
@@ -194,39 +201,30 @@
 <p class="mt-2 text-sm md:text-base text-gray-400">Handpicked selections just for you</p>
 </div>
 <div class="grid gap-6 md:grid-cols-3">
-    {% for collection in collections %}
-    <div class="group relative overflow-hidden rounded-2xl bg-surface-dark h-80 sm:h-96 shadow-lg hover:shadow-xl transition-shadow">
+  {% for collection in collections %}
+  <div class="group relative overflow-hidden rounded-2xl bg-surface-dark h-80 sm:h-96 shadow-lg hover:shadow-xl transition-shadow">
 
-        <!-- Background Image -->
-        {% if collection.image %}
-        <div class="absolute inset-0 z-0 h-full w-full bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
-             style="background-image: url('{{ collection.image.url }}');">
-        </div>
-        {% endif %}
-
-        <!-- Overlay -->
-        <div class="absolute inset-0 bg-gradient-to-t from-[#0b160f] via-[#0b160f]/30 to-transparent"></div>
-
-        <!-- Content -->
-        <div class="relative z-10 flex h-full flex-col justify-end p-6">
-            <h4 class="text-xl md:text-2xl font-bold text-white">
-                {{ collection.name }}
-            </h4>
-
-            <p class="mb-4 text-sm text-gray-300">
-                {{ collection.description }}
-            </p>
-
-            {% if collection.slug %}
-            <a href="{% url 'home:collection_products' collection.pk %}"
-            class="w-fit rounded-full bg-white/95 px-6 py-2 text-sm font-bold text-background-dark backdrop-blur-sm transition-all hover:bg-white hover:scale-105">
-                Explore
-            </a>
-            {% endif %}
-        </div>
-
+    {% if collection.image %}
+    <div class="absolute inset-0 z-0 h-full w-full bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
+         style="background-image: url('{{ collection.image.url }}');">
     </div>
-    {% endfor %}
+    {% endif %}
+
+    <div class="absolute inset-0 bg-gradient-to-t from-[#0b160f] via-[#0b160f]/30 to-transparent"></div>
+
+    <div class="relative z-10 flex h-full flex-col justify-end p-6">
+      <h4 class="text-xl md:text-2xl font-bold text-white">{{ collection.name }}</h4>
+      <p class="mb-4 text-sm text-gray-300">{{ collection.description }}</p>
+      <a href="{% url 'home:collection_products' collection.pk %}"
+         class="w-fit rounded-full bg-white/95 px-6 py-2 text-sm font-bold text-background-dark backdrop-blur-sm transition-all hover:bg-white hover:scale-105">
+        Explore
+      </a>
+    </div>
+
+  </div>
+  {% empty %}
+  <p class="col-span-3 text-center text-gray-400 py-10">No collections available right now.</p>
+  {% endfor %}
 </div>
 </div>
 </section>

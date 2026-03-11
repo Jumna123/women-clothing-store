@@ -20,14 +20,66 @@ class Category(models.Model):
         return self.category_name
 
 
+from django.utils import timezone
+
 class Collection(models.Model):
+    STATUS_CHOICES = [
+        ("published", "Published"),
+        ("draft", "Draft"),
+    ]
+    VISIBILITY_CHOICES = [
+        ("public", "Public"),
+        ("private", "Private"),
+    ]
+
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True)
     image = models.ImageField(upload_to="collections/", blank=True, null=True)
     is_active = models.BooleanField(default=True)
     publish_at = models.DateField(blank=True, null=True)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="draft")
+    visibility = models.CharField(max_length=20, choices=VISIBILITY_CHOICES, default="public")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    @property
+    def products_count(self):
+        return self.products.count()
+
+    @property
+    def computed_status(self):
+        """Auto-determine status based on publish_at date and is_active."""
+        if not self.is_active:
+            return "draft"
+        if self.publish_at and self.publish_at > timezone.now().date():
+            return "draft"  # scheduled for future
+        return "published"
+
+    @property
+    def computed_visibility(self):
+        """Auto-determine visibility."""
+        if not self.is_active:
+            return "private"
+        if self.publish_at and self.publish_at > timezone.now().date():
+            return "private"  # not yet visible
+        return "public"
+
+    @property
+    def is_scheduled(self):
+        return self.publish_at and self.publish_at > timezone.now().date()
+
+    def save(self, *args, **kwargs):
+        # ✅ auto-set status and visibility based on date and is_active
+        if not self.is_active:
+            self.status = "draft"
+            self.visibility = "private"
+        elif self.publish_at and self.publish_at > timezone.now().date():
+            self.status = "draft"
+            self.visibility = "private"
+        else:
+            self.status = "published"
+            self.visibility = "public"
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.name

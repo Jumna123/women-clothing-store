@@ -8,19 +8,24 @@ from apps.adminpanel.models import Product
 from django.http import JsonResponse
 from decimal import Decimal
 from apps.accounts.models import Address
-
-
+from django.db.models import Q
 
 def home(request):
-    from apps.adminpanel.models import Category
-    from apps.adminpanel.models import Collection
+    from apps.adminpanel.models import Category, Collection
+    from django.db.models import Count
+    
     categories = Category.objects.all()
-    collections=Collection.objects.all()
+    collections = Collection.objects.annotate(
+        num_products=Count('products')  # ← renamed to avoid clash
+    ).filter(
+        num_products__gt=0,
+        is_active=True
+    )
+    
     return render(request, "user/home.html", {
         "categories": categories,
-        "collections":collections
+        "collections": collections
     })
-
 
 
 def category_products(request, slug):
@@ -432,3 +437,30 @@ def order_detail(request, order_id):
         "order": order
     }) 
 
+def search_products(request):
+    query = request.GET.get('q', '').strip()
+    products = []
+
+    if query:
+        products = Product.objects.filter(
+            is_available=True
+        ).filter(
+            Q(product_name__icontains=query) |
+            Q(description__icontains=query) |
+            Q(category__category_name__icontains=query)
+        ).prefetch_related(
+            Prefetch('images', queryset=ProductImage.objects.filter(is_primary=True))
+        )
+
+    if request.user.is_authenticated:
+        wishlist_products = Wishlist.objects.filter(
+            user=request.user
+        ).values_list('product_id', flat=True)
+    else:
+        wishlist_products = []
+
+    return render(request, 'user/search_results.html', {
+        'query': query,
+        'products': products,
+        'wishlist_products': wishlist_products,
+    })
