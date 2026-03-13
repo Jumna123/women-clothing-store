@@ -3,162 +3,225 @@
 {% block title %}User Management{% endblock %}
 
 {% block content %}
-<main class="flex flex-col min-h-screen bg-gray-100">
+<div class="flex flex-col min-h-screen">
 
-    <!-- Header -->
-    <div class="bg-white border-b border-gray-200">
-        <div class="px-8 py-6 max-w-7xl mx-auto">
-            <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+   <!-- Header -->
+<div class="bg-white rounded-2xl shadow-sm border border-gray-100 mb-6">
+    <div class="px-8 py-6">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
 
-                <div>
-                    <h2 class="text-3xl font-bold text-gray-900">User Management</h2>
-                    <p class="text-sm text-gray-500">
-                        Manage registered users, monitor status, and control access permissions.
-                    </p>
-                </div>
-
-                <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
-
-                    <!-- Search -->
-                    <div class="relative w-full sm:w-72">
-                        <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
-                            search
-                        </span>
-                        <input
-                            type="text"
-                            placeholder="Search by name or email..."
-                            class="w-full pl-10 pr-3 py-2.5 text-sm border border-gray-300 rounded-lg focus:ring-primary focus:border-primary"
-                        />
-                    </div>
-
-                    <!-- Buttons -->
-                    <div class="flex gap-2">
-                        <button class="px-4 py-2.5 border rounded-lg text-sm hover:bg-gray-50 flex items-center gap-1">
-                            <span class="material-symbols-outlined text-[18px]">filter_list</span>
-                            Filter
-                        </button>
-                        <button class="px-4 py-2.5 bg-primary text-white rounded-lg text-sm hover:bg-primary-dark flex items-center gap-1">
-                            <span class="material-symbols-outlined text-[18px]">add</span>
-                            Add User
-                        </button>
-                    </div>
-
-                </div>
+            <div>
+                <h2 class="text-2xl font-bold text-gray-900">User Management</h2>
+                <p class="text-sm text-gray-500 mt-1">
+                    {{ total_users }} registered user{{ total_users|pluralize }} total
+                </p>
             </div>
-        </div>
-    </div>
 
-    <!-- Content -->
-    <div class="flex-1 overflow-y-auto p-8">
-        <div class="max-w-7xl mx-auto">
+            <!-- Single form wrapping BOTH search and filter -->
+            <form method="GET" action="" id="filterForm"
+                  class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
 
-            <div class="bg-white rounded-xl shadow border border-gray-200 overflow-hidden">
-
-                <!-- Table -->
-                <div class="overflow-x-auto">
-                    <table class="w-full text-sm text-left text-gray-600">
-                        <thead class="bg-gray-50 text-xs uppercase text-gray-700 border-b">
-                            <tr>
-                                <th class="px-6 py-4 w-1/4">User Name</th>
-                                <th class="px-6 py-4 w-1/4">Email Address</th>
-                                <th class="px-6 py-4 w-1/6">Joined Date</th>
-                                <th class="px-6 py-4 w-1/6">Status</th>
-                                <th class="px-6 py-4 w-1/6 text-right">Action</th>
-                            </tr>
-                        </thead>
-
-                        <tbody class="divide-y">
-
-{% for user in users %}
-<tr class="hover:bg-gray-50">
-
-    <!-- User Name -->
-    <td class="px-6 py-4">
-        <div class="flex items-center gap-3">
-            <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-xs font-semibold">
-                {{ users.first_name|slice:":1" }}{{ users.last_name|slice:":1" }}
-            </div>
-            {{ user.get_full_name|default:user.username }}
-        </div>
-    </td>
-
-    <!-- Email -->
-    <td class="px-6 py-4 text-primary truncate">
-        {{ user.email }}
-    </td>
-
-    <!-- Joined Date -->
-    <td class="px-6 py-4">
-        {{ user.date_joined|date:"M d, Y" }}
-    </td>
-
-    <!-- Status -->
-    <td class="px-6 py-4">
-        {% if user.is_active %}
-            <span class="inline-flex px-2.5 py-1 text-xs rounded-full bg-green-100 text-green-700">
-                Active
-            </span>
-        {% else %}
-            <span class="inline-flex px-2.5 py-1 text-xs rounded-full bg-red-100 text-red-700">
-                Blocked
-            </span>
-        {% endif %}
-    </td>
-
-    <!-- Action -->
-    <td class="px-6 py-4 text-right">
-        {% if user.is_active %}
-            <a href="{% url 'adminpanel:block_user' user.id %}"
-               class="text-gray-400 hover:text-red-600 flex justify-end items-center gap-1">
-                <span class="material-symbols-outlined">block</span>
-                <span class="hidden xl:inline">Block</span>
-            </a>
-        {% else %}
-            <a href="{% url 'adminpanel:activate_user' user.id %}"
-               class="text-primary hover:text-primary-dark flex justify-end items-center gap-1">
-                <span class="material-symbols-outlined">check_circle</span>
-                <span class="hidden xl:inline">Activate</span>
-            </a>
-        {% endif %}
-    </td>
-
-</tr>
-{% empty %}
-<tr>
-    <td colspan="5" class="px-6 py-8 text-center text-gray-500">
-        No users found
-    </td>
-</tr>
-{% endfor %}
-
-</tbody>
-
-                    </table>
-                </div>
-
-                <!-- Pagination -->
-                <div class="bg-gray-50 border-t px-6 py-4 flex items-center justify-between">
-                    <span class="text-sm text-gray-500 hidden sm:block">
-                        Showing <b>1–6</b> of <b>48</b> users
+                <!-- Search -->
+                <div class="relative w-full sm:w-72">
+                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-[20px]">
+                        search
                     </span>
-
-                    <div class="flex items-center gap-1">
-                        <button class="p-2 hover:bg-gray-200 rounded">
-                            <span class="material-symbols-outlined">chevron_left</span>
-                        </button>
-
-                        <button class="w-8 h-8 bg-primary text-white rounded">1</button>
-                        <button class="w-8 h-8 hover:bg-gray-200 rounded">2</button>
-                        <button class="w-8 h-8 hover:bg-gray-200 rounded">3</button>
-
-                        <button class="p-2 hover:bg-gray-200 rounded">
-                            <span class="material-symbols-outlined">chevron_right</span>
-                        </button>
-                    </div>
+                    <input
+                        type="text"
+                        name="q"
+                        value="{{ request.GET.q }}"
+                        placeholder="Search by name or email..."
+                        class="w-full pl-10 pr-3 py-2.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                    />
                 </div>
+
+                <!-- Filter -->
+                <select
+                    name="filter"
+                    onchange="document.getElementById('filterForm').submit()"
+                    class="px-4 py-2.5 border border-gray-300 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-primary cursor-pointer"
+                >
+                    <option value="" {% if not request.GET.filter %}selected{% endif %}>All Users</option>
+                    <option value="active" {% if request.GET.filter == 'active' %}selected{% endif %}>Active</option>
+                    <option value="blocked" {% if request.GET.filter == 'blocked' %}selected{% endif %}>Blocked</option>
+                </select>
+
+                <button type="submit" class="hidden"></button>
+
+            </form>
+
+        </div>
+
+        <!-- Active filter pills — now INSIDE the header card -->
+        {% if request.GET.q or request.GET.filter %}
+        <div class="flex items-center gap-2 mt-4 pt-4 border-t border-gray-100 flex-wrap">
+            <span class="text-xs text-gray-500">Active filters:</span>
+            {% if request.GET.q %}
+                <span class="inline-flex items-center gap-1 px-3 py-1 bg-primary/10 text-primary text-xs rounded-full">
+                    Search: "{{ request.GET.q }}"
+                    <a href="?{% if request.GET.filter %}filter={{ request.GET.filter }}{% endif %}" class="ml-1 hover:text-red-500 font-bold leading-none">×</a>
+                </span>
+            {% endif %}
+            {% if request.GET.filter %}
+                <span class="inline-flex items-center gap-1 px-3 py-1 bg-primary/10 text-primary text-xs rounded-full capitalize">
+                    {{ request.GET.filter }}
+                    <a href="?{% if request.GET.q %}q={{ request.GET.q }}{% endif %}" class="ml-1 hover:text-red-500 font-bold leading-none">×</a>
+                </span>
+            {% endif %}
+            <a href="?" class="text-xs text-gray-400 hover:text-red-500 underline ml-1">Clear all</a>
+        </div>
+        {% endif %}
+
+    </div>
+</div>
+    <!-- Table card -->
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm text-left text-gray-600">
+                <thead class="bg-gray-50 text-xs uppercase text-gray-500 tracking-wider border-b border-gray-100">
+                    <tr>
+                        <th class="px-6 py-4 font-medium">User</th>
+                        <th class="px-6 py-4 font-medium">Email</th>
+                        <th class="px-6 py-4 font-medium">Joined</th>
+                        <th class="px-6 py-4 font-medium">Status</th>
+                        <th class="px-6 py-4 font-medium text-right">Action</th>
+                    </tr>
+                </thead>
+
+                <tbody class="divide-y divide-gray-50">
+                    {% for user in users %}
+                    <tr class="hover:bg-gray-50 transition-colors">
+
+                        <!-- User -->
+                        <td class="px-6 py-4">
+                            <div class="flex items-center gap-3">
+                                <div class="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center text-xs font-bold text-primary shrink-0">
+                                    {% if user.first_name or user.last_name %}
+                                        {{ user.first_name|slice:":1"|upper }}{{ user.last_name|slice:":1"|upper }}
+                                    {% else %}
+                                        {{ user.username|slice:":1"|upper }}
+                                    {% endif %}
+                                </div>
+                                <div>
+                                    <p class="font-medium text-gray-900">{{ user.get_full_name|default:user.username }}</p>
+                                    <p class="text-xs text-gray-400">@{{ user.username }}</p>
+                                </div>
+                            </div>
+                        </td>
+
+                        <!-- Email -->
+                        <td class="px-6 py-4 text-gray-500">
+                            {{ user.email|default:"—" }}
+                        </td>
+
+                        <!-- Joined -->
+                        <td class="px-6 py-4 text-gray-500">
+                            {{ user.date_joined|date:"M d, Y" }}
+                        </td>
+
+                        <!-- Status -->
+                        <td class="px-6 py-4">
+                            {% if user.is_active %}
+                                <span class="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-medium rounded-full bg-green-100 text-green-700">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-green-500 inline-block"></span>
+                                    Active
+                                </span>
+                            {% else %}
+                                <span class="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-medium rounded-full bg-red-100 text-red-600">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-red-500 inline-block"></span>
+                                    Blocked
+                                </span>
+                            {% endif %}
+                        </td>
+
+                        <!-- Action -->
+                        <td class="px-6 py-4 text-right">
+                            {% if user.is_active %}
+                                <a href="{% url 'adminpanel:block_user' user.id %}"
+                                   class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+                                    <span class="material-symbols-outlined text-[16px]">block</span>
+                                    Block
+                                </a>
+                            {% else %}
+                                <a href="{% url 'adminpanel:activate_user' user.id %}"
+                                   class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-primary hover:bg-primary/10 rounded-lg transition-colors">
+                                    <span class="material-symbols-outlined text-[16px]">check_circle</span>
+                                    Activate
+                                </a>
+                            {% endif %}
+                        </td>
+
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="px-6 py-16 text-center">
+                            <div class="flex flex-col items-center gap-2 text-gray-400">
+                                <span class="material-symbols-outlined text-4xl">person_search</span>
+                                <p class="font-medium">No users found</p>
+                                {% if request.GET.q %}
+                                    <p class="text-sm">No results for "{{ request.GET.q }}"</p>
+                                {% endif %}
+                                <a href="?" class="mt-2 text-xs text-primary underline">Clear filters</a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        {% if users.has_other_pages %}
+        <div class="bg-gray-50 border-t border-gray-100 px-6 py-4 flex items-center justify-between">
+
+            <span class="text-sm text-gray-500 hidden sm:block">
+                Showing
+                <b>{{ users.start_index }}</b>–<b>{{ users.end_index }}</b>
+                of <b>{{ users.paginator.count }}</b> user{{ users.paginator.count|pluralize }}
+            </span>
+
+            <div class="flex items-center gap-1">
+
+                {% if users.has_previous %}
+                    <a href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}{% if request.GET.filter %}filter={{ request.GET.filter }}&{% endif %}page={{ users.previous_page_number }}"
+                       class="p-2 hover:bg-gray-200 rounded-lg transition-colors">
+                        <span class="material-symbols-outlined text-[20px]">chevron_left</span>
+                    </a>
+                {% else %}
+                    <span class="p-2 text-gray-300 cursor-not-allowed">
+                        <span class="material-symbols-outlined text-[20px]">chevron_left</span>
+                    </span>
+                {% endif %}
+
+                {% for num in users.paginator.page_range %}
+                    {% if users.number == num %}
+                        <span class="w-8 h-8 flex items-center justify-center bg-primary text-white rounded-lg text-sm font-medium">
+                            {{ num }}
+                        </span>
+                    {% elif num > users.number|add:"-3" and num < users.number|add:"3" %}
+                        <a href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}{% if request.GET.filter %}filter={{ request.GET.filter }}&{% endif %}page={{ num }}"
+                           class="w-8 h-8 flex items-center justify-center hover:bg-gray-200 rounded-lg text-sm transition-colors">
+                            {{ num }}
+                        </a>
+                    {% endif %}
+                {% endfor %}
+
+                {% if users.has_next %}
+                    <a href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}{% if request.GET.filter %}filter={{ request.GET.filter }}&{% endif %}page={{ users.next_page_number }}"
+                       class="p-2 hover:bg-gray-200 rounded-lg transition-colors">
+                        <span class="material-symbols-outlined text-[20px]">chevron_right</span>
+                    </a>
+                {% else %}
+                    <span class="p-2 text-gray-300 cursor-not-allowed">
+                        <span class="material-symbols-outlined text-[20px]">chevron_right</span>
+                    </span>
+                {% endif %}
 
             </div>
         </div>
+        {% endif %}
+
     </div>
-</main>
+</div>
 {% endblock %}
