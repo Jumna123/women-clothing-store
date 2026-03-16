@@ -15,14 +15,25 @@ from django.views.decorators.http import require_POST
 
 
 
+# Updated view (WITH search + filter) ✅
 def category(request):
-    categories = Category.objects.annotate(
-        product_count=Count('products')
-    )
+    q = request.GET.get('q', '').strip()
+    status = request.GET.get('status', '')
+
+    categories = Category.objects.annotate(product_count=Count('products'))
+
+    if q:
+        categories = categories.filter(category_name__icontains=q)
+
+    if status == 'active':
+        categories = categories.filter(is_active=True)
+    elif status == 'inactive':
+        categories = categories.filter(is_active=False)
+
     return render(request, "adminpanel/category.html", {
         "categories": categories
     })
-
+    
 @login_required
 def add_category(request):
     if request.method == "POST":

@@ -1,30 +1,37 @@
-from django.shortcuts import render,redirect, get_object_or_404
-from django.db.models import Prefetch
-from apps.adminpanel.models import Category, Product, ProductImage,Collection
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .models import Wishlist, Cart, Order, OrderItem
-from apps.adminpanel.models import Product
 from django.http import JsonResponse
+from django.db.models import Q, Prefetch
+from django.core.paginator import Paginator
+from django.views.decorators.http import require_POST  
 from decimal import Decimal
+from django.utils import timezone
+
+from apps.adminpanel.models import Category, Product, ProductImage, Collection
 from apps.accounts.models import Address
-from django.db.models import Q
+from .models import Wishlist, Cart, Order, OrderItem
+
 
 def home(request):
-    from apps.adminpanel.models import Category, Collection
+    from apps.adminpanel.models import Category, Collection, StoreSettings
     from django.db.models import Count
-    
+
     categories = Category.objects.all()
     collections = Collection.objects.annotate(
-        num_products=Count('products')  # ← renamed to avoid clash
+        num_products=Count('products')
     ).filter(
         num_products__gt=0,
         is_active=True
     )
-    
+
+    store_settings = StoreSettings.get_settings()
+    marquee_items = [item.strip() for item in store_settings.marquee_text.split('|')]
+
     return render(request, "user/home.html", {
         "categories": categories,
-        "collections": collections
+        "collections": collections,
+        "marquee_items": marquee_items,
     })
 
 
@@ -310,6 +317,7 @@ def product_detail(request, slug):
 
 
 from apps.accounts.models import Address
+from apps.adminpanel.models import StoreSettings
 
 @login_required(login_url='accounts:userlogin')
 def checkout(request):
@@ -321,16 +329,33 @@ def checkout(request):
         messages.warning(request, "Your cart is empty.")
         return redirect("home:cart_view")
 
+    store_settings = StoreSettings.get_settings()
+
     subtotal = sum(item.total_price() for item in cart_items)
     shipping = Decimal("0")
-    if subtotal > Decimal("0") and subtotal < Decimal("1000"):
-        shipping = Decimal("50")
+    if subtotal > Decimal("0") and subtotal < store_settings.free_shipping_threshold:
+        shipping = store_settings.standard_shipping_cost
     tax = subtotal * Decimal("0.05")
     total = subtotal + shipping + tax
 
-    # ✅ fetch saved addresses
     addresses = Address.objects.filter(user=request.user).order_by('-is_default', '-created_at')
     default_address = addresses.filter(is_default=True).first()
+
+    if request.method == 'POST':
+        address_id = request.POST.get('address_id')
+        delivery = request.POST.get('delivery', 'standard')
+
+        if not address_id:
+            messages.error(request, "Please select a delivery address.", extra_tags='checkout')
+            return redirect("home:checkout")
+
+        if not Address.objects.filter(id=address_id, user=request.user).exists():
+            messages.error(request, "Invalid address selected.", extra_tags='checkout')
+            return redirect("home:checkout")
+
+        request.session['checkout_address_id'] = address_id
+        request.session['checkout_delivery'] = delivery
+        return redirect('home:checkout_payment')
 
     return render(request, "user/checkout.html", {
         "cart_items": cart_items,
@@ -340,77 +365,78 @@ def checkout(request):
         "total": total,
         "addresses": addresses,
         "default_address": default_address,
+        "store_settings": store_settings,
     })
 
 
 @login_required(login_url='accounts:userlogin')
-def place_order(request):
-    if request.method != "POST":
-        return redirect("home:checkout")
+def checkout_payment(request):
+    address_id = request.session.get('checkout_address_id')
+    delivery = request.session.get('checkout_delivery', 'standard')
 
-    cart_items = Cart.objects.filter(user=request.user).select_related("product")
+    if not address_id:
+        messages.error(request, "Please complete your address first.", extra_tags='checkout')
+        return redirect('home:checkout')
+
+    address = get_object_or_404(Address, id=address_id, user=request.user)
+
+    cart_items = Cart.objects.filter(
+        user=request.user
+    ).select_related("product").prefetch_related("product__images")
 
     if not cart_items.exists():
-        messages.error(request, "Your cart is empty.")
+        messages.warning(request, "Your cart is empty.")
         return redirect("home:cart_view")
 
-    address_id = request.POST.get("address_id")
-    payment_method = request.POST.get("payment_method", "cod")
-
-    # ✅ if no saved address selected, create one from form fields
-    if not address_id:
-        full_name = request.POST.get("new_full_name", "").strip()
-        phone = request.POST.get("new_phone", "").strip()
-        house_name = request.POST.get("new_house_name", "").strip()
-        street = request.POST.get("new_street", "").strip()
-        city = request.POST.get("new_city", "").strip()
-        state = request.POST.get("new_state", "").strip()
-        pincode = request.POST.get("new_pincode", "").strip()
-
-        if not all([full_name, phone, house_name, street, city, state, pincode]):
-            messages.error(request, "Please fill in all address fields.")
-            return redirect("home:checkout")
-
-        address = Address.objects.create(
-            user=request.user,
-            full_name=full_name,
-            phone=phone,
-            house_name=house_name,
-            street=street,
-            city=city,
-            state=state,
-            pincode=pincode,
-            is_default=not Address.objects.filter(user=request.user).exists()
-        )
-    else:
-        address = get_object_or_404(Address, id=address_id, user=request.user)
+    store_settings = StoreSettings.get_settings()
 
     subtotal = sum(item.total_price() for item in cart_items)
     shipping = Decimal("0")
-    if subtotal > Decimal("0") and subtotal < Decimal("1000"):
-        shipping = Decimal("50")
+    if subtotal > Decimal("0") and subtotal < store_settings.free_shipping_threshold:
+        shipping = store_settings.standard_shipping_cost
+    if delivery == 'express':
+        shipping += store_settings.express_shipping_cost
     tax = subtotal * Decimal("0.05")
     total = subtotal + shipping + tax
 
-    order = Order.objects.create(
-        user=request.user,
-        total_amount=total,
-        status="pending",
-    )
+    if request.method == 'POST':
+        payment_method = request.POST.get('payment_method', 'cod')
 
-    for item in cart_items:
-        OrderItem.objects.create(
-            order=order,
-            product=item.product,
-            quantity=item.quantity,
-            price=item.product.discount_price or item.product.price,
-            size=item.size,
+        order = Order.objects.create(
+            user=request.user,
+            total_amount=total,
+            status="pending",
+            payment_method=payment_method,
         )
 
-    cart_items.delete()
+        for item in cart_items:
+            OrderItem.objects.create(
+                order=order,
+                product=item.product,
+                quantity=item.quantity,
+                price=item.product.discount_price or item.product.price,
+                size=item.size,
+            )
 
-    messages.success(request, f"Order #{order.id} placed successfully!")
-    return redirect("home:user_orders")
+        cart_items.delete()
+        request.session.pop('checkout_address_id', None)
+        request.session.pop('checkout_delivery', None)
+
+        messages.success(request, f"Order #{order.id} placed successfully!", extra_tags='checkout')
+        return redirect('home:user_orders')
+
+    return render(request, "user/payment.html", {
+        "address": address,
+        "delivery": delivery,
+        "cart_items": cart_items,
+        "subtotal": subtotal,
+        "shipping": shipping,
+        "tax": tax,
+        "total": total,
+        "store_settings": store_settings,
+    })
+
+
 
 @login_required
 def user_orders(request):
@@ -464,3 +490,26 @@ def search_products(request):
         'products': products,
         'wishlist_products': wishlist_products,
     })
+
+
+@login_required(login_url='accounts:userlogin')
+@require_POST
+def request_return(request, order_id):
+    order = get_object_or_404(Order, id=order_id, user=request.user)
+
+    if not order.can_return:
+        messages.error(request, "This order is not eligible for return.", extra_tags='checkout')
+        return redirect('home:order_detail', order_id=order_id)
+
+    reason = request.POST.get('return_reason', '').strip()
+    if not reason:
+        messages.error(request, "Please provide a reason for return.", extra_tags='checkout')
+        return redirect('home:order_detail', order_id=order_id)
+
+    order.status = 'return_requested'
+    order.return_reason = reason
+    order.return_requested_at = timezone.now()
+    order.save()
+
+    messages.success(request, "Return request submitted.", extra_tags='checkout')
+    return redirect('home:order_detail', order_id=order_id)

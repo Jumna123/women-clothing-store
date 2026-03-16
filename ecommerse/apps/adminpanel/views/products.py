@@ -6,10 +6,37 @@ from django.http import JsonResponse
 from ..forms import ProductForm
 
 
+from django.core.paginator import Paginator
+
 def product(request):
+    q = request.GET.get('q', '').strip()
+    category_id = request.GET.get('category', '')
+    stock_status = request.GET.get('stock', '')
+
     products = Product.objects.all().order_by('-created_at')
+
+    if q:
+        products = products.filter(product_name__icontains=q)
+
+    if category_id:
+        products = products.filter(category_id=category_id)
+
+    if stock_status == 'in_stock':
+        products = products.filter(is_available=True)
+    elif stock_status == 'out_of_stock':
+        products = products.filter(is_available=False)
+
+    paginator = Paginator(products, 10)  # 10 per page
+    page_number = request.GET.get('page', 1)
+    page_obj = paginator.get_page(page_number)
+
+    categories = Category.objects.filter(is_active=True)
+
     return render(request, "adminpanel/products.html", {
-        "products": products
+        "products": page_obj,
+        "page_obj": page_obj,
+        "categories": categories,
+        "total_count": paginator.count,
     })
 
 

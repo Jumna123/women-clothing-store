@@ -1,58 +1,272 @@
 {% extends "adminpanel/admin_base.html" %}
-{% block title %}Collection Management{% endblock %}
+{% block title %}Store Settings{% endblock %}
 {% block content %}
 
-<main class="flex-1 flex flex-col h-full overflow-y-auto bg-background-dark relative">
-<div class="w-full max-w-[1000px] mx-auto px-6 py-8 md:px-10 lg:px-14">
-<div class="bg-white rounded-xl shadow-lg shadow-black/5 border border-gray-100 overflow-hidden">
-<div class="p-6 md:p-8 border-b border-gray-100">
-<h2 class="text-3xl md:text-4xl font-bold text-text-dark mb-3 tracking-tight">General Settings</h2>
-<p class="text-text-secondary text-base max-w-2xl">Manage global configurations for your online store. Changes made here will affect customer experience immediately.</p>
+<div class="flex flex-col h-full bg-white rounded-2xl overflow-hidden shadow-lg shadow-black/10">
+<div class="h-full overflow-y-auto scrollbar-hide">
+<div class="w-full max-w-[900px] mx-auto px-6 py-8 md:px-10 flex flex-col gap-8">
+
+  <!-- Header -->
+  <div>
+    <h2 class="text-3xl font-black text-text-main tracking-tight">Store Settings</h2>
+    <p class="text-text-muted text-sm mt-1">Manage global configurations for your online store.</p>
+  </div>
+
+  {% if messages %}
+    {% for message in messages %}
+      <div class="px-4 py-3 rounded-xl text-sm font-semibold
+        {% if message.tags == 'error' %}bg-red-50 text-red-700 border border-red-200
+        {% else %}bg-green-50 text-green-700 border border-green-200{% endif %}">
+        {{ message }}
+      </div>
+    {% endfor %}
+  {% endif %}
+
+  <!-- General + Features Form -->
+  <form method="POST">
+    {% csrf_token %}
+    <input type="hidden" name="action" value="save_general"/>
+
+    <div class="bg-white rounded-2xl border border-[#d1e6d9] shadow-sm overflow-hidden">
+
+      <!-- Section header -->
+      <div class="px-8 py-5 border-b border-[#e7f3ec] bg-[#f8fcfa]">
+        <h3 class="text-base font-bold text-text-main flex items-center gap-2">
+          <span class="material-symbols-outlined text-primary text-[20px]">store</span>
+          General
+        </h3>
+      </div>
+
+      
+      <!-- Marquee Text -->
+      <div class="px-8 py-6 border-b border-[#e7f3ec]">
+        <label class="block text-sm font-semibold text-text-main mb-1">
+          Homepage Marquee Text
+        </label>
+        <p class="text-xs text-text-muted mb-3">Separate multiple messages with <code class="bg-gray-100 px-1 rounded">|</code> — e.g. <em>Free shipping | New arrivals | Use SAVE10</em></p>
+        <textarea
+          name="marquee_text"
+          rows="3"
+          class="w-full px-4 py-3 rounded-xl border border-[#d1e6d9] bg-[#f8fcfa] text-text-main text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition resize-none"
+        >{{ settings.marquee_text }}</textarea>
+      </div>
+
+      <!-- Shipping thresholds -->
+      <div class="px-8 py-6 border-b border-[#e7f3ec]">
+        <h4 class="text-sm font-bold text-text-main mb-4 flex items-center gap-2">
+          <span class="material-symbols-outlined text-primary text-[18px]">local_shipping</span>
+          Shipping Costs
+        </h4>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div>
+            <label class="block text-xs font-semibold text-text-muted mb-1">Free Shipping Above (₹)</label>
+            <input type="number" name="free_shipping_threshold" value="{{ settings.free_shipping_threshold }}"
+                   class="w-full h-10 px-3 rounded-xl border border-[#d1e6d9] bg-[#f8fcfa] text-text-main text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition"/>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-text-muted mb-1">Standard Shipping (₹)</label>
+            <input type="number" name="standard_shipping_cost" value="{{ settings.standard_shipping_cost }}"
+                   class="w-full h-10 px-3 rounded-xl border border-[#d1e6d9] bg-[#f8fcfa] text-text-main text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition"/>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-text-muted mb-1">Express Shipping (₹)</label>
+            <input type="number" name="express_shipping_cost" value="{{ settings.express_shipping_cost }}"
+                   class="w-full h-10 px-3 rounded-xl border border-[#d1e6d9] bg-[#f8fcfa] text-text-main text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition"/>
+          </div>
+        </div>
+      </div>
+
+      <!-- Toggles -->
+      <div class="px-8 py-5 border-b border-[#e7f3ec] bg-[#f8fcfa]">
+        <h4 class="text-sm font-bold text-text-main flex items-center gap-2">
+          <span class="material-symbols-outlined text-primary text-[18px]">tune</span>
+          Feature Toggles
+        </h4>
+      </div>
+
+      <!-- COD -->
+      <div class="px-8 py-5 border-b border-[#e7f3ec] flex items-center justify-between gap-6">
+        <div class="flex items-start gap-4">
+          <div class="h-10 w-10 rounded-lg bg-[#f0f9f4] flex items-center justify-center text-primary shrink-0">
+            <span class="material-symbols-outlined text-[20px]">payments</span>
+          </div>
+          <div>
+            <h3 class="text-sm font-semibold text-text-main">Cash on Delivery</h3>
+            <p class="text-xs text-text-muted mt-0.5">Allow customers to pay on delivery. Disable to force online payments only.</p>
+          </div>
+        </div>
+        <label class="relative inline-flex items-center cursor-pointer shrink-0">
+          <input type="checkbox" name="cod_enabled" class="sr-only peer" {% if settings.cod_enabled %}checked{% endif %}/>
+          <div class="w-12 h-7 bg-gray-200 rounded-full peer peer-checked:bg-primary peer-focus:ring-2 peer-focus:ring-primary/20 after:content-[''] after:absolute after:top-[3px] after:left-[3px] after:bg-white after:rounded-full after:h-[22px] after:w-[22px] after:transition-all peer-checked:after:translate-x-5"></div>
+          <span class="ml-2 text-xs font-semibold text-text-muted">{{ settings.cod_enabled|yesno:"Enabled,Disabled" }}</span>
+        </label>
+      </div>
+
+     
+
+      <!-- Discounts -->
+      <div class="px-8 py-5 flex items-center justify-between gap-6">
+        <div class="flex items-start gap-4">
+          <div class="h-10 w-10 rounded-lg bg-[#f0f9f4] flex items-center justify-center text-primary shrink-0">
+            <span class="material-symbols-outlined text-[20px]">percent</span>
+          </div>
+          <div>
+            <h3 class="text-sm font-semibold text-text-main">Global Discounts</h3>
+            <p class="text-xs text-text-muted mt-0.5">Master switch for all promotional codes and discount campaigns.</p>
+          </div>
+        </div>
+        <label class="relative inline-flex items-center cursor-pointer shrink-0">
+          <input type="checkbox" name="discounts_enabled" class="sr-only peer" {% if settings.discounts_enabled %}checked{% endif %}/>
+          <div class="w-12 h-7 bg-gray-200 rounded-full peer peer-checked:bg-primary peer-focus:ring-2 peer-focus:ring-primary/20 after:content-[''] after:absolute after:top-[3px] after:left-[3px] after:bg-white after:rounded-full after:h-[22px] after:w-[22px] after:transition-all peer-checked:after:translate-x-5"></div>
+          <span class="ml-2 text-xs font-semibold text-text-muted">{{ settings.discounts_enabled|yesno:"Enabled,Disabled" }}</span>
+        </label>
+      </div>
+
+    </div>
+
+    <!-- Save button -->
+    <div class="flex justify-end mt-4">
+      <button type="submit"
+              class="flex items-center gap-2 px-6 py-3 bg-primary hover:bg-primary-dark text-white text-sm font-bold rounded-xl shadow-lg shadow-primary/20 transition-all">
+        <span class="material-symbols-outlined text-[18px]">save</span>
+        Save Settings
+      </button>
+    </div>
+  </form>
+
+  <!-- Promo Codes Section -->
+  <div class="bg-white rounded-2xl border border-[#d1e6d9] shadow-sm overflow-hidden">
+
+    <div class="px-8 py-5 border-b border-[#e7f3ec] bg-[#f8fcfa] flex items-center justify-between">
+      <h3 class="text-base font-bold text-text-main flex items-center gap-2">
+        <span class="material-symbols-outlined text-primary text-[20px]">local_offer</span>
+        Promo Codes
+      </h3>
+      <span class="text-xs text-text-muted font-medium">{{ promo_codes.count }} code{{ promo_codes.count|pluralize }}</span>
+    </div>
+
+    <!-- Add new promo -->
+    <form method="POST" class="px-8 py-6 border-b border-[#e7f3ec] bg-white">
+      {% csrf_token %}
+      <input type="hidden" name="action" value="add_promo"/>
+      <p class="text-xs font-bold text-text-muted uppercase tracking-wider mb-4">Add New Code</p>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div>
+          <label class="block text-xs font-semibold text-text-muted mb-1">Code</label>
+          <input type="text" name="code" placeholder="e.g. SAVE20"
+                 class="w-full h-10 px-3 rounded-xl border border-[#d1e6d9] bg-[#f8fcfa] text-text-main text-sm uppercase focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition"/>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-text-muted mb-1">Discount %</label>
+          <input type="number" name="discount_percent" placeholder="e.g. 20" min="1" max="100"
+                 class="w-full h-10 px-3 rounded-xl border border-[#d1e6d9] bg-[#f8fcfa] text-text-main text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition"/>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-text-muted mb-1">Usage Limit (0=∞)</label>
+          <input type="number" name="usage_limit" placeholder="0" min="0"
+                 class="w-full h-10 px-3 rounded-xl border border-[#d1e6d9] bg-[#f8fcfa] text-text-main text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition"/>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-text-muted mb-1">Expires (optional)</label>
+          <input type="date" name="expires_at"
+                 class="w-full h-10 px-3 rounded-xl border border-[#d1e6d9] bg-[#f8fcfa] text-text-main text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition"/>
+        </div>
+      </div>
+      <div class="mt-4">
+        <button type="submit"
+                class="flex items-center gap-2 px-5 py-2.5 bg-[#112117] hover:bg-[#1c3326] text-white text-sm font-bold rounded-xl transition-colors">
+          <span class="material-symbols-outlined text-[16px]">add</span>
+          Add Code
+        </button>
+      </div>
+    </form>
+
+    <!-- Promo codes table -->
+    {% if promo_codes %}
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead class="bg-[#f8fcfa] border-b border-[#e7f3ec]">
+          <tr>
+            <th class="px-6 py-3 text-left text-xs font-bold text-text-muted uppercase tracking-wider">Code</th>
+            <th class="px-6 py-3 text-left text-xs font-bold text-text-muted uppercase tracking-wider">Discount</th>
+            <th class="px-6 py-3 text-left text-xs font-bold text-text-muted uppercase tracking-wider">Usage</th>
+            <th class="px-6 py-3 text-left text-xs font-bold text-text-muted uppercase tracking-wider">Expires</th>
+            <th class="px-6 py-3 text-left text-xs font-bold text-text-muted uppercase tracking-wider">Status</th>
+            <th class="px-6 py-3 text-right text-xs font-bold text-text-muted uppercase tracking-wider">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-[#e7f3ec]">
+          {% for promo in promo_codes %}
+          <tr class="hover:bg-[#f8fcfa] transition-colors">
+            <td class="px-6 py-4">
+              <span class="font-bold text-text-main font-mono tracking-wider">{{ promo.code }}</span>
+            </td>
+            <td class="px-6 py-4">
+              <span class="inline-flex items-center gap-1 text-primary font-bold">
+                <span class="material-symbols-outlined text-[14px]">percent</span>
+                {{ promo.discount_percent }}% off
+              </span>
+            </td>
+            <td class="px-6 py-4 text-text-muted text-xs">
+              {{ promo.used_count }} / {% if promo.usage_limit == 0 %}∞{% else %}{{ promo.usage_limit }}{% endif %}
+            </td>
+            <td class="px-6 py-4 text-text-muted text-xs">
+              {% if promo.expires_at %}{{ promo.expires_at|date:"M d, Y" }}{% else %}—{% endif %}
+            </td>
+            <td class="px-6 py-4">
+              {% if promo.is_valid %}
+                <span class="inline-flex items-center gap-1.5 rounded-full bg-green-100 px-2.5 py-1 text-xs font-semibold text-green-800">
+                  <span class="h-1.5 w-1.5 rounded-full bg-green-600"></span>Active
+                </span>
+              {% else %}
+                <span class="inline-flex items-center gap-1.5 rounded-full bg-gray-100 px-2.5 py-1 text-xs font-semibold text-gray-500">
+                  <span class="h-1.5 w-1.5 rounded-full bg-gray-400"></span>Inactive
+                </span>
+              {% endif %}
+            </td>
+            <td class="px-6 py-4 text-right">
+              <div class="flex items-center justify-end gap-2">
+                <!-- Toggle -->
+                <form method="POST" action="{% url 'adminpanel:toggle-promo' promo.pk %}">
+                  {% csrf_token %}
+                  <button type="submit"
+                          class="size-8 flex items-center justify-center rounded-full transition-colors
+                          {% if promo.is_active %}hover:bg-yellow-100 text-yellow-600{% else %}hover:bg-green-100 text-green-600{% endif %}"
+                          title="{% if promo.is_active %}Deactivate{% else %}Activate{% endif %}">
+                    <span class="material-symbols-outlined text-[18px]">
+                      {% if promo.is_active %}toggle_off{% else %}toggle_on{% endif %}
+                    </span>
+                  </button>
+                </form>
+                <!-- Delete -->
+                <form method="POST" action="{% url 'adminpanel:delete-promo' promo.pk %}"
+                      onsubmit="return confirm('Delete promo code {{ promo.code }}?');">
+                  {% csrf_token %}
+                  <button type="submit"
+                          class="size-8 flex items-center justify-center rounded-full hover:bg-red-100 text-red-500 transition-colors"
+                          title="Delete">
+                    <span class="material-symbols-outlined text-[18px]">delete</span>
+                  </button>
+                </form>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="px-8 py-10 text-center text-text-muted text-sm">
+      <span class="material-symbols-outlined text-4xl block mb-2 opacity-30">local_offer</span>
+      No promo codes yet. Add one above.
+    </div>
+    {% endif %}
+
+  </div>
+
+  <div class="h-6"></div>
 </div>
-<div class="p-6 md:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-gray-100 hover:bg-surface-light/30 transition-colors">
-<div class="flex items-start gap-5">
-<div class="h-12 w-12 rounded-lg bg-surface-hover flex items-center justify-center flex-shrink-0 text-primary">
-<span class="material-symbols-outlined text-2xl">assignment_return</span>
-</div>
-<div class="flex flex-col gap-1">
-<h3 class="text-lg font-semibold text-text-dark">Return Policy</h3>
-<p class="text-text-secondary text-sm leading-relaxed max-w-md">Enable or disable the customer return portal. When disabled, customers cannot initiate returns automatically.</p>
 </div>
 </div>
-<div class="flex items-center pl-16 md:pl-0">
-<label class="relative inline-flex items-center cursor-pointer group">
-<input checked="" class="sr-only peer" type="checkbox" value=""/>
-<div class="w-14 h-8 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[4px] after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-primary"></div>
-<span class="ml-3 text-sm font-medium text-text-secondary group-hover:text-text-dark transition-colors">Active</span>
-</label>
-</div>
-</div>
-<div class="p-6 md:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6 hover:bg-surface-light/30 transition-colors">
-<div class="flex items-start gap-5">
-<div class="h-12 w-12 rounded-lg bg-surface-hover flex items-center justify-center flex-shrink-0 text-primary">
-<span class="material-symbols-outlined text-2xl">percent</span>
-</div>
-<div class="flex flex-col gap-1">
-<h3 class="text-lg font-semibold text-text-dark">Global Discounts</h3>
-<p class="text-text-secondary text-sm leading-relaxed max-w-md">Master switch for promotional codes. Disabling this will pause all active discount campaigns store-wide.</p>
-</div>
-</div>
-<div class="flex items-center pl-16 md:pl-0">
-<label class="relative inline-flex items-center cursor-pointer group">
-<input class="sr-only peer" type="checkbox" value=""/>
-<div class="w-14 h-8 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[4px] after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-primary"></div>
-<span class="ml-3 text-sm font-medium text-text-secondary group-hover:text-text-dark transition-colors">Paused</span>
-</label>
-</div>
-</div>
-<div class="p-6 md:p-8 bg-surface-light/50 border-t border-gray-100 flex justify-end">
-<button class="relative flex items-center justify-center px-8 py-3 bg-primary hover:bg-primary-dark text-white text-base font-bold rounded-lg shadow-lg shadow-primary/30 transition-all duration-200 transform hover:-translate-y-0.5 focus:ring-4 focus:ring-primary/30">
-<span class="material-symbols-outlined mr-2 text-[20px]">save</span>
-                                Save Settings
-                            </button>
-</div>
-</div>
-</div>
-</main>
-</div>
-{%endblock%}
+
+{% endblock %}

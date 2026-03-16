@@ -1,304 +1,302 @@
 {% extends "adminpanel/admin_base.html" %}
-{% block title %}category Management{% endblock %}
+{% block title %}Order Management{% endblock %}
 {% block content %}
-<main class="flex-1 flex flex-col h-full bg-[#112117] relative overflow-hidden p-4 lg:p-8">
-<div class="flex-1 flex flex-col w-full h-full bg-white rounded-2xl shadow-xl overflow-hidden border border-[#d0e7d9]">
-<header class="flex-none px-8 pt-8 pb-4">
-<div class="flex flex-wrap justify-between items-center gap-4 mb-6">
-<div class="flex flex-col gap-1">
-<h1 class="text-text-dark text-3xl font-black leading-tight tracking-[-0.033em]">Order Management</h1>
-<p class="text-text-muted text-base font-normal">Track and manage your customer orders</p>
-</div>
-<button class="flex items-center justify-center gap-2 rounded-lg h-10 px-5 bg-primary hover:bg-primary-hover text-white text-sm font-bold shadow-md transition-all">
-<span class="material-symbols-outlined text-[20px]">download</span>
-<span>Export Orders</span>
-</button>
-</div>
-<div class="flex flex-col lg:flex-row gap-4 items-start lg:items-center justify-between border-b border-[#e7f3ec] pb-6">
-<label class="flex flex-col min-w-[320px] h-11 w-full lg:w-auto">
-<div class="flex w-full flex-1 items-stretch rounded-lg h-full border border-[#d0e7d9] overflow-hidden focus-within:ring-2 focus-within:ring-primary/20 transition-all">
-<div class="flex items-center justify-center pl-3 bg-white">
-<span class="material-symbols-outlined text-text-muted">search</span>
-</div>
-<input class="flex w-full min-w-0 flex-1 resize-none bg-white text-text-dark focus:outline-none h-full placeholder:text-text-muted/70 px-3 text-sm font-normal" placeholder="Search by Order ID, Customer Name or Email" value=""/>
-</div>
-</label>
-<div class="flex gap-2 flex-wrap">
-<button class="flex h-9 items-center gap-2 rounded-full border border-primary bg-primary text-white px-4 transition-all shadow-sm">
-<span class="material-symbols-outlined text-white text-[18px]">view_list</span>
-<span class="text-white text-sm font-medium">All Status</span>
-</button>
-<button class="flex h-9 items-center gap-2 rounded-full border border-[#d0e7d9] bg-white px-4 hover:bg-[#f6f8f7] transition-all">
-<span class="material-symbols-outlined text-text-muted text-[18px]">schedule</span>
-<span class="text-text-dark text-sm font-medium">Placed</span>
-</button>
-<button class="flex h-9 items-center gap-2 rounded-full border border-[#d0e7d9] bg-white px-4 hover:bg-[#f6f8f7] transition-all">
-<span class="material-symbols-outlined text-text-muted text-[18px]">local_shipping</span>
-<span class="text-text-dark text-sm font-medium">Shipped</span>
-</button>
-<button class="flex h-9 items-center gap-2 rounded-full border border-[#d0e7d9] bg-white px-4 hover:bg-[#f6f8f7] transition-all">
-<span class="material-symbols-outlined text-text-muted text-[18px]">check_circle</span>
-<span class="text-text-dark text-sm font-medium">Delivered</span>
-</button>
-<button class="flex h-9 items-center gap-2 rounded-full border border-[#d0e7d9] bg-white px-4 hover:bg-[#f6f8f7] transition-all">
-<span class="material-symbols-outlined text-text-muted text-[18px]">cancel</span>
-<span class="text-text-dark text-sm font-medium">Cancelled</span>
-</button>
-</div>
-</div>
-</header>
-<div class="flex-1 overflow-y-auto px-8 pb-8">
-<div class="w-full rounded-xl border border-[#d0e7d9] bg-white shadow-sm overflow-hidden">
-<table class="w-full">
-<thead class="bg-[#f8fcfa] border-b border-[#d0e7d9]">
-<tr>
-<th class="px-6 py-4 text-left text-xs font-bold text-text-muted uppercase tracking-wider">Order ID</th>
-<th class="px-6 py-4 text-left text-xs font-bold text-text-muted uppercase tracking-wider">Customer</th>
-<th class="px-6 py-4 text-left text-xs font-bold text-text-muted uppercase tracking-wider">Date</th>
-<th class="px-6 py-4 text-left text-xs font-bold text-text-muted uppercase tracking-wider">Total Amount</th>
-<th class="px-6 py-4 text-left text-xs font-bold text-text-muted uppercase tracking-wider">Status</th>
-<th class="px-6 py-4 text-right text-xs font-bold text-text-muted uppercase tracking-wider">Actions</th>
-</tr>
-</thead>
-<tbody class="divide-y divide-[#d0e7d9]">
-<tr class="hover:bg-[#f8fcfa] transition-colors group">
-<td class="px-6 py-4 whitespace-nowrap">
-<span class="text-primary font-bold cursor-pointer hover:underline">#ORD-7829</span>
-</td>
-<td class="px-6 py-4 whitespace-nowrap">
-<div class="flex items-center gap-3">
-<div class="h-9 w-9 rounded-full bg-gray-200 bg-cover bg-center" data-alt="Customer Sarah Jenkins profile" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAMq7u9jPA4CgNa16BDKAWO4U4Pp7oh3YiCqMXkJE1DCbNbN0WUMlWjuXVrOXxMWBPvp5FgiyV5JrUpYkrElgyh8Dq_z5J97OTeiSZy5POjFMHICUak3Z06iPiiCvZs3_7CiY8UtuqU_VEq9VHLqzuc2d-ZjeGbvOZgBSe_sGMVwQrBW-mOLn4J644cOiX9PYP2wJK2YDwW4Y6LGe9OSLASrId57_cVxVPBzIWbXkFixjhEQRb5lyYNUp0XncYKo0IdzhNdv4TGH5k");'></div>
-<div class="flex flex-col">
-<span class="text-sm font-medium text-text-dark">Sarah Jenkins</span>
-<span class="text-xs text-text-muted">sarah.j@example.com</span>
-</div>
-</div>
-</td>
-<td class="px-6 py-4 whitespace-nowrap">
-<span class="text-sm text-text-dark">Oct 24, 2023</span>
-</td>
-<td class="px-6 py-4 whitespace-nowrap">
-<span class="text-sm font-medium text-text-dark">$124.50</span>
-</td>
-<td class="px-6 py-4 whitespace-nowrap">
-<span class="inline-flex items-center gap-1.5 rounded-full bg-green-100 px-2.5 py-1 text-xs font-medium text-green-800">
-<span class="h-1.5 w-1.5 rounded-full bg-green-600"></span>
-                                        Delivered
-                                    </span>
-</td>
-<td class="px-6 py-4 whitespace-nowrap text-right">
-<button class="text-text-muted hover:text-primary transition-colors flex items-center justify-end gap-1 ml-auto text-sm font-medium">
-                                        View Details
-                                        <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
-</button>
-</td>
-</tr>
-<tr class="hover:bg-[#f8fcfa] transition-colors group">
-<td class="px-6 py-4 whitespace-nowrap">
-<span class="text-primary font-bold cursor-pointer hover:underline">#ORD-7830</span>
-</td>
-<td class="px-6 py-4 whitespace-nowrap">
-<div class="flex items-center gap-3">
-<div class="h-9 w-9 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 font-bold text-sm">
-                                            EC
-                                        </div>
-<div class="flex flex-col">
-<span class="text-sm font-medium text-text-dark">Emily Chen</span>
-<span class="text-xs text-text-muted">emily.c@example.com</span>
-</div>
-</div>
-</td>
-<td class="px-6 py-4 whitespace-nowrap">
-<span class="text-sm text-text-dark">Oct 24, 2023</span>
-</td>
-<td class="px-6 py-4 whitespace-nowrap">
-<span class="text-sm font-medium text-text-dark">$89.00</span>
-</td>
-<td class="px-6 py-4 whitespace-nowrap">
-<span class="inline-flex items-center gap-1.5 rounded-full bg-blue-100 px-2.5 py-1 text-xs font-medium text-blue-800">
-<span class="h-1.5 w-1.5 rounded-full bg-blue-600"></span>
-                                        Shipped
-                                    </span>
-</td>
-<td class="px-6 py-4 whitespace-nowrap text-right">
-<button class="text-text-muted hover:text-primary transition-colors flex items-center justify-end gap-1 ml-auto text-sm font-medium">
-                                        View Details
-                                        <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
-</button>
-</td>
-</tr>
-<tr class="hover:bg-[#f8fcfa] transition-colors group">
-<td class="px-6 py-4 whitespace-nowrap">
-<span class="text-primary font-bold cursor-pointer hover:underline">#ORD-7831</span>
-</td>
-<td class="px-6 py-4 whitespace-nowrap">
-<div class="flex items-center gap-3">
-<div class="h-9 w-9 rounded-full bg-gray-200 bg-cover bg-center" data-alt="Customer Jessica Alva profile" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAoL55T444Khfwv9w8QXEkCDdR9Zd7XW2j7neKhHyGVrw-AOcOKyqjS0L9DneUihYdprlSLsBr55fIX5KxWAvL8uvonXS_vaN0dL0ZlQAiuombifVu118YA8Kfx_pXJ_0otNwlf0fpIyR5DQwTsOdxeYvPYVu_5-eo30vjMkdnkNzqxx7s3cgv51xJp1AgVYVNghAYgoAeS6Qfc8a7_zkAsijKAKWvbfMKdkTrajyqT8-iDK5ytpNHarn-1TN_M6vPdPd6if92GXaQ");'></div>
-<div class="flex flex-col">
-<span class="text-sm font-medium text-text-dark">Jessica Alva</span>
-<span class="text-xs text-text-muted">jess.alva@example.com</span>
-</div>
-</div>
-</td>
-<td class="px-6 py-4 whitespace-nowrap">
-<span class="text-sm text-text-dark">Oct 23, 2023</span>
-</td>
-<td class="px-6 py-4 whitespace-nowrap">
-<span class="text-sm font-medium text-text-dark">$210.00</span>
-</td>
-<td class="px-6 py-4 whitespace-nowrap">
-<span class="inline-flex items-center gap-1.5 rounded-full bg-yellow-100 px-2.5 py-1 text-xs font-medium text-yellow-800">
-<span class="h-1.5 w-1.5 rounded-full bg-yellow-600"></span>
-                                        Placed
-                                    </span>
-</td>
-<td class="px-6 py-4 whitespace-nowrap text-right">
-<button class="text-text-muted hover:text-primary transition-colors flex items-center justify-end gap-1 ml-auto text-sm font-medium">
-                                        View Details
-                                        <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
-</button>
-</td>
-</tr>
-<tr class="hover:bg-[#f8fcfa] transition-colors group">
-<td class="px-6 py-4 whitespace-nowrap">
-<span class="text-primary font-bold cursor-pointer hover:underline">#ORD-7832</span>
-</td>
-<td class="px-6 py-4 whitespace-nowrap">
-<div class="flex items-center gap-3">
-<div class="h-9 w-9 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 font-bold text-sm">
-                                            AL
-                                        </div>
-<div class="flex flex-col">
-<span class="text-sm font-medium text-text-dark">Amanda Low</span>
-<span class="text-xs text-text-muted">amanda.low@example.com</span>
-</div>
-</div>
-</td>
-<td class="px-6 py-4 whitespace-nowrap">
-<span class="text-sm text-text-dark">Oct 23, 2023</span>
-</td>
-<td class="px-6 py-4 whitespace-nowrap">
-<span class="text-sm font-medium text-text-dark">$55.00</span>
-</td>
-<td class="px-6 py-4 whitespace-nowrap">
-<span class="inline-flex items-center gap-1.5 rounded-full bg-red-100 px-2.5 py-1 text-xs font-medium text-red-800">
-<span class="h-1.5 w-1.5 rounded-full bg-red-600"></span>
-                                        Cancelled
-                                    </span>
-</td>
-<td class="px-6 py-4 whitespace-nowrap text-right">
-<button class="text-text-muted hover:text-primary transition-colors flex items-center justify-end gap-1 ml-auto text-sm font-medium">
-                                        View Details
-                                        <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
-</button>
-</td>
-</tr>
-<tr class="hover:bg-[#f8fcfa] transition-colors group">
-<td class="px-6 py-4 whitespace-nowrap">
-<span class="text-primary font-bold cursor-pointer hover:underline">#ORD-7833</span>
-</td>
-<td class="px-6 py-4 whitespace-nowrap">
-<div class="flex items-center gap-3">
-<div class="h-9 w-9 rounded-full bg-gray-200 bg-cover bg-center" data-alt="Customer Rachel Green profile" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBJ8YVCkPYnxCtwmI3Vl-d9V_hnykVhzqOQm4-09tDCc8MnG3dOP9mtmkLRUet54Xasuud9lzTitu63ZmubrRhwjLH9OdmxmG_9Acs2OqhL9aYljfTW2c-sb-fFWVPoA7TlEmH6MXXAVfeYaPatQaFUz7ADIyUbOUCcsPezPgkUo4CeuDxlP6obmjWWwoba7RsfFQwRnQlLDHa3ODnMwvTKC3koCj_SwLr40Ll_HojUEf-9zNXXYkIq2ZPXvqahhJ2IxsRe9IdlYYg");'></div>
-<div class="flex flex-col">
-<span class="text-sm font-medium text-text-dark">Rachel Green</span>
-<span class="text-xs text-text-muted">rachel.green@example.com</span>
-</div>
-</div>
-</td>
-<td class="px-6 py-4 whitespace-nowrap">
-<span class="text-sm text-text-dark">Oct 22, 2023</span>
-</td>
-<td class="px-6 py-4 whitespace-nowrap">
-<span class="text-sm font-medium text-text-dark">$145.20</span>
-</td>
-<td class="px-6 py-4 whitespace-nowrap">
-<span class="inline-flex items-center gap-1.5 rounded-full bg-green-100 px-2.5 py-1 text-xs font-medium text-green-800">
-<span class="h-1.5 w-1.5 rounded-full bg-green-600"></span>
-                                        Delivered
-                                    </span>
-</td>
-<td class="px-6 py-4 whitespace-nowrap text-right">
-<button class="text-text-muted hover:text-primary transition-colors flex items-center justify-end gap-1 ml-auto text-sm font-medium">
-                                        View Details
-                                        <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
-</button>
-</td>
-</tr>
-<tr class="hover:bg-[#f8fcfa] transition-colors group">
-<td class="px-6 py-4 whitespace-nowrap">
-<span class="text-primary font-bold cursor-pointer hover:underline">#ORD-7834</span>
-</td>
-<td class="px-6 py-4 whitespace-nowrap">
-<div class="flex items-center gap-3">
-<div class="h-9 w-9 rounded-full bg-teal-100 flex items-center justify-center text-teal-600 font-bold text-sm">
-                                            MJ
-                                        </div>
-<div class="flex flex-col">
-<span class="text-sm font-medium text-text-dark">Monica Jones</span>
-<span class="text-xs text-text-muted">monica.j@example.com</span>
-</div>
-</div>
-</td>
-<td class="px-6 py-4 whitespace-nowrap">
-<span class="text-sm text-text-dark">Oct 22, 2023</span>
-</td>
-<td class="px-6 py-4 whitespace-nowrap">
-<span class="text-sm font-medium text-text-dark">$230.00</span>
-</td>
-<td class="px-6 py-4 whitespace-nowrap">
-<span class="inline-flex items-center gap-1.5 rounded-full bg-yellow-100 px-2.5 py-1 text-xs font-medium text-yellow-800">
-<span class="h-1.5 w-1.5 rounded-full bg-yellow-600"></span>
-                                        Placed
-                                    </span>
-</td>
-<td class="px-6 py-4 whitespace-nowrap text-right">
-<button class="text-text-muted hover:text-primary transition-colors flex items-center justify-end gap-1 ml-auto text-sm font-medium">
-                                        View Details
-                                        <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
-</button>
-</td>
-</tr>
-</tbody>
-</table>
-<div class="flex items-center justify-between border-t border-[#d0e7d9] bg-white px-4 py-3 sm:px-6">
-<div class="flex flex-1 justify-between sm:hidden">
-<a class="relative inline-flex items-center rounded-md border border-[#d0e7d9] bg-white px-4 py-2 text-sm font-medium text-text-dark hover:bg-gray-50" href="#">Previous</a>
-<a class="relative ml-3 inline-flex items-center rounded-md border border-[#d0e7d9] bg-white px-4 py-2 text-sm font-medium text-text-dark hover:bg-gray-50" href="#">Next</a>
-</div>
-<div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
-<div>
-<p class="text-sm text-text-muted">
-                              Showing
-                              <span class="font-medium text-text-dark">1</span>
-                              to
-                              <span class="font-medium text-text-dark">6</span>
-                              of
-                              <span class="font-medium text-text-dark">42</span>
-                              results
-                            </p>
-</div>
-<div>
-<nav aria-label="Pagination" class="isolate inline-flex -space-x-px rounded-md shadow-sm">
-<a class="relative inline-flex items-center rounded-l-md px-2 py-2 text-text-muted ring-1 ring-inset ring-[#d0e7d9] hover:bg-gray-50 focus:z-20 focus:outline-offset-0" href="#">
-<span class="sr-only">Previous</span>
-<span class="material-symbols-outlined text-[20px]">chevron_left</span>
+
+<div class="flex flex-col h-full bg-[#112117] rounded-2xl overflow-hidden">
+<div class="flex flex-col w-full h-full bg-white rounded-2xl shadow-xl overflow-hidden border border-[#d0e7d9]">
+
+  <!-- HEADER -->
+  <div class="flex-none px-8 pt-8 pb-6 border-b border-[#e7f3ec]">
+
+    <!-- Title row -->
+    <div class="flex flex-wrap justify-between items-center gap-4 mb-6">
+      <div>
+        <h1 class="text-[#112117] text-3xl font-black leading-tight tracking-[-0.033em]">Order Management</h1>
+        <p class="text-[#4e7a5e] text-sm font-normal mt-1">Track and manage your customer orders</p>
+      </div>
+<a href="{% url 'adminpanel:export-orders' %}?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}{% if current_status %}status={{ current_status }}{% endif %}"
+   class="flex items-center justify-center gap-2 rounded-xl h-10 px-5 bg-[#112117] hover:bg-[#1c3326] text-white text-sm font-bold shadow-md transition-all">
+  <span class="material-symbols-outlined text-[18px]">download</span>
+  <span>Export Orders</span>
 </a>
-<a aria-current="page" class="relative z-10 inline-flex items-center bg-primary px-4 py-2 text-sm font-semibold text-white focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary" href="#">1</a>
-<a class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-text-dark ring-1 ring-inset ring-[#d0e7d9] hover:bg-gray-50 focus:z-20 focus:outline-offset-0" href="#">2</a>
-<a class="relative hidden items-center px-4 py-2 text-sm font-semibold text-text-dark ring-1 ring-inset ring-[#d0e7d9] hover:bg-gray-50 focus:z-20 focus:outline-offset-0 md:inline-flex" href="#">3</a>
-<span class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-text-muted ring-1 ring-inset ring-[#d0e7d9] focus:outline-offset-0">...</span>
-<a class="relative hidden items-center px-4 py-2 text-sm font-semibold text-text-dark ring-1 ring-inset ring-[#d0e7d9] hover:bg-gray-50 focus:z-20 focus:outline-offset-0 md:inline-flex" href="#">8</a>
-<a class="relative inline-flex items-center rounded-r-md px-2 py-2 text-text-muted ring-1 ring-inset ring-[#d0e7d9] hover:bg-gray-50 focus:z-20 focus:outline-offset-0" href="#">
-<span class="sr-only">Next</span>
-<span class="material-symbols-outlined text-[20px]">chevron_right</span>
-</a>
-</nav>
+    </div>
+
+    <!-- Search + Filters -->
+    <form method="GET" class="flex flex-col lg:flex-row gap-3 items-start lg:items-center justify-between">
+
+      <!-- Search bar -->
+      <div class="w-full lg:max-w-md">
+        <div class="flex items-stretch h-11 rounded-xl border border-[#d0e7d9] bg-[#f8fcfa] overflow-hidden shadow-sm focus-within:ring-2 focus-within:ring-[#112117]/15 focus-within:border-[#112117]/30 transition-all">
+          <div class="flex items-center pl-4 text-[#4e7a5e]">
+            <span class="material-symbols-outlined text-[20px]">search</span>
+          </div>
+          <input
+            type="search"
+            name="q"
+            value="{{ request.GET.q }}"
+            class="flex-1 bg-transparent text-[#112117] text-sm placeholder:text-[#4e7a5e]/60 focus:outline-none px-3"
+            placeholder="Search orders, customers, emails..."
+          />
+          {% if request.GET.q %}
+            <a href="?{% if current_status %}status={{ current_status }}{% endif %}"
+               class="flex items-center px-3 text-[#4e7a5e] hover:text-[#112117] transition-colors">
+              <span class="material-symbols-outlined text-[18px]">close</span>
+            </a>
+          {% endif %}
+          <button type="submit"
+                  class="px-4 bg-[#112117] text-white text-xs font-bold hover:bg-[#1c3326] transition-colors tracking-wide">
+            SEARCH
+          </button>
+        </div>
+      </div>
+
+      <!-- Status pills -->
+      <div class="flex gap-2 flex-wrap">
+        <a href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}"
+           class="flex h-9 items-center gap-1.5 rounded-xl border px-3 text-xs font-semibold transition-all
+           {% if not current_status %}border-[#112117] bg-[#112117] text-white shadow-sm{% else %}border-[#d0e7d9] bg-white text-[#4e7a5e] hover:border-[#112117]/30 hover:text-[#112117]{% endif %}">
+          <span class="material-symbols-outlined text-[15px]">view_list</span> All
+        </a>
+        <a href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}status=pending"
+           class="flex h-9 items-center gap-1.5 rounded-xl border px-3 text-xs font-semibold transition-all
+           {% if current_status == 'pending' %}border-yellow-500 bg-yellow-500 text-white shadow-sm{% else %}border-[#d0e7d9] bg-white text-[#4e7a5e] hover:border-yellow-400 hover:text-yellow-700{% endif %}">
+          <span class="material-symbols-outlined text-[15px]">schedule</span> Pending
+        </a>
+        <a href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}status=processing"
+           class="flex h-9 items-center gap-1.5 rounded-xl border px-3 text-xs font-semibold transition-all
+           {% if current_status == 'processing' %}border-purple-500 bg-purple-500 text-white shadow-sm{% else %}border-[#d0e7d9] bg-white text-[#4e7a5e] hover:border-purple-400 hover:text-purple-700{% endif %}">
+          <span class="material-symbols-outlined text-[15px]">autorenew</span> Processing
+        </a>
+        <a href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}status=shipped"
+           class="flex h-9 items-center gap-1.5 rounded-xl border px-3 text-xs font-semibold transition-all
+           {% if current_status == 'shipped' %}border-blue-500 bg-blue-500 text-white shadow-sm{% else %}border-[#d0e7d9] bg-white text-[#4e7a5e] hover:border-blue-400 hover:text-blue-700{% endif %}">
+          <span class="material-symbols-outlined text-[15px]">local_shipping</span> Shipped
+        </a>
+        <a href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}status=delivered"
+           class="flex h-9 items-center gap-1.5 rounded-xl border px-3 text-xs font-semibold transition-all
+           {% if current_status == 'delivered' %}border-green-600 bg-green-600 text-white shadow-sm{% else %}border-[#d0e7d9] bg-white text-[#4e7a5e] hover:border-green-500 hover:text-green-700{% endif %}">
+          <span class="material-symbols-outlined text-[15px]">check_circle</span> Delivered
+        </a>
+        <a href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}status=return_requested"
+           class="flex h-9 items-center gap-1.5 rounded-xl border px-3 text-xs font-semibold transition-all
+           {% if current_status == 'return_requested' %}border-orange-500 bg-orange-500 text-white shadow-sm{% else %}border-[#d0e7d9] bg-white text-[#4e7a5e] hover:border-orange-400 hover:text-orange-600{% endif %}">
+          <span class="material-symbols-outlined text-[15px]">assignment_return</span> Returns
+        </a>
+        <a href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}status=cancelled"
+           class="flex h-9 items-center gap-1.5 rounded-xl border px-3 text-xs font-semibold transition-all
+           {% if current_status == 'cancelled' %}border-red-500 bg-red-500 text-white shadow-sm{% else %}border-[#d0e7d9] bg-white text-[#4e7a5e] hover:border-red-400 hover:text-red-600{% endif %}">
+          <span class="material-symbols-outlined text-[15px]">cancel</span> Cancelled
+        </a>
+      </div>
+    </form>
+
+    <!-- Results summary -->
+    {% if request.GET.q or current_status %}
+      <div class="mt-4 px-4 py-2 bg-[#f0f9f4] text-[#112117]/70 text-xs rounded-lg border border-[#d0e7d9] inline-flex items-center gap-2">
+        <span class="material-symbols-outlined text-[14px] text-[#4e7a5e]">info</span>
+        Showing <strong>{{ total_count }}</strong> order{{ total_count|pluralize }}
+        {% if request.GET.q %} matching <strong>"{{ request.GET.q }}"</strong>{% endif %}
+        {% if current_status %} &mdash; status: <strong>{{ current_status|title }}</strong>{% endif %}
+        <a href="{% url 'adminpanel:orders' %}" class="ml-1 text-[#112117] font-bold underline underline-offset-2">Clear</a>
+      </div>
+    {% endif %}
+
+  </div>
+
+  <!-- TABLE -->
+  <div class="flex-1 overflow-auto">
+    <table class="w-full text-sm min-w-[900px]">
+      <thead class="bg-[#f8fcfa] border-b border-[#d0e7d9] sticky top-0 z-10">
+        <tr>
+          <th class="px-6 py-4 text-left text-xs font-bold text-[#4e7a5e] uppercase tracking-wider whitespace-nowrap">Order ID</th>
+          <th class="px-6 py-4 text-left text-xs font-bold text-[#4e7a5e] uppercase tracking-wider">Customer</th>
+          <th class="px-6 py-4 text-left text-xs font-bold text-[#4e7a5e] uppercase tracking-wider whitespace-nowrap">Date</th>
+          <th class="px-6 py-4 text-left text-xs font-bold text-[#4e7a5e] uppercase tracking-wider whitespace-nowrap">Total</th>
+          <th class="px-6 py-4 text-left text-xs font-bold text-[#4e7a5e] uppercase tracking-wider">Status</th>
+          <th class="px-6 py-4 text-left text-xs font-bold text-[#4e7a5e] uppercase tracking-wider whitespace-nowrap">Update Status</th>
+          <th class="px-6 py-4 text-right text-xs font-bold text-[#4e7a5e] uppercase tracking-wider">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-[#e7f3ec] bg-white">
+
+        {% for order in orders %}
+        <tr class="hover:bg-[#f8fcfa] transition-colors">
+
+          <td class="px-6 py-4 whitespace-nowrap">
+            <span class="text-[#112117] font-bold text-sm">#ORD-{{ order.id }}</span>
+          </td>
+
+          <td class="px-6 py-4">
+            <div class="flex items-center gap-3">
+              <div class="h-9 w-9 rounded-full bg-[#d0e7d9] flex items-center justify-center text-[#112117] font-bold text-sm shrink-0">
+                {{ order.user.first_name|first|upper }}{{ order.user.last_name|first|upper }}
+              </div>
+              <div class="flex flex-col min-w-0">
+                <span class="text-sm font-semibold text-[#112117] truncate">{{ order.user.first_name }} {{ order.user.last_name }}</span>
+                <span class="text-xs text-[#4e7a5e] truncate">{{ order.user.email }}</span>
+              </div>
+            </div>
+          </td>
+
+          <td class="px-6 py-4 whitespace-nowrap">
+            <span class="text-sm text-[#112117]">{{ order.created_at|date:"M d, Y" }}</span>
+          </td>
+
+          <td class="px-6 py-4 whitespace-nowrap">
+            <span class="text-sm font-semibold text-[#112117]">₹{{ order.total_amount }}</span>
+          </td>
+
+          <td class="px-6 py-4 whitespace-nowrap">
+            {% if order.status == 'delivered' %}
+              <span class="inline-flex items-center gap-1.5 rounded-full bg-green-100 px-2.5 py-1 text-xs font-semibold text-green-800">
+                <span class="h-1.5 w-1.5 rounded-full bg-green-600"></span>Delivered
+              </span>
+            {% elif order.status == 'shipped' %}
+              <span class="inline-flex items-center gap-1.5 rounded-full bg-blue-100 px-2.5 py-1 text-xs font-semibold text-blue-800">
+                <span class="h-1.5 w-1.5 rounded-full bg-blue-600"></span>Shipped
+              </span>
+            {% elif order.status == 'pending' %}
+              <span class="inline-flex items-center gap-1.5 rounded-full bg-yellow-100 px-2.5 py-1 text-xs font-semibold text-yellow-800">
+                <span class="h-1.5 w-1.5 rounded-full bg-yellow-500"></span>Pending
+              </span>
+            {% elif order.status == 'processing' %}
+              <span class="inline-flex items-center gap-1.5 rounded-full bg-purple-100 px-2.5 py-1 text-xs font-semibold text-purple-800">
+                <span class="h-1.5 w-1.5 rounded-full bg-purple-500"></span>Processing
+              </span>
+            {% elif order.status == 'return_requested' %}
+              <span class="inline-flex items-center gap-1.5 rounded-full bg-orange-100 px-2.5 py-1 text-xs font-semibold text-orange-800">
+                <span class="h-1.5 w-1.5 rounded-full bg-orange-500"></span>Return Req.
+              </span>
+            {% elif order.status == 'returned' %}
+              <span class="inline-flex items-center gap-1.5 rounded-full bg-gray-100 px-2.5 py-1 text-xs font-semibold text-gray-600">
+                <span class="h-1.5 w-1.5 rounded-full bg-gray-400"></span>Returned
+              </span>
+            {% elif order.status == 'cancelled' %}
+              <span class="inline-flex items-center gap-1.5 rounded-full bg-red-100 px-2.5 py-1 text-xs font-semibold text-red-800">
+                <span class="h-1.5 w-1.5 rounded-full bg-red-500"></span>Cancelled
+              </span>
+            {% endif %}
+          </td>
+
+          <td class="px-6 py-4 whitespace-nowrap">
+            {% if order.status != 'return_requested' and order.status != 'returned' and order.status != 'cancelled' %}
+              <form method="POST" action="{% url 'adminpanel:update-order-status' order.id %}">
+                {% csrf_token %}
+                <div class="flex items-center gap-2">
+                  <select name="status"
+                          class="text-xs rounded-lg border border-[#d0e7d9] px-2 py-1.5 text-[#112117] focus:outline-none focus:ring-2 focus:ring-[#112117]/20 bg-white">
+                    {% for value, label in status_choices %}
+                      {% if value != 'return_requested' and value != 'returned' %}
+                        <option value="{{ value }}" {% if order.status == value %}selected{% endif %}>{{ label }}</option>
+                      {% endif %}
+                    {% endfor %}
+                  </select>
+                  <button type="submit"
+                          class="text-xs px-3 py-1.5 rounded-lg bg-[#112117] text-white hover:bg-[#1c3326] transition-colors font-semibold whitespace-nowrap">
+                    Update
+                  </button>
+                </div>
+              </form>
+            {% elif order.status == 'return_requested' %}
+              <div class="flex gap-2">
+                <form method="POST" action="{% url 'adminpanel:handle-return' order.id %}">
+                  {% csrf_token %}
+                  <input type="hidden" name="action" value="approve"/>
+                  <button type="submit" class="text-xs px-3 py-1.5 rounded-lg bg-green-600 text-white hover:bg-green-700 transition-colors font-semibold">
+                    Approve
+                  </button>
+                </form>
+                <form method="POST" action="{% url 'adminpanel:handle-return' order.id %}">
+                  {% csrf_token %}
+                  <input type="hidden" name="action" value="reject"/>
+                  <button type="submit" class="text-xs px-3 py-1.5 rounded-lg bg-red-100 text-red-700 hover:bg-red-200 transition-colors font-semibold">
+                    Reject
+                  </button>
+                </form>
+              </div>
+            {% else %}
+              <span class="text-xs text-[#4e7a5e]">—</span>
+            {% endif %}
+          </td>
+
+          <td class="px-6 py-4 whitespace-nowrap text-right">
+            <div class="flex items-center justify-end gap-2">
+              {% if order.return_reason %}
+                <span class="text-xs text-orange-600 font-medium bg-orange-50 border border-orange-200 rounded-lg px-2 py-1 max-w-[120px] truncate"
+                      title="{{ order.return_reason }}">
+                  {{ order.return_reason|truncatechars:20 }}
+                </span>
+              {% endif %}
+              <a href="#"
+                 class="inline-flex items-center gap-1 text-xs font-semibold text-[#4e7a5e] hover:text-[#112117] transition-colors px-3 py-1.5 rounded-lg hover:bg-[#f0f9f4] border border-transparent hover:border-[#d0e7d9]">
+                View
+                <span class="material-symbols-outlined text-[15px]">arrow_forward</span>
+              </a>
+            </div>
+          </td>
+
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="7" class="text-center py-16 text-[#4e7a5e]">
+            <span class="material-symbols-outlined text-5xl block mb-3 opacity-40">receipt_long</span>
+            <p class="font-semibold text-[#112117]/50">No orders found</p>
+            {% if request.GET.q or current_status %}
+              <a href="{% url 'adminpanel:orders' %}" class="mt-2 inline-block text-xs text-[#112117] underline underline-offset-2">Clear filters</a>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+
+      </tbody>
+    </table>
+  </div>
+
+  <!-- PAGINATION -->
+  {% if page_obj.paginator.num_pages > 1 %}
+  <div class="flex-none flex items-center justify-between border-t border-[#d0e7d9] bg-[#f8fcfa] px-6 py-3">
+    <p class="text-xs text-[#4e7a5e]">
+      Showing <span class="font-bold text-[#112117]">{{ page_obj.start_index }}</span>–<span class="font-bold text-[#112117]">{{ page_obj.end_index }}</span>
+      of <span class="font-bold text-[#112117]">{{ total_count }}</span> orders
+    </p>
+    <nav class="isolate inline-flex -space-x-px rounded-xl overflow-hidden shadow-sm border border-[#d0e7d9]">
+      {% if page_obj.has_previous %}
+        <a href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}{% if current_status %}status={{ current_status }}&{% endif %}page={{ page_obj.previous_page_number }}"
+           class="inline-flex items-center px-3 py-2 bg-white text-[#4e7a5e] hover:bg-[#f0f9f4] transition-colors border-r border-[#d0e7d9]">
+          <span class="material-symbols-outlined text-[18px]">chevron_left</span>
+        </a>
+      {% else %}
+        <span class="inline-flex items-center px-3 py-2 bg-white text-gray-300 cursor-not-allowed border-r border-[#d0e7d9]">
+          <span class="material-symbols-outlined text-[18px]">chevron_left</span>
+        </span>
+      {% endif %}
+
+      {% for num in page_obj.paginator.page_range %}
+        {% if page_obj.number == num %}
+          <span class="inline-flex items-center px-4 py-2 bg-[#112117] text-white text-xs font-bold border-r border-[#d0e7d9]">{{ num }}</span>
+        {% elif num == 1 or num == page_obj.paginator.num_pages or num >= page_obj.number|add:"-2" and num <= page_obj.number|add:"2" %}
+          <a href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}{% if current_status %}status={{ current_status }}&{% endif %}page={{ num }}"
+             class="inline-flex items-center px-4 py-2 bg-white text-[#112117] text-xs font-semibold hover:bg-[#f0f9f4] transition-colors border-r border-[#d0e7d9]">{{ num }}</a>
+        {% elif num == page_obj.number|add:"-3" or num == page_obj.number|add:"3" %}
+          <span class="inline-flex items-center px-3 py-2 bg-white text-[#4e7a5e] text-xs border-r border-[#d0e7d9]">…</span>
+        {% endif %}
+      {% endfor %}
+
+      {% if page_obj.has_next %}
+        <a href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}{% if current_status %}status={{ current_status }}&{% endif %}page={{ page_obj.next_page_number }}"
+           class="inline-flex items-center px-3 py-2 bg-white text-[#4e7a5e] hover:bg-[#f0f9f4] transition-colors">
+          <span class="material-symbols-outlined text-[18px]">chevron_right</span>
+        </a>
+      {% else %}
+        <span class="inline-flex items-center px-3 py-2 bg-white text-gray-300 cursor-not-allowed">
+          <span class="material-symbols-outlined text-[18px]">chevron_right</span>
+        </span>
+      {% endif %}
+    </nav>
+  </div>
+  {% endif %}
+
 </div>
 </div>
-</div>
-</div>
-</div>
-</div></main>
-</div>
+
 {% endblock %}

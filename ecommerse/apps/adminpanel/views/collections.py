@@ -7,12 +7,31 @@ import base64
 from django.core.files.base import ContentFile
 
 
-def collections(request):
-    collections = Collection.objects.prefetch_related('products').all()
-    return render(request, "adminpanel/collections.html", {
-        "collections": collections
-    })
+from django.core.paginator import Paginator
 
+def collections(request):
+    q = request.GET.get('q', '').strip()
+    status = request.GET.get('status', '')
+
+    collections_qs = Collection.objects.prefetch_related('products').all()
+
+    if q:
+        collections_qs = collections_qs.filter(name__icontains=q)
+
+    if status == 'active':
+        collections_qs = collections_qs.filter(is_active=True, status='published')
+    elif status == 'draft':
+        collections_qs = collections_qs.filter(status='draft')
+
+    paginator = Paginator(collections_qs, 10)
+    page_number = request.GET.get('page', 1)
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, "adminpanel/collections.html", {
+        "collections": page_obj,
+        "page_obj": page_obj,
+        "total_count": paginator.count,
+    })
 
 from django.utils import timezone
 

@@ -1,0 +1,318 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Payment — vólke shoppe</title>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#064e3b",
+            "primary-hover": "#065f46",
+            "brand-bg": "#f8faf9",
+            "card-bg": "#ffffff",
+            "card-accent": "#f9fafb",
+            "text-main": "#064e3b",
+            "text-secondary": "#374151",
+            "border-color": "#d1fae5"
+          },
+          fontFamily: { "display": ["Manrope", "sans-serif"] },
+        },
+      },
+    }
+  </script>
+  <style>
+    .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    body { font-family: 'Manrope', sans-serif; }
+    .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #d1fae5; border-radius: 4px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #064e3b; }
+  </style>
+</head>
+<body class="antialiased bg-brand-bg text-text-main">
+
+<div class="flex min-h-screen flex-col">
+
+  <!-- HEADER -->
+  <header class="sticky top-0 z-50 bg-[#1e4433]">
+    <div class="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+
+      <!-- Logo -->
+      <div style="display:flex;flex-direction:column;line-height:1;">
+        <span style="font-family:'Georgia','Times New Roman',serif;font-size:22px;font-weight:700;letter-spacing:0.15em;color:#ffffff;">vólke</span>
+        <span style="font-size:8px;letter-spacing:0.18em;color:#ffffff;text-transform:uppercase;">shoppe</span>
+      </div>
+
+      <!-- Progress Stepper -->
+      <div class="flex items-center">
+
+        <!-- Step 1: Bag (completed) -->
+        <a href="{% url 'home:cart_view' %}" class="flex flex-col items-center gap-1 min-w-[72px]">
+          <div class="flex size-8 items-center justify-center rounded-full bg-green-600 text-white shadow">
+            <span class="material-symbols-outlined text-[18px]">check</span>
+          </div>
+          <span class="text-[10px] font-semibold text-green-400 tracking-wider uppercase">Bag</span>
+        </a>
+
+        <div class="w-16 h-[2px] bg-green-600 mx-2"></div>
+
+        <!-- Step 2: Delivery (completed) -->
+        <a href="{% url 'home:checkout' %}" class="flex flex-col items-center gap-1 min-w-[88px]">
+          <div class="flex size-8 items-center justify-center rounded-full bg-green-600 text-white shadow">
+            <span class="material-symbols-outlined text-[18px]">check</span>
+          </div>
+          <span class="text-[10px] font-semibold text-green-400 tracking-wider uppercase">Delivery</span>
+        </a>
+
+        <div class="w-16 h-[2px] bg-green-600 mx-2"></div>
+
+        <!-- Step 3: Payment (active) -->
+        <div class="flex flex-col items-center gap-1 min-w-[72px]">
+          <div class="flex size-8 items-center justify-center rounded-full bg-[#36e27b] text-[#112117] shadow">
+            <span class="material-symbols-outlined text-[18px]">payments</span>
+          </div>
+          <span class="text-[10px] font-bold text-white tracking-wider uppercase">Payment</span>
+        </div>
+
+      </div>
+
+      <div class="shrink-0 w-[120px] hidden md:flex items-center justify-end gap-1 text-xs text-green-300 font-medium">
+        <span class="material-symbols-outlined text-[14px]">lock</span>
+        Secure Checkout
+      </div>
+
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main class="flex-1 px-4 py-10 md:px-10 lg:px-20 xl:px-32">
+    <div class="mx-auto max-w-7xl">
+
+      {% if messages %}
+        {% for message in messages %}
+          {% if 'checkout' in message.tags or 'error' in message.tags %}
+            <div class="mb-6 px-4 py-3 rounded-xl text-sm font-semibold
+              {% if message.tags == 'error checkout' %}bg-red-50 text-red-700 border border-red-200
+              {% else %}bg-green-50 text-green-700 border border-green-200{% endif %}">
+              {{ message }}
+            </div>
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+
+      <form method="POST" action="{% url 'home:checkout_payment' %}">
+        {% csrf_token %}
+
+        <div class="flex flex-col gap-8 lg:flex-row lg:items-start">
+
+          <!-- LEFT: PAYMENT + DELIVERY SUMMARY -->
+          <div class="flex flex-1 flex-col gap-6">
+
+            <!-- Delivery Summary (read-only) -->
+            <div class="rounded-xl border border-border-color bg-card-bg shadow-sm overflow-hidden">
+              <div class="flex items-center justify-between bg-card-accent px-5 py-4 border-b border-border-color">
+                <div class="flex items-center gap-3">
+                  <div class="flex size-7 items-center justify-center rounded-full bg-green-600 text-white">
+                    <span class="material-symbols-outlined text-[15px]">check</span>
+                  </div>
+                  <h2 class="text-sm font-bold text-primary uppercase tracking-wider">Delivering to</h2>
+                </div>
+                <a href="{% url 'home:checkout' %}" class="text-xs font-semibold text-primary hover:underline flex items-center gap-1">
+                  <span class="material-symbols-outlined text-[14px]">edit</span> Change
+                </a>
+              </div>
+              <div class="px-5 py-4 flex flex-col gap-1">
+                <p class="font-bold text-primary text-sm">{{ address.full_name }}</p>
+                <p class="text-sm text-text-secondary">{{ address.house_name }}, {{ address.street }}</p>
+                <p class="text-sm text-text-secondary">{{ address.city }}, {{ address.state }} — {{ address.pincode }}</p>
+                <p class="text-sm text-text-secondary flex items-center gap-1 mt-1">
+                  <span class="material-symbols-outlined text-[14px]">call</span>
+                  {{ address.phone }}
+                </p>
+                <div class="mt-2 inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary w-fit">
+                  <span class="material-symbols-outlined text-[13px]">local_shipping</span>
+                  {% if delivery == 'express' %}Express Delivery (1–2 days){% else %}Standard Delivery (3–5 days){% endif %}
+                </div>
+              </div>
+            </div>
+
+            <!-- Payment Method -->
+            <div class="rounded-xl border border-border-color bg-card-bg shadow-sm overflow-hidden">
+              <div class="flex items-center gap-3 bg-card-accent px-5 py-4 border-b border-border-color">
+                <span class="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-sm font-bold text-white">3</span>
+                <h2 class="text-lg font-bold text-primary">Payment Method</h2>
+              </div>
+              <div class="p-5 space-y-3">
+
+                <!-- COD -->
+                <label class="flex cursor-pointer items-center justify-between rounded-xl border-2 p-4 transition-all
+                  {% if store_settings.cod_enabled %}
+                    border-transparent bg-gray-50 hover:border-primary/30 has-[:checked]:border-primary has-[:checked]:bg-primary/5
+                  {% else %}
+                    border-transparent bg-gray-50 opacity-40 cursor-not-allowed select-none
+                  {% endif %}">
+                  <div class="flex items-center gap-4">
+                    <div class="flex size-10 items-center justify-center rounded-full bg-primary/10 text-primary shrink-0">
+                      <span class="material-symbols-outlined text-[20px]">payments</span>
+                    </div>
+                    <div>
+                      <p class="font-bold text-primary text-sm">Cash on Delivery</p>
+                      <p class="text-xs text-text-secondary mt-0.5">Pay when your order arrives at your door</p>
+                      {% if not store_settings.cod_enabled %}
+                        <p class="text-xs text-red-400 font-semibold mt-1">Currently unavailable</p>
+                      {% endif %}
+                    </div>
+                  </div>
+                  <input name="payment_method" type="radio" value="cod"
+                         class="text-primary focus:ring-primary"
+                         {% if store_settings.cod_enabled %}checked{% endif %}
+                         {% if not store_settings.cod_enabled %}disabled{% endif %}/>
+                </label>
+
+                <!-- Online Payment -->
+                <label class="flex cursor-pointer items-center justify-between rounded-xl border-2 border-transparent bg-gray-50 p-4 transition-all hover:border-primary/30 has-[:checked]:border-primary has-[:checked]:bg-primary/5">
+                  <div class="flex items-center gap-4">
+                    <div class="flex size-10 items-center justify-center rounded-full bg-primary/10 text-primary shrink-0">
+                      <span class="material-symbols-outlined text-[20px]">credit_card</span>
+                    </div>
+                    <div>
+                      <p class="font-bold text-primary text-sm">Pay Online</p>
+                      <p class="text-xs text-text-secondary mt-0.5">Credit / Debit card via Stripe — secure &amp; instant</p>
+                      <div class="mt-1.5 flex items-center gap-1.5">
+                        <span class="text-[10px] font-bold bg-primary/10 text-primary px-2 py-0.5 rounded-full">Stripe</span>
+                        <span class="text-[10px] font-bold bg-blue-50 text-blue-600 px-2 py-0.5 rounded-full">Visa</span>
+                        <span class="text-[10px] font-bold bg-red-50 text-red-600 px-2 py-0.5 rounded-full">Mastercard</span>
+                      </div>
+                    </div>
+                  </div>
+                  <input name="payment_method" type="radio" value="stripe"
+                         class="text-primary focus:ring-primary"
+                         {% if not store_settings.cod_enabled %}checked{% endif %}/>
+                </label>
+
+              </div>
+            </div>
+
+            <!-- Security note -->
+            <div class="flex items-center gap-3 rounded-xl bg-green-50 border border-green-100 px-4 py-3">
+              <span class="material-symbols-outlined text-green-600 text-[20px]">verified_user</span>
+              <p class="text-xs text-green-700 font-medium">Your payment information is SSL encrypted and 100% secure. We never store card details.</p>
+            </div>
+
+          </div>
+
+          <!-- RIGHT: ORDER SUMMARY -->
+          <div class="w-full lg:sticky lg:top-24 lg:max-w-[380px]">
+            <div class="rounded-xl bg-card-bg shadow-sm border border-border-color overflow-hidden">
+
+              <div class="bg-[#1e4433] px-6 py-4">
+                <h2 class="text-sm font-bold text-white tracking-widest uppercase">Order Summary</h2>
+              </div>
+
+              <!-- Items -->
+              <div class="max-h-[280px] overflow-y-auto custom-scrollbar divide-y divide-border-color">
+                {% for item in cart_items %}
+                <div class="flex items-center gap-4 px-5 py-4">
+                  <div class="relative shrink-0 h-16 w-14 overflow-hidden rounded-lg bg-gray-50 border border-gray-100">
+                    {% with item.product.images.first as img %}
+                      {% if img %}
+                        <img src="{{ img.image.url }}" class="h-full w-full object-cover"/>
+                      {% else %}
+                        <div class="h-full w-full flex items-center justify-center bg-gray-100">
+                          <span class="material-symbols-outlined text-gray-300 text-xl">image</span>
+                        </div>
+                      {% endif %}
+                    {% endwith %}
+                    <span class="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-white">
+                      {{ item.quantity }}
+                    </span>
+                  </div>
+                  <div class="flex flex-1 flex-col min-w-0">
+                    <p class="truncate text-sm font-bold text-primary">{{ item.product.product_name }}</p>
+                    <p class="text-xs text-text-secondary mt-0.5">
+                      {% if item.product.color_name %}{{ item.product.color_name }}{% endif %}
+                      {% if item.size %} · {{ item.size }}{% endif %}
+                    </p>
+                  </div>
+                  <p class="text-sm font-bold text-primary shrink-0">₹{{ item.total_price }}</p>
+                </div>
+                {% endfor %}
+              </div>
+
+              <!-- Breakdown -->
+              <div class="px-6 py-4 space-y-2.5 border-t border-border-color">
+                <div class="flex justify-between text-sm text-text-secondary">
+                  <span>Subtotal</span>
+                  <span class="font-medium text-primary">₹{{ subtotal }}</span>
+                </div>
+                <div class="flex justify-between text-sm text-text-secondary">
+                  <span>Shipping</span>
+                  <span class="font-medium {% if shipping == 0 %}text-green-600{% else %}text-primary{% endif %}">
+                    {% if shipping == 0 %}FREE{% else %}₹{{ shipping }}{% endif %}
+                  </span>
+                </div>
+                <div class="flex justify-between text-sm text-text-secondary">
+                  <span>Tax (5%)</span>
+                  <span class="font-medium text-primary">₹{{ tax }}</span>
+                </div>
+              </div>
+
+              <!-- Total -->
+              <div class="px-6 py-4 bg-gray-50 border-t border-border-color">
+                <div class="flex items-center justify-between">
+                  <span class="text-base font-bold text-primary">Total</span>
+                  <span class="text-2xl font-extrabold text-primary">₹{{ total }}</span>
+                </div>
+                <p class="text-xs text-green-600 font-semibold mt-1 text-right">Inclusive of all taxes</p>
+              </div>
+
+              <!-- CTA -->
+              <div class="px-6 py-5">
+                <button type="submit"
+                  class="group flex w-full items-center justify-center gap-2 rounded-xl bg-primary py-4 text-base font-bold text-white shadow-lg hover:bg-primary-hover hover:shadow-xl transition-all active:scale-[0.98]">
+                  <span class="material-symbols-outlined text-[20px]">shopping_bag</span>
+                  Place Order — ₹{{ total }}
+                  <span class="material-symbols-outlined text-[18px] transition-transform group-hover:translate-x-1">arrow_forward</span>
+                </button>
+                <p class="mt-3 text-center text-xs text-text-secondary">
+                  By placing your order, you agree to our
+                  <a class="underline text-primary font-medium" href="#">Terms</a> &amp;
+                  <a class="underline text-primary font-medium" href="#">Privacy Policy</a>
+                </p>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="mt-auto border-t border-border-color py-6 bg-white">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-3">
+      <div style="display:flex;flex-direction:column;line-height:1;">
+        <span style="font-family:'Georgia','Times New Roman',serif;font-size:16px;font-weight:700;letter-spacing:0.15em;color:#064e3b;">vólke</span>
+        <span style="font-size:7px;letter-spacing:0.18em;color:#9ca3af;text-transform:uppercase;">shoppe</span>
+      </div>
+      <div class="flex gap-6 text-xs text-text-secondary">
+        <a class="hover:text-primary transition-colors" href="#">Privacy Policy</a>
+        <a class="hover:text-primary transition-colors" href="#">Terms of Service</a>
+        <a class="hover:text-primary transition-colors" href="#">Returns</a>
+      </div>
+      <p class="text-xs text-gray-400">© 2024 vólke shoppe. All rights reserved.</p>
+    </div>
+  </footer>
+
+</div>
+
+</body>
+</html>

@@ -1,4 +1,5 @@
 {% load static %}
+
 <!DOCTYPE html>
 <html class="dark" lang="en"><head>
 <meta charset="utf-8"/>
@@ -121,40 +122,29 @@
   </div>
 </header>
 
+
 <!-- MARQUEE TICKER -->
 <div class="marquee-wrapper border-b border-[#254632] bg-[#141a17] py-2.5">
   <div class="marquee-track">
-    <!-- First copy -->
-    <div class="flex items-center shrink-0">
-      <span class="px-6 text-[11px] tracking-[0.18em] text-gray-400 uppercase whitespace-nowrap">Free Shipping on Orders Above ₹1999</span>
-      <span class="text-primary/50 text-xs">✦</span>
-      <span class="px-6 text-[11px] tracking-[0.18em] text-white/60 uppercase whitespace-nowrap">New Arrivals Every Week</span>
-      <span class="text-primary/50 text-xs">✦</span>
-      <span class="px-6 text-[11px] tracking-[0.18em] text-gray-400 uppercase whitespace-nowrap">Easy 30-Day Returns</span>
-      <span class="text-primary/50 text-xs">✦</span>
-      <span class="px-6 text-[11px] tracking-[0.18em] text-white/60 uppercase whitespace-nowrap">Exclusive Members-Only Deals</span>
-      <span class="text-primary/50 text-xs">✦</span>
-      <span class="px-6 text-[11px] tracking-[0.18em] text-gray-400 uppercase whitespace-nowrap">Curated Collections — Shop Now</span>
-      <span class="text-primary/50 text-xs">✦</span>
-      <span class="px-6 text-[11px] tracking-[0.18em] text-white/60 uppercase whitespace-nowrap">Premium Quality. Everyday Style.</span>
-      <span class="text-primary/50 text-xs">✦</span>
-    </div>
-    <!-- Duplicate copy for seamless loop -->
-    <div class="flex items-center shrink-0">
-      <span class="px-6 text-[11px] tracking-[0.18em] text-gray-400 uppercase whitespace-nowrap">Free Shipping on Orders Above ₹1999</span>
-      <span class="text-primary/50 text-xs">✦</span>
-      <span class="px-6 text-[11px] tracking-[0.18em] text-white/60 uppercase whitespace-nowrap">New Arrivals Every Week</span>
-      <span class="text-primary/50 text-xs">✦</span>
-      <span class="px-6 text-[11px] tracking-[0.18em] text-gray-400 uppercase whitespace-nowrap">Easy 30-Day Returns</span>
-      <span class="text-primary/50 text-xs">✦</span>
-      <span class="px-6 text-[11px] tracking-[0.18em] text-white/60 uppercase whitespace-nowrap">Exclusive Members-Only Deals</span>
-      <span class="text-primary/50 text-xs">✦</span>
-      <span class="px-6 text-[11px] tracking-[0.18em] text-gray-400 uppercase whitespace-nowrap">Curated Collections — Shop Now</span>
-      <span class="text-primary/50 text-xs">✦</span>
-      <span class="px-6 text-[11px] tracking-[0.18em] text-white/60 uppercase whitespace-nowrap">Premium Quality. Everyday Style.</span>
-      <span class="text-primary/50 text-xs">✦</span>
-    </div>
-  </div>
+
+    <!-- NEW -->
+<div class="flex items-center shrink-0">
+  {% for item in marquee_items %}
+    <span class="px-6 text-[11px] tracking-[0.18em]
+      {% if forloop.counter|divisibleby:2 %}text-white/60{% else %}text-gray-400{% endif %}
+      uppercase whitespace-nowrap">{{ item }}</span>
+    <span class="text-primary/50 text-xs">✦</span>
+  {% endfor %}
+</div>
+
+<div class="flex items-center shrink-0">
+  {% for item in marquee_items %}
+    <span class="px-6 text-[11px] tracking-[0.18em]
+      {% if forloop.counter|divisibleby:2 %}text-white/60{% else %}text-gray-400{% endif %}
+      uppercase whitespace-nowrap">{{ item }}</span>
+    <span class="text-primary/50 text-xs">✦</span>
+  {% endfor %}
+</div>
 </div>
 
 <main class="flex-grow">

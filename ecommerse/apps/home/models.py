@@ -65,6 +65,13 @@ class Order(models.Model):
         ("shipped", "Shipped"),
         ("delivered", "Delivered"),
         ("cancelled", "Cancelled"),
+        ("return_requested", "Return Requested"),
+        ("returned", "Returned"),
+    ]
+
+    PAYMENT_METHOD_CHOICES = [
+        ("cod", "Cash on Delivery"),
+        ("stripe", "Online Payment"),
     ]
 
     user = models.ForeignKey(
@@ -72,24 +79,36 @@ class Order(models.Model):
         on_delete=models.CASCADE,
         related_name="orders"
     )
-
-    total_amount = models.DecimalField(
-        max_digits=10,
-        decimal_places=2
+    # Add these missing fields:
+    address = models.ForeignKey(
+        'accounts.Address',
+        on_delete=models.SET_NULL,
+        null=True, blank=True
     )
-
-    status = models.CharField(
+    payment_method = models.CharField(
         max_length=20,
-        choices=STATUS_CHOICES,
-        default="pending"
+        choices=PAYMENT_METHOD_CHOICES,
+        default="cod"
     )
+    return_reason = models.TextField(blank=True, null=True)
+    return_requested_at = models.DateTimeField(null=True, blank=True)
 
+    total_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="pending")
     created_at = models.DateTimeField(auto_now_add=True)
-
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"Order #{self.id}"
+
+    @property
+    def can_return(self):
+        """Only delivered orders within 7 days can be returned."""
+        from django.utils import timezone
+        if self.status != 'delivered':
+            return False
+        days_since_delivery = (timezone.now() - self.updated_at).days
+        return days_since_delivery <= 7
 
 class OrderItem(models.Model):
 

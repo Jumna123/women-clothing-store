@@ -2,241 +2,314 @@
 {% block title %}Product Management{% endblock %}
 {% block content %}
 
-<link href="https://fonts.googleapis.com/css2?family=Spline+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Spline+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    colors: {
-                        "primary": "#17cf60",
-                        "background-light": "#ffffff",
-                        "background-dark": "#112117",
-                        "background-page": "#0e2315", // Dark green page background
-                        "text-main": "#0e1b13",
-                        "text-secondary": "#4e976b",
-                        "text-on-dark": "#e7f3ec", // Light text for dark background
-                        "surface-light": "#f8fcfa",
-                        "border-color": "#e7f3ec",
-                        "border-dark": "#1f3b28"
-                    },
-                    fontFamily: {
-                        "display": ["Spline Sans", "sans-serif"]
-                    },
-                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
-                },
-            },
-        }
-    </script>
-</head>
-
-
-
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "primary": "#17cf60",
+          "background-light": "#ffffff",
+          "background-dark": "#112117",
+          "background-page": "#0e2315",
+          "text-main": "#0e1b13",
+          "text-secondary": "#4e976b",
+          "text-on-dark": "#e7f3ec",
+          "surface-light": "#f8fcfa",
+          "border-color": "#e7f3ec",
+          "border-dark": "#1f3b28"
+        },
+        fontFamily: { "display": ["Spline Sans", "sans-serif"] },
+        borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+      },
+    },
+  }
+</script>
 
 <div class="max-w-[1440px] mx-auto px-6 md:px-10 py-8 flex flex-col gap-6">
-<div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-2">
-<div class="flex flex-col gap-2">
-<h1 class="text-white text-3xl md:text-4xl font-black leading-tight tracking-[-0.033em]">Product Management</h1>
-<p class="text-[#4e976b] text-base font-normal">Manage your inventory, prices, and product availability.</p>
-</div>
-<a href="{% url 'adminpanel:addproduct' %}">
-<button class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-white hover:bg-green-600 transition-colors shadow-sm text-sm font-bold leading-normal tracking-[0.015em] gap-2 ">
-<span class="material-symbols-outlined text-[20px]">add</span>
-<span class="truncate">Add Product</span>
-</button>
-</a>
-</div>
-<div class="flex flex-col lg:flex-row gap-4 mb-0 bg-white p-4 rounded-xl border border-transparent shadow-md">
-<div class="flex-1">
-<label class="flex flex-col h-10 w-full lg:max-w-md">
-<div class="flex w-full flex-1 items-stretch rounded-lg h-full bg-surface-light border border-border-color focus-within:border-primary transition-colors">
-<div class="text-text-secondary flex border-none items-center justify-center pl-3 rounded-l-lg border-r-0">
-<span class="material-symbols-outlined text-[20px]">search</span>
-</div>
-<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-text-main focus:outline-0 focus:ring-0 border-none bg-transparent focus:border-none h-full placeholder:text-text-secondary px-3 rounded-l-none border-l-0 pl-2 text-sm font-normal leading-normal" placeholder="Search by product name, SKU..." value=""/>
-</div>
-</label>
-</div>
-<div class="flex gap-3 overflow-x-auto pb-2 lg:pb-0 scrollbar-hide">
-<button class="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-surface-light border border-border-color pl-4 pr-3 hover:border-primary transition-colors group">
-<p class="text-text-main text-sm font-medium leading-normal">Category</p>
-<span class="material-symbols-outlined text-text-secondary group-hover:text-primary text-[20px]">expand_more</span>
-</button>
-<button class="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-surface-light border border-border-color pl-4 pr-3 hover:border-primary transition-colors group">
-<p class="text-text-main text-sm font-medium leading-normal">Stock Status</p>
-<span class="material-symbols-outlined text-text-secondary group-hover:text-primary text-[20px]">expand_more</span>
-</button>
-<button class="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-surface-light border border-border-color pl-4 pr-3 hover:border-primary transition-colors group">
-<p class="text-text-main text-sm font-medium leading-normal">Price Range</p>
-<span class="material-symbols-outlined text-text-secondary group-hover:text-primary text-[20px]">expand_more</span>
-</button>
-<button class="flex h-10 shrink-0 items-center justify-center rounded-lg bg-surface-light border border-border-color px-3 hover:bg-gray-100 text-text-secondary transition-colors" title="Reset Filters">
-<span class="material-symbols-outlined text-[20px]">filter_alt_off</span>
-</button>
-</div>
-</div>
-<div class="w-full overflow-hidden rounded-xl border border-transparent bg-white shadow-md flex flex-col flex-1">
-<div class="overflow-x-auto">
-<table class="w-full text-left border-collapse">
-<thead>
-<tr class="bg-surface-light border-b border-border-color">
-<th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-text-secondary w-20">Image</th>
-<th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-text-secondary min-w-[200px]">Product Name</th>
-<th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-text-secondary">Category</th>
-<th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-text-secondary">Price</th>
-<th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-text-secondary">Availability</th>
-<th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-text-secondary text-right">Actions</th>
-</tr>
-</thead>
- <tbody class="divide-y divide-border-color bg-white">
-{% for product in products %}
-<tr class="group hover:bg-surface-light transition-colors duration-150">
 
-  <!-- IMAGE -->
-  <td class="px-6 py-4">
-    <div class="relative h-12 w-12 overflow-hidden rounded-lg border border-border-color">
-      {% if product.images.first %}
-        <img
-          src="{{ product.images.first.image.url }}"
-          class="h-full w-full object-cover"
-          alt="{{ product.product_name }}"
-        />
-      {% else %}
-        <div class="h-full w-full bg-gray-100 flex items-center justify-center text-xs text-gray-400">
-          No Image
+  <!-- Header -->
+  <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-2">
+    <div class="flex flex-col gap-2">
+      <h1 class="text-white text-3xl md:text-4xl font-black leading-tight tracking-[-0.033em]">Product Management</h1>
+      <p class="text-[#4e976b] text-base font-normal">Manage your inventory, prices, and product availability.</p>
+    </div>
+    <a href="{% url 'adminpanel:addproduct' %}">
+      <button class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-white hover:bg-green-600 transition-colors shadow-sm text-sm font-bold leading-normal tracking-[0.015em] gap-2">
+        <span class="material-symbols-outlined text-[20px]">add</span>
+        <span class="truncate">Add Product</span>
+      </button>
+    </a>
+  </div>
+
+  <!-- Filters Form -->
+  <form method="GET" id="filterForm" class="flex flex-col lg:flex-row gap-4 mb-0 bg-white p-4 rounded-xl border border-transparent shadow-md">
+
+    <!-- Search -->
+    <div class="flex-1">
+      <div class="flex w-full flex-1 items-stretch rounded-lg h-10 bg-surface-light border border-border-color focus-within:border-primary transition-colors">
+        <div class="text-text-secondary flex border-none items-center justify-center pl-3 rounded-l-lg">
+          <span class="material-symbols-outlined text-[20px]">search</span>
         </div>
-      {% endif %}
-    </div>
-  </td>
-
-  <!-- PRODUCT NAME -->
-  <td class="px-6 py-4">
-    <div class="flex flex-col">
-      <span class="font-bold text-text-main text-sm">
-        {{ product.product_name }}
-      </span>
-      <span class="text-xs text-text-secondary">
-        SKU: {{ product.product_code }}
-      </span>
-    </div>
-  </td>
-
-  <!-- CATEGORY -->
-  <td class="px-6 py-4">
-    <span class="inline-flex items-center rounded-full bg-surface-light border border-border-color px-2.5 py-0.5 text-xs font-medium text-text-main">
-      {{ product.category.category_name }}
-    </span>
-  </td>
-
-  <!-- PRICE -->
-  <td class="px-6 py-4 text-sm font-medium text-text-main">
-    {% if product.discount_price %}
-      <span class="line-through text-text-secondary text-xs mr-1">
-        ₹{{ product.price }}
-      </span>
-      ₹{{ product.discount_price }}
-    {% else %}
-      ₹{{ product.price }}
-    {% endif %}
-  </td>
-
-  <!-- AVAILABILITY -->
-  <td class="px-6 py-4">
-    {% if product.is_available %}
-      <div class="flex items-center gap-2">
-        <span class="relative flex h-2.5 w-2.5">
-          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-          <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-primary"></span>
-        </span>
-        <span class="text-sm font-medium text-text-main">In Stock</span>
-        <span class="text-xs text-text-secondary">
-          ({{ product.stock_quantity }})
-        </span>
+        <input
+          type="search"
+          name="q"
+          value="{{ request.GET.q }}"
+          class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-text-main focus:outline-0 focus:ring-0 border-none bg-transparent focus:border-none h-full placeholder:text-text-secondary px-3 rounded-l-none border-l-0 pl-2 text-sm font-normal leading-normal"
+          placeholder="Search by product name..."
+        />
       </div>
-    {% else %}
-      <span class="text-sm text-red-500 font-medium">Out of Stock</span>
-    {% endif %}
-  </td>
+    </div>
 
-  <!-- ACTIONS -->
-  <td class="px-6 py-4 text-right">
-    <div class="flex items-center justify-end gap-2">
+    <!-- Filters Row -->
+    <div class="flex gap-3 overflow-x-auto pb-2 lg:pb-0 scrollbar-hide flex-wrap">
 
-      <!-- Edit -->
-      <a href="{% url 'adminpanel:edit-product' product.id %}"
-          class="size-8 flex items-center justify-center rounded-full hover:bg-blue-100 text-blue-600"
-          title="Edit">
-        <span class="material-symbols-outlined text-[18px]">edit</span>
-      </a>
+      <!-- Category Dropdown -->
+      <select
+        name="category"
+        onchange="this.form.submit()"
+        class="flex h-10 shrink-0 items-center rounded-lg bg-surface-light border border-border-color px-4 text-text-main text-sm font-medium hover:border-primary focus:outline-none focus:border-primary transition-colors"
+      >
+        <option value="">All Categories</option>
+        {% for cat in categories %}
+          <option value="{{ cat.id }}" {% if request.GET.category == cat.id|stringformat:"s" %}selected{% endif %}>
+            {{ cat.category_name }}
+          </option>
+        {% endfor %}
+      </select>
 
-      <!-- Delete -->
-      <form method="POST"
-            action="{% url 'adminpanel:delete-product' product.id %}"
-            onsubmit="return confirm('Are you sure you want to delete this category?');">
-        {% csrf_token %}
-        <button type="submit"
-                class="size-8 flex items-center justify-center rounded-full hover:bg-red-100 text-red-600"
-                title="Delete">
-          <span class="material-symbols-outlined text-[18px]">delete</span>
-        </button>
-      </form>
+      <!-- Stock Status Dropdown -->
+      <select
+        name="stock"
+        onchange="this.form.submit()"
+        class="flex h-10 shrink-0 items-center rounded-lg bg-surface-light border border-border-color px-4 text-text-main text-sm font-medium hover:border-primary focus:outline-none focus:border-primary transition-colors"
+      >
+        <option value="">All Stock</option>
+        <option value="in_stock"      {% if request.GET.stock == 'in_stock'      %}selected{% endif %}>In Stock</option>
+        <option value="out_of_stock"  {% if request.GET.stock == 'out_of_stock'  %}selected{% endif %}>Out of Stock</option>
+      </select>
+
+      <!-- Search Submit -->
+      <button
+        type="submit"
+        class="flex h-10 shrink-0 items-center justify-center rounded-lg bg-primary text-white px-4 text-sm font-semibold hover:bg-green-600 transition-colors"
+      >
+        Search
+      </button>
+
+      <!-- Reset Filters -->
+      {% if request.GET.q or request.GET.category or request.GET.stock %}
+        <a
+          href="{% url 'adminpanel:product' %}"
+          class="flex h-10 shrink-0 items-center justify-center rounded-lg bg-surface-light border border-border-color px-3 hover:bg-gray-100 text-text-secondary transition-colors"
+          title="Reset Filters"
+        >
+          <span class="material-symbols-outlined text-[20px]">filter_alt_off</span>
+        </a>
+      {% endif %}
 
     </div>
-  </td>
+  </form>
 
-</tr>
-{% empty %}
-<tr>
-  <td colspan="6" class="text-center py-6 text-text-secondary">
-    No products found.
-  </td>
-</tr>
-{% endfor %}
-</tbody>
+  <!-- Results summary -->
+  {% if request.GET.q or request.GET.category or request.GET.stock %}
+    <div class="px-4 py-2 bg-green-50 text-green-700 text-sm rounded-lg border border-green-100">
+      Showing {{ total_count }} result{{ total_count|pluralize }}
+      {% if request.GET.q %} for <strong>"{{ request.GET.q }}"</strong>{% endif %}
+      {% if request.GET.stock %} &mdash; stock: <strong>{{ request.GET.stock|title }}</strong>{% endif %}
+    </div>
+  {% endif %}
 
-</table>
+  <!-- Table -->
+  <div class="w-full overflow-hidden rounded-xl border border-transparent bg-white shadow-md flex flex-col flex-1">
+    <div class="overflow-x-auto">
+      <table class="w-full text-left border-collapse">
+        <thead>
+          <tr class="bg-surface-light border-b border-border-color">
+            <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-text-secondary w-20">Image</th>
+            <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-text-secondary min-w-[200px]">Product Name</th>
+            <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-text-secondary">Category</th>
+            <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-text-secondary">Price</th>
+            <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-text-secondary">Availability</th>
+            <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-text-secondary text-right">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-border-color bg-white">
+          {% for product in products %}
+          <tr class="group hover:bg-surface-light transition-colors duration-150">
+
+            <!-- IMAGE -->
+            <td class="px-6 py-4">
+              <div class="relative h-12 w-12 overflow-hidden rounded-lg border border-border-color">
+                {% if product.images.first %}
+                  <img src="{{ product.images.first.image.url }}" class="h-full w-full object-cover" alt="{{ product.product_name }}"/>
+                {% else %}
+                  <div class="h-full w-full bg-gray-100 flex items-center justify-center text-xs text-gray-400">No Img</div>
+                {% endif %}
+              </div>
+            </td>
+
+            <!-- PRODUCT NAME -->
+            <td class="px-6 py-4">
+              <div class="flex flex-col">
+                <span class="font-bold text-text-main text-sm">{{ product.product_name }}</span>
+                <span class="text-xs text-text-secondary">SKU: {{ product.product_code }}</span>
+              </div>
+            </td>
+
+            <!-- CATEGORY -->
+            <td class="px-6 py-4">
+              <span class="inline-flex items-center rounded-full bg-surface-light border border-border-color px-2.5 py-0.5 text-xs font-medium text-text-main">
+                {{ product.category.category_name }}
+              </span>
+            </td>
+
+            <!-- PRICE -->
+            <td class="px-6 py-4 text-sm font-medium text-text-main">
+              {% if product.discount_price %}
+                <span class="line-through text-text-secondary text-xs mr-1">₹{{ product.price }}</span>
+                ₹{{ product.discount_price }}
+              {% else %}
+                ₹{{ product.price }}
+              {% endif %}
+            </td>
+
+            <!-- AVAILABILITY -->
+            <td class="px-6 py-4">
+              {% if product.is_available %}
+                <div class="flex items-center gap-2">
+                  <span class="relative flex h-2.5 w-2.5">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-primary"></span>
+                  </span>
+                  <span class="text-sm font-medium text-text-main">In Stock</span>
+                  <span class="text-xs text-text-secondary">({{ product.stock_quantity }})</span>
+                </div>
+              {% else %}
+                <span class="text-sm text-red-500 font-medium">Out of Stock</span>
+              {% endif %}
+            </td>
+
+            <!-- ACTIONS -->
+            <td class="px-6 py-4 text-right">
+              <div class="flex items-center justify-end gap-2">
+                <a href="{% url 'adminpanel:edit-product' product.id %}"
+                   class="size-8 flex items-center justify-center rounded-full hover:bg-blue-100 text-blue-600"
+                   title="Edit">
+                  <span class="material-symbols-outlined text-[18px]">edit</span>
+                </a>
+                <form method="POST"
+                      action="{% url 'adminpanel:delete-product' product.id %}"
+                      onsubmit="return confirm('Are you sure you want to delete this product?');">
+                  {% csrf_token %}
+                  <button type="submit"
+                          class="size-8 flex items-center justify-center rounded-full hover:bg-red-100 text-red-600"
+                          title="Delete">
+                    <span class="material-symbols-outlined text-[18px]">delete</span>
+                  </button>
+                </form>
+              </div>
+            </td>
+
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="6" class="text-center py-10 text-text-secondary">
+              <span class="material-symbols-outlined text-4xl block mb-2">inventory_2</span>
+              No products found.
+              {% if request.GET.q or request.GET.category or request.GET.stock %}
+                &mdash; <a href="{% url 'adminpanel:product' %}" class="text-primary underline">clear filters</a>
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination -->
+    {% if page_obj.paginator.num_pages > 1 %}
+    <div class="flex items-center justify-between border-t border-border-color bg-surface-light px-6 py-4">
+
+      <!-- Mobile -->
+      <div class="flex flex-1 justify-between sm:hidden">
+        {% if page_obj.has_previous %}
+          <a href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}{% if request.GET.category %}category={{ request.GET.category }}&{% endif %}{% if request.GET.stock %}stock={{ request.GET.stock }}&{% endif %}page={{ page_obj.previous_page_number }}"
+             class="relative inline-flex items-center rounded-md border border-border-color bg-white px-4 py-2 text-sm font-medium text-text-secondary hover:bg-gray-50">
+            Previous
+          </a>
+        {% endif %}
+        {% if page_obj.has_next %}
+          <a href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}{% if request.GET.category %}category={{ request.GET.category }}&{% endif %}{% if request.GET.stock %}stock={{ request.GET.stock }}&{% endif %}page={{ page_obj.next_page_number }}"
+             class="relative ml-3 inline-flex items-center rounded-md border border-border-color bg-white px-4 py-2 text-sm font-medium text-text-secondary hover:bg-gray-50">
+            Next
+          </a>
+        {% endif %}
+      </div>
+
+      <!-- Desktop -->
+      <div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
+        <p class="text-sm text-text-secondary">
+          Showing
+          <span class="font-bold text-text-main">{{ page_obj.start_index }}</span>
+          to
+          <span class="font-bold text-text-main">{{ page_obj.end_index }}</span>
+          of
+          <span class="font-bold text-text-main">{{ total_count }}</span>
+          results
+        </p>
+
+        <nav class="isolate inline-flex -space-x-px rounded-md shadow-sm">
+
+          <!-- Previous -->
+          {% if page_obj.has_previous %}
+            <a href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}{% if request.GET.category %}category={{ request.GET.category }}&{% endif %}{% if request.GET.stock %}stock={{ request.GET.stock }}&{% endif %}page={{ page_obj.previous_page_number }}"
+               class="relative inline-flex items-center rounded-l-md px-2 py-2 text-text-secondary ring-1 ring-inset ring-border-color hover:bg-white">
+              <span class="material-symbols-outlined text-[20px]">chevron_left</span>
+            </a>
+          {% else %}
+            <span class="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-300 ring-1 ring-inset ring-border-color cursor-not-allowed">
+              <span class="material-symbols-outlined text-[20px]">chevron_left</span>
+            </span>
+          {% endif %}
+
+          <!-- Page Numbers -->
+          {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+              <span class="relative z-10 inline-flex items-center bg-primary px-4 py-2 text-sm font-semibold text-white">
+                {{ num }}
+              </span>
+            {% elif num == 1 or num == page_obj.paginator.num_pages or num >= page_obj.number|add:"-2" and num <= page_obj.number|add:"2" %}
+              <a href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}{% if request.GET.category %}category={{ request.GET.category }}&{% endif %}{% if request.GET.stock %}stock={{ request.GET.stock }}&{% endif %}page={{ num }}"
+                 class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-text-main ring-1 ring-inset ring-border-color hover:bg-white">
+                {{ num }}
+              </a>
+            {% elif num == page_obj.number|add:"-3" or num == page_obj.number|add:"3" %}
+              <span class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-text-secondary ring-1 ring-inset ring-border-color">…</span>
+            {% endif %}
+          {% endfor %}
+
+          <!-- Next -->
+          {% if page_obj.has_next %}
+            <a href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}{% if request.GET.category %}category={{ request.GET.category }}&{% endif %}{% if request.GET.stock %}stock={{ request.GET.stock }}&{% endif %}page={{ page_obj.next_page_number }}"
+               class="relative inline-flex items-center rounded-r-md px-2 py-2 text-text-secondary ring-1 ring-inset ring-border-color hover:bg-white">
+              <span class="material-symbols-outlined text-[20px]">chevron_right</span>
+            </a>
+          {% else %}
+            <span class="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-300 ring-1 ring-inset ring-border-color cursor-not-allowed">
+              <span class="material-symbols-outlined text-[20px]">chevron_right</span>
+            </span>
+          {% endif %}
+
+        </nav>
+      </div>
+    </div>
+    {% endif %}
+
+  </div>
 </div>
-<div class="flex items-center justify-between border-t border-border-color bg-surface-light px-6 py-4">
-<div class="flex flex-1 justify-between sm:hidden">
-<button class="relative inline-flex items-center rounded-md border border-border-color bg-white px-4 py-2 text-sm font-medium text-text-secondary hover:bg-gray-50">Previous</button>
-<button class="relative ml-3 inline-flex items-center rounded-md border border-border-color bg-white px-4 py-2 text-sm font-medium text-text-secondary hover:bg-gray-50">Next</button>
-</div>
-<div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
-<div>
-<p class="text-sm text-text-secondary">
-                            Showing
-                            <span class="font-bold text-text-main">1</span>
-                            to
-                            <span class="font-bold text-text-main">5</span>
-                            of
-                            <span class="font-bold text-text-main">97</span>
-                            results
-                        </p>
-</div>
-<div>
-<nav aria-label="Pagination" class="isolate inline-flex -space-x-px rounded-md shadow-sm">
-<button class="relative inline-flex items-center rounded-l-md px-2 py-2 text-text-secondary ring-1 ring-inset ring-border-color hover:bg-white focus:z-20 focus:outline-offset-0">
-<span class="sr-only">Previous</span>
-<span class="material-symbols-outlined text-[20px]">chevron_left</span>
-</button>
-<button aria-current="page" class="relative z-10 inline-flex items-center bg-primary px-4 py-2 text-sm font-semibold text-white focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">1</button>
-<button class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-text-main ring-1 ring-inset ring-border-color hover:bg-white focus:z-20 focus:outline-offset-0">2</button>
-<button class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-text-main ring-1 ring-inset ring-border-color hover:bg-white focus:z-20 focus:outline-offset-0">3</button>
-<span class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-text-secondary ring-1 ring-inset ring-border-color focus:outline-offset-0">...</span>
-<button class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-text-main ring-1 ring-inset ring-border-color hover:bg-white focus:z-20 focus:outline-offset-0">10</button>
-<button class="relative inline-flex items-center rounded-r-md px-2 py-2 text-text-secondary ring-1 ring-inset ring-border-color hover:bg-white focus:z-20 focus:outline-offset-0">
-<span class="sr-only">Next</span>
-<span class="material-symbols-outlined text-[20px]">chevron_right</span>
-</button>
-</nav>
-</div>
-</div>
-</div>
-</div>
-</div>
-</main>
-</div>
+
 {% endblock %}
-</body></html>

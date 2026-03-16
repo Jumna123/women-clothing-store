@@ -123,3 +123,58 @@ class ProductImage(models.Model):
 
     def __str__(self):
         return f"Image for {self.product.product_name}"
+
+class StoreSettings(models.Model):
+    # General
+    store_name = models.CharField(max_length=100, default="vólke shoppe")
+    marquee_text = models.TextField(
+        default="Free shipping on orders over ₹1000 | New arrivals every week | Use code WELCOME10 for 10% off",
+        help_text="Separate multiple messages with |"
+    )
+
+    # Features
+    cod_enabled = models.BooleanField(default=True)
+    discounts_enabled = models.BooleanField(default=True)
+
+    # Shipping
+    free_shipping_threshold = models.DecimalField(max_digits=10, decimal_places=2, default=1000)
+    standard_shipping_cost = models.DecimalField(max_digits=10, decimal_places=2, default=50)
+    express_shipping_cost = models.DecimalField(max_digits=10, decimal_places=2, default=15)
+
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Store Settings"
+
+    def __str__(self):
+        return "Store Settings"
+
+    @classmethod
+    def get_settings(cls):
+        """Always returns the single settings object, creates if not exists."""
+        obj, _ = cls.objects.get_or_create(pk=1)
+        return obj
+
+
+class PromoCode(models.Model):
+    code = models.CharField(max_length=20, unique=True)
+    discount_percent = models.PositiveIntegerField()
+    is_active = models.BooleanField(default=True)
+    usage_limit = models.PositiveIntegerField(default=0, help_text="0 = unlimited")
+    used_count = models.PositiveIntegerField(default=0)
+    expires_at = models.DateField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.code} ({self.discount_percent}%)"
+
+    @property
+    def is_valid(self):
+        from django.utils import timezone
+        if not self.is_active:
+            return False
+        if self.usage_limit > 0 and self.used_count >= self.usage_limit:
+            return False
+        if self.expires_at and self.expires_at < timezone.now().date():
+            return False
+        return True

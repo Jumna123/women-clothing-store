@@ -25,35 +25,69 @@
     <!-- Card -->
     <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
 
-      <!-- Controls -->
-      <div class="p-5 border-b flex flex-col md:flex-row gap-4">
+      <!-- Controls: Search + Status Filter (single GET form) -->
+      <form method="GET" class="p-5 border-b flex flex-col md:flex-row gap-4">
+
+        <!-- Search -->
         <div class="relative flex-1">
           <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
             search
           </span>
-        <form method="GET" class="w-full">
-
-          <input
+      <input
             type="search"
-            placeholder="Search products..."
+            name="q"
+            value="{{ request.GET.q }}"
+            placeholder="Search categories..."
             class="w-full h-12 pl-12 pr-4 rounded-lg
-                  border border-border-green
-                  bg-[#f8fbfa] text-text-dark-green
-                  focus:outline-none
-                  focus:ring-2 focus:ring-primary/30
-                  focus:border-primary
-                  transition"
+                   border border-gray-200
+                   bg-[#f8fbfa] text-gray-800
+                   focus:outline-none
+                   focus:ring-2 focus:ring-green-300
+                   focus:border-green-500
+                   transition"
           />
-        </form>
-
         </div>
 
-        <select class="h-11 px-4 rounded-lg border border-gray-200">
-          <option>All Statuses</option>
-          <option>Active</option>
-          <option>Inactive</option>
+        <!-- Status Filter -->
+        <select
+          name="status"
+          onchange="this.form.submit()"
+          class="h-12 px-4 rounded-lg border border-gray-200 bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-300 focus:border-green-500 transition"
+        >
+          <option value="" {% if not request.GET.status %}selected{% endif %}>All Statuses</option>
+          <option value="active"   {% if request.GET.status == 'active'   %}selected{% endif %}>Active</option>
+          <option value="inactive" {% if request.GET.status == 'inactive' %}selected{% endif %}>Inactive</option>
         </select>
-      </div>
+
+        <!-- Submit button (for search; status auto-submits via onchange) -->
+        <button
+          type="submit"
+          class="h-12 px-5 bg-green-500 hover:bg-green-600 text-white rounded-lg font-semibold transition"
+        >
+          Search
+        </button>
+
+        <!-- Clear filters (only shown when a filter is active) -->
+        {% if request.GET.q or request.GET.status %}
+          <a
+            href="{% url 'adminpanel:category' %}"
+            class="h-12 px-4 flex items-center gap-1 rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50 transition text-sm"
+          >
+            <span class="material-symbols-outlined text-[18px]">close</span>
+            Clear
+          </a>
+        {% endif %}
+
+      </form>
+
+      <!-- Results summary -->
+      {% if request.GET.q or request.GET.status %}
+        <div class="px-5 py-2 bg-green-50 text-green-700 text-sm border-b">
+          Showing {{ categories|length }} result{{ categories|length|pluralize }}
+          {% if request.GET.q %} for <strong>"{{ request.GET.q }}"</strong>{% endif %}
+          {% if request.GET.status %} &mdash; status: <strong>{{ request.GET.status }}</strong>{% endif %}
+        </div>
+      {% endif %}
 
       <!-- Table -->
       <div class="overflow-x-auto">
@@ -74,9 +108,7 @@
             <tr class="hover:bg-gray-50 transition-colors group">
 
               <!-- ID -->
-              <td class="px-6 py-4 font-mono">
-                #{{ category.id }}
-              </td>
+              <td class="px-6 py-4 font-mono">#{{ category.id }}</td>
 
               <!-- Category -->
               <td class="px-6 py-4">
@@ -87,42 +119,28 @@
                       style="background-image: url('{{ category.category_image.url }}');"
                     {% endif %}
                   ></div>
-                  <span class="font-bold">
-                    {{ category.category_name }}
-                  </span>
+                  <span class="font-bold">{{ category.category_name }}</span>
                 </div>
               </td>
 
               <!-- Slug -->
-              <td class="px-6 py-4">
-                {{ category.slug }}
-              </td>
+              <td class="px-6 py-4">{{ category.slug }}</td>
 
               <!-- Products -->
-              <td class="px-6 py-4">
-                {{ category.product_count|default:"NOT FOUND" }}
+              <td class="px-6 py-4">{{ category.product_count|default:"—" }}</td>
 
-
-
-              </td>
-
-              <!-- ✅ STATUS (FIXED) -->
+              <!-- Status -->
               <td class="px-6 py-4">
                 {% if category.is_active %}
-                  <span class="px-3 py-1 text-xs rounded-full bg-green-100 text-green-700">
-                    Active
-                  </span>
+                  <span class="px-3 py-1 text-xs rounded-full bg-green-100 text-green-700">Active</span>
                 {% else %}
-                  <span class="px-3 py-1 text-xs rounded-full bg-red-100 text-red-700">
-                    Inactive
-                  </span>
+                  <span class="px-3 py-1 text-xs rounded-full bg-red-100 text-red-700">Inactive</span>
                 {% endif %}
               </td>
 
               <!-- Actions -->
               <td class="px-6 py-4 text-right">
                 <div class="flex items-center justify-end gap-2">
-
 
                   <!-- Edit -->
                   <a href="{% url 'adminpanel:edit-category' category.id %}"
@@ -131,9 +149,8 @@
                     <span class="material-symbols-outlined text-[18px]">edit</span>
                   </a>
 
-                  <!-- Toggle -->
-                  <form method="POST"
-                        action="{% url 'adminpanel:toggle-category-status' category.id %}">
+                  <!-- Toggle Status -->
+                  <form method="POST" action="{% url 'adminpanel:toggle-category-status' category.id %}">
                     {% csrf_token %}
                     <button type="submit"
                             class="size-8 flex items-center justify-center rounded-full
@@ -167,8 +184,12 @@
             </tr>
             {% empty %}
             <tr>
-              <td colspan="6" class="text-center py-6 text-gray-500">
+              <td colspan="6" class="text-center py-10 text-gray-400">
+                <span class="material-symbols-outlined text-4xl block mb-2">category</span>
                 No categories found
+                {% if request.GET.q or request.GET.status %}
+                  &mdash; <a href="{% url 'adminpanel:category' %}" class="text-green-600 underline">clear filters</a>
+                {% endif %}
               </td>
             </tr>
             {% endfor %}
@@ -180,190 +201,4 @@
   </div>
 </main>
 
-<script>
-        document.addEventListener("DOMContentLoaded", function () {
-
-            /* =========================================================
-               MAIN PRODUCT IMAGE (FIXED TO USE Django field)
-               ========================================================= */
-
-            const uploadTrigger = document.getElementById("uploadTrigger");
-            const productImageInput = document.getElementById("id_main_image");
-
-            let cropper = null;
-            let activeInput = productImageInput;
-
-            const cropModal = document.getElementById("cropperModal");
-            const cropImage = document.getElementById("cropperImage");
-            const cropConfirmBtn = document.getElementById("cropConfirm");
-            const cropCancelBtn = document.getElementById("cropCancel");
-            const previewContainer = document.getElementById("mainImagePreview");
-
-            /* NEW: modal elements */
-            const imagePreviewModal = document.getElementById("imagePreviewModal");
-            const imagePreviewModalImg = document.getElementById("imagePreviewModalImg");
-            const mainImagePreviewRow = document.getElementById("mainImagePreviewRow");
-
-
-
-            /* OPEN CROPPER WHEN FILE SELECTED */
-            productImageInput.addEventListener("change", function () {
-                if (!this.files || !this.files[0]) return;
-
-                const file = this.files[0];
-
-                if (!file.type.startsWith("image/")) {
-                    alert("Please select a valid image file.");
-                    this.value = "";
-                    return;
-                }
-
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    cropImage.src = e.target.result;
-                    cropModal.classList.remove("hidden");
-
-                    if (cropper) cropper.destroy();
-
-                    cropper = new Cropper(cropImage, {
-                        aspectRatio: 4 / 5,
-                        viewMode: 0,
-                        dragMode: "move",
-                        autoCropArea: 0.9,
-                        background: false,
-                        guides: true,
-                        center: true,
-                        highlight: false,
-                        cropBoxMovable: true,
-                        cropBoxResizable: true,
-                        toggleDragModeOnDblclick: false,
-                    });
-                };
-
-                reader.readAsDataURL(file);
-            });
-
-            /* CONFIRM CROP */
-            cropConfirmBtn.addEventListener("click", function () {
-                if (!cropper || !activeInput) return;
-
-                cropper.getCroppedCanvas({
-                    width: 1200,
-                    height: 1500,
-                }).toBlob(blob => {
-                    if (!blob) return;
-
-                    const croppedFile = new File(
-                        [blob],
-                        "cropped.jpg",
-                        { type: "image/jpeg" }
-                    );
-
-                    const dt = new DataTransfer();
-                    dt.items.add(croppedFile);
-                    activeInput.files = dt.files;
-
-                    showPreview(croppedFile);
-
-                    cropper.destroy();
-                    cropper = null;
-                    cropModal.classList.add("hidden");
-                }, "image/jpeg", 0.9);
-            });
-
-            /* CANCEL CROP */
-            cropCancelBtn.addEventListener("click", function () {
-                if (cropper) cropper.destroy();
-                cropper = null;
-
-                if (activeInput) activeInput.value = "";
-                cropModal.classList.add("hidden");
-            });
-
-            /* PREVIEW + DELETE + STORE URL FOR MODAL */
-
-            function activatePreview(src, name = "") {
-                const previewContainer = document.getElementById("mainImagePreview");
-                const img = document.getElementById("mainImagePreviewImg");
-                const removeBtn = document.getElementById("mainImageRemove");
-                const nameEl = previewContainer.querySelector("p.text-xs.font-medium");
-
-                // show preview
-                previewContainer.classList.remove("hidden");
-
-                // set image
-                img.src = src;
-
-                // filename
-                if (name && nameEl) {
-                    nameEl.textContent = name;
-                }
-
-                // enable large preview
-                if (imagePreviewModalImg) {
-                    imagePreviewModalImg.dataset.src = src;
-                }
-
-                // delete button (UI only)
-                if (removeBtn) {
-                    removeBtn.onclick = function (e) {
-                        e.stopPropagation();
-                        previewContainer.classList.add("hidden");
-                        img.src = "";
-                        productImageInput.value = "";
-                    };
-                }
-            }
-
-            function showPreview(file) {
-                const objectUrl = URL.createObjectURL(file);
-                activatePreview(objectUrl, file.name);
-            }
-
-            /* NEW: open/close big preview */
-            if (mainImagePreviewRow && imagePreviewModal && imagePreviewModalImg) {
-                mainImagePreviewRow.addEventListener("click", function () {
-                    const src = imagePreviewModalImg.dataset.src;
-                    if (!src) return;
-                    imagePreviewModalImg.src = src;
-                    imagePreviewModal.classList.remove("hidden");
-                });
-
-                imagePreviewModal.addEventListener("click", function (e) {
-                    if (e.target === imagePreviewModal) {
-                        imagePreviewModal.classList.add("hidden");
-                        imagePreviewModalImg.src = "";
-                    }
-                });
-            }
-
-            // EDIT MODE: show existing main image if provided by Django
-            if (window.existingMainImage) {
-                activatePreview(
-                    window.existingMainImage.url,
-                    window.existingMainImage.name
-                );
-            }
-            
-            /* ================= SEARCH FUNCTIONALITY ================= */
-
-            const searchInput = document.getElementById("searchInput");
-            const productTable = document.getElementById("productTable");
-
-            if (searchInput && productTable) {
-                const rows = productTable.querySelectorAll("tr");
-
-                searchInput.addEventListener("keyup", function () {
-                    const value = this.value.toLowerCase();
-
-                    rows.forEach(row => {
-                        row.style.display = row.textContent.toLowerCase().includes(value)
-                            ? ""
-                            : "none";
-                    });
-                });
-            }
-
-        });
-    </script>
 {% endblock %}

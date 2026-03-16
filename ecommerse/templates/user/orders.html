@@ -135,10 +135,9 @@ Order ID : {{ order.order_id }}
 {% for item in order.items.all %}
 
 <a class="flex items-center p-4 lg:p-6 hover:bg-surface-light/30 transition-colors group"
-   href="{% url 'orders:order_detail' order.id %}">
+   href="{% url 'home:checkout_payment' order.id %}">
 
 <div class="size-24 lg:size-28 flex-shrink-0 rounded-lg overflow-hidden bg-surface-light">
-
 <img class="w-full h-full object-cover"
      src="{{ item.product.image.url }}">
 

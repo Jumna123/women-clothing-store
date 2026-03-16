@@ -3,177 +3,272 @@
 {% block content %}
 
 <main class="flex-grow px-4 py-8 sm:px-6 lg:px-8">
-<div class="mx-auto max-w-7xl bg-white rounded-[2rem] p-6 sm:p-10 shadow-2xl">
-<div class="mb-8 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
-<div>
-<nav class="flex text-sm text-[#112117]/50 mb-3 font-medium">
-<a class="hover:text-[#112117] transition-colors" href="#">Dashboard</a>
-<span class="mx-2">/</span>
-<a class="hover:text-[#112117] transition-colors" href="#">Products</a>
-<span class="mx-2">/</span>
-<span class="text-[#112117]">Collections</span>
-</nav>
-<h2 class="text-3xl md:text-4xl font-bold tracking-tight text-[#112117]">Collection Management</h2>
-<p class="mt-2 text-[#112117]/70 max-w-2xl">Organize your products into seasonal or thematic groups to enhance customer discovery.</p>
-</div>
-<a href="{% url 'adminpanel:addcollections' %}">
-<button class="group flex items-center gap-2 rounded-full bg-[#112117] px-6 py-3.5 text-sm font-bold text-white shadow-lg shadow-[#112117]/20 transition-all hover:scale-105 active:scale-95 hover:bg-[#1c3326]">
-<span class="material-symbols-outlined text-lg group-hover:rotate-90 transition-transform">add</span>
-                Create New Collection
-            </button></a>
-</div>
-<div class="mb-6 flex flex-col md:flex-row gap-4 justify-between items-center rounded-2xl bg-gray-50 p-2 border border-[#112117]/5">
-<div class="flex flex-col sm:flex-row gap-2 w-full md:w-auto">
-<div class="relative w-full sm:w-72">
-<span class="absolute inset-y-0 left-0 flex items-center pl-3 text-[#112117]/50">
-<span class="material-symbols-outlined text-xl">filter_list</span>
-</span>
-<input class="w-full rounded-xl border-none bg-white py-2.5 pl-10 pr-4 text-sm text-[#112117] focus:ring-2 focus:ring-[#112117]/10 shadow-sm placeholder:text-[#112117]/40" placeholder="Filter by name..." type="text"/>
-</div>
-<div class="relative w-full sm:w-48">
-<select class="w-full rounded-xl border-none bg-white py-2.5 pl-4 pr-10 text-sm text-[#112117] focus:ring-2 focus:ring-[#112117]/10 shadow-sm cursor-pointer appearance-none">
-<option value="">All Statuses</option>
-<option value="active">Active</option>
-<option value="draft">Draft</option>
-<option value="archived">Archived</option>
-</select>
-<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-[#112117]/50">
-<span class="material-symbols-outlined text-lg">expand_more</span>
-</div>
-</div>
-</div>
-<div class="flex gap-2 w-full md:w-auto overflow-x-auto pb-1 md:pb-0">
-<button class="whitespace-nowrap flex items-center justify-center gap-2 rounded-xl bg-white px-4 py-2.5 text-sm font-bold text-[#112117] shadow-sm border border-[#112117]/10 hover:bg-gray-100 transition-colors">
-<span class="material-symbols-outlined text-lg">sort</span> Sort
-                </button>
-<button class="whitespace-nowrap flex items-center justify-center gap-2 rounded-xl bg-white px-4 py-2.5 text-sm font-bold text-[#112117] shadow-sm border border-[#112117]/10 hover:bg-gray-100 transition-colors">
-<span class="material-symbols-outlined text-lg">grid_view</span> View
-                </button>
-</div>
-</div>
-<div class="overflow-hidden rounded-2xl border border-[#112117]/10 bg-white shadow-sm ring-1 ring-black/5">
-<div class="overflow-x-auto">
-<table class="min-w-full text-left text-sm whitespace-nowrap">
-<thead class="bg-gray-50 border-b border-[#112117]/10">
-<tr>
-<th class="px-6 py-4 font-bold text-[#112117]">Collection Name</th>
-<th class="px-6 py-4 font-bold text-[#112117]">Status</th>
-<th class="px-6 py-4 font-bold text-[#112117]">Products</th>
-<th class="px-6 py-4 font-bold text-[#112117]">Visibility</th>
-<th class="px-6 py-4 font-bold text-[#112117] text-right">Actions</th>
-</tr>
-</thead>
-<tbody class="divide-y divide-[#112117]/10">
-{% for collection in collections %}
-<tr class="group hover:bg-gray-50/50 transition-colors">
+  <div class="mx-auto max-w-7xl bg-white rounded-[2rem] p-6 sm:p-10 shadow-2xl">
 
-<td class="px-6 py-4">
-<div class="flex items-center gap-4">
-<div class="size-12 rounded-lg bg-gray-200 bg-cover bg-center border border-[#112117]/10 shadow-sm"
-     style="background-image: url('{{ collection.image.url }}');">
-</div>
+    <!-- Header -->
+    <div class="mb-8 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+      <div>
+        <nav class="flex text-sm text-[#112117]/50 mb-3 font-medium">
+          <a class="hover:text-[#112117] transition-colors" href="#">Dashboard</a>
+          <span class="mx-2">/</span>
+          <a class="hover:text-[#112117] transition-colors" href="#">Products</a>
+          <span class="mx-2">/</span>
+          <span class="text-[#112117]">Collections</span>
+        </nav>
+        <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-[#112117]">Collection Management</h2>
+        <p class="mt-2 text-[#112117]/70 max-w-2xl">Organize your products into seasonal or thematic groups to enhance customer discovery.</p>
+      </div>
+      <a href="{% url 'adminpanel:addcollections' %}">
+        <button class="group flex items-center gap-2 rounded-full bg-[#112117] px-6 py-3.5 text-sm font-bold text-white shadow-lg shadow-[#112117]/20 transition-all hover:scale-105 active:scale-95 hover:bg-[#1c3326]">
+          <span class="material-symbols-outlined text-lg group-hover:rotate-90 transition-transform">add</span>
+          Create New Collection
+        </button>
+      </a>
+    </div>
 
-<div class="flex flex-col">
-<span class="font-bold text-[#112117] text-base">
-    {{ collection.name }}
-</span>
-<span class="text-xs text-[#112117]/60">
-    Updated {{ collection.updated_at|timesince }} ago
-</span>
-</div>
-</div>
-</td>
+    <!-- Filters Form -->
+    <form method="GET" class="mb-6 flex flex-col md:flex-row gap-4 justify-between items-center rounded-2xl bg-gray-50 p-2 border border-[#112117]/5">
 
-<!-- STATUS column -->
-<td class="px-6 py-4">
-  {% if collection.computed_status == "published" %}
-    <span class="inline-flex items-center gap-1.5 rounded-full bg-[#112117]/5 px-3 py-1 text-xs font-bold text-[#112117] border border-[#112117]/10">
-      <span class="size-2 rounded-full bg-green-500"></span> Published
-    </span>
-  {% elif collection.is_scheduled %}
-    <span class="inline-flex items-center gap-1.5 rounded-full bg-yellow-50 px-3 py-1 text-xs font-bold text-yellow-700 border border-yellow-200">
-      <span class="size-2 rounded-full bg-yellow-400"></span>
-      Scheduled · {{ collection.publish_at }}
-    </span>
-  {% else %}
-    <span class="inline-flex items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1 text-xs font-bold text-gray-500 border border-gray-200">
-      <span class="size-2 rounded-full bg-gray-400"></span> Draft
-    </span>
-  {% endif %}
-</td>
+      <div class="flex flex-col sm:flex-row gap-2 w-full md:w-auto">
 
-<!-- add this td after the visibility td -->
-<td class="px-6 py-4">
-  <div class="flex items-center gap-2">
-    <span class="font-bold text-[#112117]">{{ collection.products_count }}</span>
-    <span class="text-[#112117]/50 text-xs">items</span>
+        <!-- Search by name -->
+        <div class="relative w-full sm:w-72">
+          <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-[#112117]/50">
+            <span class="material-symbols-outlined text-xl">filter_list</span>
+          </span>
+          <input
+            type="search"
+            name="q"
+            value="{{ request.GET.q }}"
+            class="w-full rounded-xl border-none bg-white py-2.5 pl-10 pr-4 text-sm text-[#112117] focus:ring-2 focus:ring-[#112117]/10 shadow-sm placeholder:text-[#112117]/40"
+            placeholder="Filter by name..."
+          />
+        </div>
+
+        <!-- Status Filter -->
+        <div class="relative w-full sm:w-48">
+          <select
+            name="status"
+            onchange="this.form.submit()"
+            class="w-full rounded-xl border-none bg-white py-2.5 pl-4 pr-10 text-sm text-[#112117] focus:ring-2 focus:ring-[#112117]/10 shadow-sm cursor-pointer appearance-none"
+          >
+            <option value=""       {% if not request.GET.status %}selected{% endif %}>All Statuses</option>
+            <option value="active" {% if request.GET.status == 'active' %}selected{% endif %}>Published</option>
+            <option value="draft"  {% if request.GET.status == 'draft'  %}selected{% endif %}>Draft</option>
+          </select>
+          <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-[#112117]/50">
+            <span class="material-symbols-outlined text-lg">expand_more</span>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="flex gap-2 w-full md:w-auto">
+
+        <!-- Search Submit -->
+        <button
+          type="submit"
+          class="whitespace-nowrap flex items-center justify-center gap-2 rounded-xl bg-[#112117] px-4 py-2.5 text-sm font-bold text-white shadow-sm hover:bg-[#1c3326] transition-colors"
+        >
+          <span class="material-symbols-outlined text-lg">search</span> Search
+        </button>
+
+        <!-- Reset -->
+        {% if request.GET.q or request.GET.status %}
+          <a
+            href="{% url 'adminpanel:collections' %}"
+            class="whitespace-nowrap flex items-center justify-center gap-2 rounded-xl bg-white px-4 py-2.5 text-sm font-bold text-[#112117] shadow-sm border border-[#112117]/10 hover:bg-gray-100 transition-colors"
+            title="Clear filters"
+          >
+            <span class="material-symbols-outlined text-lg">filter_alt_off</span> Clear
+          </a>
+        {% endif %}
+
+      </div>
+    </form>
+
+    <!-- Results summary -->
+    {% if request.GET.q or request.GET.status %}
+      <div class="mb-4 px-4 py-2 bg-[#112117]/5 text-[#112117]/70 text-sm rounded-xl border border-[#112117]/10">
+        Showing {{ total_count }} collection{{ total_count|pluralize }}
+        {% if request.GET.q %} matching <strong>"{{ request.GET.q }}"</strong>{% endif %}
+        {% if request.GET.status %} &mdash; status: <strong>{{ request.GET.status|title }}</strong>{% endif %}
+      </div>
+    {% endif %}
+
+    <!-- Table -->
+    <div class="overflow-hidden rounded-2xl border border-[#112117]/10 bg-white shadow-sm ring-1 ring-black/5">
+      <div class="overflow-x-auto">
+        <table class="min-w-full text-left text-sm whitespace-nowrap">
+          <thead class="bg-gray-50 border-b border-[#112117]/10">
+            <tr>
+              <th class="px-6 py-4 font-bold text-[#112117]">Collection Name</th>
+              <th class="px-6 py-4 font-bold text-[#112117]">Status</th>
+              <th class="px-6 py-4 font-bold text-[#112117]">Products</th>
+              <th class="px-6 py-4 font-bold text-[#112117]">Visibility</th>
+              <th class="px-6 py-4 font-bold text-[#112117] text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-[#112117]/10">
+            {% for collection in collections %}
+            <tr class="group hover:bg-gray-50/50 transition-colors">
+
+              <!-- Name + Image -->
+              <td class="px-6 py-4">
+                <div class="flex items-center gap-4">
+                  <div class="size-12 rounded-lg bg-gray-200 bg-cover bg-center border border-[#112117]/10 shadow-sm"
+                       {% if collection.image %}style="background-image: url('{{ collection.image.url }}');"{% endif %}>
+                  </div>
+                  <div class="flex flex-col">
+                    <span class="font-bold text-[#112117] text-base">{{ collection.name }}</span>
+                    <span class="text-xs text-[#112117]/60">Updated {{ collection.updated_at|timesince }} ago</span>
+                  </div>
+                </div>
+              </td>
+
+              <!-- Status -->
+              <td class="px-6 py-4">
+                {% if collection.computed_status == "published" %}
+                  <span class="inline-flex items-center gap-1.5 rounded-full bg-[#112117]/5 px-3 py-1 text-xs font-bold text-[#112117] border border-[#112117]/10">
+                    <span class="size-2 rounded-full bg-green-500"></span> Published
+                  </span>
+                {% elif collection.is_scheduled %}
+                  <span class="inline-flex items-center gap-1.5 rounded-full bg-yellow-50 px-3 py-1 text-xs font-bold text-yellow-700 border border-yellow-200">
+                    <span class="size-2 rounded-full bg-yellow-400"></span>
+                    Scheduled · {{ collection.publish_at }}
+                  </span>
+                {% else %}
+                  <span class="inline-flex items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1 text-xs font-bold text-gray-500 border border-gray-200">
+                    <span class="size-2 rounded-full bg-gray-400"></span> Draft
+                  </span>
+                {% endif %}
+              </td>
+
+              <!-- Products count -->
+              <td class="px-6 py-4">
+                <div class="flex items-center gap-2">
+                  <span class="font-bold text-[#112117]">{{ collection.products_count }}</span>
+                  <span class="text-[#112117]/50 text-xs">items</span>
+                </div>
+              </td>
+
+              <!-- Visibility -->
+              <td class="px-6 py-4 text-[#112117]/70">
+                <div class="flex items-center gap-1.5">
+                  <span class="material-symbols-outlined text-lg">
+                    {% if collection.computed_visibility == "public" %}public{% else %}lock{% endif %}
+                  </span>
+                  {{ collection.computed_visibility|title }}
+                </div>
+              </td>
+
+              <!-- Actions -->
+              <td class="px-6 py-4 text-right">
+                <div class="flex justify-end gap-1">
+                  <a href="{% url 'adminpanel:editcollection' collection.id %}"
+                     class="flex size-9 items-center justify-center rounded-lg text-[#112117]/70 hover:bg-[#112117] hover:text-white transition-colors">
+                    <span class="material-symbols-outlined text-lg">edit</span>
+                  </a>
+                  <form method="post" action="{% url 'adminpanel:deletecollection' collection.id %}"
+                        onsubmit="return confirm('Delete this collection?');">
+                    {% csrf_token %}
+                    <button class="flex size-9 items-center justify-center rounded-lg text-[#112117]/70 hover:bg-red-50 hover:text-red-600 transition-colors">
+                      <span class="material-symbols-outlined text-lg">delete</span>
+                    </button>
+                  </form>
+                </div>
+              </td>
+
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="5" class="text-center py-10 text-gray-400">
+                <span class="material-symbols-outlined text-4xl block mb-2">collections_bookmark</span>
+                No collections found.
+                {% if request.GET.q or request.GET.status %}
+                  &mdash; <a href="{% url 'adminpanel:collections' %}" class="text-[#112117] underline">clear filters</a>
+                {% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pagination Footer -->
+      <div class="flex items-center justify-between border-t border-[#112117]/10 bg-gray-50 px-6 py-4">
+
+        <!-- Count -->
+        <span class="text-sm text-[#112117]/70">
+          {% if page_obj.paginator.num_pages > 1 %}
+            Showing {{ page_obj.start_index }}–{{ page_obj.end_index }} of {{ total_count }} collection{{ total_count|pluralize }}
+          {% else %}
+            {{ total_count }} collection{{ total_count|pluralize }}
+          {% endif %}
+        </span>
+
+        <!-- Pagination controls -->
+        {% if page_obj.paginator.num_pages > 1 %}
+        <nav class="flex gap-1">
+
+          <!-- Previous -->
+          {% if page_obj.has_previous %}
+            <a href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}{% if request.GET.status %}status={{ request.GET.status }}&{% endif %}page={{ page_obj.previous_page_number }}"
+               class="flex size-9 items-center justify-center rounded-lg border border-[#112117]/10 bg-white text-[#112117] hover:bg-[#112117] hover:text-white transition-colors shadow-sm">
+              <span class="material-symbols-outlined text-lg">chevron_left</span>
+            </a>
+          {% else %}
+            <span class="flex size-9 items-center justify-center rounded-lg border border-[#112117]/10 bg-white text-[#112117]/30 cursor-not-allowed shadow-sm">
+              <span class="material-symbols-outlined text-lg">chevron_left</span>
+            </span>
+          {% endif %}
+
+          <!-- Page numbers -->
+          {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+              <span class="flex size-9 items-center justify-center rounded-lg bg-[#112117] text-white text-sm font-bold shadow-sm">
+                {{ num }}
+              </span>
+            {% elif num == 1 or num == page_obj.paginator.num_pages or num >= page_obj.number|add:"-2" and num <= page_obj.number|add:"2" %}
+              <a href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}{% if request.GET.status %}status={{ request.GET.status }}&{% endif %}page={{ num }}"
+                 class="flex size-9 items-center justify-center rounded-lg border border-[#112117]/10 bg-white text-[#112117] text-sm font-medium hover:bg-[#112117] hover:text-white transition-colors shadow-sm">
+                {{ num }}
+              </a>
+            {% elif num == page_obj.number|add:"-3" or num == page_obj.number|add:"3" %}
+              <span class="flex size-9 items-center justify-center text-[#112117]/40 text-sm">…</span>
+            {% endif %}
+          {% endfor %}
+
+          <!-- Next -->
+          {% if page_obj.has_next %}
+            <a href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}{% if request.GET.status %}status={{ request.GET.status }}&{% endif %}page={{ page_obj.next_page_number }}"
+               class="flex size-9 items-center justify-center rounded-lg border border-[#112117]/10 bg-white text-[#112117] hover:bg-[#112117] hover:text-white transition-colors shadow-sm">
+              <span class="material-symbols-outlined text-lg">chevron_right</span>
+            </a>
+          {% else %}
+            <span class="flex size-9 items-center justify-center rounded-lg border border-[#112117]/10 bg-white text-[#112117]/30 cursor-not-allowed shadow-sm">
+              <span class="material-symbols-outlined text-lg">chevron_right</span>
+            </span>
+          {% endif %}
+
+        </nav>
+        {% endif %}
+
+      </div>
+    </div>
+
   </div>
-</td>
-
-<!-- VISIBILITY column -->
-<td class="px-6 py-4 text-[#112117]/70">
-  <div class="flex items-center gap-1.5">
-    <span class="material-symbols-outlined text-lg">
-      {% if collection.computed_visibility == "public" %}public{% else %}lock{% endif %}
-    </span>
-    {{ collection.computed_visibility|title }}
-  </div>
-</td>
-
-
-<td class="px-6 py-4 text-right">
-<div class="flex justify-end gap-1">
-<a href="{% url 'adminpanel:editcollection' collection.id %}"
-   class="flex size-9 items-center justify-center rounded-lg text-[#112117]/70 hover:bg-[#112117] hover:text-white">
-<span class="material-symbols-outlined text-lg">edit</span>
-</a>
-
-<form method="post" action="{% url 'adminpanel:deletecollection' collection.id %}">
-{% csrf_token %}
-<button class="flex size-9 items-center justify-center rounded-lg text-[#112117]/70 hover:bg-red-50 hover:text-red-600">
-<span class="material-symbols-outlined text-lg">delete</span>
-</button>
-</form>
-</div>
-</td>
-
-</tr>
-{% empty %}
-<tr>
-<td colspan="5" class="text-center py-10 text-gray-400">
-No collections found
-</td>
-</tr>
-{% endfor %}
-</tbody>
-
-</table>
-</div>
-<div class="flex items-center justify-between border-t border-[#112117]/10 bg-gray-50 px-6 py-4">
-<span class="text-sm text-[#112117]/70">
-  {{ collections|length }} collection{{ collections|length|pluralize }}
-</span>
-
-<div class="flex gap-2">
-<button class="flex size-9 items-center justify-center rounded-lg border border-[#112117]/10 bg-white text-[#112117] hover:bg-[#112117] hover:text-white transition-colors disabled:opacity-50 shadow-sm">
-<span class="material-symbols-outlined text-lg">chevron_left</span>
-</button>
-<button class="flex size-9 items-center justify-center rounded-lg border border-[#112117]/10 bg-white text-[#112117] hover:bg-[#112117] hover:text-white transition-colors shadow-sm">
-<span class="material-symbols-outlined text-lg">chevron_right</span>
-</button>
-</div>
-</div>
-</div>
-</div>
 </main>
+
 <footer class="mt-auto border-t border-white/10 bg-[#112117] py-8">
-<div class="mx-auto max-w-7xl px-4 flex flex-col md:flex-row justify-between items-center gap-4">
-<p class="text-xs text-white/50 font-medium">© 2024 Elegance Inc. Admin Panel v2.0</p>
-<div class="flex gap-6 text-xs font-medium text-white/50">
-<a class="hover:text-white transition-colors" href="#">Documentation</a>
-<a class="hover:text-white transition-colors" href="#">Support</a>
-<a class="hover:text-white transition-colors" href="#">Privacy Policy</a>
-</div>
-</div>
+  <div class="mx-auto max-w-7xl px-4 flex flex-col md:flex-row justify-between items-center gap-4">
+    <p class="text-xs text-white/50 font-medium">© 2024 Elegance Inc. Admin Panel v2.0</p>
+    <div class="flex gap-6 text-xs font-medium text-white/50">
+      <a class="hover:text-white transition-colors" href="#">Documentation</a>
+      <a class="hover:text-white transition-colors" href="#">Support</a>
+      <a class="hover:text-white transition-colors" href="#">Privacy Policy</a>
+    </div>
+  </div>
 </footer>
+
 {% endblock %}
