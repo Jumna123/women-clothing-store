@@ -17,7 +17,10 @@ class ProductForm(forms.ModelForm):
     stock_quantity = forms.IntegerField(
         required=False,
         initial=0,
+        min_value=0,  
         widget=forms.NumberInput(attrs={
+            "min": "0",   
+            "step": "1",  
             "class": "w-full h-12 bg-[#f8fcfa] border border-border-green rounded-xl px-4 focus:border-primary focus:ring-0 transition-colors",
         })
     )
@@ -88,6 +91,8 @@ class ProductForm(forms.ModelForm):
 
     def clean_stock_quantity(self):
         value = self.cleaned_data.get("stock_quantity")
+        if value is not None and value < 0:
+            raise forms.ValidationError("Stock quantity cannot be negative.")
         return value if value is not None else 0
 
 

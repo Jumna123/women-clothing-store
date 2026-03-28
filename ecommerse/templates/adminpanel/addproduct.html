@@ -2,440 +2,391 @@
 {% block title %}Category Management{% endblock %}
 
 {% block content %}
+
+<link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet">
+
+<style>
+  #quill-wrapper .ql-toolbar {
+    background: #ffffff;
+    border: none !important;
+    border-bottom: 1px solid #d1e7da !important;
+    padding: 8px 12px;
+    border-radius: 12px 12px 0 0;
+  }
+  #quill-wrapper .ql-container {
+    border: none !important;
+    background: #f8fcfa;
+    font-size: 14px;
+    font-family: inherit;
+    border-radius: 0 0 12px 12px;
+  }
+  #quill-wrapper .ql-editor {
+    min-height: 150px;
+    padding: 12px 16px;
+    color: #1a1a1a;
+  }
+  #quill-wrapper .ql-editor.ql-blank::before {
+    color: #88a594;
+    font-style: normal;
+  }
+  #quill-wrapper .ql-toolbar .ql-stroke { stroke: #88a594; }
+  #quill-wrapper .ql-toolbar .ql-fill   { fill:   #88a594; }
+  #quill-wrapper .ql-toolbar button:hover .ql-stroke,
+  #quill-wrapper .ql-toolbar button.ql-active .ql-stroke { stroke: #11d45f !important; }
+  #quill-wrapper .ql-toolbar button:hover .ql-fill,
+  #quill-wrapper .ql-toolbar button.ql-active .ql-fill   { fill:   #11d45f !important; }
+  #quill-wrapper .ql-toolbar .ql-picker-label { color: #88a594; }
+</style>
+
 <h1 class="text-xl font-bold">
-    {% if is_edit %}
-        Edit Product
-    {% else %}
-        Add Product
-    {% endif %}
+  {% if is_edit %}Edit Product{% else %}Add Product{% endif %}
 </h1>
 
 <main class="flex-1 flex flex-col relative bg-page-bg">
   <header class="flex items-center justify-between px-8 py-5 sticky top-0 z-20 bg-page-bg">
-<div class="md:hidden">
-<button class="text-white">
-<span class="material-symbols-outlined">menu</span>
-</button>
-</div>
-<div class="hidden md:flex flex-col">
-<div class="flex items-center gap-2 text-sm text-[#88a594] mb-1">
-<a class="hover:text-primary transition-colors" href="#">Dashboard</a>
-<span class="material-symbols-outlined text-[16px]">chevron_right</span>
-<a class="hover:text-primary transition-colors" href="#">Products</a>
-<span class="material-symbols-outlined text-[16px]">chevron_right</span>
-<span class="text-white font-medium">Add New</span>
-</div>
-<h2 class="text-2xl font-bold text-white">Product Management</h2>
-</div>
-
-</header>
-<div class="px-6 md:px-10 pb-10 max-w-[1200px] mx-auto w-full">
-<div class="mb-8 mt-2">
-<h1 class="text-4xl font-black tracking-tight text-white mb-2">Add New Product</h1>
-<p class="text-[#88a594] max-w-2xl">Create a new product listing for your store. Fill out the details below to ensure accurate inventory management and customer information.</p>
-</div>
-
-{% if messages %}
-    {% for message in messages %}
-      <div class="mb-4 px-4 py-3 rounded-xl text-sm font-medium
-        {% if message.tags == 'error' %}bg-red-100 text-red-700 border border-red-300
-        {% else %}bg-green-100 text-green-700 border border-green-300{% endif %}">
-        {{ message }}
-      </div>
-    {% endfor %}
-  {% endif %}
-
-<form method="POST" enctype="multipart/form-data">
-  {% csrf_token %}
-<div class="lg:col-span-2 flex flex-col gap-6">
-<div class="bg-white p-6 rounded-2xl shadow-sm border border-transparent">
-<h3 class="text-lg font-bold text-text-main mb-6 flex items-center gap-2">
-<span class="material-symbols-outlined text-primary">edit_note</span>
-                                General Information
-                            </h3>
-
-<label class="block">
-  <span class="text-text-main font-medium mb-2 block">Product Name</span>
-  {{ form.product_name }}
-  <!-- ✅ show error below the field -->
-  {% if form.product_name.errors %}
-    <p class="text-red-500 text-xs mt-1">{{ form.product_name.errors.0 }}</p>
-  {% endif %}
-</label>
-
-</label>
-<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-<label class="block">
-<span class="text-text-main font-medium mb-2 block">Price</span>
-<div class="relative">
-<span class="absolute left-4 top-1/2 -translate-y-1/2 text-text-secondary"></span>
-{{ form.price }}
-
-
-</div>
-</label>
-<label class="block">
-<span class="text-text-main font-medium mb-2 block">Discount Price (Optional)</span>
-<div class="relative">
-<span class="absolute left-4 top-1/2 -translate-y-1/2 text-text-secondary"></span>
-{{ form.discount_price }}
-
-
-</div>
-</label>
-</div>
-<label class="block">
-<span class="text-text-main font-medium mb-2 block">Description</span>
-<div class="bg-[#f8fcfa] border border-border-green rounded-xl overflow-hidden focus-within:border-primary transition-colors">
-<div class="flex items-center gap-2 px-3 py-2 border-b border-border-green bg-white">
-<button class="p-1.5 rounded hover:bg-gray-100 text-text-secondary" type="button"><span class="material-symbols-outlined text-[20px]">format_bold</span></button>
-<button class="p-1.5 rounded hover:bg-gray-100 text-text-secondary" type="button"><span class="material-symbols-outlined text-[20px]">format_italic</span></button>
-<button class="p-1.5 rounded hover:bg-gray-100 text-text-secondary" type="button"><span class="material-symbols-outlined text-[20px]">format_list_bulleted</span></button>
-<button class="p-1.5 rounded hover:bg-gray-100 text-text-secondary" type="button"><span class="material-symbols-outlined text-[20px]">link</span></button>
-</div>
-{{ form.description }}
-
-
-</div>
-</label>
-</div>
-</div>
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-
-<!-- LEFT COLUMN : PRODUCT IMAGES -->
-<div class="bg-white dark:bg-[#0b1a12] p-6 rounded-2xl shadow-sm border border-[#e7f3ec] dark:border-[#1a3826] h-fit">
-
-  <h3 class="text-lg font-bold text-text-main dark:text-white mb-6 flex items-center gap-2">
-    <span class="material-symbols-outlined text-primary">image</span>
-    Product Images
-  </h3>
-
-  <label
-    id="uploadBox"
-    for="productImage"
-    class="border-2 border-dashed border-border-green rounded-xl p-8 flex flex-col items-center justify-center text-center cursor-pointer hover:bg-[#f8fcfa] dark:hover:bg-[#152e20] transition-colors group"
-  >
-    <div class="bg-[#e7f3ec] rounded-full p-4 mb-4 group-hover:scale-110 transition-transform">
-      <span class="material-symbols-outlined text-primary text-[32px]">cloud_upload</span>
+    <div class="md:hidden">
+      <button class="text-white">
+        <span class="material-symbols-outlined">menu</span>
+      </button>
     </div>
-    <p class="text-text-main dark:text-white font-medium mb-1">Click to upload or drag and drop</p>
-    <p class="text-text-secondary text-sm">SVG, PNG, JPG or GIF</p>
-
-    <input type="file" name="images" id="productImage" accept="image/*" multiple class="hidden" />
-  </label>
-
-  <div class="flex gap-4 mt-6 overflow-x-auto pb-2" id="imagePreviewContainer">
-
-    <!-- ✅ Show existing images in edit mode -->
-    {% if is_edit %}
-      {% for img in product.images.all %}
-      <div class="relative shrink-0 size-24 rounded-lg overflow-hidden border border-border-green group">
-        <div class="w-full h-full bg-center bg-cover" style="background-image: url('{{ img.image.url }}');"></div>
-        <button
-          type="button"
-          class="absolute top-1 right-1 bg-white/90 text-red-500 rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-opacity delete-image-btn"
-          data-image-id="{{ img.id }}"
-        >
-          <span class="material-symbols-outlined text-[16px]">close</span>
-        </button>
+    <div class="hidden md:flex flex-col">
+      <div class="flex items-center gap-2 text-sm text-[#88a594] mb-1">
+        <a class="hover:text-primary transition-colors" href="#">Dashboard</a>
+        <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+        <a class="hover:text-primary transition-colors" href="#">Products</a>
+        <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+        <span class="text-white font-medium">Add New</span>
       </div>
+      <h2 class="text-2xl font-bold text-white">Product Management</h2>
+    </div>
+  </header>
+
+  <div class="px-6 md:px-10 pb-10 max-w-[1200px] mx-auto w-full">
+    <div class="mb-8 mt-2">
+      <h1 class="text-4xl font-black tracking-tight text-white mb-2">
+        {% if is_edit %}Edit Product{% else %}Add New Product{% endif %}
+      </h1>
+      <p class="text-[#88a594] max-w-2xl">Create a new product listing for your store. Fill out the details below to ensure accurate inventory management and customer information.</p>
+    </div>
+
+    {% if messages %}
+      {% for message in messages %}
+        <div class="mb-4 px-4 py-3 rounded-xl text-sm font-medium
+          {% if message.tags == 'error' %}bg-red-100 text-red-700 border border-red-300
+          {% else %}bg-green-100 text-green-700 border border-green-300{% endif %}">
+          {{ message }}
+        </div>
       {% endfor %}
     {% endif %}
-    
-    {% if not is_edit %}
-  <p class="text-xs text-[#88a594] mt-2 flex items-center gap-1">
-    <span class="material-symbols-outlined text-[14px]">info</span>
-    If the form has errors, you'll need to re-select your images.
-  </p>
-{% endif %}
-    <!-- Add more images button -->
-    <label
-      for="productImage"
-      class="relative shrink-0 size-24 rounded-lg overflow-hidden border border-border-green flex items-center justify-center bg-[#f8fcfa] dark:bg-[#152e20] cursor-pointer hover:bg-[#eef6f1]"
-    >
-      <span class="material-symbols-outlined text-border-green">add_photo_alternate</span>
-    </label>
 
+    <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+
+      <div class="lg:col-span-2 flex flex-col gap-6">
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-transparent">
+          <h3 class="text-lg font-bold text-text-main mb-6 flex items-center gap-2">
+            <span class="material-symbols-outlined text-primary">edit_note</span>
+            General Information
+          </h3>
+
+          <label class="block">
+            <span class="text-text-main font-medium mb-2 block">Product Name</span>
+            {{ form.product_name }}
+            {% if form.product_name.errors %}
+              <p class="text-red-500 text-xs mt-1">{{ form.product_name.errors.0 }}</p>
+            {% endif %}
+          </label>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+            <label class="block">
+              <span class="text-text-main font-medium mb-2 block">Price</span>
+              <div class="relative">
+                <span class="absolute left-4 top-1/2 -translate-y-1/2 text-text-secondary"></span>
+                {{ form.price }}
+              </div>
+            </label>
+            <label class="block">
+              <span class="text-text-main font-medium mb-2 block">Discount Price (Optional)</span>
+              <div class="relative">
+                <span class="absolute left-4 top-1/2 -translate-y-1/2 text-text-secondary"></span>
+                {{ form.discount_price }}
+              </div>
+            </label>
+          </div>
+
+          <div class="mt-6">
+            <span class="text-text-main font-medium mb-2 block">Description</span>
+            <div id="quill-wrapper" class="border border-border-green rounded-xl">
+              <div id="quill-editor"></div>
+            </div>
+            <textarea name="description" id="description-hidden" class="hidden">{% if is_edit %}{{ product.description|default_if_none:'' }}{% endif %}</textarea>
+            {% if form.description.errors %}
+              <p class="text-red-500 text-xs mt-1">{{ form.description.errors.0 }}</p>
+            {% endif %}
+          </div>
+
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+
+        <!-- LEFT COLUMN: PRODUCT IMAGES -->
+        <div class="bg-white dark:bg-[#0b1a12] p-6 rounded-2xl shadow-sm border border-[#e7f3ec] dark:border-[#1a3826] h-fit">
+          <h3 class="text-lg font-bold text-text-main dark:text-white mb-6 flex items-center gap-2">
+            <span class="material-symbols-outlined text-primary">image</span>
+            Product Images
+          </h3>
+
+          <label
+            id="uploadBox"
+            for="productImage"
+            class="border-2 border-dashed border-border-green rounded-xl p-8 flex flex-col items-center justify-center text-center cursor-pointer hover:bg-[#f8fcfa] dark:hover:bg-[#152e20] transition-colors group"
+          >
+            <div class="bg-[#e7f3ec] rounded-full p-4 mb-4 group-hover:scale-110 transition-transform">
+              <span class="material-symbols-outlined text-primary text-[32px]">cloud_upload</span>
+            </div>
+            <p class="text-text-main dark:text-white font-medium mb-1">Click to upload or drag and drop</p>
+            <p class="text-text-secondary text-sm">SVG, PNG, JPG or GIF</p>
+            <input type="file" name="images" id="productImage" accept="image/*" multiple class="hidden" />
+          </label>
+
+          <div class="flex gap-4 mt-6 overflow-x-auto pb-2" id="imagePreviewContainer">
+            {% if is_edit %}
+              {% for img in product.images.all %}
+              <div class="relative shrink-0 size-24 rounded-lg overflow-hidden border border-border-green group">
+                <div class="w-full h-full bg-center bg-cover" style="background-image: url('{{ img.image.url }}');"></div>
+                <button
+                  type="button"
+                  class="absolute top-1 right-1 bg-white/90 text-red-500 rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-opacity delete-image-btn"
+                  data-image-id="{{ img.id }}"
+                >
+                  <span class="material-symbols-outlined text-[16px]">close</span>
+                </button>
+              </div>
+              {% endfor %}
+            {% endif %}
+
+            {% if not is_edit %}
+              <p class="text-xs text-[#88a594] mt-2 flex items-center gap-1">
+                <span class="material-symbols-outlined text-[14px]">info</span>
+                If the form has errors, you'll need to re-select your images.
+              </p>
+            {% endif %}
+
+            <label
+              for="productImage"
+              class="relative shrink-0 size-24 rounded-lg overflow-hidden border border-border-green flex items-center justify-center bg-[#f8fcfa] dark:bg-[#152e20] cursor-pointer hover:bg-[#eef6f1]"
+            >
+              <span class="material-symbols-outlined text-border-green">add_photo_alternate</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- RIGHT COLUMN -->
+        <div class="flex flex-col gap-6">
+
+          <!-- Availability -->
+          <div class="bg-white dark:bg-[#0b1a12] p-6 rounded-2xl shadow-sm border border-[#e7f3ec] dark:border-[#1a3826]">
+            <h3 class="text-lg font-bold text-text-main dark:text-white mb-4">Availability</h3>
+            <div class="flex items-center justify-between mb-6 p-3 bg-[#f8fcfa] dark:bg-[#152e20] rounded-xl border border-border-green dark:border-[#2a4d38]">
+              <div class="flex flex-col">
+                <span class="text-sm font-bold text-text-main dark:text-white">In Stock</span>
+                <span class="text-xs text-text-secondary">Visible to customers</span>
+              </div>
+              <label class="relative inline-flex items-center cursor-pointer">
+                {{ form.is_available }}
+                <div class="w-11 h-6 bg-gray-200 rounded-full relative peer-checked:bg-primary dark:bg-gray-700
+                  after:content-[''] after:absolute after:top-[2px] after:left-[2px]
+                  after:bg-white after:border after:rounded-full after:h-5 after:w-5
+                  after:transition-all peer-checked:after:translate-x-full"></div>
+              </label>
+            </div>
+
+            <div class="bg-white dark:bg-[#0b1a12] p-6 rounded-2xl shadow-sm border border-[#e7f3ec] dark:border-[#1a3826]">
+              <label class="block">
+                <span class="text-text-main dark:text-white font-medium mb-2 block">Stock Quantity</span>
+                {{ form.stock_quantity }}
+              </label>
+            </div>
+          </div>
+
+          <!-- Category -->
+          <div class="bg-white dark:bg-[#0b1a12] p-6 rounded-2xl shadow-sm border border-[#e7f3ec] dark:border-[#1a3826]">
+            <label class="block">
+              <span class="text-text-main dark:text-white font-medium mb-2 block">Category</span>
+              <div class="relative">
+                {{ form.category }}
+                <span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none">expand_more</span>
+              </div>
+            </label>
+          </div>
+
+          <!-- Sizes with individual stock -->
+      <div class="bg-white dark:bg-[#0b1a12] p-6 rounded-2xl shadow-sm border border-[#e7f3ec] dark:border-[#1a3826]">
+        <span class="text-text-main dark:text-white font-medium mb-4 block">Available Sizes & Stock</span>
+        
+        <div id="sizeContainer" class="flex flex-col gap-3 mb-4">
+          {% if is_edit %}
+            {% for ps in product.product_sizes.all %}
+            <div class="size-row flex items-center gap-3 bg-[#f8fcfa] dark:bg-[#152e20] px-4 py-3 rounded-xl border border-border-green">
+              <span class="text-sm font-bold text-text-main dark:text-white w-12">{{ ps.size }}</span>
+              <input type="hidden" name="size_name" value="{{ ps.size }}">
+              <div class="flex items-center gap-2 flex-1">
+                <label class="text-xs text-text-secondary">Stock:</label>
+                <input type="number" name="size_stock" value="{{ ps.stock_quantity }}" min="0" step="1"
+                  class="w-24 h-8 bg-white dark:bg-[#0b1a12] border border-border-green rounded-lg px-3 text-sm font-semibold text-text-main focus:ring-0 focus:border-primary"/>
+              </div>
+              <button type="button" class="text-text-secondary hover:text-red-500 remove-size-row">
+                <span class="material-symbols-outlined text-[18px]">close</span>
+              </button>
+            </div>
+            {% endfor %}
+          {% endif %}
+        </div>
+
+        <div class="flex gap-3">
+          <div class="relative flex-1">
+            <select id="sizeSelect"
+              class="w-full h-12 bg-[#f8fcfa] dark:bg-[#152e20] border border-border-green dark:border-[#2a4d38] rounded-xl px-4 text-text-main dark:text-white focus:ring-0 focus:border-primary transition-colors appearance-none">
+              <option disabled selected value="">Select size to add...</option>
+              <option value="XS">XS</option>
+              <option value="S">S</option>
+              <option value="M">M</option>
+              <option value="L">L</option>
+              <option value="XL">XL</option>
+              <option value="XXL">XXL</option>
+              <option value="One Size">One Size</option>
+            </select>
+            <span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none">expand_more</span>
+          </div>
+          <button type="button" onclick="addSizeRow()"
+            class="h-12 px-5 bg-primary text-white rounded-xl font-semibold text-sm hover:opacity-90 transition">
+            Add
+          </button>
+        </div>
+      </div>
+
+          <!-- Color -->
+          <div class="bg-white dark:bg-[#0b1a12] p-6 rounded-2xl shadow-sm border border-[#e7f3ec] dark:border-[#1a3826]">
+            <label class="block mb-4">
+              <span class="text-text-main dark:text-white font-medium mb-2 block">Color</span>
+              <div class="relative">
+                <input
+                  type="color"
+                  id="colorPicker"
+                  value="{% if is_edit %}{{ product.color_hex }}{% else %}#11d45f{% endif %}"
+                  class="w-full h-12 bg-[#f8fcfa] dark:bg-[#152e20] border border-border-green dark:border-[#2a4d38] rounded-xl p-1.5 cursor-pointer focus:ring-0 focus:border-primary transition-colors"
+                />
+                <span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none">palette</span>
+              </div>
+            </label>
+            <label class="block">
+              <span class="text-text-main dark:text-white font-medium mb-2 block">Color Name</span>
+              <div class="relative">
+                <input
+                  type="text"
+                  name="color_name"
+                  placeholder="e.g. Forest Green"
+                  value="{% if is_edit %}{{ product.color_name }}{% else %}{% endif %}"
+                  class="w-full h-12 bg-[#f8fcfa] dark:bg-[#152e20] border border-border-green dark:border-[#2a4d38] rounded-xl px-4 text-text-main dark:text-white placeholder:text-text-secondary focus:ring-0 focus:border-primary transition-colors"
+                />
+                <span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none">label</span>
+              </div>
+            </label>
+            {{ form.color_hex }}
+          </div>
+
+          <div class="flex flex-col gap-6">
+
+            <!-- Collections -->
+            <div class="bg-white dark:bg-[#0b1a12] p-6 rounded-2xl shadow-sm border border-[#e7f3ec] dark:border-[#1a3826]">
+              <label class="block text-sm font-semibold text-text-main dark:text-white mb-3">Collections</label>
+              <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                {% for collection in collections %}
+                <label class="flex items-center gap-2 text-sm text-text-main dark:text-gray-200">
+                  <input
+                    type="checkbox"
+                    name="collections"
+                    value="{{ collection.id }}"
+                    class="w-4 h-4 text-primary border-border-green rounded focus:ring-primary dark:bg-[#152e20] dark:border-[#2a4d38]"
+                    {% if is_edit and collection in product.collections.all %}checked{% endif %}
+                  >
+                  {{ collection.name }}
+                </label>
+                {% endfor %}
+              </div>
+            </div>
+
+            <!-- Trending -->
+            <div class="bg-white dark:bg-[#0b1a12] p-6 rounded-2xl shadow-sm border border-[#e7f3ec] dark:border-[#1a3826]">
+              <h3 class="text-lg font-bold text-text-main dark:text-white mb-4">Trending</h3>
+              <div class="flex items-center justify-between p-3 bg-[#f8fcfa] dark:bg-[#152e20] rounded-xl border border-border-green dark:border-[#2a4d38]">
+                <div class="flex flex-col">
+                  <span class="text-sm font-bold text-text-main dark:text-white">Show in Trending</span>
+                  <span class="text-xs text-text-secondary">Display on homepage trending section</span>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer">
+                  <input
+                    type="checkbox"
+                    name="is_trending"
+                    value="1"
+                    {% if is_edit and product.is_trending %}checked{% endif %}
+                    class="sr-only peer"
+                  />
+                  <div class="w-11 h-6 bg-gray-200 rounded-full relative peer-checked:bg-primary dark:bg-gray-700
+                    after:content-[''] after:absolute after:top-[2px] after:left-[2px]
+                    after:bg-white after:border after:rounded-full after:h-5 after:w-5
+                    after:transition-all peer-checked:after:translate-x-full"></div>
+                </label>
+              </div>
+            </div>
+
+            <!-- Tags — fixed for edit mode -->
+            <div class="bg-white dark:bg-[#0b1a12] p-6 rounded-2xl shadow-sm border border-[#e7f3ec] dark:border-[#1a3826]">
+              <label class="block">
+                <span class="text-text-main dark:text-white font-medium mb-2 block">Tags</span>
+                <input
+                  id="tagInput"
+                  class="w-full h-12 bg-[#f8fcfa] dark:bg-[#152e20] border border-border-green dark:border-[#2a4d38] rounded-xl px-4 text-text-main dark:text-white focus:ring-0 focus:border-primary transition-colors"
+                  placeholder="Type a tag and press Enter or comma"
+                  type="text"
+                />
+                {# Pass tags from Django as a safe JSON-like string so JS can parse it reliably #}
+                <input type="hidden" name="tags" id="tags-hidden" value="{{ product_tags }}">
+                <div id="tagContainer" class="flex flex-wrap gap-2 mt-3"></div>
+              </label>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="flex justify-end gap-4 mt-8">
+        <button
+          type="button"
+          class="px-6 h-12 border border-[#1a3826] text-[#88a594] rounded-xl font-semibold hover:bg-[#1a3826] hover:text-white transition">
+          Cancel
+        </button>
+        <button
+          type="submit"
+          class="px-8 h-12 bg-primary text-white font-semibold rounded-xl shadow-sm hover:opacity-90 transition">
+          {% if is_edit %}Update Product{% else %}Add Product{% endif %}
+        </button>
+      </div>
+
+    </form>
   </div>
-</div>
-
-
-<!-- RIGHT COLUMN -->
-<div class="flex flex-col gap-6">
-
-<div class="bg-white dark:bg-[#0b1a12] p-6 rounded-2xl shadow-sm border border-[#e7f3ec] dark:border-[#1a3826]">
-
-<h3 class="text-lg font-bold text-text-main dark:text-white mb-4">
-Availability
-</h3>
-
-<div class="flex items-center justify-between mb-6 p-3 bg-[#f8fcfa] dark:bg-[#152e20] rounded-xl border border-border-green dark:border-[#2a4d38]">
-
-<div class="flex flex-col">
-<span class="text-sm font-bold text-text-main dark:text-white">
-In Stock
-</span>
-
-<span class="text-xs text-text-secondary">
-Visible to customers
-</span>
-</div>
-
-<label class="relative inline-flex items-center cursor-pointer">
-
-{{ form.is_available }}
-<div class="w-11 h-6 bg-gray-200 rounded-full relative peer-checked:bg-primary dark:bg-gray-700
-after:content-[''] after:absolute after:top-[2px] after:left-[2px]
-after:bg-white after:border after:rounded-full after:h-5 after:w-5
-after:transition-all peer-checked:after:translate-x-full"></div>
-
-</label>
-
-</div>
-
-<div class="bg-white dark:bg-[#0b1a12] p-6 rounded-2xl shadow-sm border border-[#e7f3ec] dark:border-[#1a3826]">
-  <label class="block">
-    <span class="text-text-main dark:text-white font-medium mb-2 block">Stock Quantity</span>
-    {{ form.stock_quantity }}
-  </label>
-</div>
-
-
-<!-- Category -->
-<div class="bg-white dark:bg-[#0b1a12] p-6 rounded-2xl shadow-sm border border-[#e7f3ec] dark:border-[#1a3826] appearance-none">
-
-<label class="block">
-
-<span class="text-text-main dark:text-white font-medium mb-2 block">
-Category
-</span>
-
-<div class="relative">
-
-{{ form.category }}
-
-<span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none">
-expand_more
-</span>
-
-</div>
-
-</label>
-
-</div>
-
-
-<!-- Sizes -->
-<div class="bg-white dark:bg-[#0b1a12] p-6 rounded-2xl shadow-sm border border-[#e7f3ec] dark:border-[#1a3826]">
-
-
-<span class="text-text-main dark:text-white font-medium mb-2 block">
-Available Sizes
-</span>
-
-<div id="sizeContainer" class="flex flex-wrap gap-2 mb-3">
-
-{% if is_edit %}
-{% for size in sizes %}
-
-<div class="size-chip flex items-center gap-1">
-
-<span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-bold bg-[#e7f3ec] text-text-main border border-border-green">
-
-{{ size }}
-
-<button type="button"
-class="ml-2 text-text-secondary hover:text-red-500 remove-size">
-
-<span class="material-symbols-outlined text-[14px]">close</span>
-
-</button>
-
-</span>
-
-<input type="hidden" name="size" value="{{ size }}">
-
-</div>
-
-{% endfor %}
-{% endif %}
-
-</div>
-<div class="relative">
-  <select
-    id="sizeSelect"
-    class="w-full h-12 bg-[#f8fcfa] dark:bg-[#152e20] border border-border-green dark:border-[#2a4d38] rounded-xl px-4 text-text-main dark:text-white focus:ring-0 focus:border-primary transition-colors appearance-none"
-  >
-    <option disabled selected value="">Add sizes...</option>
-    <option value="XS">XS</option>
-    <option value="S">S</option>
-    <option value="M">M</option>
-    <option value="L">L</option>
-    <option value="XL">XL</option>
-    <option value="XXL">XXL</option>
-    <option value="One Size">One Size</option>
-  </select>
-
-  <span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none">
-    add
-  </span>
-</div>
-
-
-</div>
-
-
-
-<div class="bg-white dark:bg-[#0b1a12] p-6 rounded-2xl shadow-sm border border-[#e7f3ec] dark:border-[#1a3826]">
-
-  <!-- Color Picker -->
-  <label class="block mb-4">
-    <span class="text-text-main dark:text-white font-medium mb-2 block">Color</span>
-    <div class="relative">
-      <input
-        type="color"
-        id="colorPicker"
-        value="{% if is_edit %}{{ product.color_hex }}{% else %}#11d45f{% endif %}"
-        class="w-full h-12 bg-[#f8fcfa] dark:bg-[#152e20] border border-border-green dark:border-[#2a4d38] rounded-xl p-1.5 cursor-pointer focus:ring-0 focus:border-primary transition-colors"
-      />
-      <span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none">
-        palette
-      </span>
-    </div>
-  </label>
-
-  <!-- Color Name -->
-  <label class="block">
-    <span class="text-text-main dark:text-white font-medium mb-2 block">Color Name</span>
-    <div class="relative">
-      <input
-        type="text"
-        name="color_name"
-        placeholder="e.g. Forest Green"
-        value="{% if is_edit %}{{ product.color_name }}{% else %}{% endif %}"
-        class="w-full h-12 bg-[#f8fcfa] dark:bg-[#152e20] border border-border-green dark:border-[#2a4d38] rounded-xl px-4 text-text-main dark:text-white placeholder:text-text-secondary focus:ring-0 focus:border-primary transition-colors"
-      />
-      <span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none">
-        label
-      </span>
-    </div>
-  </label>
-
-  <!-- Hidden input to actually submit the hex value -->
-  {{ form.color_hex }}
-
-</div>
-
-
-<div class="flex flex-col gap-6 mt-6">
-<div class="bg-white dark:bg-[#0b1a12] p-6 rounded-2xl shadow-sm border border-[#e7f3ec] dark:border-[#1a3826]">
-
-<label class="block text-sm font-semibold text-text-main dark:text-white mb-3">
-Collections
-</label>
-
-<div class="grid grid-cols-2 md:grid-cols-3 gap-3">
-
-{% for collection in collections %}
-
-<label class="flex items-center gap-2 text-sm text-text-main dark:text-gray-200">
-
-<input
-type="checkbox"
-name="collections"
-value="{{ collection.id }}"
-class="w-4 h-4 text-primary border-border-green rounded focus:ring-primary dark:bg-[#152e20] dark:border-[#2a4d38]"
-
-{% if is_edit and collection in product.collections.all %}
-checked
-{% endif %}
->
-
-{{ collection.name }}
-
-</label>
-
-{% endfor %}
-
-</div>
-
-</div>
-
-
-<label class="block">
-
-<div class="bg-white dark:bg-[#0b1a12] p-6 rounded-2xl shadow-sm border border-[#e7f3ec] dark:border-[#1a3826]">
-
-<label class="block">
-
-<span class="text-text-main dark:text-white font-medium mb-2 block">
-Tags
-</span>
-
-<input
-class="w-full h-12 bg-[#f8fcfa] dark:bg-[#152e20] border border-border-green dark:border-[#2a4d38] rounded-xl px-4 text-text-main dark:text-white focus:ring-0 focus:border-primary transition-colors"
-placeholder="Add tags separated by comma"
-type="text"
-/>
-
-<div class="flex flex-wrap gap-2 mt-3">
-
-<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-[#e7f3ec] dark:bg-[#152e20] text-text-main dark:text-white">
-floral
-<button class="ml-1 text-text-secondary hover:text-red-500" type="button">
-<span class="material-symbols-outlined text-[14px]">close</span>
-</button>
-</span>
-
-<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-[#e7f3ec] dark:bg-[#152e20] text-text-main dark:text-white">
-cotton
-<button class="ml-1 text-text-secondary hover:text-red-500" type="button">
-<span class="material-symbols-outlined text-[14px]">close</span>
-</button>
-</span>
-
-</div>
-
-</label>
-
-</div>
-</div>
-
-</div>
-</label>
-<div class="flex justify-end gap-4 mt-8">
-
-<button
-type="button"
-class="px-6 h-12 border border-[#1a3826] text-[#88a594] rounded-xl font-semibold hover:bg-[#1a3826] hover:text-white transition">
-Cancel
-</button>
-
-<button
-type="submit"
-class="px-8 h-12 bg-primary text-white font-semibold rounded-xl shadow-sm hover:opacity-90 transition">
-
-{% if is_edit %}
-Update Product
-{% else %}
-Add Product
-{% endif %}
-
-</button>
-
-</div>
-</div>
-</form>
-</div>
 </main>
-</div>
+
+<script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
 <script>
+
+// ─── IMAGE PREVIEW ───────────────────────────────────────────────
 const imageInput = document.getElementById("productImage");
-const previewContainer = document.getElementById("imagePreviewContainer"); // ✅ use id now
+const previewContainer = document.getElementById("imagePreviewContainer");
 
 imageInput.addEventListener("change", function () {
-  const files = this.files;
-  for (let file of files) {
+  for (let file of this.files) {
     const url = URL.createObjectURL(file);
     const wrapper = document.createElement("div");
     wrapper.className = "relative shrink-0 size-24 rounded-lg overflow-hidden border border-border-green group";
@@ -447,7 +398,7 @@ imageInput.addEventListener("change", function () {
   }
 });
 
-// ✅ Delete existing images via AJAX
+// ─── DELETE EXISTING IMAGES ──────────────────────────────────────
 document.addEventListener("click", function (e) {
   const btn = e.target.closest(".delete-image-btn");
   if (btn) {
@@ -461,65 +412,147 @@ document.addEventListener("click", function (e) {
   }
 });
 
-const sizeSelect = document.getElementById("sizeSelect");
-const sizeContainer = document.getElementById("sizeContainer");
-
-sizeSelect.addEventListener("change", function () {
-  const size = this.value;
+// ─── SIZES ───────────────────────────────────────────────────────
+// ─── SIZES WITH STOCK ─────────────────────────────────────────────
+function addSizeRow() {
+  const select = document.getElementById('sizeSelect');
+  const size = select.value;
   if (!size) return;
 
-  // prevent duplicates
-  if (document.querySelector(`input[value="${size}"]`)) {
-    this.value = "";
+  // Prevent duplicates
+  if (document.querySelector(`input[name="size_name"][value="${size}"]`)) {
+    select.value = "";
     return;
   }
 
-  // wrapper
-  const wrapper = document.createElement("div");
-  wrapper.className = "size-chip flex items-center gap-1";
-
-  const chip = document.createElement("span");
-  chip.className =
-    "inline-flex items-center px-3 py-1.5 rounded-full text-xs font-bold bg-[#e7f3ec] text-text-main border border-border-green";
-
-  chip.innerHTML = `
-    ${size}
-    <button type="button" class="ml-2 text-text-secondary hover:text-red-500 remove-size">
-      <span class="material-symbols-outlined text-[14px]">close</span>
+  const row = document.createElement('div');
+  row.className = 'size-row flex items-center gap-3 bg-[#f8fcfa] dark:bg-[#152e20] px-4 py-3 rounded-xl border border-border-green';
+  row.innerHTML = `
+    <span class="text-sm font-bold text-text-main dark:text-white w-12">${size}</span>
+    <input type="hidden" name="size_name" value="${size}">
+    <div class="flex items-center gap-2 flex-1">
+      <label class="text-xs text-text-secondary">Stock:</label>
+      <input type="number" name="size_stock" value="0" min="0" step="1"
+        class="w-24 h-8 bg-white dark:bg-[#0b1a12] border border-border-green rounded-lg px-3 text-sm font-semibold text-text-main focus:ring-0 focus:border-primary"/>
+    </div>
+    <button type="button" class="text-text-secondary hover:text-red-500 remove-size-row">
+      <span class="material-symbols-outlined text-[18px]">close</span>
     </button>
   `;
+  document.getElementById('sizeContainer').appendChild(row);
+  select.value = "";
+}
 
-  const hiddenInput = document.createElement("input");
-  hiddenInput.type = "hidden";
-  hiddenInput.name = "size";
-  hiddenInput.value = size;
-
-  wrapper.appendChild(chip);
-  wrapper.appendChild(hiddenInput);
-
-  sizeContainer.appendChild(wrapper);
-
-  this.value = "";
-});
-document.addEventListener("click", function(e) {
-  if (e.target.closest(".remove-size")) {
-    const chip = e.target.closest(".size-chip");
-    chip.remove();
+document.addEventListener('click', function(e) {
+  if (e.target.closest('.remove-size-row')) {
+    e.target.closest('.size-row').remove();
   }
 });
 
+// ─── COLOR PICKER ────────────────────────────────────────────────
 const colorPicker = document.getElementById('colorPicker');
-  const colorHexInput = document.querySelector('input[name="color_hex"]');
-
-  // Sync on page load
+const colorHexInput = document.querySelector('input[name="color_hex"]');
+if (colorHexInput) colorHexInput.value = colorPicker.value;
+colorPicker.addEventListener('input', () => {
   if (colorHexInput) colorHexInput.value = colorPicker.value;
+});
 
-  // Sync on change
-  colorPicker.addEventListener('input', () => {
-    if (colorHexInput) colorHexInput.value = colorPicker.value;
+// ─── QUILL EDITOR ────────────────────────────────────────────────
+const quill = new Quill('#quill-editor', {
+  theme: 'snow',
+  placeholder: 'Write a detailed product description...',
+  modules: {
+    toolbar: [
+      ['bold', 'italic', 'underline'],
+      [{ list: 'ordered' }, { list: 'bullet' }],
+      ['link'],
+      ['clean']
+    ]
+  }
+});
+
+const hiddenDesc = document.getElementById('description-hidden');
+if (hiddenDesc && hiddenDesc.value.trim()) {
+  quill.root.innerHTML = hiddenDesc.value.trim();
+}
+
+document.querySelector('form').addEventListener('submit', function () {
+  hiddenDesc.value = quill.root.innerHTML;
+});
+
+// ─── TAGS (FIXED) ────────────────────────────────────────────────
+const tagInput = document.getElementById('tagInput');
+const tagContainer = document.getElementById('tagContainer');
+const tagsHidden = document.getElementById('tags-hidden');
+
+function parseTags(raw) {
+  if (!raw || !raw.trim()) return [];
+
+  const trimmed = raw.trim();
+
+  // Handle Python list format: ['tag1', 'tag2'] or ["tag1", "tag2"]
+  if (trimmed.startsWith('[') && trimmed.endsWith(']')) {
+    try {
+      // Replace single quotes with double quotes for valid JSON
+      const jsonStr = trimmed.replace(/'/g, '"');
+      const parsed = JSON.parse(jsonStr);
+      if (Array.isArray(parsed)) {
+        return parsed.map(t => String(t).trim()).filter(Boolean);
+      }
+    } catch (e) {
+      // Fallback: strip brackets and split manually
+      return trimmed
+        .slice(1, -1)
+        .split(',')
+        .map(t => t.trim().replace(/^['"]|['"]$/g, ''))
+        .filter(Boolean);
+    }
+  }
+
+  // Plain comma-separated: tag1, tag2, tag3
+  return trimmed.split(',').map(t => t.trim()).filter(Boolean);
+}
+
+let tags = parseTags(tagsHidden.value);
+
+function renderTags() {
+  tagContainer.innerHTML = '';
+  tags.forEach(tag => {
+    const span = document.createElement('span');
+    span.className = 'inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-[#e7f3ec] dark:bg-[#152e20] text-text-main dark:text-white';
+    span.innerHTML = `${tag}
+      <button type="button" class="ml-1 text-text-secondary hover:text-red-500" data-tag="${tag}">
+        <span class="material-symbols-outlined text-[14px]">close</span>
+      </button>`;
+    tagContainer.appendChild(span);
   });
+  // Always save as clean comma-separated so it round-trips correctly
+  tagsHidden.value = tags.join(',');
+}
+
+tagInput.addEventListener('keydown', function (e) {
+  if (e.key === 'Enter' || e.key === ',') {
+    e.preventDefault();
+    const val = this.value.trim().replace(/,$/, '');
+    if (val && !tags.includes(val)) {
+      tags.push(val);
+      renderTags();
+    }
+    this.value = '';
+  }
+});
+
+tagContainer.addEventListener('click', function (e) {
+  const btn = e.target.closest('button[data-tag]');
+  if (btn) {
+    tags = tags.filter(t => t !== btn.dataset.tag);
+    renderTags();
+  }
+});
+
+// Render existing tags immediately on page load
+renderTags();
+
 </script>
-
-
 
 {% endblock %}

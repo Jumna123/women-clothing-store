@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.text import slugify
+from django.core.validators import MinValueValidator
 
 
 class Category(models.Model):
@@ -23,14 +24,8 @@ class Category(models.Model):
 from django.utils import timezone
 
 class Collection(models.Model):
-    STATUS_CHOICES = [
-        ("published", "Published"),
-        ("draft", "Draft"),
-    ]
-    VISIBILITY_CHOICES = [
-        ("public", "Public"),
-        ("private", "Private"),
-    ]
+    STATUS_CHOICES = [("published", "Published"), ("draft", "Draft")]
+    VISIBILITY_CHOICES = [("public", "Public"), ("private", "Private")]
 
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True)
@@ -48,20 +43,18 @@ class Collection(models.Model):
 
     @property
     def computed_status(self):
-        """Auto-determine status based on publish_at date and is_active."""
         if not self.is_active:
             return "draft"
         if self.publish_at and self.publish_at > timezone.now().date():
-            return "draft"  # scheduled for future
+            return "draft"
         return "published"
 
     @property
     def computed_visibility(self):
-        """Auto-determine visibility."""
         if not self.is_active:
             return "private"
         if self.publish_at and self.publish_at > timezone.now().date():
-            return "private"  # not yet visible
+            return "private"
         return "public"
 
     @property
@@ -69,7 +62,6 @@ class Collection(models.Model):
         return self.publish_at and self.publish_at > timezone.now().date()
 
     def save(self, *args, **kwargs):
-        # ✅ auto-set status and visibility based on date and is_active
         if not self.is_active:
             self.status = "draft"
             self.visibility = "private"
@@ -94,14 +86,16 @@ class Product(models.Model):
     fabric = models.CharField(max_length=20, blank=True)
     color_hex = models.CharField(max_length=7, blank=True, null=True)
     color_name = models.CharField(max_length=50, blank=True, null=True)
-    size = models.CharField(max_length=100, blank=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     discount_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
-    stock_quantity = models.IntegerField(default=0)
+    stock_quantity = models.IntegerField(default=0)  # keep as overall fallback
     is_available = models.BooleanField(default=True)
     image = models.ImageField(upload_to="products/", null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    is_trending = models.BooleanField(default=False)
+    tags = models.CharField(max_length=500, blank=True, default="")
+    size = models.CharField(max_length=255, blank=True, null=True)
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -114,6 +108,22 @@ class Product(models.Model):
             self.slug = slug
         super().save(*args, **kwargs)
 
+    def __str__(self):
+        return self.product_name
+
+
+# ← Outside Product class, at the same indentation level
+class ProductSize(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='product_sizes')
+    size = models.CharField(max_length=20)
+    stock_quantity = models.IntegerField(default=0, validators=[MinValueValidator(0)])
+
+    class Meta:
+        unique_together = ('product', 'size')
+
+    def __str__(self):
+        return f"{self.product.product_name} - {self.size} ({self.stock_quantity})"
+
 
 class ProductImage(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images')
@@ -124,23 +134,18 @@ class ProductImage(models.Model):
     def __str__(self):
         return f"Image for {self.product.product_name}"
 
+
 class StoreSettings(models.Model):
-    # General
     store_name = models.CharField(max_length=100, default="vólke shoppe")
     marquee_text = models.TextField(
         default="Free shipping on orders over ₹1000 | New arrivals every week | Use code WELCOME10 for 10% off",
         help_text="Separate multiple messages with |"
     )
-
-    # Features
     cod_enabled = models.BooleanField(default=True)
     discounts_enabled = models.BooleanField(default=True)
-
-    # Shipping
     free_shipping_threshold = models.DecimalField(max_digits=10, decimal_places=2, default=1000)
     standard_shipping_cost = models.DecimalField(max_digits=10, decimal_places=2, default=50)
     express_shipping_cost = models.DecimalField(max_digits=10, decimal_places=2, default=15)
-
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
@@ -151,7 +156,6 @@ class StoreSettings(models.Model):
 
     @classmethod
     def get_settings(cls):
-        """Always returns the single settings object, creates if not exists."""
         obj, _ = cls.objects.get_or_create(pk=1)
         return obj
 
@@ -160,17 +164,18 @@ class PromoCode(models.Model):
     code = models.CharField(max_length=20, unique=True)
     discount_percent = models.PositiveIntegerField()
     is_active = models.BooleanField(default=True)
-    usage_limit = models.PositiveIntegerField(default=0, help_text="0 = unlimited")
+    usage_limit = models.PositiveIntegerField(default=0)
     used_count = models.PositiveIntegerField(default=0)
     expires_at = models.DateField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    image = models.ImageField(upload_to='promos/', null=True, blank=True)
+    show_on_homepage = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.code} ({self.discount_percent}%)"
 
     @property
     def is_valid(self):
-        from django.utils import timezone
         if not self.is_active:
             return False
         if self.usage_limit > 0 and self.used_count >= self.usage_limit:

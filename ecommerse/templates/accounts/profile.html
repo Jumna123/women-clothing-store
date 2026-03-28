@@ -1,261 +1,425 @@
+{% load static %}
 <!DOCTYPE html>
-<html lang="en"><head>
+<html lang="en">
+<head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>My Account Dashboard - Chic Greens</title>
+<title>My Account — vólke shoppe</title>
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <script id="tailwind-config">
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        "primary": "#064e3b", // Deepened: Emerald 900
-                        "primary-hover": "#022c22", // Deeper: Emerald 950
-                        "primary-light": "#ecfdf5", // Emerald 50
-                        "text-main": "#022c22", 
-                        "text-secondary": "#064e3b",
-                        "background-base": "#ffffff",
-                        "surface-light": "#f0fdf4",
-                        "surface-lighter": "#ffffff",
-                        "border-green": "#059669", // More intense: Emerald 600
-                        "accent-dark": "#022c22"
-                    },
-                    fontFamily: {
-                        "display": ["Manrope", "sans-serif"]
-                    },
-                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "full": "9999px"},
-                },
-            },
-        }
-    </script>
-<style type="text/tailwindcss">
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #f0fdf4; 
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #064e3b; 
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #022c22; 
-        }
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-        }
-        .icon-filled {
-            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-        }
-        .hide-scrollbar::-webkit-scrollbar {
-            display: none;
-        }
-        .hide-scrollbar {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-    </style>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          "primary":       "#064e3b",
+          "primary-hover": "#022c22",
+          "primary-light": "#ecfdf5",
+          "text-main":     "#022c22",
+          "text-secondary":"#064e3b",
+          "background-base":"#ffffff",
+          "surface-light": "#f0fdf4",
+          "surface-lighter":"#ffffff",
+          "border-green":  "#059669",
+          "accent-dark":   "#022c22"
+        },
+        fontFamily: { "display": ["Manrope", "sans-serif"] },
+        borderRadius: {"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","2xl":"1rem","full":"9999px"},
+      },
+    },
+  }
+</script>
+<style>
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: #f0fdf4; }
+  ::-webkit-scrollbar-thumb { background: #064e3b; border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: #022c22; }
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  .icon-filled { font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  .hide-scrollbar::-webkit-scrollbar { display: none; }
+  .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+</style>
 </head>
+
 <body class="bg-background-base text-text-main font-display antialiased min-h-screen flex flex-col selection:bg-primary-light selection:text-primary">
-<header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-border-green/20 w-full shadow-sm">
-<div class="px-4 lg:px-10 py-3 flex items-center justify-between">
-<div class="flex items-center gap-8">
-<a class="flex items-center gap-2 group" href="#">
-<div class="size-8 text-primary">
-<svg class="w-full h-full" fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
-<path clip-rule="evenodd" d="M24 4H6V17.3333V30.6667H24V44H42V30.6667V17.3333H24V4Z" fill="currentColor" fill-rule="evenodd"></path>
-</svg>
-</div>
-<h2 class="text-text-main text-xl font-bold tracking-tight group-hover:text-primary transition-colors">Chic Greens</h2>
-</a>
-<nav class="hidden lg:flex items-center gap-6">
-<a class="text-text-secondary text-sm font-semibold hover:text-primary transition-colors" href="#">Shop</a>
-<a class="text-text-secondary text-sm font-semibold hover:text-primary transition-colors" href="#">New Arrivals</a>
-<a class="text-text-secondary text-sm font-semibold hover:text-primary transition-colors" href="#">Sale</a>
-<a class="text-text-secondary text-sm font-semibold hover:text-primary transition-colors" href="#">Sustainable</a>
-</nav>
-</div>
-<div class="flex items-center justify-end gap-4 lg:gap-6 flex-1 max-w-md">
-<label class="hidden md:flex flex-1 relative group">
-<span class="absolute inset-y-0 left-0 flex items-center pl-3 text-text-secondary group-focus-within:text-primary">
-<span class="material-symbols-outlined">search</span>
-</span>
-<input class="w-full bg-surface-light text-text-main placeholder:text-text-secondary/50 text-sm font-medium rounded-lg border border-border-green/20 py-2.5 pl-10 pr-4 focus:ring-2 focus:ring-primary/20 focus:bg-white focus:border-primary transition-all outline-none" placeholder="Search styles..." type="text"/>
-</label>
-<div class="flex gap-2">
-<button class="relative flex items-center justify-center p-2 rounded-lg text-text-secondary hover:bg-surface-light hover:text-primary transition-colors group">
-<span class="material-symbols-outlined group-hover:text-primary">shopping_bag</span>
-<span class="absolute top-1 right-1 size-2 bg-primary rounded-full ring-2 ring-white"></span>
-</button>
-<button class="flex items-center justify-center p-2 rounded-lg text-text-secondary hover:bg-surface-light hover:text-primary transition-colors group">
-<span class="material-symbols-outlined group-hover:text-primary">person</span>
-</button>
-</div>
-</div>
-</div>
+
+<!-- ══════════════════════════════════════════
+     HEADER
+══════════════════════════════════════════ -->
+<header class="sticky top-0 z-50 bg-[#1e4433]">
+  <div class="px-4 lg:px-10 py-3 flex items-center justify-between">
+
+    <div class="flex items-center gap-6">
+      <!-- Logo -->
+      <a href="{% url 'home:home' %}" class="flex items-center gap-2 group">
+        <div class="flex flex-col" style="line-height:1;">
+          <span style="font-family:'Georgia','Times New Roman',serif;font-size:22px;font-weight:700;letter-spacing:0.15em;color:#ffffff;">vólke</span>
+          <span style="font-size:8px;letter-spacing:0.18em;color:#ffffff;text-transform:uppercase;">shoppe</span>
+        </div>
+      </a>
+
+      <nav class="hidden lg:flex items-center gap-6">
+        {% for category in categories %}
+        <a class="text-white/80 text-sm font-semibold hover:text-white transition-colors"
+           href="{% url 'home:category_products' category.slug %}">
+          {{ category.category_name }}
+        </a>
+        {% endfor %}
+      </nav>
+    </div>
+
+      <div class="hidden md:flex flex-1 max-w-xl mx-6">
+        <div class="relative w-full">
+          <form method="GET" action="{% url 'home:search_products' %}" class="relative w-full">
+            <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-white/50">
+              <span class="material-symbols-outlined text-xl">search</span>
+            </div>
+            <input name="q"
+              class="block w-full rounded-full border-none bg-white/10 py-2.5 pl-11 pr-4 text-sm text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-white/20 focus:bg-white/15 transition-all hover:bg-white/15"
+              placeholder="Search styles..."
+              type="text" autocomplete="off"/>
+          </form>
+        </div>
+      </div>
+
+      <div class="flex gap-2">
+        <a href="{% url 'home:cart_view' %}" class="relative flex items-center justify-center p-2 rounded-lg text-white/80 hover:bg-white/10 hover:text-white transition-colors">
+          <span class="material-symbols-outlined">shopping_bag</span>
+          {% if cart_count %}
+          <span class="absolute top-1 right-1 size-2 bg-green-400 rounded-full ring-2 ring-[#1e4433]"></span>
+          {% endif %}
+        </a>
+
+        <div class="relative" id="profileDropdown">
+          <button onclick="toggleDropdown()" class="flex items-center gap-2 p-2 rounded-lg text-white/80 hover:bg-white/10 hover:text-white transition-colors">
+            {% if user.profile_picture %}
+              <img src="{{ user.profile_picture.url }}" class="size-7 rounded-full object-cover border-2 border-white/20" alt="{{ user.username }}"/>
+            {% else %}
+              <span class="material-symbols-outlined icon-filled">account_circle</span>
+            {% endif %}
+            <span class="hidden md:block text-sm font-semibold text-white">{{ user.get_short_name|default:user.username }}</span>
+            <span class="material-symbols-outlined text-[18px] text-white/70">expand_more</span>
+          </button>
+
+          <div id="dropdownMenu" class="hidden absolute right-0 mt-2 w-52 bg-white border border-border-green/20 rounded-xl shadow-xl py-2 z-50">
+            <a href="{% url 'accounts:profile' %}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-text-main hover:bg-surface-light hover:text-primary transition-colors">
+              <span class="material-symbols-outlined text-[18px]">person</span> My Profile
+            </a>
+            <a href="{% url 'home:user_orders' %}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-text-main hover:bg-surface-light hover:text-primary transition-colors">
+              <span class="material-symbols-outlined text-[18px]">package_2</span> My Orders
+            </a>
+            <a href="{% url 'home:wishlist_view' %}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-text-main hover:bg-surface-light hover:text-primary transition-colors">
+              <span class="material-symbols-outlined text-[18px]">favorite</span> Wishlist
+            </a>
+            <div class="border-t border-border-green/10 my-1"></div>
+            <a href="{% url 'accounts:logout' %}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 transition-colors">
+              <span class="material-symbols-outlined text-[18px]">logout</span> Sign Out
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </header>
+
+
+<!-- ══════════════════════════════════════════
+     PAGE BODY
+══════════════════════════════════════════ -->
 <div class="flex-grow w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-10">
-<div class="flex flex-col lg:flex-row gap-8 lg:gap-10 h-full">
-{% include "accounts/profile_sidebar.html" %}
-<main class="flex-1 flex flex-col gap-8 min-w-0">
-<div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary to-accent-dark p-8 shadow-xl text-white">
-<div class="relative z-10 flex flex-col gap-2">
-<h1 class="text-white text-3xl font-extrabold tracking-tight">Welcome back, {{user.username}}</h1>
-<p class="text-emerald-100/90 text-base max-w-xl">You've saved 4.2kg of CO2 this month through your sustainable choices.</p>
+  <div class="flex flex-col lg:flex-row gap-8 lg:gap-10">
+
+    <!-- ── Sidebar ── -->
+    {% include "accounts/profile_sidebar.html" %}
+
+    <!-- ── Main content ── -->
+    <main class="flex-1 flex flex-col gap-8 min-w-0">
+
+      
+
+      <!-- ── Welcome banner ── -->
+      <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary to-accent-dark p-8 shadow-xl text-white">
+        <div class="relative z-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div class="flex flex-col gap-1">
+            <p class="text-emerald-200/70 text-xs font-semibold uppercase tracking-widest">Welcome back</p>
+            <h1 class="text-white text-3xl font-extrabold tracking-tight">
+              {{ user.get_full_name|default:user.username }}
+            </h1>
+            <p class="text-emerald-100/80 text-sm max-w-md mt-1">
+              Member since {{ user.date_joined|date:"F Y" }} &nbsp;·&nbsp;
+              {% if user.email %}{{ user.email }}{% endif %}
+            </p>
+          </div>
+        </div>
+        <span class="material-symbols-outlined absolute -bottom-10 -right-8 text-[200px] text-white/5 select-none pointer-events-none rotate-12">storefront</span>
+      </div>
+
+      <!-- ── Stats cards ── -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+
+        <!-- Active Orders -->
+        <a href="{% url 'home:user_orders' %}"
+          class="bg-white rounded-2xl p-6 border border-border-green/10 shadow-sm flex flex-col gap-1 hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 group">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-text-secondary font-bold text-xs tracking-widest uppercase">Active Orders</span>
+            <span class="material-symbols-outlined text-primary bg-primary-light p-2 rounded-xl group-hover:scale-110 transition-transform">local_shipping</span>
+          </div>
+          <p class="text-text-main text-3xl font-black">{{ active_orders_count|default:"0" }}</p>
+          <p class="text-text-secondary/60 text-xs font-medium">
+            {% if latest_order %}
+              Latest: #{{ latest_order.order_number }}
+            {% else %}
+              No active orders
+            {% endif %}
+          </p>
+        </a>
+
+        <!-- Wishlist -->
+        <a href="{% url 'home:wishlist_view' %}"
+          class="bg-white rounded-2xl p-6 border border-border-green/10 shadow-sm flex flex-col gap-1 hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 group">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-text-secondary font-bold text-xs tracking-widest uppercase">Wishlist</span>
+            <span class="material-symbols-outlined text-primary bg-primary-light p-2 rounded-xl group-hover:scale-110 transition-transform">favorite</span>
+          </div>
+          <p class="text-text-main text-3xl font-black">{{ wishlist_count|default:"0" }}</p>
+          <p class="text-text-secondary/60 text-xs font-medium">
+            {% if wishlist_count %}
+              {{ wishlist_count }} saved item{{ wishlist_count|pluralize }}
+            {% else %}
+              No items saved yet
+            {% endif %}
+          </p>
+        </a>
+
+        <!-- Total Orders -->
+        <a href="{% url 'home:user_orders' %}"
+          class="bg-white rounded-2xl p-6 border border-border-green/10 shadow-sm flex flex-col gap-1 hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 group">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-text-secondary font-bold text-xs tracking-widest uppercase">Total Orders</span>
+            <span class="material-symbols-outlined text-primary bg-primary-light p-2 rounded-xl group-hover:scale-110 transition-transform">receipt_long</span>
+          </div>
+          <p class="text-text-main text-3xl font-black">{{ total_orders_count|default:"0" }}</p>
+          <p class="text-text-secondary/60 text-xs font-medium">
+            {% if total_spent %}
+              ₹{{ total_spent|floatformat:2 }} total spent
+            {% else %}
+              No orders yet
+            {% endif %}
+          </p>
+        </a>
+
+      </div>
+
+      <!-- ── Recent Orders ── -->
+      <section class="bg-white rounded-2xl border border-border-green/10 shadow-sm overflow-hidden">
+        <div class="px-6 py-5 border-b border-border-green/10 flex items-center justify-between bg-surface-light/30">
+          <h2 class="text-text-main font-bold text-lg">Recent Orders</h2>
+          <a class="text-primary font-bold text-sm hover:underline underline-offset-2 flex items-center gap-1" href="{% url 'home:user_orders' %}">
+            View All <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+          </a>
+        </div>
+
+        <div class="divide-y divide-border-green/10">
+          {% for order in recent_orders %}
+          <div class="flex flex-col md:flex-row gap-5 items-start md:items-center p-6 hover:bg-surface-light/40 transition-colors">
+
+            <!-- Product image -->
+            <div class="w-20 h-28 rounded-xl overflow-hidden flex-shrink-0 shadow-sm bg-surface-light">
+              {% if order.items.first.product.images.first %}
+                <img src="{{ order.items.first.product.images.first.image.url }}"
+                  alt="{{ order.items.first.product.name }}"
+                  class="w-full h-full object-cover"/>
+              {% else %}
+                <div class="w-full h-full flex items-center justify-center">
+                  <span class="material-symbols-outlined text-border-green/30 text-4xl">image</span>
+                </div>
+              {% endif %}
+            </div>
+
+            <!-- Order details -->
+            <div class="flex-grow space-y-2 min-w-0">
+              <div class="flex flex-wrap items-center gap-2 justify-between">
+                <!-- Status badge -->
+                <span class="text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wide
+                  {% if order.status == 'delivered' %}bg-green-100 text-green-700
+                  {% elif order.status == 'cancelled' %}bg-red-100 text-red-600
+                  {% elif order.status == 'shipped' or order.status == 'in_transit' %}bg-blue-100 text-blue-700
+                  {% else %}bg-primary-light text-primary{% endif %}">
+                  {{ order.get_status_display }}
+                </span>
+                <span class="text-text-secondary/50 text-xs font-medium">Order #{{ order.order_number }}</span>
+              </div>
+
+              <h3 class="text-text-main font-bold text-base truncate">
+                {{ order.items.first.product.name }}
+                {% if order.items.count > 1 %}
+                  <span class="text-text-secondary/60 font-medium text-sm">+{{ order.items.count|add:"-1" }} more</span>
+                {% endif %}
+              </h3>
+
+              <p class="text-text-secondary/70 text-sm">
+                Placed {{ order.created_at|date:"d M Y" }}
+                &nbsp;·&nbsp;
+                ₹{{ order.total_amount|floatformat:2 }}
+              </p>
+
+              <!-- Progress bar -->
+              {% if order.status != 'cancelled' %}
+              <div class="pt-2">
+                <div class="relative w-full h-1.5 bg-emerald-100 rounded-full overflow-hidden">
+                  <div class="absolute top-0 left-0 h-full bg-primary rounded-full transition-all duration-500
+                    {% if order.status == 'pending' %}w-1/4
+                    {% elif order.status == 'confirmed' %}w-2/4
+                    {% elif order.status == 'shipped' or order.status == 'in_transit' %}w-3/4
+                    {% elif order.status == 'delivered' %}w-full
+                    {% else %}w-1/4{% endif %}">
+                  </div>
+                </div>
+                <div class="flex justify-between mt-1.5">
+                  <span class="text-[9px] font-bold text-primary uppercase tracking-wide">Placed</span>
+                  <span class="text-[9px] font-bold {% if order.status == 'confirmed' or order.status == 'shipped' or order.status == 'in_transit' or order.status == 'delivered' %}text-primary{% else %}text-text-secondary/30{% endif %} uppercase tracking-wide">Confirmed</span>
+                  <span class="text-[9px] font-bold {% if order.status == 'shipped' or order.status == 'in_transit' or order.status == 'delivered' %}text-primary{% else %}text-text-secondary/30{% endif %} uppercase tracking-wide">Shipped</span>
+                  <span class="text-[9px] font-bold {% if order.status == 'delivered' %}text-primary{% else %}text-text-secondary/30{% endif %} uppercase tracking-wide">Delivered</span>
+                </div>
+              </div>
+              {% endif %}
+            </div>
+
+            <!-- Actions -->
+            <div class="w-full md:w-auto flex flex-row md:flex-col gap-2 flex-shrink-0">
+              <a href="{% url 'home:order_detail' order.id %}"
+                class="flex-1 md:flex-none text-center bg-primary text-white font-bold py-2.5 px-5 rounded-lg text-sm hover:bg-primary-hover transition-colors shadow-sm">
+                Order Details
+              </a>
+              {% if order.status == 'shipped' or order.status == 'in_transit' %}
+              <a href="{% url 'home:order_detail' order.id %}"
+                class="flex-1 md:flex-none text-center border border-primary text-primary font-bold py-2.5 px-5 rounded-lg text-sm hover:bg-primary-light transition-colors">
+                Track
+              </a>
+              {% endif %}
+            </div>
+
+          </div>
+          {% empty %}
+          <div class="flex flex-col items-center justify-center py-16 px-6 text-center">
+            <div class="w-16 h-16 rounded-full bg-surface-light flex items-center justify-center mb-4">
+              <span class="material-symbols-outlined text-3xl text-border-green/40">package_2</span>
+            </div>
+            <p class="text-text-main font-bold text-base mb-1">No orders yet</p>
+            <p class="text-text-secondary/60 text-sm mb-5">When you place an order, it will appear here.</p>
+            <a href="#"
+              class="bg-primary text-white font-bold py-2.5 px-6 rounded-xl text-sm hover:bg-primary-hover transition-colors shadow-md shadow-primary/10">
+              Start Shopping
+            </a>
+          </div>
+          {% endfor %}
+        </div>
+      </section>
+
+      <!-- ── Recently Viewed / Recommended ── -->
+      {% if recommended_products %}
+      <section>
+        <div class="flex items-center justify-between mb-5">
+          <div>
+            <h2 class="text-text-main font-bold text-xl">Recommended for You</h2>
+            <p class="text-text-secondary/60 text-sm">Curated picks based on your taste</p>
+          </div>
+          <a href="#" class="text-primary font-bold text-sm hover:underline underline-offset-2 flex items-center gap-1">
+            Browse All <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+          </a>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-5">
+          {% for product in recommended_products %}
+          <a href="#" class="group cursor-pointer">
+            <div class="relative aspect-[3/4] rounded-2xl overflow-hidden mb-3 bg-surface-light">
+              {% if product.images.first %}
+                <img src="{{ product.images.first.image.url }}"
+                  alt="{{ product.name }}"
+                  class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"/>
+              {% else %}
+                <div class="w-full h-full flex items-center justify-center">
+                  <span class="material-symbols-outlined text-4xl text-border-green/30">image</span>
+                </div>
+              {% endif %}
+
+              <!-- Wishlist button -->
+              <form method="POST" action="{% url 'home:add_to_wishlist' product.id %}" class="absolute top-3 right-3">
+                {% csrf_token %}
+                <button type="submit"
+                  class="size-8 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-primary opacity-0 group-hover:opacity-100 transition-opacity hover:bg-white shadow-sm">
+                  <span class="material-symbols-outlined text-sm {% if product.id in wishlist_ids %}icon-filled{% endif %}">favorite</span>
+                </button>
+              </form>
+
+              {% if product.badge %}
+              <div class="absolute bottom-3 left-3">
+                <span class="bg-primary/90 text-white text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wide">{{ product.badge }}</span>
+              </div>
+              {% endif %}
+
+              {% if product.discount_percent %}
+              <div class="absolute top-3 left-3">
+                <span class="bg-red-500 text-white text-[10px] font-bold px-2 py-1 rounded uppercase">-{{ product.discount_percent }}%</span>
+              </div>
+              {% endif %}
+            </div>
+
+            <h4 class="text-text-main font-bold text-sm mb-1 truncate">{{ product.name }}</h4>
+            <div class="flex items-center gap-2">
+              <p class="text-text-secondary font-bold text-sm">₹{{ product.price|floatformat:2 }}</p>
+              {% if product.original_price %}
+              <p class="text-text-secondary/40 text-xs line-through">₹{{ product.original_price|floatformat:2 }}</p>
+              {% endif %}
+            </div>
+          </a>
+          {% endfor %}
+        </div>
+      </section>
+      {% endif %}
+
+    </main>
+  </div>
 </div>
-<span class="material-symbols-outlined absolute -bottom-10 -right-8 text-[200px] text-white/5 select-none pointer-events-none rotate-12">eco</span>
-</div>
-<div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
-<div class="bg-white rounded-2xl p-6 border border-border-green/10 shadow-sm flex flex-col gap-1 hover:shadow-md transition-all duration-300">
-<div class="flex items-center justify-between mb-2">
-<span class="text-text-secondary font-bold text-sm tracking-wide">ACTIVE ORDERS</span>
-<span class="material-symbols-outlined text-primary bg-primary-light p-2 rounded-xl">local_shipping</span>
-</div>
-<p class="text-text-main text-3xl font-black">1</p>
-<p class="text-text-secondary/60 text-xs font-medium">Estimated arrival: Oct 24</p>
-</div>
-<div class="bg-white rounded-2xl p-6 border border-border-green/10 shadow-sm flex flex-col gap-1 hover:shadow-md transition-all duration-300">
-<div class="flex items-center justify-between mb-2">
-<span class="text-text-secondary font-bold text-sm tracking-wide">WISHLIST</span>
-<span class="material-symbols-outlined text-primary bg-primary-light p-2 rounded-xl">favorite</span>
-</div>
-<p class="text-text-main text-3xl font-black">12</p>
-<p class="text-text-secondary/60 text-xs font-medium">3 items back in stock</p>
-</div>
-<div class="bg-white rounded-2xl p-6 border border-border-green/10 shadow-sm flex flex-col gap-1 hover:shadow-md transition-all duration-300">
-<div class="flex items-center justify-between mb-2">
-<span class="text-text-secondary font-bold text-sm tracking-wide">STORE CREDIT</span>
-<span class="material-symbols-outlined text-primary bg-primary-light p-2 rounded-xl">account_balance_wallet</span>
-</div>
-<p class="text-text-main text-3xl font-black">$45.00</p>
-<p class="text-text-secondary/60 text-xs font-medium">Expires in 30 days</p>
-</div>
-</div>
-<section class="bg-white rounded-2xl border border-border-green/10 shadow-sm overflow-hidden">
-<div class="px-6 py-5 border-b border-border-green/10 flex items-center justify-between bg-surface-light/30">
-<h2 class="text-text-main font-bold text-lg">Recent Orders</h2>
-<a class="text-primary font-bold text-sm hover:underline" href="#">View All Orders</a>
-</div>
-<div class="p-6">
-<div class="flex flex-col md:flex-row gap-6 items-start md:items-center p-6 bg-surface-light/50 rounded-xl border border-border-green/10">
-<div class="w-24 h-32 rounded-lg overflow-hidden flex-shrink-0 shadow-sm">
-<img alt="Order product" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAa6eDcZtymyT1D5GJF9RvNVKXwZIUwuWckn8LUcby3oFwqUkLpfgJ5SbK-EMg2Ir_T5lx-cQ_uuJo4w-4rh67oI8HuSTA4DbFzOyLg7aJ7Wm2Zs1KNFQORxnmPgeNapmK8nOMITYhu9PR_PxVyGVaGnKA-stKIqKX78NjaFcM1cKRBr30g-c0DlhSxPqCpz2DrpBxov45jiU4EFqzhfYYHvE9p7FwbOCfe5r7OuC7nGEbtcPAgAOp7lvnlNIpvLgmL8qLFixFPYZE"/>
-</div>
-<div class="flex-grow space-y-2">
-<div class="flex items-center justify-between">
-<span class="bg-primary text-white text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-tighter">In Transit</span>
-<span class="text-text-secondary/60 text-xs font-medium">Order #CH-92834</span>
-</div>
-<h3 class="text-text-main font-bold text-lg">Linen Blend Midi Dress - Sage</h3>
-<p class="text-text-secondary/70 text-sm">Size: M • Qty: 1</p>
-<div class="pt-4">
-<div class="relative w-full h-1.5 bg-emerald-200 rounded-full overflow-hidden">
-<div class="absolute top-0 left-0 h-full bg-primary w-2/3"></div>
-</div>
-<div class="flex justify-between mt-2">
-<span class="text-[10px] font-bold text-primary uppercase">Confirmed</span>
-<span class="text-[10px] font-bold text-primary uppercase">Shipped</span>
-<span class="text-[10px] font-bold text-text-secondary/30 uppercase">Delivered</span>
-</div>
-</div>
-</div>
-<div class="w-full md:w-auto flex flex-col gap-2">
-<button class="w-full bg-primary text-white font-bold py-2.5 px-6 rounded-lg text-sm hover:bg-primary-hover transition-colors shadow-md shadow-primary/10">Track Package</button>
-<button class="w-full border border-primary text-primary font-bold py-2.5 px-6 rounded-lg text-sm hover:bg-primary-light transition-colors">Order Details</button>
-</div>
-</div>
-</div>
-</section>
-<section>
-<div class="flex items-center justify-between mb-6">
-<div>
-<h2 class="text-text-main font-bold text-xl">Recommended for You</h2>
-<p class="text-text-secondary/60 text-sm">Based on your recent sustainable choices</p>
-</div>
-<div class="flex gap-2">
-<button class="size-10 rounded-full border border-border-green/20 flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all">
-<span class="material-symbols-outlined">chevron_left</span>
-</button>
-<button class="size-10 rounded-full border border-border-green/20 flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all">
-<span class="material-symbols-outlined">chevron_right</span>
-</button>
-</div>
-</div>
-<div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-<div class="group cursor-pointer">
-<div class="relative aspect-[3/4] rounded-2xl overflow-hidden mb-3">
-<img alt="Recommended Item" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB7uYVkEnX9YiIavxShbASuOXm7mu8dt5laA1EMLb1R8d2NfN2YZreGmO4WUM4MqB_cfrSqfjhfgHEknyA3baRP4i_1HQT6w_VNOfV70NhBu9o6rPFitg56wX_97qXVI4WXvHrxzQQFBwNMKKlQ8wb9-t0puSey0qOIKPp3b7iaUzvvcf-AaGlOZuem5HW2OVsr37x99KqFuepXFBkZKaob2QZ4PWIMoWw52ttRuVBSJ5vwfW4EqhZjr6yqTnLO-T8tnoj_piealnA"/>
-<button class="absolute top-3 right-3 size-8 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-primary opacity-0 group-hover:opacity-100 transition-opacity">
-<span class="material-symbols-outlined text-sm">favorite</span>
-</button>
-<div class="absolute bottom-3 left-3">
-<span class="bg-primary/90 text-white text-[10px] font-bold px-2 py-1 rounded uppercase">Organic Cotton</span>
-</div>
-</div>
-<h4 class="text-text-main font-bold text-sm mb-1">Sustainable Knit Tank</h4>
-<p class="text-text-secondary font-bold text-sm">$48.00</p>
-</div>
-<div class="group cursor-pointer">
-<div class="relative aspect-[3/4] rounded-2xl overflow-hidden mb-3">
-<img alt="Recommended Item" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDu_AO_mQcGLgEx3m-TOWQuCkIduzVEZmoHR0fTWhJyAQjgqE0pHL2rwvOJfcPPcIjBlMQBQhQ4RLkhdN9LKko96a5l4qQUiahu-KSjPlT3V7ogow5FWgHvrBtJhrQL1J1AOM7fKq7XbkF3GFBJ0VrE922SE4r7V8rWsv3yLvoEhE5v_eLMX5tFNitYOPBHNathIx1q8SNU00MjbWNtVlzsBCyi4L1YtK1ezFzvzvdkcA513XXjM9fpPnyeIwl5IvHUGXMjG9x6V2o"/>
-<button class="absolute top-3 right-3 size-8 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-primary opacity-0 group-hover:opacity-100 transition-opacity">
-<span class="material-symbols-outlined text-sm">favorite</span>
-</button>
-</div>
-<h4 class="text-text-main font-bold text-sm mb-1">High-Rise Tencel Shorts</h4>
-<p class="text-text-secondary font-bold text-sm">$64.00</p>
-</div>
-<div class="group cursor-pointer">
-<div class="relative aspect-[3/4] rounded-2xl overflow-hidden mb-3">
-<img alt="Recommended Item" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBgsuY7ujS94TSV8tQDEggCnvOxAnWPf6G3zcBVxdHYwumj6iB5lYHl3jd7y998UPf8uayDLhTxx1tCPvF4e0Fy01BYn4ZuUgxNmF1_wyCLnd9YH1pGAs2E97sjL9ptwbf7LbAN03PUl0LQPvAQSHu7n9CC6RJhuhFVN-2WKrD5n4FzFrUSBE0g5Gz4M-H-D78iX4Qs6ib2FLr48UM2zaWtcldedwHx5veNQUyDmB0jzauH049h4sUmfXxLbKM68iedRKgG7ZyIXR8"/>
-<button class="absolute top-3 right-3 size-8 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-primary opacity-0 group-hover:opacity-100 transition-opacity">
-<span class="material-symbols-outlined text-sm">favorite</span>
-</button>
-</div>
-<h4 class="text-text-main font-bold text-sm mb-1">Eco-Friendly Straw Hat</h4>
-<p class="text-text-secondary font-bold text-sm">$32.00</p>
-</div>
-<div class="group cursor-pointer">
-<div class="relative aspect-[3/4] rounded-2xl overflow-hidden mb-3">
-<img alt="Recommended Item" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAO3vr8L7KGGlln1dEqNZpLSfvcNs0YT-zE5AaS5tmzSDIIh_W7JQcO4HCV4ov-ei3wOi9DsbaKa82VRUA4kEcsO4tFLTPXjLb7OtYhVTcydyvpPwWP9_LctldcsseL1j6LYkxmtTznDEu4frgjRoPyY1P6XlXFRf_54i-9VRfJZQOHr2qwE5INeHYRu3USwdVJkB8ZeddF1ijwoBiRu17GV0xvoNooUXbevYNYkf-XtiSP2Z4H7yHXvkHIYcUGETv_Cd3rFgEqSyg"/>
-<button class="absolute top-3 right-3 size-8 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-primary opacity-0 group-hover:opacity-100 transition-opacity">
-<span class="material-symbols-outlined text-sm">favorite</span>
-</button>
-<div class="absolute bottom-3 left-3">
-<span class="bg-primary/90 text-white text-[10px] font-bold px-2 py-1 rounded uppercase">Low Impact</span>
-</div>
-</div>
-<h4 class="text-text-main font-bold text-sm mb-1">Recycled Silk Blouse</h4>
-<p class="text-text-secondary font-bold text-sm">$89.00</p>
-</div>
-</div>
-</section>
-</main>
-</div>
-</div>
-<footer class="mt-auto bg-surface-light py-12 border-t border-border-green/10">
-<div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
-<div class="flex flex-col md:flex-row justify-between items-center gap-6">
-<div class="flex items-center gap-2">
-<div class="size-6 text-primary">
-<svg class="w-full h-full" fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
-<path clip-rule="evenodd" d="M24 4H6V17.3333V30.6667H24V44H42V30.6667V17.3333H24V4Z" fill="currentColor" fill-rule="evenodd"></path>
-</svg>
-</div>
-<span class="text-text-main font-bold text-sm">Chic Greens © 2024</span>
-</div>
-<div class="flex gap-8">
-<a class="text-text-secondary/60 text-xs font-semibold hover:text-primary transition-colors" href="#">Privacy Policy</a>
-<a class="text-text-secondary/60 text-xs font-semibold hover:text-primary transition-colors" href="#">Terms of Service</a>
-<a class="text-text-secondary/60 text-xs font-semibold hover:text-primary transition-colors" href="#">Sustainability Report</a>
-</div>
-</div>
-</div>
+
+
+<!-- ══════════════════════════════════════════
+     FOOTER
+══════════════════════════════════════════ -->
+<footer class="mt-auto bg-surface-light py-10 border-t border-border-green/10">
+  <div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+      <div class="flex items-center gap-2">
+        <div class="flex flex-col" style="line-height:1;">
+          <span style="font-family:'Georgia',serif;font-size:16px;font-weight:700;letter-spacing:0.15em;color:#022c22;">vólke</span>
+          <span style="font-size:6px;letter-spacing:0.18em;color:#064e3b;text-transform:uppercase;">shoppe</span>
+        </div>
+        <span class="text-text-secondary/40 text-xs ml-2">© {% now "Y" %}</span>
+      </div>
+      <div class="flex gap-8">
+        <a class="text-text-secondary/60 text-xs font-semibold hover:text-primary transition-colors" href="#">Privacy Policy</a>
+        <a class="text-text-secondary/60 text-xs font-semibold hover:text-primary transition-colors" href="#">Terms of Service</a>
+        <a class="text-text-secondary/60 text-xs font-semibold hover:text-primary transition-colors" href="#">Contact Us</a>
+      </div>
+    </div>
+  </div>
 </footer>
 
-</body></html>
+<script>
+  function toggleDropdown() {
+    document.getElementById('dropdownMenu').classList.toggle('hidden');
+  }
+  // Close dropdown on outside click
+  document.addEventListener('click', function(e) {
+    const dropdown = document.getElementById('profileDropdown');
+    if (!dropdown.contains(e.target)) {
+      document.getElementById('dropdownMenu').classList.add('hidden');
+    }
+  });
+</script>
+
+</body>
+</html>

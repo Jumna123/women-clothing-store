@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8"/>
   <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-  <title>Checkout - GreenStyle</title>
+  <title>Checkout -Volke</title>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
@@ -112,6 +112,11 @@
 
       <form method="POST" action="{% url 'home:checkout' %}">
         {% csrf_token %}
+          {% if buy_now %}
+            <input type="hidden" name="buy_now_confirm" value="1"/>
+            <input type="hidden" name="buy_now_product_id" value="{{ buy_now_product_id }}"/>
+            <input type="hidden" name="buy_now_size" value="{{ buy_now_size }}"/>
+          {% endif %}
 
         <div class="flex flex-col gap-8 lg:flex-row lg:items-start">
 
@@ -225,53 +230,6 @@
     </div>
   </div>
 </div>
-            <!-- ═══ STEP 3: PAYMENT ═══ -->
-            <div class="overflow-hidden rounded-xl border border-border-color bg-card-bg shadow-sm">
-            <div class="flex items-center gap-3 bg-card-accent p-4 border-b border-border-color">
-                <span class="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-sm font-bold text-white">3</span>
-                <h2 class="text-lg font-bold text-primary">Payment Method</h2>
-            </div>
-            <div class="p-6 space-y-4">
-
-                <!-- COD — only show if enabled in settings -->
-<!-- COD — blurred if disabled in settings -->
-<label class="flex cursor-pointer items-center justify-between rounded-xl border-2 border-transparent bg-gray-50 p-4 transition-all
-  {% if store_settings.cod_enabled %}hover:border-primary/30 has-[:checked]:border-primary has-[:checked]:bg-primary/5{% else %}opacity-40 cursor-not-allowed select-none{% endif %}">
-  <div class="flex items-center gap-3">
-    <input name="payment_method" type="radio" value="cod"
-           class="text-primary focus:ring-primary"
-           {% if store_settings.cod_enabled %}checked{% endif %}
-           {% if not store_settings.cod_enabled %}disabled{% endif %}/>
-    <div>
-      <p class="font-bold text-primary">Cash on Delivery</p>
-      <p class="text-xs text-text-secondary">Pay when your order arrives</p>
-      {% if not store_settings.cod_enabled %}
-        <p class="text-xs text-red-400 font-semibold mt-1">Currently unavailable</p>
-      {% endif %}
-    </div>
-  </div>
-  <span class="material-symbols-outlined text-primary/60">payments</span>
-</label>
-
-<!-- Online Payment — auto-checked when COD disabled -->
-<label class="flex cursor-pointer items-center justify-between rounded-xl border-2 border-transparent bg-gray-50 p-4 transition-all hover:border-primary/30 has-[:checked]:border-primary has-[:checked]:bg-primary/5">
-  <div class="flex items-center gap-3">
-    <input name="payment_method" type="radio" value="stripe"
-           class="text-primary focus:ring-primary"
-           {% if not store_settings.cod_enabled %}checked{% endif %}/>
-    <div>
-      <p class="font-bold text-primary">Pay Online</p>
-      <p class="text-xs text-text-secondary">Credit / Debit card via Stripe — secure &amp; instant</p>
-    </div>
-  </div>
-  <div class="flex items-center gap-1">
-    <span class="material-symbols-outlined text-primary/60">credit_card</span>
-    <span class="text-[10px] font-bold bg-primary/10 text-primary px-2 py-0.5 rounded-full">Stripe</span>
-  </div>
-</label>
-
-            </div>
-            </div>
 
           </div>
 
@@ -282,73 +240,117 @@
               <h2 class="mb-6 text-xl font-bold text-primary">Order Summary</h2>
 
               <!-- CART ITEMS -->
-              <div class="mb-6 space-y-4 max-h-72 overflow-y-auto pr-1">
-                {% for item in cart_items %}
-                <div class="flex items-center gap-4">
-                  <div class="relative h-16 w-14 shrink-0 overflow-hidden rounded-lg bg-gray-50 border border-gray-100">
-                    {% with item.product.images.first as img %}
-                      {% if img %}
-                        <img src="{{ img.image.url }}" class="h-full w-full object-cover"/>
-                      {% else %}
-                        <img src="{% static 'images/default.png' %}" class="h-full w-full object-cover"/>
-                      {% endif %}
-                    {% endwith %}
-                    <span class="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-white">
-                      {{ item.quantity }}
-                    </span>
-                  </div>
-                  <div class="flex flex-1 flex-col overflow-hidden">
-                    <p class="truncate text-sm font-bold text-primary">{{ item.product.product_name }}</p>
-                    <p class="text-xs text-text-secondary">
-                      {% if item.product.color_name %}{{ item.product.color_name }}{% endif %}
-                      {% if item.size %} / {{ item.size }}{% endif %}
-                    </p>
-                  </div>
-                  <p class="text-sm font-bold text-primary">₹{{ item.total_price }}</p>
-                </div>
-                {% endfor %}
-              </div>
+<!-- RIGHT COLUMN — ORDER SUMMARY -->
+<div class="w-full lg:sticky lg:top-28 lg:max-w-[380px]">
+  <div class="rounded-2xl bg-white border border-gray-100 shadow-sm overflow-hidden">
 
-              <!-- PRICE BREAKDOWN -->
-              <div class="space-y-3 border-t border-border-color pt-5">
-                <div class="flex justify-between text-sm text-text-secondary">
-                  <span>Subtotal</span>
-                  <span class="font-medium text-primary">₹{{ subtotal }}</span>
-                </div>
-                <div class="flex justify-between text-sm text-text-secondary">
-                  <span>Shipping</span>
-                  <span class="font-medium text-primary">{% if shipping == 0 %}Free{% else %}₹{{ shipping }}{% endif %}</span>
-                </div>
-                <div class="flex justify-between text-sm text-text-secondary">
-                  <span>Tax (5%)</span>
-                  <span class="font-medium text-primary">₹{{ tax }}</span>
-                </div>
-                <div class="flex items-center justify-between border-t border-border-color pt-4">
-                  <span class="text-base font-bold text-primary">Total</span>
-                  <span class="text-2xl font-extrabold text-primary">₹{{ total }}</span>
-                </div>
-              </div>
-
-              <!-- PLACE ORDER BUTTON -->
-              <button type="submit"
-                class="mt-8 flex w-full items-center justify-center gap-2 rounded-xl bg-primary py-4 text-base font-bold text-white shadow-lg shadow-primary/20 transition-all hover:bg-primary-hover active:scale-[0.98]">
-                <span class="material-symbols-outlined">shopping_bag</span>
-                Place Order — ₹{{ total }}
-              </button>
-
-              <p class="mt-4 text-center text-xs text-text-secondary">
-                By placing your order, you agree to our
-                <a class="underline text-primary" href="#">Terms of Service</a> and
-                <a class="underline text-primary" href="#">Privacy Policy</a>.
-              </p>
-
-            </div>
-          </div>
-
-        </div>
-      </form>
+    <!-- Header -->
+    <div class="bg-[#1e4433] px-6 py-4">
+      <h2 class="text-sm font-bold text-white tracking-widest uppercase">Order Summary</h2>
     </div>
-  </main>
+
+    <!-- Cart Items -->
+    <div class="px-6 pt-5 pb-3 space-y-4 max-h-60 overflow-y-auto">
+      {% for item in cart_items %}
+      <div class="flex items-center gap-4">
+        <div class="relative h-16 w-14 shrink-0 overflow-hidden rounded-xl bg-gray-50 border border-gray-100">
+          {% with item.product.images.first as img %}
+            {% if img %}
+              <img src="{{ img.image.url }}" class="h-full w-full object-cover"/>
+            {% else %}
+              <div class="w-full h-full bg-gray-100 flex items-center justify-center">
+                <span class="material-symbols-outlined text-gray-300 text-xl">image</span>
+              </div>
+            {% endif %}
+          {% endwith %}
+          <span class="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-[#1e4433] text-[10px] font-bold text-white">
+            {{ item.quantity }}
+          </span>
+        </div>
+        <div class="flex flex-1 flex-col overflow-hidden">
+          <p class="truncate text-sm font-bold text-[#112117]">{{ item.product.product_name }}</p>
+          <p class="text-xs text-gray-400">
+            {% if item.product.color_name %}{{ item.product.color_name }}{% endif %}
+            {% if item.size %} / {{ item.size }}{% endif %}
+          </p>
+          <p class="text-xs text-gray-400 mt-0.5">Item total: <span class="font-bold text-[#112117]">₹{{ item.total_price }}</span></p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- Price Breakdown -->
+    <div class="px-6 py-4 space-y-3 border-t border-gray-100">
+      <div class="flex justify-between text-sm text-gray-600">
+        <span>Price ({{ item_count }} item{{ item_count|pluralize }})</span>
+        <span class="font-medium text-[#112117]">₹{{ subtotal|floatformat:2 }}</span>
+      </div>
+      <div class="flex justify-between text-sm text-gray-600">
+        <span>Shipping</span>
+        <span class="font-medium {% if shipping == 0 %}text-green-600{% else %}text-[#112117]{% endif %}">
+          {% if shipping == 0 %}FREE{% else %}₹{{ shipping|floatformat:2 }}{% endif %}
+        </span>
+      </div>
+      {% if shipping == 0 and subtotal > 0 %}
+        <p class="text-xs text-green-600 font-medium -mt-1">🎉 You qualify for free shipping!</p>
+      {% elif subtotal > 0 %}
+        <p class="text-xs text-gray-400 -mt-1">Purchase worth ₹{{ store_settings.free_shipping_threshold|floatformat:0 }}  for free shipping</p>
+      {% endif %}
+      <div class="flex justify-between text-sm text-gray-600">
+        <span>Tax (5%)</span>
+        <span class="font-medium text-[#112117]">₹{{ tax|floatformat:2 }}</span>
+      </div>
+      {% if discount and discount > 0 %}
+      <div class="flex justify-between text-sm text-green-600 font-semibold">
+        <span class="flex items-center gap-1">
+          <span class="material-symbols-outlined text-[15px]">confirmation_number</span>
+          Coupon Discount
+        </span>
+        <span>− ₹{{ discount|floatformat:2 }}</span>
+      </div>
+      {% endif %}
+
+      <!-- Coupon -->
+      <!-- Coupon (read-only — applied from cart) -->
+{% if coupon_msg %}
+<div class="pt-3 border-t border-gray-100">
+  <div class="flex items-center justify-between bg-green-50 border border-green-200 rounded-xl px-4 py-2.5">
+    <div class="flex items-center gap-2 text-green-700 text-sm font-semibold">
+      <span class="material-symbols-outlined text-[18px]">confirmation_number</span>
+      {{ coupon_msg }}
+    </div>
+    <span class="text-[10px] font-bold bg-green-100 text-green-700 px-2 py-0.5 rounded-full">APPLIED</span>
+  </div>
+</div>
+{% endif %}
+
+    <!-- Total -->
+    <div class="px-6 py-4 border-t border-gray-200 bg-gray-50">
+      <div class="flex items-center justify-between">
+        <span class="text-base font-bold text-[#112117]">Total Amount</span>
+        <span class="text-2xl font-extrabold text-[#112117]">₹{{ total|floatformat:2 }}</span>
+      </div>
+      {% if discount > 0 %}
+      <p class="mt-1 text-xs text-green-600 font-semibold text-right">You save ₹{{ discount|floatformat:2 }} on this order!</p>
+      {% else %}
+      <p class="mt-1 text-xs text-green-600 font-semibold text-right">Inclusive of all taxes</p>
+      {% endif %}
+    </div>
+
+    <!-- Place Order Button -->
+    <div class="px-6 py-5">
+      <button type="submit"
+        class="group flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#36e27b] to-[#2bc468] py-4 text-base font-bold text-[#112117] shadow-lg hover:shadow-xl hover:scale-[1.01] transition-all">
+        <span class="material-symbols-outlined">shopping_bag</span>
+        PROCEED TO PAYMENT
+      </button>
+      <div class="mt-4 flex items-center justify-center gap-2 text-xs text-gray-400 font-medium">
+        <span class="material-symbols-outlined text-[16px] text-green-500">lock</span>
+        100% Secure Payments
+      </div>
+    </div>
+
+  </div>
 </div>
 
 <script>

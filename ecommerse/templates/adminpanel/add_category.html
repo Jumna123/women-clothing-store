@@ -1,6 +1,6 @@
 {% extends "adminpanel/admin_base.html" %}
 
-{% block title %}User Management{% endblock %}
+{% block title %}{% if category %}Edit Category{% else %}Add Category{% endif %}{% endblock %}
 
 {% block content %}
 <!-- Cropper.js CSS -->
@@ -16,7 +16,6 @@
         border-radius: 50%;
     }
 
-    /* The below allows the image outside the circle to be "dimmed" correctly while showing the circle clearly */
     .cropper-view-box {
         outline: 0;
         box-shadow: 0 0 0 1px #39f;
@@ -32,14 +31,14 @@
                 <div class="flex items-center gap-2 text-sm">
                     <a class="text-primary font-medium hover:underline" href="#">Categories</a>
                     <span class="text-gray-600">/</span>
-                    <span class="text-white font-medium">Add New</span>
+                    <span class="text-white font-medium">{% if category %}Edit Category{% else %}Add New{% endif %}</span>
                 </div>
                 <div class="flex flex-col gap-2">
                     <h2 class="text-white text-3xl md:text-4xl font-black leading-tight tracking-tight">
-                        Add New Category
+                        {% if category %}Edit Category{% else %}Add New Category{% endif %}
                     </h2>
                     <p class="text-gray-400 text-base font-normal max-w-2xl">
-                        Create a new product category to organize your inventory.
+                        {% if category %}Update the details of this category.{% else %}Create a new product category to organize your inventory.{% endif %}
                     </p>
                 </div>
             </div>
@@ -48,21 +47,18 @@
 
                     {% csrf_token %}
 
-                
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        
-                        
+
                         <label class="flex flex-col gap-2">
                             <span class="text-text-dark-green text-sm font-semibold">
                                 Category Name
                             </span>
-
                             <input
                                 type="text"
                                 name="category_name"
                                 placeholder="e.g., Summer Dresses"
                                 required
-                                value="{{ request.POST.category_name }}"
+                                value="{{ category.category_name|default:'' }}"
                                 class="form-input w-full h-12 px-4 rounded-lg bg-[#f8fbfa] border border-border-green text-text-dark-green placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-normal"
                             />
                         </label>
@@ -73,12 +69,13 @@
                                 type="text"
                                 name="slug"
                                 placeholder="e.g., summer-dresses"
-                                value="{{ request.POST.slug }}"
-                                class="form-input w-full h-12 px-4 rounded-lg bg-[#f8fbfa] border border-border-green ..."
-                            />
+                                value="{% if category %}{{ category.slug }}{% else %}{{ request.POST.slug }}{% endif %}"
 
+                                class="form-input w-full h-12 px-4 rounded-lg bg-[#f8fbfa] border border-border-green text-text-dark-green placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-normal"
+                            />
                         </label>
                     </div>
+
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <label class="flex flex-col gap-2">
                             <span class="text-text-dark-green text-sm font-semibold">Parent Category <span
@@ -86,17 +83,14 @@
                             <div class="relative">
                                 <select
                                     name="parent"
-                                    class="form-select w-full h-12 px-4 pr-10 rounded-lg bg-[#f8fbfa] border border-border-green ...">
-
-
-                                    <option disabled="" selected="" value="">Select parent category...</option>
-                                    <option value="clothing">Clothing</option>
-                                    <option value="accessories">Accessories</option>
-                                    <option value="shoes">Shoes</option>
-                                    <option value="sale">Sale</option>
+                                    class="form-select w-full h-12 px-4 pr-10 rounded-lg bg-[#f8fbfa] border border-border-green text-text-dark-green focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all">
+                                    <option value="">Select parent category...</option>
+                                    <option value="clothing" {% if category.parent == "clothing" %}selected{% endif %}>Clothing</option>
+                                    <option value="accessories" {% if category.parent == "accessories" %}selected{% endif %}>Accessories</option>
+                                    <option value="shoes" {% if category.parent == "shoes" %}selected{% endif %}>Shoes</option>
+                                    <option value="sale" {% if category.parent == "sale" %}selected{% endif %}>Sale</option>
                                 </select>
-                                <span
-                                    class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-primary">
+                                <span class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-primary">
                                     <span class="material-symbols-outlined">expand_more</span>
                                 </span>
                             </div>
@@ -110,10 +104,13 @@
                                         type="checkbox"
                                         name="is_active"
                                         value="1"
-                                        checked
+                                        {% if category %}
+                                            {% if category.is_active %}checked{% endif %}
+                                        {% else %}
+                                            checked
+                                        {% endif %}
                                         class="sr-only peer"
                                     />
-
                                     <div
                                         class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary/30 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary">
                                     </div>
@@ -122,97 +119,95 @@
                             </div>
                         </div>
                     </div>
+
                     <label class="flex flex-col gap-3">
-                    <span class="text-text-dark-green text-sm font-semibold">
-                        Banner Image <span class="text-gray-400 font-normal">(Optional)</span>
-                    </span>
+                        <span class="text-text-dark-green text-sm font-semibold">
+                            Banner Image <span class="text-gray-400 font-normal">(Optional)</span>
+                        </span>
 
-                    <!-- REAL FILE INPUT (OUTSIDE UI) -->
-                    <input
-                        id="categoryImageInput"
-                        name="category_image"
-                        type="file"
-                        accept="image/*"
-                        class="hidden"
-                        required
-                    />
+                        <!-- REAL FILE INPUT -->
+                        <input
+                            id="categoryImageInput"
+                            name="category_image"
+                            type="file"
+                            accept="image/*"
+                            class="hidden"
+                            {% if not category %}required{% endif %}
+                        />
 
-                    <!-- UPLOAD UI -->
-                    <div id="uploadContainer" class="w-full">
-                        <label
-                            for="categoryImageInput"
-                            class="w-full flex justify-center rounded-lg border-2 border-dashed border-border-green px-6 py-10 transition-colors hover:bg-[#f8fbfa] hover:border-primary/50 group cursor-pointer bg-white">
-
-                            <div class="text-center">
-                                <div class="mx-auto flex h-12 w-12 text-gray-300 group-hover:text-primary transition-colors">
-                                    <span class="material-symbols-outlined text-[48px]">cloud_upload</span>
-                                </div>
-
-                                <div class="mt-4 flex text-sm leading-6 text-gray-600 justify-center">
-                                    <span class="font-semibold text-primary">Upload a file</span>
-                                    <p class="pl-1">or drag and drop</p>
-                                </div>
-
-                                <p class="text-xs leading-5 text-gray-500 mt-1">
-                                    PNG, JPG, GIF up to 10MB
-                                </p>
+                        <!-- EXISTING IMAGE (edit mode only) -->
+                        {% if category.category_image %}
+                        <div id="existingImageContainer" class="w-full bg-white border border-border-green rounded-lg p-4">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-sm font-semibold text-text-dark-green">Current Image</span>
+                                <button type="button" id="changeImageBtn" class="text-primary hover:text-primary-dark text-sm font-medium">
+                                    Change Image
+                                </button>
                             </div>
-                        </label>
-                    </div>
+                            <div class="h-48 w-48 bg-gray-100 rounded-full overflow-hidden flex items-center justify-center border border-gray-200 mx-auto">
+                                <img src="{{ category.category_image.url }}" class="h-full w-full object-cover" alt="Current image">
+                            </div>
+                        </div>
+                        {% endif %}
 
-                    <!-- ✅ RESULT / PREVIEW AREA (THIS WAS MISSING) -->
-                    <div id="resultContainer"
-                        class="hidden w-full bg-white border border-border-green rounded-lg p-4 relative mt-4">
-
-                        <div class="flex items-center justify-between mb-2">
-                            <span class="text-sm font-semibold text-text-dark-green">
-                                Selected Image
-                            </span>
-                            <button
-                                type="button"
-                                id="removeImageBtn"
-                                class="text-red-500 hover:text-red-700 text-sm font-medium">
-                                Remove
-                            </button>
+                        <!-- UPLOAD UI -->
+                        <div id="uploadContainer" class="{% if category.category_image %}hidden{% endif %} w-full">
+                            <label
+                                for="categoryImageInput"
+                                class="w-full flex justify-center rounded-lg border-2 border-dashed border-border-green px-6 py-10 transition-colors hover:bg-[#f8fbfa] hover:border-primary/50 group cursor-pointer bg-white">
+                                <div class="text-center">
+                                    <div class="mx-auto flex h-12 w-12 text-gray-300 group-hover:text-primary transition-colors">
+                                        <span class="material-symbols-outlined text-[48px]">cloud_upload</span>
+                                    </div>
+                                    <div class="mt-4 flex text-sm leading-6 text-gray-600 justify-center">
+                                        <span class="font-semibold text-primary">Upload a file</span>
+                                        <p class="pl-1">or drag and drop</p>
+                                    </div>
+                                    <p class="text-xs leading-5 text-gray-500 mt-1">PNG, JPG, GIF up to 10MB</p>
+                                </div>
+                            </label>
                         </div>
 
-                        <div class="h-48 w-48 bg-gray-100 rounded-full overflow-hidden flex items-center justify-center border border-gray-200 mx-auto">
-                            <img
-                                id="finalCroppedImage"
-                                src=""
-                                class="h-full w-full object-cover"
-                            >
+                        <!-- NEW IMAGE PREVIEW -->
+                        <div id="resultContainer" class="hidden w-full bg-white border border-border-green rounded-lg p-4 relative mt-4">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-sm font-semibold text-text-dark-green">Selected Image</span>
+                                <button type="button" id="removeImageBtn" class="text-red-500 hover:text-red-700 text-sm font-medium">
+                                    Remove
+                                </button>
+                            </div>
+                            <div class="h-48 w-48 bg-gray-100 rounded-full overflow-hidden flex items-center justify-center border border-gray-200 mx-auto">
+                                <img id="finalCroppedImage" src="" class="h-full w-full object-cover">
+                            </div>
                         </div>
-                    </div>
-                </label>
-
+                    </label>
 
                     <label class="flex flex-col gap-2">
                         <span class="text-text-dark-green text-sm font-semibold">Description <span
                                 class="text-gray-400 font-normal">(Optional)</span></span>
                         <textarea
                             name="description"
-                            class="form-textarea w-full min-h-[120px] p-4 rounded-lg ..."
+                            class="form-textarea w-full min-h-[120px] p-4 rounded-lg bg-[#f8fbfa] border border-border-green text-text-dark-green placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
                             placeholder="Add a description for SEO and internal use..."
-                        >{{ request.POST.description }}</textarea>
+                        >{% if category %}{{ category.description }}{% else %}{{ request.POST.description }}{% endif %}</textarea>
 
                     </label>
+
                     <div class="h-px w-full bg-border-green/50 my-2"></div>
                     <div class="flex items-center justify-end gap-4">
-                        <button
-                            class="px-6 py-3 rounded-lg text-sm font-semibold text-primary hover:bg-primary/5 hover:text-primary transition-colors border border-transparent hover:border-primary/10"
-                            type="button">
+                        <a
+                            href="{% url 'adminpanel:category' %}"
+                            class="px-6 py-3 rounded-lg text-sm font-semibold text-primary hover:bg-primary/5 hover:text-primary transition-colors border border-transparent hover:border-primary/10">
                             Cancel
-                        </button>
+                        </a>
                         <button
-                                id="submitBtn"
-                                type="submit"
-                                disabled
-                                class="px-8 py-3 rounded-lg text-sm font-semibold text-white bg-primary opacity-50 cursor-not-allowed"
-                            >
-                                Save Category
-                            </button>
-
+                            id="submitBtn"
+                            type="submit"
+                            {% if not category %}disabled{% endif %}
+                            class="px-8 py-3 rounded-lg text-sm font-semibold text-white bg-primary transition-colors {% if not category %}opacity-50 cursor-not-allowed{% else %}hover:bg-primary-dark{% endif %}"
+                        >
+                            {% if category %}Update Category{% else %}Save Category{% endif %}
+                        </button>
                     </div>
                 </form>
             </div>
@@ -221,25 +216,16 @@
 </div>
 
 <!-- Cropper Modal -->
-<div id="cropperModal" class="hidden fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog"
-    aria-modal="true">
+<div id="cropperModal" class="hidden fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
     <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-        <!-- Background overlay -->
-        <div class="fixed inset-0 bg-gray-900 bg-opacity-75 transition-opacity" aria-hidden="true"
-            onclick="closeCropperModal()"></div>
-
-        <!-- Modal panel -->
-        <div
-            class="inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-3xl sm:w-full">
+        <div class="fixed inset-0 bg-gray-900 bg-opacity-75 transition-opacity" aria-hidden="true" onclick="closeCropperModal()"></div>
+        <div class="inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-3xl sm:w-full">
             <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                 <div class="sm:flex sm:items-start">
                     <div class="mt-3 text-center sm:mt-0 sm:text-left w-full">
-                        <h3 class="text-xl leading-6 font-bold text-gray-900" id="modal-title">
-                            Crop Image
-                        </h3>
+                        <h3 class="text-xl leading-6 font-bold text-gray-900" id="modal-title">Crop Image</h3>
                         <div class="mt-4">
-                            <div
-                                class="relative h-[500px] w-full bg-gray-50 rounded-lg overflow-hidden border border-gray-200">
+                            <div class="relative h-[500px] w-full bg-gray-50 rounded-lg overflow-hidden border border-gray-200">
                                 <img id="imageToCrop" src="" alt="Picture to crop" class="max-w-full block">
                             </div>
                         </div>
@@ -268,11 +254,20 @@
     const cropperModal = document.getElementById('cropperModal');
     const imageToCrop = document.getElementById('imageToCrop');
     const performCropBtn = document.getElementById('performCropBtn');
-
     const uploadContainer = document.getElementById('uploadContainer');
     const resultContainer = document.getElementById('resultContainer');
     const finalCroppedImage = document.getElementById('finalCroppedImage');
     const removeImageBtn = document.getElementById('removeImageBtn');
+    const existingImageContainer = document.getElementById('existingImageContainer');
+    const changeImageBtn = document.getElementById('changeImageBtn');
+    const submitBtn = document.getElementById('submitBtn');
+
+    // Edit mode: submit is always enabled
+    const isEditMode = {{ category|yesno:"true,false" }};
+    if (isEditMode) {
+        submitBtn.disabled = false;
+        submitBtn.classList.remove("opacity-50", "cursor-not-allowed");
+    }
 
     function closeCropperModal() {
         cropperModal.classList.add('hidden');
@@ -282,7 +277,15 @@
         }
     }
 
-    // OPEN CROPPER
+    // Change image button (edit mode)
+    if (changeImageBtn) {
+        changeImageBtn.addEventListener('click', function () {
+            existingImageContainer.classList.add('hidden');
+            uploadContainer.classList.remove('hidden');
+        });
+    }
+
+    // Open Cropper
     itemInput.addEventListener('change', function (e) {
         const file = e.target.files[0];
         if (!file) return;
@@ -306,14 +309,11 @@
         reader.readAsDataURL(file);
     });
 
-    // CROP & SAVE
+    // Crop & Save
     performCropBtn.addEventListener('click', function () {
         if (!cropper) return;
 
-        const canvas = cropper.getCroppedCanvas({
-            width: 600,
-            height: 600
-        });
+        const canvas = cropper.getCroppedCanvas({ width: 600, height: 600 });
 
         canvas.toBlob(function (blob) {
             const file = new File([blob], "category.jpg", { type: "image/jpeg" });
@@ -327,8 +327,7 @@
             uploadContainer.classList.add('hidden');
             resultContainer.classList.remove('hidden');
 
-            // ENABLE SUBMIT
-            const submitBtn = document.getElementById("submitBtn");
+            // Enable submit
             submitBtn.disabled = false;
             submitBtn.classList.remove("opacity-50", "cursor-not-allowed");
 
@@ -336,19 +335,22 @@
         });
     });
 
-    // REMOVE IMAGE
+    // Remove image
     removeImageBtn.addEventListener('click', function () {
         itemInput.value = "";
         finalCroppedImage.src = "";
         resultContainer.classList.add('hidden');
-        uploadContainer.classList.remove('hidden');
 
-        const submitBtn = document.getElementById("submitBtn");
-        submitBtn.disabled = true;
-        submitBtn.classList.add("opacity-50", "cursor-not-allowed");
+        if (existingImageContainer) {
+            existingImageContainer.classList.remove('hidden');
+        } else {
+            uploadContainer.classList.remove('hidden');
+            if (!isEditMode) {
+                submitBtn.disabled = true;
+                submitBtn.classList.add("opacity-50", "cursor-not-allowed");
+            }
+        }
     });
 </script>
-
-
 
 {% endblock %}

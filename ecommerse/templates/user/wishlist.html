@@ -1,292 +1,561 @@
+{% load static %}
 <!DOCTYPE html>
-<html lang="en"><head>
+<html lang="en">
+<head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Wishlist | Elegance - Women's Fashion</title>
+<title>Wishlist — vólke shoppe</title>
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="https://fonts.googleapis.com/css2?family=Spline+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <script id="tailwind-config">
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        "brand-dark": "#112117",
-                        "brand-green": "#1c3326",
-                        "brand-accent": "#254632",
-                        "background-light": "#ffffff",
-                        "surface-light": "#f9fafb",
-                    },
-                    fontFamily: {
-                        "display": ["Spline Sans", "sans-serif"]
-                    },
-                    borderRadius: {
-                        "DEFAULT": "1rem", 
-                        "lg": "2rem", 
-                        "xl": "3rem", 
-                        "full": "9999px"
-                    },
-                },
-            },
-        }
-    </script>
-<style type="text/tailwindcss">
-        body {
-            font-family: 'Spline Sans', sans-serif;
-        }
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-        }
-        .wishlist-empty-state {
-            display: none;
-        }
-    </style>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          "primary":        "#064e3b",
+          "primary-hover":  "#022c22",
+          "primary-light":  "#ecfdf5",
+          "text-main":      "#022c22",
+          "text-secondary": "#064e3b",
+          "background-base":"#ffffff",
+          "surface-light":  "#f0fdf4",
+          "surface-lighter":"#ffffff",
+          "border-green":   "#059669",
+          "accent-dark":    "#022c22"
+        },
+        fontFamily: { "display": ["Manrope", "sans-serif"] },
+        borderRadius: {"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","2xl":"1rem","full":"9999px"},
+      },
+    },
+  }
+</script>
+<style>
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: #f0fdf4; }
+  ::-webkit-scrollbar-thumb { background: #064e3b; border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: #022c22; }
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  .icon-filled { font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+</style>
 </head>
-<body class="bg-background-light text-brand-dark min-h-screen flex flex-col font-display selection:bg-brand-dark selection:text-white">
-<header class="sticky top-0 z-50 w-full border-b border-gray-100 bg-white/95 backdrop-blur-md">
-<div class="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-<a class="flex items-center gap-2" href="/">
-<div class="flex size-8 items-center justify-center rounded-full bg-brand-dark text-white">
-<span class="material-symbols-outlined text-2xl">diamond</span>
-</div>
-<h1 class="text-xl font-bold tracking-tight text-brand-dark uppercase">ELEGANCE</h1>
-</a>
 
-<a href="{% url 'home:cart_view' %}"
-   class="group relative flex size-9 md:size-10 items-center justify-center rounded-full bg-gradient-to-b from-primary to-[#2ec56a] text-background-dark hover:to-white transition-all shadow-[0_0_10px_rgba(54,226,123,0.2)]">
+<body class="bg-background-base text-text-main font-display antialiased min-h-screen flex flex-col selection:bg-primary-light selection:text-primary">
 
-    <span class="material-symbols-outlined text-xl md:text-2xl">
-        shopping_cart
-    </span>
+<!-- ══════════════════════════════════════════
+     HEADER
+══════════════════════════════════════════ -->
+<header class="sticky top-0 z-50 bg-[#1e4433]">
+  <div class="px-4 lg:px-10 py-3 flex items-center justify-between">
 
-    {% if cart_count > 0 %}
-    <span class="absolute -right-1 -top-1 flex size-4 items-center justify-center rounded-full bg-white text-[10px] font-bold text-background-dark group-hover:bg-primary">
-        {{ cart_count }}
-    </span>
-    {% endif %}
-</a>
-</div>
-</div>
-</header>
-<main class="flex-grow">
-<div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 flex gap-8">
-{% if from_profile %}
-    {% include "accounts/profile_sidebar.html" %}
-{% endif %}
-<div class="flex-1">
-<div class="mb-10 flex flex-col gap-2">
-<nav class="flex mb-4 text-sm font-medium text-gray-400">
-<a class="hover:text-brand-dark transition-colors" href="/">Home</a>
-<span class="mx-2">/</span>
-<span class="text-brand-dark">Wishlist</span>
-</nav>
-<h2 class="text-4xl font-black tracking-tight text-brand-dark">My Wishlist</h2>
-<p class="text-gray-500">
-    You have {{ wishlist_count }} item{{ wishlist_count|pluralize }} in your wishlist.
-</p></div>
-
-{% if wishlist_items %}
-  <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
-    {% for item in wishlist_items %}
-    <div class="group relative bg-[#1c3326] p-4 rounded-2xl shadow-lg">
-     {% with item.product.images.all.0 as primary_image %}
-    {% if primary_image %}
-        <img src="{{ primary_image.image.url }}"
-             alt="{{ item.product.product_name }}"
-             class="w-full aspect-[3/4] object-cover rounded-xl mb-3">
-    {% else %}
-        <div class="w-full aspect-[3/4] bg-gray-200 flex items-center justify-center rounded-xl mb-3">
-            <span class="text-gray-500 text-sm">No Image</span>
+    <div class="flex items-center gap-6">
+      <!-- Logo -->
+      <a href="{% url 'home:home' %}" class="flex items-center gap-2 group">
+        <div class="flex flex-col" style="line-height:1;">
+          <span style="font-family:'Georgia','Times New Roman',serif;font-size:22px;font-weight:700;letter-spacing:0.15em;color:#ffffff;">vólke</span>
+          <span style="font-size:8px;letter-spacing:0.18em;color:#ffffff;text-transform:uppercase;">shoppe</span>
         </div>
-    {% endif %}
-{% endwith %}
-      <div class="flex justify-between items-start">
-        <div>
-          <h3 class="text-lg font-semibold text-white">{{ item.product.product_name }}</h3>
-        </div>
-        
-      </div>
-      <p class="text-white font-bold mt-2">₹ {{ item.product.price }}</p>
-      <a href="{% url 'home:category_products' item.product.id %}"
-         class="inline-block mt-4 w-full py-2 bg-gradient-to-r from-primary to-[#2ec56a]
-                rounded-full text-background-dark font-bold text-sm transition-all hover:scale-105">
-        
       </a>
-       <!-- Add to Cart Button -->
-<button type="button"
-    onclick="openSizeModal('{{ item.product.id }}')"
-    class="inline-block mt-3 w-full py-2 bg-white text-[#1c3326]
-           rounded-full font-semibold text-sm text-center
-           transition-all hover:bg-gray-200">
-    Add to Cart
-</button>
 
+      <nav class="hidden lg:flex items-center gap-6">
+        {% for category in categories %}
+        <a class="text-white/80 text-sm font-semibold hover:text-white transition-colors"
+           href="{% url 'home:category_products' category.slug %}">
+          {{ category.category_name }}
+        </a>
+        {% endfor %}
+      </nav>
     </div>
-    {% endfor %}
-  </div>
-  {% else %}
-  <p class="text-center text-gray-400">Your wishlist is empty 💔</p>
-  {% endif %}
-</div>
-</div>
-</div>
-<div class="wishlist-empty-state flex flex-col items-center justify-center py-24 text-center">
-<div class="mb-6 flex size-24 items-center justify-center rounded-full bg-gray-50 text-brand-dark border border-gray-100">
-<span class="material-symbols-outlined text-5xl">favorite</span>
-</div>
-<h3 class="mb-2 text-2xl font-bold text-brand-dark">Your wishlist is empty</h3>
-<p class="mb-10 max-w-sm text-gray-500">Save items that you love in your wishlist and they will appear here.</p>
-<a class="rounded-full bg-brand-dark px-10 py-4 font-bold text-white transition-transform hover:scale-105 active:scale-95" href="/">
-                Continue Shopping
+
+      <div class="hidden md:flex flex-1 max-w-xl mx-6">
+        <div class="relative w-full">
+          <form method="GET" action="{% url 'home:search_products' %}" class="relative w-full">
+            <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-white/50">
+              <span class="material-symbols-outlined text-xl">search</span>
+            </div>
+            <input name="q"
+              class="block w-full rounded-full border-none bg-white/10 py-2.5 pl-11 pr-4 text-sm text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-white/20 focus:bg-white/15 transition-all hover:bg-white/15"
+              placeholder="Search styles..."
+              type="text" autocomplete="off"/>
+          </form>
+        </div>
+      </div>
+
+      <div class="flex gap-2">
+        <a href="{% url 'home:cart_view' %}" class="relative flex items-center justify-center p-2 rounded-lg text-white/80 hover:bg-white/10 hover:text-white transition-colors">
+          <span class="material-symbols-outlined">shopping_bag</span>
+          {% if cart_count %}
+          <span class="absolute top-1 right-1 size-2 bg-green-400 rounded-full ring-2 ring-[#1e4433]"></span>
+          {% endif %}
+        </a>
+
+        <div class="relative" id="profileDropdown">
+          <button onclick="toggleDropdown()" class="flex items-center gap-2 p-2 rounded-lg text-white/80 hover:bg-white/10 hover:text-white transition-colors">
+            {% if user.profile_picture %}
+              <img src="{{ user.profile_picture.url }}" class="size-7 rounded-full object-cover border-2 border-white/20" alt="{{ user.username }}"/>
+            {% else %}
+              <span class="material-symbols-outlined icon-filled">account_circle</span>
+            {% endif %}
+            <span class="hidden md:block text-sm font-semibold text-white">{{ user.get_short_name|default:user.username }}</span>
+            <span class="material-symbols-outlined text-[18px] text-white/70">expand_more</span>
+          </button>
+
+          <div id="dropdownMenu" class="hidden absolute right-0 mt-2 w-52 bg-white border border-border-green/20 rounded-xl shadow-xl py-2 z-50">
+            <a href="{% url 'accounts:profile' %}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-text-main hover:bg-surface-light hover:text-primary transition-colors">
+              <span class="material-symbols-outlined text-[18px]">person</span> My Profile
             </a>
-</div>
-</div>
-</main>
-<footer class="bg-gray-50 border-t border-gray-100 pt-16 pb-8">
-<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-<div class="grid gap-12 sm:grid-cols-2 lg:grid-cols-4">
-<div class="space-y-4">
-<div class="flex items-center gap-2">
-<div class="flex size-6 items-center justify-center rounded-full bg-brand-dark text-white">
-<span class="material-symbols-outlined text-sm">diamond</span>
-</div>
-<span class="text-lg font-bold text-brand-dark uppercase">ELEGANCE</span>
-</div>
-<p class="text-sm text-gray-500 leading-relaxed">
-                    Redefining women's fashion with a blend of modern trends and timeless elegance. Quality you can trust, style you will love.
-                </p>
-<div class="flex gap-4 pt-2">
-<a class="text-brand-dark/60 hover:text-brand-dark transition-colors" href="#"><span class="sr-only">Facebook</span><svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"></path></svg></a>
-<a class="text-brand-dark/60 hover:text-brand-dark transition-colors" href="#"><span class="sr-only">Instagram</span><svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path clip-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.468 2.53c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z" fill-rule="evenodd"></path></svg></a>
-</div>
-</div>
-<div>
-<h4 class="mb-6 font-bold text-brand-dark">Shop</h4>
-<ul class="space-y-3 text-sm text-gray-500">
-<li><a class="hover:text-brand-dark transition-colors" href="#">New Arrivals</a></li>
-<li><a class="hover:text-brand-dark transition-colors" href="#">Best Sellers</a></li>
-<li><a class="hover:text-brand-dark transition-colors" href="#">Clothing</a></li>
-<li><a class="hover:text-brand-dark transition-colors" href="#">Accessories</a></li>
-<li><a class="hover:text-brand-dark transition-colors" href="#">Sale</a></li>
-</ul>
-</div>
-<div>
-<h4 class="mb-6 font-bold text-brand-dark">Support</h4>
-<ul class="space-y-3 text-sm text-gray-500">
-<li><a class="hover:text-brand-dark transition-colors" href="#">Order Status</a></li>
-<li><a class="hover:text-brand-dark transition-colors" href="#">Shipping &amp; Returns</a></li>
-<li><a class="hover:text-brand-dark transition-colors" href="#">Size Guide</a></li>
-<li><a class="hover:text-brand-dark transition-colors" href="#">Contact Us</a></li>
-<li><a class="hover:text-brand-dark transition-colors" href="#">FAQ</a></li>
-</ul>
-</div>
-<div>
-<h4 class="mb-6 font-bold text-brand-dark">Legal</h4>
-<ul class="space-y-3 text-sm text-gray-500">
-<li><a class="hover:text-brand-dark transition-colors" href="#">Privacy Policy</a></li>
-<li><a class="hover:text-brand-dark transition-colors" href="#">Terms of Service</a></li>
-<li><a class="hover:text-brand-dark transition-colors" href="#">Return Policy</a></li>
-<li><a class="hover:text-brand-dark transition-colors" href="#">Cookie Policy</a></li>
-</ul>
-</div>
-</div>
-<div class="mt-12 border-t border-gray-200 pt-8 text-center text-sm text-gray-400">
-<p>© 2024 Elegance Fashion. All rights reserved.</p>
-</div>
-</div>
-</footer>
-<!-- SIZE SELECTION MODAL -->
-<div id="sizeModal"
-     class="fixed inset-0 bg-black bg-opacity-40 hidden flex items-center justify-center z-50">
+            <a href="{% url 'home:user_orders' %}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-text-main hover:bg-surface-light hover:text-primary transition-colors">
+              <span class="material-symbols-outlined text-[18px]">package_2</span> My Orders
+            </a>
+            <a href="{% url 'home:wishlist_view' %}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-text-main hover:bg-surface-light hover:text-primary transition-colors">
+              <span class="material-symbols-outlined text-[18px]">favorite</span> Wishlist
+            </a>
+            <div class="border-t border-border-green/10 my-1"></div>
+            <a href="{% url 'accounts:logout' %}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 transition-colors">
+              <span class="material-symbols-outlined text-[18px]">logout</span> Sign Out
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
 
-    <div class="bg-white w-[400px] rounded-lg p-6 relative">
 
-        <!-- Close Button -->
-        <button onclick="closeSizeModal()"
-                class="absolute top-3 right-3 text-gray-500 text-xl">
-            ×
-        </button>
+<!-- ══════════════════════════════════════════
+     PAGE BODY
+══════════════════════════════════════════ -->
+<div class="flex-grow w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-10">
 
-        <!-- Product Info -->
-        <div id="modalContent"></div>
+ <!-- Breadcrumb -->
+<nav class="flex items-center gap-1.5 text-sm font-medium text-text-secondary/60 mb-8">
+  {% if from_profile %}
+    <a href="{% url 'accounts:profile' %}" class="hover:text-primary transition-colors">Account</a>
+    <span class="material-symbols-outlined text-sm">chevron_right</span>
+  {% else %}
+    <a href="{% url 'home:home' %}" class="hover:text-primary transition-colors">Home</a>
+    <span class="material-symbols-outlined text-sm">chevron_right</span>
+  {% endif %}
+  <span class="text-primary font-bold">Wishlist</span>
+</nav>
 
-        <!-- Size Section -->
-        <h3 class="mt-4 font-semibold">Select Size</h3>
+  <div class="flex flex-col lg:flex-row gap-8 lg:gap-10">
 
-        <div id="sizeOptions" class="flex gap-3 mt-3 flex-wrap"></div>
+    <!-- ══════════════════════════════════════════
+         SIDEBAR — only shown when coming from profile
+    ══════════════════════════════════════════ -->
+{% if from_profile %}
 
-        <!-- Done Button -->
-        <form method="POST" id="moveToCartForm">
-            {% csrf_token %}
-            <input type="hidden" name="size" id="selectedSize">
+<!-- SIDEBAR -->
+<aside class="w-full lg:w-64 flex-shrink-0">
+  <div class="bg-white rounded-2xl border border-border-green/10 shadow-sm overflow-hidden sticky top-24">
 
-            <button type="submit"
-                    class="mt-6 w-full bg-[#1c3326] text-white py-3 rounded-full font-semibold hover:bg-[#254632] transition">
-                Add to Cart
+    <!-- User card -->
+    <div class="p-6 bg-gradient-to-br from-primary to-accent-dark text-white">
+      <div class="flex items-center gap-3 mb-1">
+        {% if user.profile_picture %}
+          <img src="{{ user.profile_picture.url }}" class="size-12 rounded-full object-cover border-2 border-white/30" alt="{{ user.username }}"/>
+        {% else %}
+          <div class="size-12 rounded-full bg-white/10 border border-white/20 flex items-center justify-center">
+            <span class="material-symbols-outlined icon-filled text-2xl">account_circle</span>
+          </div>
+        {% endif %}
+        <div>
+          <p class="font-bold text-sm leading-tight">{{ user.get_full_name|default:user.username }}</p>
+          <p class="text-white/60 text-xs truncate max-w-[140px]">{{ user.email }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Nav links -->
+    <nav class="p-3 space-y-1">
+      {% with url_name=request.resolver_match.url_name %}
+
+      <a href="{% url 'accounts:profile' %}"
+        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all
+        {% if request.resolver_match.app_name == 'accounts' and url_name == 'profile' %}bg-primary-light text-primary
+        {% else %}text-text-secondary hover:bg-surface-light hover:text-primary{% endif %}">
+        <span class="material-symbols-outlined text-[20px] {% if request.resolver_match.app_name == 'accounts' and url_name == 'profile' %}icon-filled{% endif %}">dashboard</span>
+        Dashboard
+      </a>
+
+      <a href="{% url 'home:user_orders' %}"
+        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all
+        {% if url_name == 'user_orders' or url_name == 'order_detail' %}bg-primary-light text-primary
+        {% else %}text-text-secondary hover:bg-surface-light hover:text-primary{% endif %}">
+        <span class="material-symbols-outlined text-[20px] {% if url_name == 'user_orders' or url_name == 'order_detail' %}icon-filled{% endif %}">package_2</span>
+        My Orders
+        {% if active_orders_count %}
+          <span class="ml-auto bg-primary text-white text-[10px] font-bold px-2 py-0.5 rounded-full">{{ active_orders_count }}</span>
+        {% endif %}
+      </a>
+
+      <!-- Wishlist — always active on this page -->
+      <a href="{% url 'home:wishlist_view' %}"
+        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all bg-primary-light text-primary">
+        <span class="material-symbols-outlined text-[20px] icon-filled">favorite</span>
+        Wishlist
+        {% if wishlist_count %}
+          <span class="ml-auto bg-primary text-white text-[10px] font-bold px-2 py-0.5 rounded-full">{{ wishlist_count }}</span>
+        {% endif %}
+      </a>
+
+      <a href="{% url 'home:cart_view' %}"
+        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all
+        {% if url_name == 'cart_view' %}bg-primary-light text-primary
+        {% else %}text-text-secondary hover:bg-surface-light hover:text-primary{% endif %}">
+        <span class="material-symbols-outlined text-[20px] {% if url_name == 'cart_view' %}icon-filled{% endif %}">shopping_bag</span>
+        My Cart
+        {% if cart_count %}
+          <span class="ml-auto bg-primary text-white text-[10px] font-bold px-2 py-0.5 rounded-full">{{ cart_count }}</span>
+        {% endif %}
+      </a>
+
+      <a href="{% url 'accounts:address_list' %}"
+        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all
+        {% if url_name == 'address_list' %}bg-primary-light text-primary
+        {% else %}text-text-secondary hover:bg-surface-light hover:text-primary{% endif %}">
+        <span class="material-symbols-outlined text-[20px] {% if url_name == 'address_list' %}icon-filled{% endif %}">location_on</span>
+        Shipping Addresses
+      </a>
+
+      <div class="border-t border-border-green/10 my-2 mx-1"></div>
+
+      <a href="{% url 'accounts:profile' %}"
+        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all text-text-secondary hover:bg-surface-light hover:text-primary">
+        <span class="material-symbols-outlined text-[20px]">settings</span>
+        Settings
+      </a>
+
+      <a href="{% url 'accounts:logout' %}"
+        onclick="return confirm('Are you sure you want to sign out?')"
+        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-red-500 hover:bg-red-50 transition-all">
+        <span class="material-symbols-outlined text-[20px]">logout</span>
+        Sign Out
+      </a>
+
+      {% endwith %}
+    </nav>
+  </div>
+</aside>
+{% endif %}
+
+    <!-- ══════════════════════════════════════════
+         MAIN CONTENT
+    ══════════════════════════════════════════ -->
+    <main class="flex-1 flex flex-col min-w-0">
+
+      <!-- Page heading -->
+      <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-8">
+        <div>
+          <h1 class="text-3xl font-extrabold text-text-main mb-1">My Wishlist</h1>
+          <p class="text-text-secondary/60 font-medium text-sm">
+            {{ wishlist_count }} item{{ wishlist_count|pluralize }} saved
+          </p>
+        </div>
+        {% if wishlist_items %}
+        <a href="{% url 'home:home' %}"
+          class="inline-flex items-center gap-1.5 text-sm font-bold text-primary hover:text-primary-hover transition-colors group">
+          Continue Shopping
+          <span class="material-symbols-outlined text-[18px] group-hover:translate-x-0.5 transition-transform">arrow_forward</span>
+        </a>
+        {% endif %}
+      </div>
+
+      
+
+      <!-- Wishlist grid -->
+      {% if wishlist_items %}
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+        {% for item in wishlist_items %}
+        <div class="group relative flex flex-col bg-white border border-border-green/10 rounded-2xl overflow-hidden hover:border-border-green/40 hover:shadow-md transition-all">
+
+          <!-- Image -->
+          <a href="{% url 'home:product_detail' item.product.slug %}" class="block">
+            <div class="relative aspect-[3/4] overflow-hidden bg-surface-light">
+              {% with item.product.images.all.0 as primary_image %}
+                {% if primary_image %}
+                  <img src="{{ primary_image.image.url }}"
+                       alt="{{ item.product.product_name }}"
+                       class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>
+                {% else %}
+                  <div class="w-full h-full flex items-center justify-center">
+                    <span class="material-symbols-outlined text-4xl text-border-green/30">image</span>
+                  </div>
+                {% endif %}
+              {% endwith %}
+
+              <!-- Sale badge -->
+              {% if item.product.discount_price %}
+              <div class="absolute top-3 left-3 bg-primary text-white text-[10px] font-extrabold uppercase tracking-widest px-2.5 py-1 rounded-full">
+                Sale
+              </div>
+              {% endif %}
+
+              <!-- Remove from wishlist -->
+              <a href="{% url 'home:add_to_wishlist' item.product.id %}"
+                 class="absolute top-3 right-3 flex size-8 items-center justify-center rounded-full bg-white/90 text-red-400 hover:bg-red-500 hover:text-white transition-all shadow-sm opacity-0 group-hover:opacity-100">
+                <span class="material-symbols-outlined text-[18px] icon-filled">favorite</span>
+              </a>
+            </div>
+          </a>
+
+          <!-- Info -->
+          <div class="flex flex-col flex-1 p-4 gap-3">
+            <div>
+              <a href="{% url 'home:product_detail' item.product.slug %}">
+                <h3 class="text-sm font-bold text-text-main leading-snug line-clamp-2 hover:text-primary transition-colors">
+                  {{ item.product.product_name }}
+                </h3>
+              </a>
+              {% if item.product.category %}
+              <p class="text-xs text-text-secondary/50 mt-0.5 font-medium">{{ item.product.category.category_name }}</p>
+              {% endif %}
+            </div>
+
+            <!-- Price -->
+            <div class="flex items-baseline gap-2 flex-wrap">
+              {% if item.product.discount_price %}
+                <span class="text-base font-extrabold text-primary">₹{{ item.product.discount_price }}</span>
+                <span class="text-xs text-text-secondary/40 line-through font-medium">₹{{ item.product.price }}</span>
+              {% else %}
+                <span class="text-base font-extrabold text-primary">₹{{ item.product.price }}</span>
+              {% endif %}
+            </div>
+
+            <!-- Add to Cart -->
+            {% if item.product.stock_quantity != 0 %}
+            <button type="button"
+                onclick="openSizeModal('{{ item.product.id }}')"
+                class="mt-auto flex w-full items-center justify-center gap-1.5 rounded-xl bg-primary hover:bg-primary-hover py-2.5 text-xs font-bold text-white transition-all hover:-translate-y-0.5 shadow-sm">
+              <span class="material-symbols-outlined text-[16px]">shopping_bag</span>
+              Add to Cart
             </button>
-        </form>
+            {% else %}
+            <button disabled
+                class="mt-auto flex w-full items-center justify-center gap-1.5 rounded-xl bg-surface-light py-2.5 text-xs font-bold text-text-secondary/40 cursor-not-allowed border border-border-green/10">
+              <span class="material-symbols-outlined text-[16px]">remove_shopping_cart</span>
+              Out of Stock
+            </button>
+            {% endif %}
+
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+      {% else %}
+
+      <!-- Empty state -->
+      <div class="flex-1 flex flex-col items-center justify-center py-20 px-4">
+        <div class="size-28 bg-primary-light rounded-full flex items-center justify-center text-primary mb-8">
+          <span class="material-symbols-outlined text-6xl">favorite</span>
+        </div>
+        <h3 class="text-2xl font-extrabold text-text-main mb-3 text-center">Your wishlist is empty</h3>
+        <p class="text-text-secondary/60 font-medium text-center max-w-sm mb-8">
+          Save items you love and they'll appear here.
+        </p>
+        <a href="{% url 'home:home' %}"
+          class="inline-flex items-center gap-2 px-8 py-3.5 bg-primary hover:bg-primary-hover text-white font-bold rounded-xl shadow-lg shadow-primary/20 transition-all hover:-translate-y-0.5">
+          <span class="material-symbols-outlined text-[20px]">storefront</span>
+          Start Shopping
+        </a>
+      </div>
+
+      {% endif %}
+
+    </main>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     TRUST BADGES
+══════════════════════════════════════════ -->
+<div class="bg-white border-t border-border-green/10 py-12 mt-auto">
+  <div class="max-w-[1440px] mx-auto px-4 lg:px-8 grid grid-cols-1 md:grid-cols-3 gap-8">
+    <div class="flex flex-col items-center text-center">
+      <div class="size-14 rounded-full bg-surface-light flex items-center justify-center text-primary mb-4">
+        <span class="material-symbols-outlined text-2xl">keyboard_return</span>
+      </div>
+      <h4 class="text-xs font-black text-text-main tracking-widest uppercase">Easy Exchange</h4>
+    </div>
+    <div class="flex flex-col items-center text-center">
+      <div class="size-14 rounded-full bg-surface-light flex items-center justify-center text-primary mb-4">
+        <span class="material-symbols-outlined text-2xl">favorite</span>
+      </div>
+      <h4 class="text-xs font-black text-text-main tracking-widest uppercase">100% Handpicked</h4>
+    </div>
+    <div class="flex flex-col items-center text-center">
+      <div class="size-14 rounded-full bg-surface-light flex items-center justify-center text-primary mb-4">
+        <span class="material-symbols-outlined text-2xl">verified</span>
+      </div>
+      <h4 class="text-xs font-black text-text-main tracking-widest uppercase">Assured Quality</h4>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     FOOTER
+══════════════════════════════════════════ -->
+<footer class="bg-primary-hover text-white pt-16 pb-8">
+  <div class="max-w-[1440px] mx-auto px-4 lg:px-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-16">
+
+      <!-- Brand -->
+      <div class="lg:col-span-1">
+        <div class="flex flex-col mb-6" style="line-height:1;">
+          <span style="font-family:'Georgia',serif;font-size:22px;font-weight:700;letter-spacing:0.15em;color:#fff;">vólke</span>
+          <span style="font-size:7px;letter-spacing:0.18em;color:#a7f3d0;text-transform:uppercase;">shoppe</span>
+        </div>
+        <p class="text-white/50 text-sm leading-relaxed">Elevating sustainable fashion with consciously crafted designs that don't compromise on style or ethics.</p>
+      </div>
+
+      <!-- Help -->
+      <div>
+        <h3 class="text-xs font-bold uppercase tracking-widest text-white/40 mb-6">Help</h3>
+        <ul class="space-y-3">
+          <li><a class="text-sm text-white/60 hover:text-white transition-colors" href="#">Track Your Order</a></li>
+          <li><a class="text-sm text-white/60 hover:text-white transition-colors" href="#">FAQs</a></li>
+          <li><a class="text-sm text-white/60 hover:text-white transition-colors" href="#">Returns &amp; Exchanges</a></li>
+          <li><a class="text-sm text-white/60 hover:text-white transition-colors" href="#">Shipping Info</a></li>
+        </ul>
+      </div>
+
+      <!-- Shop -->
+      <div>
+        <h3 class="text-xs font-bold uppercase tracking-widest text-white/40 mb-6">Shop By</h3>
+        <ul class="space-y-3">
+          <li><a class="text-sm text-white/60 hover:text-white transition-colors" href="#">New Arrivals</a></li>
+          <li><a class="text-sm text-white/60 hover:text-white transition-colors" href="#">Women's Collection</a></li>
+          <li><a class="text-sm text-white/60 hover:text-white transition-colors" href="#">Best Sellers</a></li>
+          <li><a class="text-sm text-white/60 hover:text-white transition-colors" href="#">Sale</a></li>
+        </ul>
+      </div>
+
+      <!-- Social -->
+      <div>
+        <h3 class="text-xs font-bold uppercase tracking-widest text-white/40 mb-6">Follow Us</h3>
+        <ul class="space-y-3">
+          <li><a class="text-sm text-white/60 hover:text-white transition-colors" href="#">Instagram</a></li>
+          <li><a class="text-sm text-white/60 hover:text-white transition-colors" href="#">Facebook</a></li>
+          <li><a class="text-sm text-white/60 hover:text-white transition-colors" href="#">Pinterest</a></li>
+          <li><a class="text-sm text-white/60 hover:text-white transition-colors" href="#">Twitter / X</a></li>
+        </ul>
+      </div>
 
     </div>
+
+    <div class="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4">
+      <p class="text-white/30 text-[10px] font-bold uppercase tracking-widest">vólke shoppe © {% now "Y" %}. All rights reserved.</p>
+      <div class="flex gap-6">
+        <a class="text-[10px] font-bold uppercase tracking-widest text-white/30 hover:text-white transition-colors" href="#">Privacy Policy</a>
+        <a class="text-[10px] font-bold uppercase tracking-widest text-white/30 hover:text-white transition-colors" href="#">Terms of Service</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+<!-- ══════════════════════════════════════════
+     SIZE MODAL
+══════════════════════════════════════════ -->
+<div id="sizeModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+  <div class="bg-white border border-border-green/20 w-full max-w-sm rounded-2xl p-6 relative shadow-2xl">
+
+    <button onclick="closeSizeModal()"
+            class="absolute top-4 right-4 flex size-8 items-center justify-center rounded-full bg-surface-light text-text-secondary hover:text-primary transition-colors">
+      <span class="material-symbols-outlined text-[18px]">close</span>
+    </button>
+
+    <h2 class="text-base font-bold text-text-main mb-4">Select Size</h2>
+
+    <!-- Product info -->
+    <div id="modalContent" class="mb-4"></div>
+
+    <!-- Size options -->
+    <div id="sizeOptions" class="flex gap-2 flex-wrap mb-6"></div>
+
+    <form method="POST" id="moveToCartForm">
+      {% csrf_token %}
+      <input type="hidden" name="size" id="selectedSize"/>
+      <button type="submit"
+              class="w-full flex items-center justify-center gap-2 rounded-xl bg-primary hover:bg-primary-hover py-3.5 text-sm font-bold text-white transition-all hover:-translate-y-0.5 shadow-sm">
+        <span class="material-symbols-outlined text-[18px]">shopping_bag</span>
+        Add to Cart
+      </button>
+    </form>
+
+  </div>
 </div>
+
 
 <script>
-function openSizeModal(productId) {
+  function toggleDropdown() {
+    document.getElementById('dropdownMenu').classList.toggle('hidden');
+  }
+  document.addEventListener('click', function(e) {
+    const d = document.getElementById('profileDropdown');
+    if (d && !d.contains(e.target)) {
+      document.getElementById('dropdownMenu').classList.add('hidden');
+    }
+  });
 
-    fetch(`/get-product-sizes/${productId}/`)
-        .then(response => response.json())
-        .then(data => {
+  function openSizeModal(productId) {
+    fetch(`/cart/get-sizes/${productId}/`)
+      .then(r => r.json())
+      .then(data => {
+        document.getElementById("sizeModal").classList.remove("hidden");
+        document.getElementById("sizeModal").classList.add("flex");
 
-            document.getElementById("sizeModal").classList.remove("hidden");
+        document.getElementById("modalContent").innerHTML = `
+          <div class="flex gap-4 items-center p-3 bg-surface-light rounded-xl border border-border-green/10">
+            <img src="${data.image}" class="w-14 rounded-lg object-cover" style="aspect-ratio:3/4"/>
+            <div>
+              <h4 class="text-sm font-bold text-text-main">${data.name}</h4>
+              <p class="text-primary font-extrabold mt-1">₹${data.price}</p>
+            </div>
+          </div>`;
 
-            // Set product info
-            document.getElementById("modalContent").innerHTML = `
-                <div class="flex gap-4 items-center">
-                    <img src="${data.image}" class="w-16 h-20 object-cover rounded">
-                    <div>
-                        <h4 class="font-medium">${data.name}</h4>
-                        <p class="text-pink-600 font-semibold">₹ ${data.price}</p>
-                    </div>
-                </div>
-            `;
+        const sizeContainer = document.getElementById("sizeOptions");
+        sizeContainer.innerHTML = "";
 
-            // Show sizes
-            let sizeContainer = document.getElementById("sizeOptions");
-            sizeContainer.innerHTML = "";
+        if (data.sizes.length === 0) {
+          sizeContainer.innerHTML = `<p class="text-xs text-text-secondary/50">No sizes available</p>`;
+        } else {
+          data.sizes.forEach(size => {
+            sizeContainer.innerHTML += `
+              <button type="button"
+                      onclick="selectSize(this, '${size}')"
+                      class="size-btn px-4 py-2 rounded-xl border-2 border-border-green/20 text-sm font-semibold text-text-main hover:border-primary hover:text-primary transition-all">
+                ${size}
+              </button>`;
+          });
+        }
 
-            data.sizes.forEach(size => {
-                sizeContainer.innerHTML += `
-                    <button type="button"
-                            onclick="selectSize(this, '${size}')"
-                            class="size-btn border border-gray-300 rounded-full w-10 h-10 flex items-center justify-center hover:border-[#1c3326] transition">
-                        ${size}
-                    </button>
-                `;
-            });
+        document.getElementById("moveToCartForm").action = `/cart/move-to-cart/${productId}/`;
+      });
+  }
 
-            // Set form action
-            document.getElementById("moveToCartForm").action =
-                `/move-to-cart/${productId}/`;
-        });
-}
-
-function closeSizeModal() {
+  function closeSizeModal() {
     document.getElementById("sizeModal").classList.add("hidden");
-}
+    document.getElementById("sizeModal").classList.remove("flex");
+  }
 
-function selectSize(button, size) {
-
-    // Remove active from all
+  function selectSize(button, size) {
     document.querySelectorAll(".size-btn").forEach(btn => {
-        btn.classList.remove("bg-[#1c3326]", "text-white", "border-[#1c3326]");
+      btn.classList.remove("bg-primary", "text-white", "border-primary");
     });
-
-    // Add active style
-    button.classList.add("bg-[#1c3326]", "text-white", "border-[#1c3326]");
-
+    button.classList.add("bg-primary", "text-white", "border-primary");
     document.getElementById("selectedSize").value = size;
-}
+  }
+
+  document.getElementById("sizeModal").addEventListener("click", function(e) {
+    if (e.target === this) closeSizeModal();
+  });
 </script>
 
-</body></html>
+</body>
+</html>

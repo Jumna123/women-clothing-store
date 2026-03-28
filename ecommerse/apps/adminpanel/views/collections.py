@@ -5,32 +5,57 @@ from ..forms import CollectionForm
 from apps.adminpanel.models import Collection
 import base64
 from django.core.files.base import ContentFile
-
+from ..models import Product,ProductImage
+from apps.home.models import Wishlist
 
 from django.core.paginator import Paginator
+from django.db.models import Prefetch
 
-def collections(request):
-    q = request.GET.get('q', '').strip()
-    status = request.GET.get('status', '')
+def collections(request, pk):
+    collection = get_object_or_404(Collection, pk=pk, is_active=True)
 
-    collections_qs = Collection.objects.prefetch_related('products').all()
+    products = Product.objects.filter(
+        collections=collection
+    ).prefetch_related(
+        Prefetch('images', queryset=ProductImage.objects.filter(is_primary=True))
+    )
 
-    if q:
-        collections_qs = collections_qs.filter(name__icontains=q)
+    # Filter
+    availability = request.GET.get('availability', '')
+    if availability == 'in_stock':
+        products = products.filter(is_available=True, stock_quantity__gt=0)
+    elif availability == 'sold_out':
+        products = products.filter(stock_quantity=0)
 
-    if status == 'active':
-        collections_qs = collections_qs.filter(is_active=True, status='published')
-    elif status == 'draft':
-        collections_qs = collections_qs.filter(status='draft')
+    # Sort
+    sort = request.GET.get('sort', '')
+    if sort == 'price_asc':
+        products = products.order_by('price')
+    elif sort == 'price_desc':
+        products = products.order_by('-price')
+    else:
+        products = products.order_by('-created_at')
 
-    paginator = Paginator(collections_qs, 10)
-    page_number = request.GET.get('page', 1)
-    page_obj = paginator.get_page(page_number)
+    if request.user.is_authenticated:
+        wishlist_products = Wishlist.objects.filter(
+            user=request.user
+        ).values_list('product_id', flat=True)
+    else:
+        wishlist_products = []
 
+    return render(request, "user/product_listingpage.html", {
+        "category": collection,
+        "products": products,
+        "wishlist_products": wishlist_products,
+        "is_collection": True,
+        "current_availability": availability,
+        "current_sort": sort,
+    })
+
+def collections_list(request):
+    collections = Collection.objects.all().order_by('-created_at')
     return render(request, "adminpanel/collections.html", {
-        "collections": page_obj,
-        "page_obj": page_obj,
-        "total_count": paginator.count,
+        "collections": collections
     })
 
 from django.utils import timezone

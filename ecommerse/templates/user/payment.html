@@ -246,32 +246,58 @@
                 {% endfor %}
               </div>
 
-              <!-- Breakdown -->
-              <div class="px-6 py-4 space-y-2.5 border-t border-border-color">
-                <div class="flex justify-between text-sm text-text-secondary">
-                  <span>Subtotal</span>
-                  <span class="font-medium text-primary">₹{{ subtotal }}</span>
-                </div>
-                <div class="flex justify-between text-sm text-text-secondary">
-                  <span>Shipping</span>
-                  <span class="font-medium {% if shipping == 0 %}text-green-600{% else %}text-primary{% endif %}">
-                    {% if shipping == 0 %}FREE{% else %}₹{{ shipping }}{% endif %}
-                  </span>
-                </div>
-                <div class="flex justify-between text-sm text-text-secondary">
-                  <span>Tax (5%)</span>
-                  <span class="font-medium text-primary">₹{{ tax }}</span>
-                </div>
-              </div>
+  <!-- Breakdown -->
+<div class="px-6 py-4 space-y-2.5 border-t border-border-color">
+  <div class="flex justify-between text-sm text-text-secondary">
+    <span>Subtotal</span>
+    <span class="font-medium text-primary">₹{{ subtotal }}</span>
+  </div>
+  <div class="flex justify-between text-sm text-text-secondary">
+    <span>Shipping</span>
+    <span class="font-medium {% if shipping == 0 %}text-green-600{% else %}text-primary{% endif %}">
+      {% if shipping == 0 %}FREE{% else %}₹{{ shipping }}{% endif %}
+    </span>
+  </div>
+  <div class="flex justify-between text-sm text-text-secondary">
+    <span>Tax (5%)</span>
+    <span class="font-medium text-primary">₹{{ tax }}</span>
+  </div>
 
-              <!-- Total -->
-              <div class="px-6 py-4 bg-gray-50 border-t border-border-color">
-                <div class="flex items-center justify-between">
-                  <span class="text-base font-bold text-primary">Total</span>
-                  <span class="text-2xl font-extrabold text-primary">₹{{ total }}</span>
-                </div>
-                <p class="text-xs text-green-600 font-semibold mt-1 text-right">Inclusive of all taxes</p>
-              </div>
+  {% if discount and discount > 0 %}
+  <div class="flex justify-between text-sm text-green-600 font-semibold">
+    <span class="flex items-center gap-1">
+      <span class="material-symbols-outlined text-[15px]">confirmation_number</span>
+      Coupon Discount
+    </span>
+    <span>− ₹{{ discount|floatformat:2 }}</span>
+  </div>
+  {% endif %}
+
+  {% if coupon_msg %}
+  <div class="flex items-center justify-between bg-green-50 border border-green-200 rounded-xl px-3 py-2">
+    <div class="flex items-center gap-2 text-green-700 text-xs font-semibold">
+      <span class="material-symbols-outlined text-[15px]">check_circle</span>
+      {{ coupon_msg }}
+    </div>
+    <span class="text-[10px] font-bold bg-green-100 text-green-700 px-2 py-0.5 rounded-full">APPLIED</span>
+  </div>
+  {% endif %}
+</div>
+
+<!-- Total -->
+<div class="px-6 py-4 bg-gray-50 border-t border-border-color">
+  <div class="flex items-center justify-between">
+    <span class="text-base font-bold text-primary">Total</span>
+    <span class="text-2xl font-extrabold text-primary">₹{{ total }}</span>
+  </div>
+  {% if discount > 0 %}
+  <p class="text-xs text-green-600 font-semibold mt-1 text-right">You save ₹{{ discount|floatformat:2 }} on this order!</p>
+  {% else %}
+  <p class="text-xs text-green-600 font-semibold mt-1 text-right">Inclusive of all taxes</p>
+  {% endif %}
+</div>
+
+              
 
               <!-- CTA -->
               <div class="px-6 py-5">

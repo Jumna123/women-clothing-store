@@ -1,73 +1,124 @@
-<aside class="w-full lg:w-72 flex-shrink-0">
-<div class="bg-white rounded-2xl shadow-xl shadow-primary/5 border border-border-green/10 p-6 sticky top-24">
+<aside class="w-full lg:w-64 flex-shrink-0">
+  <div class="bg-white rounded-2xl border border-border-green/10 shadow-sm overflow-hidden sticky top-24">
 
-<div class="flex items-center gap-4 mb-8">
-<div class="relative">
-<div class="size-14 rounded-full overflow-hidden border-2 border-primary">
-<img class="w-full h-full object-cover"
-src="https://lh3.googleusercontent.com/aida-public/AB6AXuDBQSxYJqUj3VTn365K7wH-Po9zQjc3ElbkEjBvOEPC6B9HIr5--dJOFEthSVmrxd9dFulUIBsqMQuGnjINwK_y8hOYmr648riPTTiIKk6allRdI17NkNMorZmnYwTxFmXlpy4FW1r_5InTTmvT_fEHgDVcJ0PXvqkhWXNbDNRdalZFbj3xps99OiSzvKlYG_lNIG_7j-hzqvsDW6F7v4KyhqgtRLYgtCTLWHYKZXfioZMKH4-nvVA4JN3Z6O3PoSwPVNaqlsGTwnA"/>
-</div>
-</div>
+    <!-- User card -->
+    <div class="p-6 bg-gradient-to-br from-primary to-accent-dark text-white">
+      <div class="flex items-center gap-3 mb-1">
+        {% if user.profile_picture %}
+          <img src="{{ user.profile_picture.url }}" class="size-12 rounded-full object-cover border-2 border-white/30" alt="{{ user.username }}"/>
+        {% else %}
+          <div class="size-12 rounded-full bg-white/10 border border-white/20 flex items-center justify-center">
+            <span class="material-symbols-outlined icon-filled text-2xl">account_circle</span>
+          </div>
+        {% endif %}
+        <div>
+          <p class="font-bold text-sm leading-tight">{{ user.get_full_name|default:user.username }}</p>
+          <p class="text-white/60 text-xs truncate max-w-[140px]">{{ user.email }}</p>
+        </div>
+      </div>
+    </div>
 
-<div>
-<h3 class="font-bold text-lg">{{ user.username }}</h3>
-</div>
-</div>
+    <!-- Nav links -->
+    <nav class="p-3 space-y-1">
+      {% with url_name=request.resolver_match.url_name %}
 
-<nav class="flex flex-col gap-1.5">
+      <!-- Dashboard -->
+      <a href="{% url 'accounts:profile' %}"
+        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all
+        {% if request.resolver_match.app_name == 'accounts' and url_name == 'profile' %}
+          bg-primary-light text-primary
+        {% else %}
+          text-text-secondary hover:bg-surface-light hover:text-primary
+        {% endif %}">
+        <span class="material-symbols-outlined text-[20px]
+          {% if request.resolver_match.app_name == 'accounts' and url_name == 'profile' %}icon-filled{% endif %}">
+          dashboard
+        </span>
+        Dashboard
+      </a>
 
-<a href="{% url 'accounts:profile' %}"
-class="flex items-center gap-3 px-4 py-3 rounded-xl
-{% if active_page == 'dashboard' %}
-bg-primary text-white font-bold
-{% else %}
-hover:bg-primary-light hover:text-primary
-{% endif %}">
-<span class="material-symbols-outlined">dashboard</span>
-<span>Dashboard</span>
-</a>
+      <!-- My Orders -->
+      <a href="{% url 'home:user_orders' %}"
+        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all
+        {% if url_name == 'user_orders' or url_name == 'order_detail' %}
+          bg-primary-light text-primary
+        {% else %}
+          text-text-secondary hover:bg-surface-light hover:text-primary
+        {% endif %}">
+        <span class="material-symbols-outlined text-[20px]
+          {% if url_name == 'user_orders' or url_name == 'order_detail' %}icon-filled{% endif %}">
+          package_2
+        </span>
+        My Orders
+        {% if active_orders_count %}
+          <span class="ml-auto bg-primary text-white text-[10px] font-bold px-2 py-0.5 rounded-full">{{ active_orders_count }}</span>
+        {% endif %}
+      </a>
 
-<a href="{% url 'home:user_orders' %}"
-class="flex items-center gap-3 px-4 py-3 rounded-xl
-{% if active_page == 'orders' %}
-bg-primary text-white font-bold
-{% else %}
-hover:bg-primary-light hover:text-primary
-{% endif %}">
-<span class="material-symbols-outlined">shopping_bag</span>
-<span>My Orders</span>
-</a>
+      <!-- Wishlist -->
+      <a href="{% url 'home:wishlist_view' %}{% if request.resolver_match.app_name == 'accounts' %}?from=profile{% endif %}"
+        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all
+        {% if url_name == 'wishlist_view' %}
+          bg-primary-light text-primary
+        {% else %}
+          text-text-secondary hover:bg-surface-light hover:text-primary
+        {% endif %}">
+        <span class="material-symbols-outlined text-[20px]
+          {% if url_name == 'wishlist_view' %}icon-filled{% endif %}">
+          favorite
+        </span>
+        Wishlist
+        {% if wishlist_count %}
+          <span class="ml-auto bg-primary text-white text-[10px] font-bold px-2 py-0.5 rounded-full">{{ wishlist_count }}</span>
+        {% endif %}
+      </a>
 
-<a href="{% url 'home:wishlist_view' %}?from=profile"
-class="flex items-center gap-3 px-4 py-3 rounded-xl
-{% if active_page == 'wishlist' %}
-bg-primary text-white font-bold
-{% else %}
-hover:bg-primary-light hover:text-primary
-{% endif %}">
-<span class="material-symbols-outlined">favorite</span>
-<span>Wishlist</span>
-</a>
+      <!-- My Cart -->
+      <a href="{% url 'home:cart_view' %}"
+        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all
+        {% if url_name == 'cart_view' %}
+          bg-primary-light text-primary
+        {% else %}
+          text-text-secondary hover:bg-surface-light hover:text-primary
+        {% endif %}">
+        <span class="material-symbols-outlined text-[20px]
+          {% if url_name == 'cart_view' %}icon-filled{% endif %}">
+          shopping_bag
+        </span>
+        My Cart
+        {% if cart_count %}
+          <span class="ml-auto bg-primary text-white text-[10px] font-bold px-2 py-0.5 rounded-full">{{ cart_count }}</span>
+        {% endif %}
+      </a>
 
-<a href="{% url 'accounts:address_list' %}"
-class="flex items-center gap-3 px-4 py-3 rounded-xl
-{% if active_page == 'addresses' %}
-bg-primary text-white font-bold
-{% else %}
-hover:bg-primary-light hover:text-primary
-{% endif %}">
-<span class="material-symbols-outlined">location_on</span>
-<span>Shipping Addresses</span>
-</a>
-<!-- simplest fix — change to a GET link instead of a form -->
-<a href="{% url 'accounts:logout' %}"
-   class="flex items-center gap-3 w-full px-4 py-3 rounded-xl text-red-600 font-semibold hover:bg-red-50 transition"
-   onclick="return confirm('Are you sure you want to logout?')">
-  <span class="material-symbols-outlined">logout</span>
-  Logout
-</a>
+      <!-- Shipping Addresses -->
+      <a href="{% url 'accounts:address_list' %}"
+        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all
+        {% if url_name == 'address_list' %}
+          bg-primary-light text-primary
+        {% else %}
+          text-text-secondary hover:bg-surface-light hover:text-primary
+        {% endif %}">
+        <span class="material-symbols-outlined text-[20px]
+          {% if url_name == 'address_list' %}icon-filled{% endif %}">
+          location_on
+        </span>
+        Shipping Addresses
+      </a>
 
-</nav>
+      <!-- Divider -->
+      <div class="border-t border-border-green/10 my-2 mx-1"></div>
 
-</div>
-</aside>
+      <!-- Sign Out -->
+      <a href="{% url 'accounts:logout' %}"
+        onclick="return confirm('Are you sure you want to sign out?')"
+        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-red-500 hover:bg-red-50 transition-all">
+        <span class="material-symbols-outlined text-[20px]">logout</span>
+        Sign Out
+      </a>
+
+      {% endwith %}
+    </nav>
+
+  </div>
+</aside>    

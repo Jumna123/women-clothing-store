@@ -9,7 +9,8 @@ def admin_login(request):
         email = request.POST.get("email")
         password = request.POST.get("password")
 
-        user = authenticate(request, username=email, password=password)
+        user = authenticate(request, email=email, password=password)
+
 
         if user is not None:
             if user.is_staff:

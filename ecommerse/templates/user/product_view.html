@@ -1,334 +1,607 @@
+{% load static %}
 <!DOCTYPE html>
-<html class="light" lang="en"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Detailed Product Page - Lumina Fashion</title>
-<link href="https://fonts.googleapis.com" rel="preconnect"/>
-<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    colors: {
-                        "primary": "#11d411", // Vibrant green from config (Brand Brand)
-                        "primary-dark": "#0da60d", // Darker shade for hover
-                        "secondary": "#1d331d", // Deep forest green for text/dark mode bg
-                        "accent-light": "#e7f3e7", // Very light green for backgrounds
-                        "background-light": "#f8fcf8",
-                        "background-dark": "#102210",
-                    },
-                    fontFamily: {
-                        "display": ["Manrope", "sans-serif"]
-                    },
-                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
-                },
-            },
-        }
-    </script>
-<style>.no-scrollbar::-webkit-scrollbar {
-            display: none;
-        }
-        .no-scrollbar {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-    </style>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>{{ product.product_name }} — vólke shoppe</title>
+  <link href="https://fonts.googleapis.com/css2?family=Spline+Sans:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            "primary":      "#36e27b",
+            "dark-green":   "#112117",
+            "surface-dark": "#1c3326",
+          },
+          fontFamily: {
+            "display": ["Spline Sans", "sans-serif"],
+            "serif":   ["Playfair Display", "serif"],
+          },
+        },
+      },
+    }
+  </script>
+  <style>
+    body { font-family: 'Spline Sans', sans-serif; }
+    .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 20; }
+    details summary::-webkit-details-marker { display: none; }
+    #mainImageWrap { overflow: hidden; }
+    #mainImageWrap img { transition: transform .6s cubic-bezier(.25,.46,.45,.94); }
+    #mainImageWrap:hover img { transform: scale(1.05); }
+    .thumb.active { outline: 2px solid #36e27b; outline-offset: 2px; }
+    .size-btn.active { background: #112117; color: #fff; border-color: #112117; }
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
+    details[open] .acc-arrow { transform: rotate(180deg); }
+    .acc-arrow { transition: transform .2s; }
+    #toast {
+      position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%) translateY(4rem);
+      transition: transform .35s cubic-bezier(.34,1.56,.64,1), opacity .35s;
+      opacity: 0; pointer-events: none; z-index: 9999;
+    }
+    #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+    @media (min-width: 1024px) {
+      .sticky-info { position: sticky; top: 6rem; }
+    }
+  </style>
 </head>
-<body class="bg-background-light dark:bg-background-dark text-secondary dark:text-gray-100 font-display transition-colors duration-200">
-<div class="w-full border-b border-[#e7f3e7] dark:border-white/10 bg-background-light dark:bg-background-dark z-50 relative">
-<header class="flex items-center justify-between whitespace-nowrap px-10 py-4 max-w-[1440px] mx-auto">
-<div class="flex items-center gap-8">
-<div class="flex items-center gap-3 text-secondary dark:text-white">
-<div class="size-8 text-primary">
-<span class="material-symbols-outlined text-4xl">eco</span>
-</div>
-<h2 class="text-xl font-bold leading-tight tracking-tight">Lumina Fashion</h2>
-</div>
-<nav class="hidden md:flex items-center gap-8">
-<a class="text-sm font-semibold hover:text-primary transition-colors" href="#">New Arrivals</a>
-<a class="text-sm font-semibold hover:text-primary transition-colors text-primary" href="#">Clothing</a>
-<a class="text-sm font-semibold hover:text-primary transition-colors" href="#">Accessories</a>
-<a class="text-sm font-semibold hover:text-primary transition-colors" href="#">Sale</a>
-</nav>
-</div>
-<div class="flex flex-1 justify-end gap-6 items-center">
-<div class="hidden lg:flex w-full max-w-xs relative">
-<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-[20px]">search</span>
-<input class="w-full h-10 rounded-lg bg-accent-light dark:bg-white/5 border-none pl-10 pr-4 text-sm text-secondary dark:text-white placeholder:text-gray-400 focus:ring-2 focus:ring-primary focus:outline-none" placeholder="Search products..." type="text"/>
-</div>
-<div class="flex gap-3">
-<button class="relative flex h-10 w-10 items-center justify-center rounded-lg bg-accent-light dark:bg-white/5 hover:bg-primary/20 dark:hover:bg-white/10 transition-colors group">
-<span class="material-symbols-outlined text-secondary dark:text-white group-hover:text-primary transition-colors">shopping_cart</span>
-<span class="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-white">2</span>
-</button>
-<button class="flex h-10 w-10 items-center justify-center rounded-lg bg-accent-light dark:bg-white/5 hover:bg-primary/20 dark:hover:bg-white/10 transition-colors group">
-<span class="material-symbols-outlined text-secondary dark:text-white group-hover:text-primary transition-colors">account_circle</span>
-</button>
-</div>
-</div>
+
+<body class="bg-[#f8f9f8] text-slate-900 min-h-screen flex flex-col">
+
+<!-- ═══════════════════════ HEADER ═══════════════════════ -->
+<header class="sticky top-0 z-50 w-full border-b border-[#1c3326] bg-[#112117]/95 backdrop-blur-xl">
+  <div class="mx-auto flex h-16 md:h-20 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+    <a href="{% url 'home:home' %}" class="flex flex-col shrink-0" style="line-height:1;">
+      <span style="font-family:'Georgia',serif;font-size:22px;font-weight:700;letter-spacing:0.15em;color:#fff;">vólke</span>
+      <span style="font-size:8px;letter-spacing:0.18em;color:#9ca3af;text-transform:uppercase;">shoppe</span>
+    </a>
+    <div class="hidden md:flex flex-1 max-w-md mx-8">
+      <form method="GET" action="{% url 'home:search_products' %}" class="relative w-full">
+        <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-primary/70 text-[20px]">search</span>
+        <input name="q" type="text" placeholder="Search styles…"
+          class="w-full rounded-full border-none bg-[#1c3326]/60 py-2.5 pl-10 pr-4 text-sm text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"/>
+      </form>
+    </div>
+    <div class="flex items-center gap-2">
+      <a href="{% url 'home:wishlist_view' %}" class="flex size-9 items-center justify-center rounded-full text-white hover:bg-white/10 transition-colors">
+        <span class="material-symbols-outlined text-[22px]">favorite</span>
+      </a>
+      {% if user.is_authenticated %}
+        <a href="{% url 'accounts:profile' %}" class="flex size-9 items-center justify-center rounded-full text-white hover:bg-white/10 transition-colors">
+          <span class="material-symbols-outlined text-[22px]">person</span>
+        </a>
+      {% else %}
+        <a href="{% url 'accounts:userlogin' %}" class="flex size-9 items-center justify-center rounded-full text-white hover:bg-white/10 transition-colors">
+          <span class="material-symbols-outlined text-[22px]">person</span>
+        </a>
+      {% endif %}
+      <a href="{% url 'home:cart_view' %}" class="group relative flex size-9 md:size-10 items-center justify-center rounded-full bg-gradient-to-b from-primary to-[#2ec56a] text-[#141a17] hover:to-white transition-all shadow-[0_0_10px_rgba(54,226,123,0.2)]">
+        <span class="material-symbols-outlined text-xl">shopping_cart</span>
+      </a>
+    </div>
+  </div>
 </header>
-</div>
-<main class="layout-container flex flex-col items-center py-8 px-6 lg:px-20 min-h-screen">
-<div class="w-full max-w-[1280px] mb-6">
-<div class="flex flex-wrap items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
-<a class="hover:text-primary transition-colors" href="#">Home</a>
-<span class="material-symbols-outlined text-[16px]">chevron_right</span>
-<a class="hover:text-primary transition-colors" href="#">Women</a>
-<span class="material-symbols-outlined text-[16px]">chevron_right</span>
-<a class="hover:text-primary transition-colors" href="#">Dresses</a>
-<span class="material-symbols-outlined text-[16px]">chevron_right</span>
-<span class="font-semibold text-secondary dark:text-white">{{ product.product_name }}</span>
-</div>
-</div>
-<section class="max-w-7xl mx-auto px-6 py-10">
 
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+<!-- ═══════════════════════ MAIN ═══════════════════════ -->
+<main class="flex-grow">
+<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 md:py-10">
 
-<!-- PRODUCT IMAGES -->
-<div>
-
-<!-- MAIN IMAGE -->
-<div class="w-full h-[500px] bg-gray-100 rounded-lg overflow-hidden">
-
-{% with images.0 as main_image %}
-{% if main_image %}
-<img id="mainImage"
-     src="{{ main_image.image.url }}"
-     class="w-full h-full object-cover">
-{% endif %}
-{% endwith %}
-
-</div>
-
-
-<!-- IMAGE GALLERY -->
-<div class="grid grid-cols-4 gap-3 mt-4">
-
-{% for image in images %}
-
-<div class="h-24 bg-gray-100 rounded overflow-hidden cursor-pointer">
-
-<img src="{{ image.image.url }}"
-     onclick="changeImage(this)"
-     class="w-full h-full object-cover hover:opacity-80">
-
-</div>
-
-{% endfor %}
-
-</div>
-
-</div>
-
-
-<!-- PRODUCT INFO -->
-<div class="flex flex-col gap-6">
-
-<!-- PRODUCT NAME -->
-<h1 class="text-4xl font-serif tracking-wide text-gray-800">
-    {{ product.product_name }}
-</h1>
-
-
-<!-- PRICE -->
-<div class="text-lg text-gray-700 font-medium">
-    {% if product.discount_price %}
-        ₹ {{ product.discount_price }}
-        <span class="text-gray-400 line-through ml-2 text-sm">
-            ₹ {{ product.price }}
-        </span>
-    {% else %}
-        ₹ {{ product.price }}
+  <!-- Breadcrumb -->
+  <nav class="flex flex-wrap items-center gap-1.5 text-xs text-gray-400 mb-8">
+    <a href="{% url 'home:home' %}" class="hover:text-dark-green transition-colors">Home</a>
+    <span class="material-symbols-outlined text-[14px]">chevron_right</span>
+    {% if product.category %}
+      <a href="{% url 'home:category_products' product.category.slug %}" class="hover:text-dark-green transition-colors">
+        {{ product.category.category_name }}
+      </a>
+      <span class="material-symbols-outlined text-[14px]">chevron_right</span>
     {% endif %}
-</div>
+    <span class="text-dark-green font-semibold truncate max-w-[220px]">{{ product.product_name }}</span>
+  </nav>
 
+  <!-- ═══ PRODUCT GRID ═══ -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 xl:gap-20">
 
-<!-- SIZE -->
-<div class="flex flex-col gap-3">
+    <!-- ── LEFT: Images ── -->
+    <div class="flex flex-col gap-3">
+      <div id="mainImageWrap" class="relative w-full aspect-[4/5] rounded-2xl overflow-hidden bg-gray-100 cursor-zoom-in">
+        {% with images.0 as first %}
+          {% if first %}
+            <img id="mainImage" src="{{ first.image.url }}" alt="{{ product.product_name }}" class="w-full h-full object-cover"/>
+          {% else %}
+            <div class="w-full h-full flex items-center justify-center bg-gray-100">
+              <span class="material-symbols-outlined text-gray-300 text-6xl">image</span>
+            </div>
+          {% endif %}
+        {% endwith %}
 
-<span class="text-sm text-gray-500">
-Size
-</span>
+        {% if product.stock_quantity == 0 %}
+        <div class="absolute inset-0 bg-black/25 flex items-center justify-center">
+          <span class="bg-white text-dark-green text-xs font-bold px-6 py-2 rounded-full tracking-widest uppercase">Sold Out</span>
+        </div>
+        {% endif %}
 
-<div class="flex flex-wrap gap-3">
+        {% if product.discount_price and product.stock_quantity != 0 %}
+        <div class="absolute top-4 left-4 bg-primary text-dark-green text-[10px] font-extrabold uppercase tracking-widest px-3 py-1.5 rounded-full">
+          Sale
+        </div>
+        {% endif %}
 
-{% for s in sizes %}
-<button
-class="px-4 py-2 border rounded-full text-sm hover:bg-black hover:text-white transition">
+        <a href="{% url 'home:add_to_wishlist' product.id %}"
+           class="absolute top-4 right-4 flex size-10 items-center justify-center rounded-full bg-white shadow-md hover:scale-110 transition-transform">
+          <span class="material-symbols-outlined text-[20px] icon-filled {% if is_wishlisted %}text-red-500{% else %}text-gray-400{% endif %}">favorite</span>
+        </a>
+      </div>
 
-{{ s }}
+      {% if images|length > 1 %}
+      <div class="grid grid-cols-5 gap-2">
+        {% for img in images %}
+        <div onclick="switchImage('{{ img.image.url }}', this)"
+             class="thumb {% if forloop.first %}active{% endif %} aspect-square overflow-hidden rounded-xl bg-gray-100 cursor-pointer hover:opacity-90 transition-opacity">
+          <img src="{{ img.image.url }}" alt="{{ product.product_name }}" class="w-full h-full object-cover"/>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </div>
 
-</button>
+    <!-- ── RIGHT: Product info ── -->
+    <div class="sticky-info flex flex-col gap-5">
 
-{% endfor %}
+      {% if product.category %}
+      <span class="inline-flex w-fit items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1 text-[11px] font-bold uppercase tracking-widest text-primary">
+        <span class="material-symbols-outlined text-[14px]">label</span>
+        {{ product.category.category_name }}
+      </span>
+      {% endif %}
 
-</div>
+      <h1 class="font-serif text-3xl md:text-4xl leading-tight text-dark-green">{{ product.product_name }}</h1>
 
-</div>
+      <!-- Price -->
+      <div class="flex items-baseline gap-3 flex-wrap">
+        {% if product.discount_price %}
+          <span class="text-3xl font-extrabold text-dark-green">₹{{ product.discount_price }}</span>
+          <span class="text-lg text-gray-400 line-through">₹{{ product.price }}</span>
+          <span class="rounded-full bg-green-100 text-green-700 text-xs font-bold px-2.5 py-1">{{ product.discount_percentage }}% off</span>
+        {% else %}
+          <span class="text-3xl font-extrabold text-dark-green">₹{{ product.price }}</span>
+        {% endif %}
+      </div>
 
+      <!-- Stock status -->
+      {% if product.stock_quantity == 0 %}
+        <div class="flex items-center gap-2 text-red-500 text-sm font-semibold">
+          <span class="material-symbols-outlined text-[18px]">remove_shopping_cart</span> Out of Stock
+        </div>
+      {% elif product.stock_quantity <= 5 %}
+        <div class="flex items-center gap-2 text-amber-600 text-sm font-semibold">
+          <span class="material-symbols-outlined text-[18px]">warning</span>
+          Only {{ product.stock_quantity }} left — hurry!
+        </div>
+      {% else %}
+        <div class="flex items-center gap-2 text-green-700 text-sm font-semibold">
+          <span class="material-symbols-outlined text-[18px]">check_circle</span> In Stock
+        </div>
+      {% endif %}
 
-<!-- COLOR -->
-<div class="flex flex-col gap-2">
+      <hr class="border-gray-200"/>
 
-<span class="text-sm text-gray-500">
-Color: {{ product.colour }}
-</span>
+      <!-- Size selector -->
+      {% if sizes %}
+      <div class="flex flex-col gap-3">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold uppercase tracking-widest text-dark-green">Select Size</span>
+          <button type="button" class="text-xs text-gray-400 underline underline-offset-2 hover:text-dark-green transition-colors">Size Guide</button>
+        </div>
+        <div id="sizeSelector" class="flex flex-wrap gap-2">
+          {% for s in sizes %}{% if s.size %}
+          <button type="button" onclick="selectSize(this, '{{ s.size|escape }}')"
+            class="size-btn px-4 py-2 rounded-lg border-2 border-gray-200 text-sm font-semibold text-dark-green hover:border-dark-green transition-all
+                   {% if s.stock_quantity == 0 %}opacity-40 cursor-not-allowed{% endif %}"
+            {% if s.stock_quantity == 0 %}disabled{% endif %}>
+            {{ s.size }}
+            {% if s.stock_quantity == 0 %}<span class="text-xs text-red-400 block">Sold out</span>{% endif %}
+          </button>
+          {% endif %}{% endfor %}
+        </div>
+        <input type="hidden" id="selectedSize" value=""/>
+      </div>
+      {% endif %}
 
-<div class="w-8 h-8 rounded-full border-2"
-     style="background: {{ product.colour|lower }};">
-</div>
+      <!-- Colour -->
+      {% if product.color_name %}
+      <div class="flex items-center gap-3">
+        <span class="text-xs font-bold uppercase tracking-widest text-dark-green">Colour:</span>
+        <div class="flex items-center gap-2">
+          {% if product.color_hex %}
+          <div class="w-6 h-6 rounded-full border-2 border-white shadow ring-1 ring-gray-200" style="background:{{ product.color_hex }};"></div>
+          {% endif %}
+          <span class="text-sm text-gray-600 capitalize">{{ product.color_name }}</span>
+        </div>
+      </div>
+      {% endif %}
 
-</div>
+      <!-- Fabric -->
+      {% if product.fabric %}
+      <div class="flex items-center gap-3">
+        <span class="text-xs font-bold uppercase tracking-widest text-dark-green">Fabric:</span>
+        <span class="rounded-full bg-dark-green text-white text-xs font-semibold px-3 py-1">{{ product.fabric }}</span>
+      </div>
+      {% endif %}
 
+      <!-- Quantity -->
+      {% if product.stock_quantity != 0 %}
+      <div class="flex flex-col gap-3">
+        <span class="text-xs font-bold uppercase tracking-widest text-dark-green">Quantity:</span>
+        <div class="flex items-center gap-4">
+          <div class="flex items-center border-2 border-gray-200 rounded-lg w-max bg-white overflow-hidden">
+            <button type="button" onclick="updateQty(-1)" class="w-10 h-10 flex items-center justify-center text-gray-500 hover:text-dark-green hover:bg-gray-50 transition-colors">
+              <span class="material-symbols-outlined text-[18px]">remove</span>
+            </button>
+            <input type="text" id="qtyInput" value="1" readonly class="w-10 text-center text-sm font-bold border-none p-0 focus:ring-0 text-dark-green bg-transparent cursor-default select-none"/>
+            <button type="button" onclick="updateQty(1)" class="w-10 h-10 flex items-center justify-center text-gray-500 hover:text-dark-green hover:bg-gray-50 transition-colors">
+              <span class="material-symbols-outlined text-[18px]">add</span>
+            </button>
+          </div>
+          <span id="stockMsg" class="text-xs font-bold text-red-500 hidden uppercase tracking-wide"></span>
+        </div>
+      </div>
+      {% endif %}
 
-<!-- FABRIC -->
-<div class="flex flex-col gap-2">
+      <!-- CTA Buttons -->
+      <div class="flex flex-col sm:flex-row gap-3 mt-4">
+        {% if product.stock_quantity != 0 %}
+          {% if sizes %}
+          <button onclick="handleAction('{% url 'home:add_to_cart' product.id %}')"
+             class="flex flex-1 items-center justify-center gap-2 rounded-xl bg-dark-green py-4 text-sm font-bold text-white hover:bg-surface-dark active:scale-[.98] transition-all shadow-sm">
+            <span class="material-symbols-outlined text-[20px]">shopping_cart</span>
+            Add to Cart
+          </button>
+          <button onclick="handleAction('{% url 'home:checkout' %}')"
+             class="flex flex-1 items-center justify-center gap-2 rounded-xl border-2 border-dark-green py-4 text-sm font-bold text-dark-green hover:bg-dark-green hover:text-white active:scale-[.98] transition-all">
+            <span class="material-symbols-outlined text-[20px]">bolt</span>
+            Buy Now
+          </button>
+          {% else %}
+          <a href="{% url 'home:add_to_cart' product.id %}" onclick="return appendQty(this)"
+             class="flex flex-1 items-center justify-center gap-2 rounded-xl bg-dark-green py-4 text-sm font-bold text-white hover:bg-surface-dark active:scale-[.98] transition-all shadow-sm">
+            <span class="material-symbols-outlined text-[20px]">shopping_cart</span>
+            Add to Cart
+          </a>
+          <form method="POST" action="{% url 'home:checkout' %}">
+            {% csrf_token %}
+            <input type="hidden" name="buy_now" value="1"/>
+            <input type="hidden" name="product_id" value="{{ product.id }}"/>
+            <input type="hidden" name="quantity" value="1"/>
+            <input type="hidden" id="buyNowSize" name="size" value=""/>
+            <button type="submit" onclick="return handleBuyNow(this.form)"
+               class="flex flex-1 w-full items-center justify-center gap-2 rounded-xl border-2 border-dark-green py-4 text-sm font-bold text-dark-green hover:bg-dark-green hover:text-white active:scale-[.98] transition-all">
+              <span class="material-symbols-outlined text-[20px]">bolt</span>
+              Buy Now
+            </button>
+          </form>
+          {% endif %}
+        {% else %}
+        <button disabled class="flex w-full items-center justify-center gap-2 rounded-xl bg-gray-200 py-4 text-sm font-bold text-gray-400 cursor-not-allowed">
+          <span class="material-symbols-outlined text-[20px]">remove_shopping_cart</span>
+          Currently Unavailable
+        </button>
+        {% endif %}
+      </div>
 
-<span class="text-sm text-gray-500">
-Fabric
-</span>
+      <!-- Trust badges -->
+      <div class="grid grid-cols-3 gap-3 pt-1">
+        <div class="flex flex-col items-center gap-2 rounded-xl border border-gray-100 bg-white p-3 text-center shadow-sm">
+          <span class="material-symbols-outlined text-dark-green text-[24px]">local_shipping</span>
+          <span class="text-[10px] font-semibold text-gray-500 leading-tight">Free Shipping<br/>over ₹1000</span>
+        </div>
+        <div class="flex flex-col items-center gap-2 rounded-xl border border-gray-100 bg-white p-3 text-center shadow-sm">
+          <span class="material-symbols-outlined text-dark-green text-[24px]">autorenew</span>
+          <span class="text-[10px] font-semibold text-gray-500 leading-tight">7-Day<br/>Returns</span>
+        </div>
+        <div class="flex flex-col items-center gap-2 rounded-xl border border-gray-100 bg-white p-3 text-center shadow-sm">
+          <span class="material-symbols-outlined text-dark-green text-[24px]">verified_user</span>
+          <span class="text-[10px] font-semibold text-gray-500 leading-tight">Secure<br/>Payments</span>
+        </div>
+      </div>
 
-<div class="inline-block bg-black text-white px-5 py-2 rounded-full text-sm">
-{{ product.fabric }}
-</div>
+      <!-- Accordion -->
+      <div class="flex flex-col border-t border-gray-100 divide-y divide-gray-100 mt-1">
+        {% if product.description and product.description != '<p><br></p>' %}
+        <details class="group py-4" open>
+          <summary class="flex cursor-pointer select-none list-none items-center justify-between font-bold text-dark-green">
+            <span class="text-xs uppercase tracking-widest">Description</span>
+            <span class="material-symbols-outlined text-[20px] acc-arrow text-gray-400">expand_more</span>
+          </summary>
+          <div class="mt-3 text-sm text-gray-600 leading-relaxed prose max-w-none">{{ product.description|safe }}</div>
+        </details>
+        {% endif %}
 
-</div>
+        {% if product.fabric %}
+        <details class="group py-4">
+          <summary class="flex cursor-pointer select-none list-none items-center justify-between font-bold text-dark-green">
+            <span class="text-xs uppercase tracking-widest">Fabric &amp; Care</span>
+            <span class="material-symbols-outlined text-[20px] acc-arrow text-gray-400">expand_more</span>
+          </summary>
+          <ul class="mt-3 space-y-2 text-sm text-gray-600">
+            <li class="flex items-center gap-2"><span class="size-1.5 rounded-full bg-primary flex-shrink-0"></span>Material: {{ product.fabric }}</li>
+            <li class="flex items-center gap-2"><span class="size-1.5 rounded-full bg-primary flex-shrink-0"></span>Dry clean recommended</li>
+            <li class="flex items-center gap-2"><span class="size-1.5 rounded-full bg-primary flex-shrink-0"></span>Iron on low heat only</li>
+            <li class="flex items-center gap-2"><span class="size-1.5 rounded-full bg-primary flex-shrink-0"></span>Do not bleach</li>
+          </ul>
+        </details>
+        {% endif %}
 
+        <details class="group py-4">
+          <summary class="flex cursor-pointer select-none list-none items-center justify-between font-bold text-dark-green">
+            <span class="text-xs uppercase tracking-widest">Shipping &amp; Returns</span>
+            <span class="material-symbols-outlined text-[20px] acc-arrow text-gray-400">expand_more</span>
+          </summary>
+          <p class="mt-3 text-sm text-gray-600 leading-relaxed">
+            Free standard shipping on all orders above ₹1000. Express delivery available at checkout.
+            Returns accepted within 7 days of delivery — items must be unworn with original tags attached.
+          </p>
+        </details>
+      </div>
 
-<!-- BUTTONS -->
-<div class="flex gap-4 mt-4">
+    </div><!-- end right col -->
+  </div><!-- end grid -->
 
-<a href="{% url 'home:add_to_cart' product.id %}"
-class="flex-1 bg-black text-white py-3 rounded-full text-center hover:bg-gray-900">
+  <!-- ═══ RELATED PRODUCTS ═══ -->
+  {% if related_products %}
+  <section class="mt-20 pb-16">
+    <div class="flex items-end justify-between mb-8">
+      <h2 class="font-serif text-2xl md:text-3xl text-dark-green">You May Also Like</h2>
+      {% if product.category %}
+      <a href="{% url 'home:category_products' product.category.slug %}"
+         class="text-xs font-bold uppercase tracking-wider text-primary hover:text-dark-green transition-colors flex items-center gap-1 group">
+        View All
+        <span class="material-symbols-outlined text-[16px] group-hover:translate-x-0.5 transition-transform">arrow_forward</span>
+      </a>
+      {% endif %}
+    </div>
+    <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+      {% for rp in related_products %}
+      <div class="group relative flex flex-col bg-white border border-gray-100 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all">
+        {% if rp.discount_price %}
+          <div class="absolute top-3 left-3 z-10 bg-primary text-dark-green text-[10px] font-extrabold uppercase px-2.5 py-1 rounded-full">Sale</div>
+        {% endif %}
+        {% if rp.stock_quantity == 0 %}
+          <div class="absolute top-3 left-3 z-10 bg-gray-900/80 text-white text-[10px] font-bold uppercase px-2.5 py-1 rounded-full">Sold Out</div>
+        {% endif %}
+        <a href="{% url 'home:product_detail' rp.slug %}" class="block">
+          <div class="aspect-[3/4] overflow-hidden bg-gray-50">
+            {% with rp.images.all as rimgs %}
+              {% if rimgs %}
+                <img src="{{ rimgs.0.image.url }}" alt="{{ rp.product_name }}"
+                     class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 {% if rp.stock_quantity == 0 %}opacity-60 grayscale{% endif %}"/>
+              {% else %}
+                <div class="w-full h-full flex items-center justify-center bg-gray-100">
+                  <span class="material-symbols-outlined text-gray-300 text-4xl">image</span>
+                </div>
+              {% endif %}
+            {% endwith %}
+          </div>
+          <div class="p-4 pb-2">
+            <h3 class="text-xs font-bold text-dark-green uppercase tracking-wide leading-snug line-clamp-2">{{ rp.product_name }}</h3>
+            <div class="mt-2 flex items-center gap-2">
+              {% if rp.discount_price %}
+                <span class="text-sm font-bold text-dark-green">₹{{ rp.discount_price }}</span>
+                <span class="text-xs text-gray-400 line-through">₹{{ rp.price }}</span>
+              {% else %}
+                <span class="text-sm font-bold text-dark-green">₹{{ rp.price }}</span>
+              {% endif %}
+            </div>
+          </div>
+        </a>
+        {% if rp.stock_quantity != 0 %}
+        <div class="px-4 pb-4 mt-auto pt-1">
+          <a href="{% url 'home:add_to_cart' rp.id %}"
+             class="flex w-full items-center justify-center gap-1 rounded-lg bg-dark-green py-2.5 text-xs font-bold text-white
+                    hover:bg-surface-dark transition-all opacity-0 group-hover:opacity-100 -translate-y-1 group-hover:translate-y-0 duration-200">
+            <span class="material-symbols-outlined text-[15px]">shopping_bag</span>
+            Add to Bag
+          </a>
+        </div>
+        {% else %}
+        <div class="px-4 pb-4 pt-1">
+          <button disabled class="flex w-full items-center justify-center rounded-lg bg-gray-100 py-2.5 text-xs font-bold text-gray-400 cursor-not-allowed">Sold Out</button>
+        </div>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
 
-Add to Cart
-
-</a>
-
-
-<a href="{% url 'home:buy_now' product.id %}"
-class="flex-1 border border-black py-3 rounded-full text-center hover:bg-black hover:text-white">
-
-Buy it Now
-
-</a>
-
-</div>
-
-</div>
-
-</section>
-<div class="flex items-center gap-6 py-4 text-sm text-gray-600 dark:text-gray-400 border-b border-gray-100 dark:border-white/10">
-<div class="flex items-center gap-2 text-green-800 dark:text-green-500 font-medium">
-<span class="material-symbols-outlined text-[18px]">check_circle</span>
-                            In Stock
-                        </div>
-<div class="flex items-center gap-2">
-<span class="material-symbols-outlined text-[18px]">local_shipping</span>
-                            Free shipping over $150
-                        </div>
-</div>
-<div class="flex flex-col gap-0 divide-y divide-gray-100 dark:divide-white/10">
-<details class="group py-4" open="">
-<summary class="flex cursor-pointer items-center justify-between font-bold text-secondary dark:text-white list-none">
-<span>Description</span>
-<span class="transition group-open:rotate-180">
-<span class="material-symbols-outlined">keyboard_arrow_down</span>
-</span>
-</summary>
-<div class="text-sm text-gray-600 dark:text-gray-400 mt-3 leading-relaxed">
-<p class="mb-2">Elevate your evening wardrobe with our Emerald Green Silk Evening Gown. Crafted from 100% premium mulberry silk, this dress features a flattering bias cut that drapes elegantly over your silhouette.</p>
-<p>Perfect for formal events, weddings, and galas. The deep emerald hue complements all skin tones, while the subtle sheen of the silk adds a touch of luxury.</p>
-</div>
-</details>
-<details class="group py-4">
-<summary class="flex cursor-pointer items-center justify-between font-bold text-secondary dark:text-white list-none">
-<span>Fabric &amp; Care</span>
-<span class="transition group-open:rotate-180">
-<span class="material-symbols-outlined">keyboard_arrow_down</span>
-</span>
-</summary>
-<div class="text-sm text-gray-600 dark:text-gray-400 mt-3 leading-relaxed">
-<ul class="list-disc pl-5 space-y-1">
-<li>Material: 100% Mulberry Silk</li>
-<li>Lining: 100% Viscose</li>
-<li>Dry clean only</li>
-<li>Do not bleach</li>
-<li>Iron on low heat</li>
-</ul>
-</div>
-</details>
-<details class="group py-4">
-<summary class="flex cursor-pointer items-center justify-between font-bold text-secondary dark:text-white list-none">
-<span>Shipping &amp; Returns</span>
-<span class="transition group-open:rotate-180">
-<span class="material-symbols-outlined">keyboard_arrow_down</span>
-</span>
-</summary>
-<div class="text-sm text-gray-600 dark:text-gray-400 mt-3 leading-relaxed">
-<p>We offer free standard shipping on all orders over $150. Returns are accepted within 30 days of purchase, provided the item is unworn and tags are attached.</p>
-</div>
-</details>
-</div>
-</div>
-</div>
-</div>
-<div class="w-full max-w-[1280px] mt-24 pb-20">
-<h2 class="text-2xl font-bold text-secondary dark:text-white mb-8">You May Also Like</h2>
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-<div class="group cursor-pointer">
-<div class="relative overflow-hidden rounded-lg aspect-[3/4] mb-3 bg-gray-100">
-<img alt="Woman in white summer dress" class="object-cover w-full h-full transition duration-500 group-hover:scale-105" data-alt="Woman in white summer dress" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDZQtv6OrBRifHBFOWxLwAVuhMn5n4VH-pJy5daR-fFNDE90lEyHYhhdbBvVqsLLbdqKrtTVVT-s9fUz25_aKSuhc6ngFKXzI50n5d11-AT6PbAl4UivMCezU8qQV1ftPEGv-0o5tQ6N3NX2fLW8pjxYXR79bYBRsftgtfGoytTm8RLn5Bi8ITHQ9p3Sb3iS4ElG1LyEMGFNQ7Z9_7QwvxWPIICIPGLHafksTWvoBXE_vRnmHJ8FlPlZyyBo1iZGCNLK34ASUl0dOw"/>
-<div class="absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity">
-<button class="bg-white text-secondary p-2 rounded-full shadow-lg hover:bg-secondary hover:text-white transition-colors">
-<span class="material-symbols-outlined text-[20px] block">add_shopping_cart</span>
-</button>
-</div>
-</div>
-<h3 class="font-bold text-secondary dark:text-white text-base truncate">Ivory Summer Midi</h3>
-<p class="text-gray-500 text-sm">$129.00</p>
-</div>
-<div class="group cursor-pointer">
-<div class="relative overflow-hidden rounded-lg aspect-[3/4] mb-3 bg-gray-100">
-<img alt="Black sleeveless evening top" class="object-cover w-full h-full transition duration-500 group-hover:scale-105" data-alt="Black sleeveless evening top" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCTaHuBQLc6iWaI1i7SFK-hBUFHmCN9OF1Hrw_rePAVV-Aqh8ZOzfEMNkExYFLbNuxC9fWoHCjMQUEu_Cmumq_BTjETEHNyGnKej8ZCbHbn6mF8_oGTGQ2MVzB2kZaiJC-oZOVGW6fbNtjJiWNbWU0czKFlj9Tsn1c4usqRY6RHHv0QBE9RU_Ac2xLm8kyT-nKnxkIhgj7VRfRdbMpIQ5IA0eYyec8SUnakgsbyjZ-6aX1d6voJLYoa9u4S_G5XeP9M9aKJRIwxGWc"/>
-<div class="absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity">
-<button class="bg-white text-secondary p-2 rounded-full shadow-lg hover:bg-secondary hover:text-white transition-colors">
-<span class="material-symbols-outlined text-[20px] block">add_shopping_cart</span>
-</button>
-</div>
-</div>
-<h3 class="font-bold text-secondary dark:text-white text-base truncate">Midnight Silk Top</h3>
-<p class="text-gray-500 text-sm">$89.00</p>
-</div>
-<div class="group cursor-pointer">
-<div class="relative overflow-hidden rounded-lg aspect-[3/4] mb-3 bg-gray-100">
-<img alt="Floral print wrap dress" class="object-cover w-full h-full transition duration-500 group-hover:scale-105" data-alt="Floral print wrap dress" src="https://lh3.googleusercontent.com/aida-public/AB6AXuChVqHIYzuTNw-lVkDRPkorrbOjhHyM87OE6ala_2nLMPyde-bxB2QkCksvbESb3bZvwKTkFspp62GUU3iN61AX_5oEwkFH0jB3M9-_lT4D3P7OrXjSr8stMNS0Nv8Im2HzXETDaghYXX8d_iedMopeKze2PotYfQ45UFpD9klIEV5kOdP2XGZNxaEc97AbXlrBb2x4L05zlD2CrdZFNsWAn8Auy3UEoS1wXM3BhRUYBHhVkmXWI3Lutt5vckxfy7lRN6fvBH3yc5s"/>
-<div class="absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity">
-<button class="bg-white text-secondary p-2 rounded-full shadow-lg hover:bg-secondary hover:text-white transition-colors">
-<span class="material-symbols-outlined text-[20px] block">add_shopping_cart</span>
-</button>
-</div>
-</div>
-<h3 class="font-bold text-secondary dark:text-white text-base truncate">Garden Party Wrap</h3>
-<p class="text-gray-500 text-sm">$155.00</p>
-</div>
-<div class="group cursor-pointer">
-<div class="relative overflow-hidden rounded-lg aspect-[3/4] mb-3 bg-gray-100">
-<img alt="Blue denim jacket over dress" class="object-cover w-full h-full transition duration-500 group-hover:scale-105" data-alt="Blue denim jacket over dress" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAcrarXmWhKdGwFBuELzKa3307sUkPsc0I1cYFNIjcpRm4rxgqKedljUgWcrfpGQGSesMw1h700NsQsbP4UfXJeGdhNanmSXvrdHUNA1r-s9oaJabTfgw1T9Qfsazwjjvpxpo9q3FhU-la3nahrbGgmxf4TX58vK5OOv5Gyj2shB1zrowX4U5WQHn276Yq2RcSRfkqLa6lXWVD65iXZzHHW2hk_gM9J5JdqHlfeWzg0iIEdBGw7U4fI0PHrhOcL1Q703juofOVXTdo"/>
-<div class="absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity">
-<button class="bg-white text-secondary p-2 rounded-full shadow-lg hover:bg-secondary hover:text-white transition-colors">
-<span class="material-symbols-outlined text-[20px] block">add_shopping_cart</span>
-</button>
-</div>
-</div>
-<h3 class="font-bold text-secondary dark:text-white text-base truncate">Classic Denim Layer</h3>
-<p class="text-gray-500 text-sm">$110.00</p>
-</div>
-</div>
 </div>
 </main>
-</body></html>
+
+<!-- ═══════════════════════ FOOTER ═══════════════════════ -->
+<footer class="bg-dark-green text-white py-14">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="grid gap-10 grid-cols-2 lg:grid-cols-4 mb-12">
+      <div class="col-span-2 lg:col-span-1 space-y-4">
+        <div style="line-height:1;">
+          <div style="font-family:'Georgia',serif;font-size:20px;font-weight:700;letter-spacing:0.15em;color:#fff;">vólke</div>
+          <div style="font-size:7px;letter-spacing:0.18em;color:#9ca3af;text-transform:uppercase;">shoppe</div>
+        </div>
+        <p class="text-sm text-gray-400 leading-relaxed max-w-xs">Curating timeless pieces for the modern woman.</p>
+      </div>
+      <div>
+        <h4 class="mb-5 text-[10px] font-bold uppercase tracking-widest text-primary">Shop</h4>
+        <ul class="space-y-3 text-sm text-gray-400">
+          <li><a class="hover:text-white transition-colors" href="{% url 'home:home' %}">New Arrivals</a></li>
+          <li><a class="hover:text-white transition-colors" href="{% url 'home:home' %}">Collections</a></li>
+          <li><a class="hover:text-white transition-colors" href="{% url 'home:search_products' %}">Search</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="mb-5 text-[10px] font-bold uppercase tracking-widest text-primary">Account</h4>
+        <ul class="space-y-3 text-sm text-gray-400">
+          {% if user.is_authenticated %}
+          <li><a class="hover:text-white transition-colors" href="{% url 'accounts:profile' %}">My Profile</a></li>
+          <li><a class="hover:text-white transition-colors" href="{% url 'home:user_orders' %}">My Orders</a></li>
+          {% else %}
+          <li><a class="hover:text-white transition-colors" href="{% url 'accounts:userlogin' %}">Login</a></li>
+          {% endif %}
+          <li><a class="hover:text-white transition-colors" href="{% url 'home:wishlist_view' %}">Wishlist</a></li>
+          <li><a class="hover:text-white transition-colors" href="{% url 'home:cart_view' %}">Cart</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="mb-5 text-[10px] font-bold uppercase tracking-widest text-primary">Support</h4>
+        <ul class="space-y-3 text-sm text-gray-400">
+          <li><a class="hover:text-white transition-colors" href="#">Shipping &amp; Returns</a></li>
+          <li><a class="hover:text-white transition-colors" href="#">Size Guide</a></li>
+          <li><a class="hover:text-white transition-colors" href="#">Contact Us</a></li>
+          <li><a class="hover:text-white transition-colors" href="#">FAQ</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="border-t border-white/10 pt-8 text-center text-[11px] text-gray-500 uppercase tracking-widest">
+      © 2024 vólke shoppe. All rights reserved.
+    </div>
+  </div>
+</footer>
+
+<!-- Toast -->
+<!-- With this: -->
+<div id="toast" class="flex items-center gap-4 bg-[#112117] text-white px-5 py-3.5 rounded-2xl shadow-2xl text-sm font-semibold">
+  <div class="flex size-9 items-center justify-center rounded-full bg-primary shrink-0">
+    <span class="material-symbols-outlined text-[#112117] text-[18px]">check</span>
+  </div>
+  <div class="flex flex-col leading-tight">
+    <span class="text-sm font-bold" id="toastMsg">Added to cart!</span>
+    <span class="text-xs text-gray-400">Item is in your bag</span>
+  </div>
+  <a href="{% url 'home:cart_view' %}"
+    class="ml-2 shrink-0 rounded-xl bg-primary text-[#112117] px-4 py-2 text-xs font-extrabold hover:opacity-90 transition-all pointer-events-auto">
+    Go to Cart
+  </a>
+  <button onclick="closeToast()"
+    class="ml-1 text-gray-400 hover:text-white transition-colors pointer-events-auto">
+    <span class="material-symbols-outlined text-[18px]">close</span>
+  </button>
+</div>
+
+
+<!-- ═══════════════════════ SCRIPTS ═══════════════════════ -->
+<script>
+  function switchImage(url, thumb) {
+    document.getElementById('mainImage').src = url;
+    document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
+    thumb.classList.add('active');
+  }
+
+  const sizeStockMap = {
+    {% for s in sizes %}"{{ s.size }}": {{ s.stock_quantity }},{% endfor %}
+  };
+  let maxStock = {{ product.stock_quantity|default:0 }};
+
+  function selectSize(btn, size) {
+    if (btn.disabled) return;
+    document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('selectedSize').value = size;
+    maxStock = sizeStockMap[size] || 0;
+    const input = document.getElementById('qtyInput');
+    const msg = document.getElementById('stockMsg');
+    if (input) input.value = 1;
+    if (msg) msg.classList.add('hidden');
+    document.querySelectorAll('input[name="quantity"]').forEach(el => el.value = 1);
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    document.getElementById('toastMsg').textContent = msg || 'Added to cart!';
+    t.classList.add('show');
+    clearTimeout(window._toastTimer);
+    window._toastTimer = setTimeout(closeToast, 4000);
+  }
+
+  function closeToast() {
+    document.getElementById('toast').classList.remove('show');
+  }
+
+  document.querySelectorAll('details').forEach(d => {
+    d.addEventListener('toggle', () => {
+      d.querySelector('.acc-arrow').style.transform = d.open ? 'rotate(180deg)' : '';
+    });
+  });
+
+  function updateQty(change) {
+    const input = document.getElementById('qtyInput');
+    const msg = document.getElementById('stockMsg');
+    if (!input) return;
+    let next = (parseInt(input.value) || 1) + change;
+    if (next < 1) next = 1;
+    if (next > maxStock) {
+      msg.classList.remove('hidden');
+      msg.textContent = maxStock === 0 ? 'Out of stock' : `Max ${maxStock} available`;
+      return;
+    }
+    msg.classList.add('hidden');
+    input.value = next;
+    document.querySelectorAll('input[name="quantity"]').forEach(el => el.value = next);
+  }
+
+  function appendQty(linkElement) {
+    const qtyInput = document.getElementById('qtyInput');
+    if (qtyInput) {
+      const url = new URL(linkElement.href, window.location.origin);
+      url.searchParams.set('quantity', qtyInput.value);
+      window.location.href = url.toString();
+      return false;
+    }
+    return true;
+  }
+
+  function handleAction(url) {
+    let finalUrl = new URL(url, window.location.origin);
+    {% if sizes %}
+    const size = document.getElementById('selectedSize').value;
+    if (!size) {
+      const selector = document.getElementById('sizeSelector');
+      selector.classList.add('ring-2', 'ring-red-400', 'ring-offset-2', 'rounded-xl', 'p-1');
+      selector.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      showToast('Please select a size first');
+      setTimeout(() => selector.classList.remove('ring-2', 'ring-red-400', 'ring-offset-2', 'rounded-xl', 'p-1'), 2000);
+      return;
+    }
+    finalUrl.searchParams.set('size', size);
+    {% endif %}
+    const qtyInput = document.getElementById('qtyInput');
+    if (qtyInput) finalUrl.searchParams.set('quantity', qtyInput.value);
+
+    // AJAX — stay on page and show toast
+    fetch(finalUrl.toString())
+      .then(res => {
+        if (res.ok || res.redirected) showToast('Added to cart!');
+      })
+      .catch(() => showToast('Added to cart!'));
+  }
+
+  function handleBuyNow(form) {
+    {% if sizes %}
+    const size = document.getElementById('selectedSize').value;
+    if (!size) {
+      const selector = document.getElementById('sizeSelector');
+      selector.classList.add('ring-2', 'ring-red-400', 'ring-offset-2', 'rounded-xl', 'p-1');
+      selector.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      showToast('Please select a size first');
+      setTimeout(() => selector.classList.remove('ring-2', 'ring-red-400', 'ring-offset-2', 'rounded-xl', 'p-1'), 2000);
+      return false;
+    }
+    document.getElementById('buyNowSize').value = size;
+    {% endif %}
+    return true;
+  }
+</script>
+
+</body>
+</html>

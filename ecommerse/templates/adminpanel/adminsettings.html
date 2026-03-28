@@ -37,7 +37,6 @@
         </h3>
       </div>
 
-      
       <!-- Marquee Text -->
       <div class="px-8 py-6 border-b border-[#e7f3ec]">
         <label class="block text-sm font-semibold text-text-main mb-1">
@@ -102,8 +101,6 @@
         </label>
       </div>
 
-     
-
       <!-- Discounts -->
       <div class="px-8 py-5 flex items-center justify-between gap-6">
         <div class="flex items-start gap-4">
@@ -145,11 +142,13 @@
       <span class="text-xs text-text-muted font-medium">{{ promo_codes.count }} code{{ promo_codes.count|pluralize }}</span>
     </div>
 
-    <!-- Add new promo -->
-    <form method="POST" class="px-8 py-6 border-b border-[#e7f3ec] bg-white">
+    <!-- Add new promo — enctype for image upload -->
+    <form method="POST" enctype="multipart/form-data" class="px-8 py-6 border-b border-[#e7f3ec] bg-white">
       {% csrf_token %}
       <input type="hidden" name="action" value="add_promo"/>
       <p class="text-xs font-bold text-text-muted uppercase tracking-wider mb-4">Add New Code</p>
+
+      <!-- Row 1: existing 4 fields -->
       <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
         <div>
           <label class="block text-xs font-semibold text-text-muted mb-1">Code</label>
@@ -172,6 +171,33 @@
                  class="w-full h-10 px-3 rounded-xl border border-[#d1e6d9] bg-[#f8fcfa] text-text-main text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition"/>
         </div>
       </div>
+
+      <!-- Row 2: NEW — image + homepage toggle -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-3">
+        <div>
+          <label class="block text-xs font-semibold text-text-muted mb-1">
+            Banner Image <span class="font-normal">(optional — shown on homepage card)</span>
+          </label>
+          <label for="promo_img_input"
+                 class="flex items-center gap-2 h-10 px-4 w-fit rounded-xl border-2 border-dashed border-[#d1e6d9] bg-[#f8fcfa] text-text-muted text-xs font-semibold cursor-pointer hover:border-primary hover:text-primary transition-colors">
+            <span class="material-symbols-outlined text-[18px]">upload</span>
+            <span id="promo_img_label">Choose image</span>
+          </label>
+          <input id="promo_img_input" type="file" name="promo_image" accept="image/*" class="sr-only"
+                 onchange="document.getElementById('promo_img_label').textContent = this.files[0]?.name || 'Choose image'"/>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-text-muted mb-1">Show on Homepage</label>
+          <div class="flex items-center gap-3 h-10">
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" name="show_on_homepage" class="sr-only peer"/>
+              <div class="w-12 h-7 bg-gray-200 rounded-full peer peer-checked:bg-primary peer-focus:ring-2 peer-focus:ring-primary/20 after:content-[''] after:absolute after:top-[3px] after:left-[3px] after:bg-white after:rounded-full after:h-[22px] after:w-[22px] after:transition-all peer-checked:after:translate-x-5"></div>
+            </label>
+            <span class="text-xs text-text-muted">Display this promo in the homepage banner section</span>
+          </div>
+        </div>
+      </div>
+
       <div class="mt-4">
         <button type="submit"
                 class="flex items-center gap-2 px-5 py-2.5 bg-[#112117] hover:bg-[#1c3326] text-white text-sm font-bold rounded-xl transition-colors">
@@ -187,33 +213,59 @@
       <table class="w-full text-sm">
         <thead class="bg-[#f8fcfa] border-b border-[#e7f3ec]">
           <tr>
-            <th class="px-6 py-3 text-left text-xs font-bold text-text-muted uppercase tracking-wider">Code</th>
-            <th class="px-6 py-3 text-left text-xs font-bold text-text-muted uppercase tracking-wider">Discount</th>
-            <th class="px-6 py-3 text-left text-xs font-bold text-text-muted uppercase tracking-wider">Usage</th>
-            <th class="px-6 py-3 text-left text-xs font-bold text-text-muted uppercase tracking-wider">Expires</th>
-            <th class="px-6 py-3 text-left text-xs font-bold text-text-muted uppercase tracking-wider">Status</th>
-            <th class="px-6 py-3 text-right text-xs font-bold text-text-muted uppercase tracking-wider">Actions</th>
+            <th class="px-5 py-3 text-left text-xs font-bold text-text-muted uppercase tracking-wider">Code</th>
+            <th class="px-5 py-3 text-left text-xs font-bold text-text-muted uppercase tracking-wider">Discount</th>
+            <th class="px-5 py-3 text-left text-xs font-bold text-text-muted uppercase tracking-wider">Usage</th>
+            <th class="px-5 py-3 text-left text-xs font-bold text-text-muted uppercase tracking-wider">Expires</th>
+            <!-- NEW columns -->
+            <th class="px-5 py-3 text-left text-xs font-bold text-text-muted uppercase tracking-wider">Image</th>
+            <th class="px-5 py-3 text-left text-xs font-bold text-text-muted uppercase tracking-wider">Homepage</th>
+            <!-- end NEW -->
+            <th class="px-5 py-3 text-left text-xs font-bold text-text-muted uppercase tracking-wider">Status</th>
+            <th class="px-5 py-3 text-right text-xs font-bold text-text-muted uppercase tracking-wider">Actions</th>
           </tr>
         </thead>
         <tbody class="divide-y divide-[#e7f3ec]">
           {% for promo in promo_codes %}
           <tr class="hover:bg-[#f8fcfa] transition-colors">
-            <td class="px-6 py-4">
+            <td class="px-5 py-4">
               <span class="font-bold text-text-main font-mono tracking-wider">{{ promo.code }}</span>
             </td>
-            <td class="px-6 py-4">
+            <td class="px-5 py-4">
               <span class="inline-flex items-center gap-1 text-primary font-bold">
                 <span class="material-symbols-outlined text-[14px]">percent</span>
                 {{ promo.discount_percent }}% off
               </span>
             </td>
-            <td class="px-6 py-4 text-text-muted text-xs">
+            <td class="px-5 py-4 text-text-muted text-xs">
               {{ promo.used_count }} / {% if promo.usage_limit == 0 %}∞{% else %}{{ promo.usage_limit }}{% endif %}
             </td>
-            <td class="px-6 py-4 text-text-muted text-xs">
+            <td class="px-5 py-4 text-text-muted text-xs">
               {% if promo.expires_at %}{{ promo.expires_at|date:"M d, Y" }}{% else %}—{% endif %}
             </td>
-            <td class="px-6 py-4">
+
+            <!-- NEW: image thumbnail -->
+            <td class="px-5 py-4">
+              {% if promo.image %}
+                <img src="{{ promo.image.url }}" alt="{{ promo.code }}"
+                     class="h-10 w-16 object-cover rounded-lg border border-[#d1e6d9]"/>
+              {% else %}
+                <span class="text-xs text-text-muted italic">None</span>
+              {% endif %}
+            </td>
+
+            <!-- NEW: homepage badge -->
+            <td class="px-5 py-4">
+              {% if promo.show_on_homepage %}
+                <span class="inline-flex items-center gap-1 rounded-full bg-blue-100 px-2.5 py-1 text-xs font-semibold text-blue-700">
+                  <span class="material-symbols-outlined text-[12px]">home</span>Shown
+                </span>
+              {% else %}
+                <span class="text-xs text-text-muted">Hidden</span>
+              {% endif %}
+            </td>
+
+            <td class="px-5 py-4">
               {% if promo.is_valid %}
                 <span class="inline-flex items-center gap-1.5 rounded-full bg-green-100 px-2.5 py-1 text-xs font-semibold text-green-800">
                   <span class="h-1.5 w-1.5 rounded-full bg-green-600"></span>Active
@@ -224,9 +276,10 @@
                 </span>
               {% endif %}
             </td>
-            <td class="px-6 py-4 text-right">
+
+            <td class="px-5 py-4 text-right">
               <div class="flex items-center justify-end gap-2">
-                <!-- Toggle -->
+                <!-- Toggle active/inactive -->
                 <form method="POST" action="{% url 'adminpanel:toggle-promo' promo.pk %}">
                   {% csrf_token %}
                   <button type="submit"
