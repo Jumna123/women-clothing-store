@@ -262,8 +262,7 @@
                   <span class="text-lg font-extrabold text-[#112117]">₹{{ item.product.discount_price }}</span>
                   <span class="text-sm text-gray-400 line-through">₹{{ item.product.price }}</span>
                   <span class="rounded-full bg-green-100 px-2 py-0.5 text-xs font-bold text-green-700">
-                    {% widthratio item.product.discount_price item.product.price 100 as pct %}
-                    {% if pct %}{{ 100|add:"-"|add:pct }}% off{% endif %}
+                    {{ item.product.discount_percentage }}% off
                   </span>
                 {% else %}
                   <span class="text-lg font-extrabold text-[#112117]">₹{{ item.product.price }}</span>
@@ -521,41 +520,30 @@
 <!-- ══════════════════════════════════════════
      FOOTER — original cart footer
 ══════════════════════════════════════════ -->
-<footer class="bg-[#1e4433] text-white pt-12 pb-8 border-t border-[#1c3326]">
-    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-    <div class="grid gap-8 grid-cols-2 lg:grid-cols-4 mb-10">
-      <div class="col-span-2 lg:col-span-1 space-y-4">
-        <div class="flex flex-col" style="line-height:1;">
-          <span style="font-family:'Georgia',serif;font-size:20px;font-weight:700;letter-spacing:0.15em;color:#fff;">vólke</span>
-          <span style="font-size:7px;letter-spacing:0.18em;color:#a7f3d0;text-transform:uppercase;">shoppe</span>
-        </div>
-        <p class="text-sm text-gray-400 leading-relaxed max-w-xs">Curating timeless pieces for the modern woman.</p>
+<footer class="bg-[#1e4433] border-t border-[#254632] py-8">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="flex flex-col sm:flex-row items-center justify-between gap-6">
+
+      <!-- Brand -->
+      <div style="line-height:1;">
+        <div style="font-family:'Georgia',serif;font-size:18px;font-weight:700;letter-spacing:0.15em;color:#ffffff;">vólke</div>
+        <div style="font-size:7px;letter-spacing:0.18em;color:#9ca3af;text-transform:uppercase;">shoppe</div>
       </div>
-      <div>
-        <h4 class="mb-4 text-xs font-bold uppercase tracking-widest text-[#36e27b]">Shop</h4>
-        <ul class="space-y-3 text-sm text-gray-400">
-          <li><a class="hover:text-white transition-colors" href="#">New Arrivals</a></li>
-          <li><a class="hover:text-white transition-colors" href="#">Collections</a></li>
-        </ul>
+
+      <!-- Links -->
+      <div class="flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs text-gray-500">
+        <a class="hover:text-primary transition-colors" href="{% url 'home:user_orders' %}">Order Status</a>
+        <a class="hover:text-primary transition-colors" href="{% url 'home:refund_policy' %}">Refund Policy</a>
+        <a class="hover:text-primary transition-colors" href="{% url 'home:contact_info' %}">Contact</a>
+        <span class="text-[#254632]">|</span>
+        <a class="hover:text-primary transition-colors" href="{% url 'home:privacy_policy' %}">Privacy Policy</a>
+        <a class="hover:text-primary transition-colors" href="{% url 'home:shipping_policy' %}">Shipping Policy</a>
+        <a class="hover:text-primary transition-colors" href="{% url 'home:terms-of-service' %}">Terms of Service</a>
       </div>
-      <div>
-        <h4 class="mb-4 text-xs font-bold uppercase tracking-widest text-[#36e27b]">Support</h4>
-        <ul class="space-y-3 text-sm text-gray-400">
-          <li><a class="hover:text-white transition-colors" href="#">Shipping &amp; Returns</a></li>
-          <li><a class="hover:text-white transition-colors" href="#">Size Guide</a></li>
-          <li><a class="hover:text-white transition-colors" href="#">Contact Us</a></li>
-        </ul>
-      </div>
-      <div>
-        <h4 class="mb-4 text-xs font-bold uppercase tracking-widest text-[#36e27b]">Legal</h4>
-        <ul class="space-y-3 text-sm text-gray-400">
-          <li><a class="hover:text-white transition-colors" href="#">Privacy Policy</a></li>
-          <li><a class="hover:text-white transition-colors" href="#">Terms of Service</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="border-t border-[#1c3326] pt-8 text-center text-xs text-gray-500 uppercase tracking-widest">
-      vólke shoppe © {% now "Y" %}. All rights reserved.
+
+      <!-- Copyright -->
+      <p class="text-xs text-gray-600 whitespace-nowrap">© 2024 VOLKE®</p>
+
     </div>
   </div>
 </footer>

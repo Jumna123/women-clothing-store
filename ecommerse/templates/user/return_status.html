@@ -1,0 +1,204 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Return Status — vólke shoppe</title>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: 'Manrope', sans-serif; }
+    .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    .icon-filled { font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  </style>
+</head>
+<body class="bg-[#f6faf8] min-h-screen flex flex-col font-display antialiased">
+
+<header class="sticky top-0 z-50 bg-[#1e4433]">
+  <div class="px-4 lg:px-10 py-3 flex items-center justify-between">
+    <a href="{% url 'home:home' %}" class="flex flex-col" style="line-height:1;">
+      <span style="font-family:'Georgia',serif;font-size:22px;font-weight:700;letter-spacing:0.15em;color:#fff;">vólke</span>
+      <span style="font-size:8px;letter-spacing:0.18em;color:#fff;text-transform:uppercase;">shoppe</span>
+    </a>
+  </div>
+</header>
+
+<div class="flex-grow w-full max-w-2xl mx-auto px-4 py-10">
+
+  <!-- Breadcrumb -->
+  <nav class="flex items-center gap-1.5 text-sm font-medium text-[#064e3b]/60 mb-8">
+    <a href="{% url 'home:user_orders' %}" class="hover:text-[#064e3b] transition-colors">My Orders</a>
+    <span class="material-symbols-outlined text-sm">chevron_right</span>
+    <a href="{% url 'home:order_detail' return_req.order.id %}" class="hover:text-[#064e3b] transition-colors">#{{ return_req.order.id }}</a>
+    <span class="material-symbols-outlined text-sm">chevron_right</span>
+    <span class="text-[#064e3b] font-bold">Return Status</span>
+  </nav>
+
+  <!-- Status card -->
+  <div class="bg-white rounded-2xl border border-green-100 shadow-sm overflow-hidden mb-6">
+
+    <!-- Header -->
+    <div class="px-6 py-5 border-b border-green-100 flex items-center justify-between flex-wrap gap-3">
+      <div>
+        <p class="text-xs text-[#064e3b]/50 font-medium mb-0.5">Return Request #{{ return_req.id }}</p>
+        <h1 class="text-base font-black text-[#022c22]">
+          {{ return_req.get_return_type_display }} Request
+        </h1>
+      </div>
+      <span class="text-xs font-bold px-3 py-1.5 rounded-full uppercase tracking-wide
+        {% if return_req.status == 'requested' %}bg-yellow-100 text-yellow-800
+        {% elif return_req.status == 'approved' %}bg-green-100 text-green-800
+        {% elif return_req.status == 'rejected' or return_req.status == 'inspection_failed' %}bg-red-100 text-red-700
+        {% elif return_req.status == 'refunded' %}bg-emerald-100 text-emerald-800
+        {% else %}bg-blue-100 text-blue-800{% endif %}">
+        {{ return_req.get_status_display }}
+      </span>
+    </div>
+
+    <!-- Timeline -->
+    <div class="px-6 py-6">
+      {% with s=return_req.status %}
+      <div class="relative">
+        <div class="space-y-4">
+          {% for step_data in return_req.timeline_steps %}
+          <div class="flex items-start gap-4">
+            <div class="flex flex-col items-center">
+              <div class="size-8 rounded-full flex items-center justify-center shrink-0
+                {% if step_data.done %}bg-[#064e3b] text-white{% elif step_data.current %}bg-yellow-100 text-yellow-700 border-2 border-yellow-400{% else %}bg-gray-100 text-gray-400{% endif %}">
+                <span class="material-symbols-outlined text-[16px] icon-filled">{{ step_data.icon }}</span>
+              </div>
+              {% if not forloop.last %}<div class="w-0.5 h-6 {% if step_data.done %}bg-[#064e3b]{% else %}bg-gray-200{% endif %} mt-1"></div>{% endif %}
+            </div>
+            <div class="pt-1">
+              <p class="text-sm font-bold {% if step_data.done or step_data.current %}text-[#022c22]{% else %}text-gray-400{% endif %}">
+                {{ step_data.label }}
+              </p>
+              {% if step_data.current %}<p class="text-xs text-yellow-600 font-medium">In progress</p>{% endif %}
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endwith %}
+    </div>
+
+    <!-- Items in this return -->
+    <div class="px-6 pb-5 border-t border-green-100 pt-5">
+      <p class="text-xs font-black text-[#022c22] uppercase tracking-wider mb-3">Items in this request</p>
+      <div class="space-y-3">
+        {% for item in return_req.items.all %}
+        <div class="flex items-center gap-3">
+          <div class="size-12 rounded-xl overflow-hidden bg-[#f0fdf4] shrink-0">
+            {% with item.product.images.first as img %}
+              {% if img %}<img src="{{ img.image.url }}" class="w-full h-full object-cover"/>{% endif %}
+            {% endwith %}
+          </div>
+          <div>
+            <p class="text-sm font-bold text-[#022c22]">{{ item.product.product_name }}</p>
+            <p class="text-xs text-[#064e3b]/60">{% if item.size %}Size: {{ item.size }} · {% endif %}Qty: {{ item.quantity }} · ₹{{ item.subtotal|floatformat:2 }}</p>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Refund amount -->
+    {% if return_req.status in "inspection_passed,refund_initiated,refund_processing,refunded" %}
+    <div class="px-6 py-4 bg-green-50 border-t border-green-100">
+      <div class="flex items-center justify-between">
+        <span class="text-sm font-bold text-[#022c22]">Refund Amount</span>
+        <span class="text-lg font-black text-green-700">₹{{ return_req.refund_amount|default:return_req.total_refund_amount|floatformat:2 }}</span>
+      </div>
+      {% if return_req.status == 'refunded' and return_req.refund_ref %}
+      <p class="text-xs text-green-600 font-medium mt-1">Ref: {{ return_req.refund_ref }}</p>
+      {% endif %}
+    </div>
+    {% endif %}
+
+    <!-- Rejection reason -->
+    {% if return_req.status == 'rejected' or return_req.status == 'inspection_failed' %}
+    <div class="px-6 py-4 bg-red-50 border-t border-red-100">
+      <p class="text-sm font-bold text-red-700 flex items-center gap-2">
+        <span class="material-symbols-outlined text-[16px]">cancel</span>
+        {% if return_req.status == 'rejected' %}Return Rejected{% else %}Failed Inspection{% endif %}
+      </p>
+      {% if return_req.rejected_reason %}
+      <p class="text-xs text-red-500 mt-1">{{ return_req.rejected_reason }}</p>
+      {% endif %}
+    </div>
+    {% endif %}
+
+    <!-- Self-ship tracking upload (shown when approved but no tracking yet) -->
+    {% if return_req.status == 'approved' and not return_req.tracking_number %}
+    <div class="px-6 py-5 border-t border-green-100 bg-blue-50">
+      <p class="text-sm font-bold text-[#022c22] mb-1">Ship the item back to us</p>
+      <p class="text-xs text-[#064e3b]/60 mb-4">Please ship the item and enter the tracking details below.</p>
+      <form method="POST" action="{% url 'home:return_status' return_req.id %}">
+        {% csrf_token %}
+        <div class="flex flex-col gap-3">
+          <input type="text" name="courier_name" placeholder="Courier name (e.g. Bluedart)"
+            class="rounded-xl border border-green-200 bg-white px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#064e3b]/20"/>
+          <input type="text" name="tracking_number" placeholder="Tracking number"
+            class="rounded-xl border border-green-200 bg-white px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#064e3b]/20"/>
+          <button type="submit"
+            class="rounded-xl bg-[#064e3b] text-white py-2.5 text-sm font-bold hover:bg-[#022c22] transition-colors">
+            Submit Tracking Info
+          </button>
+        </div>
+      </form>
+    </div>
+    {% endif %}
+
+    {% if return_req.status == 'approved' and return_req.tracking_number %}
+    <div class="px-6 py-4 border-t border-green-100 bg-blue-50">
+      <p class="text-xs font-bold text-blue-700">Tracking submitted: {{ return_req.courier_name }} — {{ return_req.tracking_number }}</p>
+    </div>
+    {% endif %}
+
+  </div>
+
+  <div class="flex gap-3">
+    <a href="{% url 'home:order_detail' return_req.order.id %}"
+      class="flex-1 flex items-center justify-center gap-2 rounded-xl border border-green-200 py-3 text-sm font-bold text-[#064e3b] hover:bg-green-50 transition-colors">
+      <span class="material-symbols-outlined text-[18px]">receipt_long</span>
+      View Order
+    </a>
+    <a href="{% url 'home:user_orders' %}"
+      class="flex-1 flex items-center justify-center gap-2 rounded-xl bg-[#064e3b] py-3 text-sm font-bold text-white hover:bg-[#022c22] transition-colors">
+      My Orders
+    </a>
+  </div>
+
+</div>
+
+<footer class="bg-[#1e4433] border-t border-[#254632] py-8">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="flex flex-col sm:flex-row items-center justify-between gap-6">
+
+      <!-- Brand -->
+      <div style="line-height:1;">
+        <div style="font-family:'Georgia',serif;font-size:18px;font-weight:700;letter-spacing:0.15em;color:#ffffff;">vólke</div>
+        <div style="font-size:7px;letter-spacing:0.18em;color:#9ca3af;text-transform:uppercase;">shoppe</div>
+      </div>
+
+      <!-- Links -->
+      <div class="flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs text-gray-500">
+        <a class="hover:text-primary transition-colors" href="{% url 'home:user_orders' %}">Order Status</a>
+        <a class="hover:text-primary transition-colors" href="{% url 'home:refund_policy' %}">Refund Policy</a>
+        <a class="hover:text-primary transition-colors" href="{% url 'home:contact_info' %}">Contact</a>
+        <span class="text-[#254632]">|</span>
+        <a class="hover:text-primary transition-colors" href="{% url 'home:privacy_policy' %}">Privacy Policy</a>
+        <a class="hover:text-primary transition-colors" href="{% url 'home:shipping_policy' %}">Shipping Policy</a>
+        <a class="hover:text-primary transition-colors" href="{% url 'home:terms-of-service' %}">Terms of Service</a>
+      </div>
+
+      <!-- Copyright -->
+      <p class="text-xs text-gray-600 whitespace-nowrap">© 2024 VOLKE®</p>
+
+    </div>
+  </div>
+</footer>
+</body>
+</html>

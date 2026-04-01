@@ -71,16 +71,14 @@
       <button class="flex size-9 items-center justify-center rounded-full text-white hover:bg-[#1c3326] transition-colors md:hidden">
         <span class="material-symbols-outlined text-xl">search</span>
       </button>
-
-      <!-- Divider -->
+      
+      <!-- Visual divider — desktop only -->
       <div class="hidden md:block h-5 w-px bg-white/10 mx-1"></div>
 
-      <!-- Wishlist -->
       <a href="{% url 'home:wishlist_view' %}" class="group relative flex size-9 md:size-10 items-center justify-center rounded-full text-white hover:bg-[#1c3326] transition-colors">
         <span class="material-symbols-outlined text-xl">favorite</span>
       </a>
 
-      <!-- Profile -->
       {% if user.is_authenticated %}
       <a href="{% url 'accounts:profile' %}" class="flex size-9 md:size-10 items-center justify-center rounded-full text-white hover:bg-[#1c3326] transition-colors">
         <span class="material-symbols-outlined text-xl md:text-2xl">person</span>
@@ -91,14 +89,22 @@
       </a>
       {% endif %}
 
-      
+      <!-- Visual divider — desktop only -->
+      <div class="hidden md:block h-5 w-px bg-white/10 mx-1"></div>
+
+ <a href="{% url 'home:cart_view' %}" class="relative flex size-9 md:size-10 items-center justify-center rounded-full text-white hover:bg-[#1c3326] transition-colors">
+  <span class="material-symbols-outlined text-xl md:text-2xl">shopping_cart</span>
+  {% if cart_count %}
+  <span class="absolute top-1 right-1 size-2 bg-green-400 rounded-full ring-2 ring-[#1e4433]"></span>
+  {% endif %}
+</a>
     </div>
   </div>
 </header>
 
 <main class="flex-grow">
 
-  <!-- Page Heading -->
+  <!-- Page Heading --> 
   <section class="mx-auto max-w-7xl px-4 pt-8 pb-4 sm:px-6 lg:px-8">
     <div class="flex items-center gap-2 text-sm text-gray-400 mb-3">
       <a href="{% url 'home:home' %}" class="hover:text-dark-green transition-colors">Home</a>
@@ -284,45 +290,30 @@
   </section>
 </main>
 
-<!-- FOOTER -->
-<footer class="bg-[#1e4433] mt-auto pt-12 pb-8">
+<footer class="bg-[#1e4433] border-t border-[#254632] py-8">
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-    <div class="grid gap-10 grid-cols-2 lg:grid-cols-4 mb-12">
-      <div class="col-span-2 lg:col-span-1 space-y-4">
-        <div style="line-height:1;">
-          <div style="font-family:'Georgia',serif;font-size:20px;font-weight:700;letter-spacing:0.15em;color:#ffffff;">vólke</div>
-          <div style="font-size:7px;letter-spacing:0.18em;color:#9ca3af;text-transform:uppercase;">shoppe</div>
-        </div>
-        <p class="text-sm text-gray-400 leading-relaxed max-w-xs">
-          Curating timeless pieces for the modern woman. Quality, comfort, and sophisticated style.
-        </p>
+    <div class="flex flex-col sm:flex-row items-center justify-between gap-6">
+
+      <!-- Brand -->
+      <div style="line-height:1;">
+        <div style="font-family:'Georgia',serif;font-size:18px;font-weight:700;letter-spacing:0.15em;color:#ffffff;">vólke</div>
+        <div style="font-size:7px;letter-spacing:0.18em;color:#9ca3af;text-transform:uppercase;">shoppe</div>
       </div>
-      <div>
-        <h4 class="mb-5 text-xs font-bold uppercase tracking-widest text-primary">Shop</h4>
-        <ul class="space-y-3 text-sm text-gray-400">
-          <li><a class="hover:text-white transition-colors" href="{% url 'home:home' %}">New Arrivals</a></li>
-          <li><a class="hover:text-white transition-colors" href="{% url 'home:home' %}">Collections</a></li>
-        </ul>
+
+      <!-- Links -->
+      <div class="flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs text-gray-500">
+        <a class="hover:text-primary transition-colors" href="{% url 'home:user_orders' %}">Order Status</a>
+        <a class="hover:text-primary transition-colors" href="{% url 'home:refund_policy' %}">Refund Policy</a>
+        <a class="hover:text-primary transition-colors" href="{% url 'home:contact_info' %}">Contact</a>
+        <span class="text-[#254632]">|</span>
+        <a class="hover:text-primary transition-colors" href="{% url 'home:privacy_policy' %}">Privacy Policy</a>
+        <a class="hover:text-primary transition-colors" href="{% url 'home:shipping_policy' %}">Shipping Policy</a>
+        <a class="hover:text-primary transition-colors" href="{% url 'home:terms-of-service' %}">Terms of Service</a>
       </div>
-      <div>
-        <h4 class="mb-5 text-xs font-bold uppercase tracking-widest text-primary">Account</h4>
-        <ul class="space-y-3 text-sm text-gray-400">
-          <li><a class="hover:text-white transition-colors" href="{% url 'accounts:profile' %}">My Profile</a></li>
-          <li><a class="hover:text-white transition-colors" href="{% url 'home:user_orders' %}">My Orders</a></li>
-          <li><a class="hover:text-white transition-colors" href="{% url 'home:wishlist_view' %}">Wishlist</a></li>
-        </ul>
-      </div>
-      <div>
-        <h4 class="mb-5 text-xs font-bold uppercase tracking-widest text-primary">Support</h4>
-        <ul class="space-y-3 text-sm text-gray-400">
-          <li><a class="hover:text-white transition-colors" href="#">Shipping &amp; Returns</a></li>
-          <li><a class="hover:text-white transition-colors" href="#">Size Guide</a></li>
-          <li><a class="hover:text-white transition-colors" href="#">Contact Us</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="border-t border-white/10 pt-8 text-center text-xs text-gray-500 uppercase tracking-widest">
-      © 2024 vólke shoppe. All rights reserved.
+
+      <!-- Copyright -->
+      <p class="text-xs text-gray-600 whitespace-nowrap">© 2024 VOLKE®</p>
+
     </div>
   </div>
 </footer>

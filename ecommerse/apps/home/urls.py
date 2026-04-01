@@ -22,19 +22,29 @@ urlpatterns = [
     path("cart/move-to-wishlist/<int:item_id>/", views.move_to_wishlist, name="move_to_wishlist"),
     path("cart/move-to-cart/<int:product_id>/", views.move_to_cart, name="move_to_cart"),
     path("cart/get-sizes/<int:product_id>/", views.get_product_sizes, name="get_product_sizes"),
+    path('cart/apply-coupon/', views.apply_coupon, name='apply_coupon'),
+    path('cart/remove-coupon/', views.remove_coupon, name='remove_coupon'),
 
     # Checkout
     path("checkout/", views.checkout, name="checkout"),
     path("checkout/payment/", views.checkout_payment, name="checkout_payment"),
+    path("checkout/razorpay/callback/", views.razorpay_callback, name="razorpay_callback"),
 
-    # Orders (user side)
+    # Orders
     path("orders/", views.user_orders, name="user_orders"),
     path("orders/<int:order_id>/", views.order_detail, name="order_detail"),
-    path("orders/<int:order_id>/return/", views.request_return, name="return_request"),
-
-    path('cart/apply-coupon/', views.apply_coupon, name='apply_coupon'),
-    path('cart/remove-coupon/', views.remove_coupon, name='remove_coupon'),
-
     path('orders/<int:order_id>/cancel/', views.cancel_order, name='cancel_order'),
-    path('orders/<int:order_id>/', views.order_detail, name='order_detail'),
+    path('orders/<int:order_id>/return/', views.request_return, name='return_request'),
+    path('orders/<int:order_id>/return/success/', views.return_success, name='return_success'),
+    path('returns/<int:return_id>/status/', views.return_status, name='return_status'),
+
+    # Invoice
+    path('orders/<int:order_id>/invoice/', views.order_invoice, name='order_invoice'),
+
+    # Footer pages
+    path('privacy-policy/', views.privacy_policy, name='privacy_policy'),
+    path('refund-policy/', views.refund_policy, name='refund_policy'),
+    path('shipping-policy/', views.shipping_policy, name='shipping_policy'),
+    path('terms-of-services/', views.terms_of_service, name='terms-of-service'),
+    path('contact-info/', views.contact_info, name='contact_info'),
 ]

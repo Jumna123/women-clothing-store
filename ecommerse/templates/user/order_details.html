@@ -39,8 +39,8 @@
   .icon-filled { font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
   .shipment-card { border-left: 3px solid #059669; }
   .shipment-card.cancelled { border-left-color: #ef4444; }
-  .shipment-card.pending { border-left-color: #f59e0b; }
-  .shipment-card.shipped { border-left-color: #3b82f6; }
+  .shipment-card.pending   { border-left-color: #f59e0b; }
+  .shipment-card.shipped   { border-left-color: #3b82f6; }
   .track-dot { width: 10px; height: 10px; border-radius: 50%; background: #d1fae5; border: 2px solid #a7f3d0; }
   .track-dot.done { background: #059669; border-color: #059669; }
   .track-line { flex: 1; height: 2px; background: #d1fae5; }
@@ -60,7 +60,6 @@
       <span style="font-size:8px;letter-spacing:0.18em;color:#fff;text-transform:uppercase;">shoppe</span>
     </a>
     <div class="flex items-center justify-end gap-3 flex-1 max-w-md">
-      
       <div class="flex gap-2">
         <a href="{% url 'home:cart_view' %}" class="relative flex items-center justify-center p-2 rounded-lg text-white/80 hover:bg-white/10 hover:text-white transition-colors">
           <span class="material-symbols-outlined">shopping_bag</span>
@@ -109,6 +108,43 @@
     <span class="text-primary font-bold">#{{ order.id }}</span>
   </nav>
 
+  <!-- ── DELIVERED BANNER ── -->
+  {% if order.status == 'delivered' %}
+  <div class="mb-6 flex items-center gap-4 bg-green-50 border border-green-200 rounded-2xl px-6 py-4 fade-in">
+    <div class="size-11 rounded-xl bg-green-100 flex items-center justify-center shrink-0">
+      <span class="material-symbols-outlined text-[24px] text-green-700 icon-filled">check_circle</span>
+    </div>
+    <div class="flex-1 min-w-0">
+      <p class="text-sm font-black text-green-800">Your order has been delivered!</p>
+      <p class="text-xs text-green-600 font-medium mt-0.5">We hope you love your purchase. You can return or exchange within the eligible window.</p>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- ── RETURN IN PROGRESS BANNER ── -->
+  {% if order.status == 'return_requested' %}
+    {% with return_req=order.return_requests.first %}
+    {% if return_req %}
+    <div class="mb-6 flex items-center gap-4 bg-orange-50 border border-orange-200 rounded-2xl px-6 py-4 fade-in">
+      <div class="size-11 rounded-xl bg-orange-100 flex items-center justify-center shrink-0">
+        <span class="material-symbols-outlined text-[24px] text-orange-600 icon-filled">assignment_return</span>
+      </div>
+      <div class="flex-1 min-w-0">
+        <p class="text-sm font-black text-orange-800">{{ return_req.get_return_type_display }} in progress</p>
+        <p class="text-xs text-orange-600 font-medium mt-0.5">
+          Status: <strong>{{ return_req.get_status_display }}</strong>
+        </p>
+      </div>
+      <a href="{% url 'home:return_status' return_req.id %}"
+         class="shrink-0 flex items-center gap-1.5 text-xs font-bold bg-orange-600 hover:bg-orange-700 text-white px-4 py-2.5 rounded-xl transition-colors">
+        <span class="material-symbols-outlined text-[15px]">track_changes</span>
+        Track Return
+      </a>
+    </div>
+    {% endif %}
+    {% endwith %}
+  {% endif %}
+
   <!-- Two-column layout -->
   <div class="flex flex-col lg:flex-row gap-6 items-start">
 
@@ -122,7 +158,7 @@
         {% elif order.status == 'shipped' or order.status == 'in_transit' %}shipped
         {% endif %}">
 
-        <!-- Item header: status -->
+        <!-- Item header -->
         <div class="px-5 py-4 border-b border-border-green/10 flex flex-wrap items-center justify-between gap-3">
           <div class="flex items-center gap-3">
             <div class="size-9 rounded-xl flex items-center justify-center
@@ -176,7 +212,7 @@
           </span>
         </div>
 
-<!-- Item row -->
+        <!-- Item row -->
         <div class="flex items-start gap-4 p-5">
           <a href="{% url 'home:product_detail' item.product.slug %}" class="size-24 flex-shrink-0 rounded-xl overflow-hidden bg-surface-light border border-border-green/10 block">
             {% with item.product.images.first as img %}
@@ -189,7 +225,6 @@
               {% endif %}
             {% endwith %}
           </a>
-
           <div class="flex-grow min-w-0">
             <a href="{% url 'home:product_detail' item.product.slug %}">
               <p class="text-sm font-black text-text-main mb-0.5 leading-snug hover:text-primary transition-colors">{{ item.product.product_name }}</p>
@@ -201,19 +236,42 @@
             <p class="text-base font-black text-text-main">₹{{ item.subtotal|floatformat:2 }}</p>
             <p class="text-[11px] text-text-secondary/50 font-medium mt-0.5">₹{{ item.price|floatformat:2 }} × {{ item.quantity }}</p>
           </div>
-        </div>  {# ← closes flex item row #}
+        </div>
 
-        <!-- Item-level actions — OUTSIDE the flex row -->
+        <!-- Per-item Return/Exchange action (only on delivered) -->
         {% if order.status == 'delivered' %}
         <div class="px-5 pb-4 flex gap-2 border-t border-border-green/10 pt-4">
-          <a href="{% url 'home:return_request' order.id %}"
-            class="text-xs font-bold border border-border-green/20 text-text-secondary px-4 py-2 rounded-lg hover:bg-surface-light transition-colors flex items-center gap-1">
-            <span class="material-symbols-outlined text-[14px]">assignment_return</span>
-            Return / Exchange
-          </a>
+          {% if item.return_status == 'none' %}
+            <a href="{% url 'home:return_request' order.id %}"
+              class="text-xs font-bold border border-border-green/20 text-text-secondary px-4 py-2 rounded-lg hover:bg-surface-light transition-colors flex items-center gap-1">
+              <span class="material-symbols-outlined text-[14px]">assignment_return</span>
+              Return / Exchange
+            </a>
+          {% elif item.return_status == 'return_requested' %}
+            <span class="text-xs font-bold text-orange-600 bg-orange-50 border border-orange-200 px-4 py-2 rounded-lg flex items-center gap-1">
+              <span class="material-symbols-outlined text-[14px]">schedule</span>
+              Return Requested
+            </span>
+          {% elif item.return_status == 'exchange_requested' %}
+            <span class="text-xs font-bold text-blue-600 bg-blue-50 border border-blue-200 px-4 py-2 rounded-lg flex items-center gap-1">
+              <span class="material-symbols-outlined text-[14px]">schedule</span>
+              Exchange Requested
+            </span>
+          {% elif item.return_status == 'returned' %}
+            <span class="text-xs font-bold text-gray-500 bg-gray-50 border border-gray-200 px-4 py-2 rounded-lg flex items-center gap-1">
+              <span class="material-symbols-outlined text-[14px]">check_circle</span>
+              Returned
+            </span>
+          {% elif item.return_status == 'exchanged' %}
+            <span class="text-xs font-bold text-green-600 bg-green-50 border border-green-200 px-4 py-2 rounded-lg flex items-center gap-1">
+              <span class="material-symbols-outlined text-[14px]">check_circle</span>
+              Exchanged
+            </span>
+          {% endif %}
         </div>
         {% endif %}
 
+        <!-- Order-level status banners -->
         {% if order.status == 'cancelled' %}
         <div class="px-5 pb-4 pt-3 border-t border-red-100 bg-red-50 flex items-center gap-2 text-xs text-red-600 font-semibold">
           <span class="material-symbols-outlined text-[16px]">cancel</span>
@@ -223,10 +281,21 @@
         {% endif %}
 
         {% if order.status == 'return_requested' %}
-        <div class="px-5 pb-4 pt-3 border-t border-orange-100 bg-orange-50 flex items-center gap-2 text-xs text-orange-700 font-semibold">
-          <span class="material-symbols-outlined text-[16px]">assignment_return</span>
-          Return requested — under review.
-          {% if order.return_reason %}<span class="text-orange-500 font-normal">Reason: {{ order.return_reason }}</span>{% endif %}
+        <div class="px-5 pb-4 pt-3 border-t border-orange-100 bg-orange-50 flex items-center justify-between gap-2 text-xs text-orange-700 font-semibold">
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-[16px]">assignment_return</span>
+            Return requested — under review.
+            {% if item.return_reason %}<span class="text-orange-500 font-normal">{{ item.return_reason }}</span>{% endif %}
+          </div>
+          {% with return_req=order.return_requests.first %}
+          {% if return_req %}
+          <a href="{% url 'home:return_status' return_req.id %}"
+             class="flex items-center gap-1 text-[11px] font-bold bg-orange-600 hover:bg-orange-700 text-white px-3 py-1.5 rounded-lg transition-colors whitespace-nowrap">
+            <span class="material-symbols-outlined text-[13px]">track_changes</span>
+            Track Return
+          </a>
+          {% endif %}
+          {% endwith %}
         </div>
         {% endif %}
 
@@ -237,17 +306,16 @@
         </div>
         {% endif %}
 
-      </div>  {# ← closes shipment-card div #}
+      </div><!-- end shipment-card -->
       {% endfor %}
 
-      <!-- Order tracking timeline -->
-      {% if order.status != 'cancelled' and order.status != 'returned' %}
+      <!-- Order tracking timeline — hidden when delivered, cancelled, or returned -->
+      {% if order.status != 'cancelled' and order.status != 'returned' and order.status != 'delivered' and order.status != 'return_requested' %}
       <div class="bg-white rounded-2xl border border-border-green/10 p-5 fade-in" id="tracking">
         <h3 class="text-sm font-black text-text-main mb-5 flex items-center gap-2">
           <span class="material-symbols-outlined text-[18px] text-primary">timeline</span>
           Order Tracking
         </h3>
-
         <div class="flex items-center gap-0 mb-4">
           <div class="flex flex-col items-center gap-1">
             <div class="track-dot done"></div>
@@ -272,7 +340,7 @@
       </div>
       {% endif %}
 
-    </div>
+    </div><!-- end LEFT -->
 
     <!-- RIGHT: Summary sidebar -->
     <div class="w-full lg:w-80 flex-shrink-0 space-y-4 lg:sticky lg:top-24">
@@ -287,50 +355,49 @@
           <p class="text-[11px] text-text-secondary/60 font-medium mt-0.5">Placed on {{ order.created_at|date:"jS F Y" }}</p>
         </div>
 
-<!-- Payment breakdown -->
-<div class="px-5 py-4 border-b border-border-green/10">
-  <h4 class="text-xs font-black text-text-main mb-3">Payment Details</h4>
-  <div class="space-y-2.5">
+        <!-- Payment breakdown -->
+        <div class="px-5 py-4 border-b border-border-green/10">
+          <h4 class="text-xs font-black text-text-main mb-3">Payment Details</h4>
+          <div class="space-y-2.5">
+            {% for item in order.items.all %}
+            <div class="flex items-start justify-between text-sm">
+              <div class="min-w-0 mr-2">
+                <span class="text-text-secondary/70 font-medium truncate block max-w-[160px]">{{ item.product.product_name }}</span>
+                <span class="text-[10px] text-text-secondary/40 font-medium">₹{{ item.price|floatformat:2 }} × {{ item.quantity }}</span>
+              </div>
+              <span class="font-bold text-text-main shrink-0">₹{{ item.subtotal|floatformat:2 }}</span>
+            </div>
+            {% endfor %}
 
-    {% for item in order.items.all %}
-    <div class="flex items-start justify-between text-sm">
-      <div class="min-w-0 mr-2">
-        <span class="text-text-secondary/70 font-medium truncate block max-w-[160px]">{{ item.product.product_name }}</span>
-        <span class="text-[10px] text-text-secondary/40 font-medium">₹{{ item.price|floatformat:2 }} × {{ item.quantity }}</span>
-      </div>
-      <span class="font-bold text-text-main shrink-0">₹{{ item.subtotal|floatformat:2 }}</span>
-    </div>
-    {% endfor %}
+            <div class="flex items-center justify-between text-sm pt-1">
+              <span class="text-text-secondary/70 font-medium">Shipping</span>
+              <span class="font-bold {% if order.shipping_amount == 0 %}text-green-600{% else %}text-text-main{% endif %}">
+                {% if order.shipping_amount == 0 %}FREE{% else %}₹{{ order.shipping_amount|floatformat:2 }}{% endif %}
+              </span>
+            </div>
 
-    <div class="flex items-center justify-between text-sm pt-1">
-      <span class="text-text-secondary/70 font-medium">Shipping</span>
-      <span class="font-bold {% if order.shipping_amount == 0 %}text-green-600{% else %}text-text-main{% endif %}">
-        {% if order.shipping_amount == 0 %}FREE{% else %}₹{{ order.shipping_amount|floatformat:2 }}{% endif %}
-      </span>
-    </div>
+            <div class="flex items-center justify-between text-sm">
+              <span class="text-text-secondary/70 font-medium">Tax</span>
+              <span class="font-bold text-text-main">₹{{ order.tax_amount|floatformat:2 }}</span>
+            </div>
 
-    <div class="flex items-center justify-between text-sm">
-      <span class="text-text-secondary/70 font-medium">Tax</span>
-      <span class="font-bold text-text-main">₹{{ order.tax_amount|floatformat:2 }}</span>
-    </div>
+            {% if order.discount_amount > 0 %}
+            <div class="flex items-center justify-between text-sm text-green-600 font-semibold">
+              <span class="flex items-center gap-1">
+                <span class="material-symbols-outlined text-[15px]">confirmation_number</span>
+                Coupon{% if order.coupon_code %} ({{ order.coupon_code }}){% endif %}
+              </span>
+              <span>− ₹{{ order.discount_amount|floatformat:2 }}</span>
+            </div>
+            {% endif %}
 
-    {% if order.discount_amount > 0 %}
-    <div class="flex items-center justify-between text-sm text-green-600 font-semibold">
-      <span class="flex items-center gap-1">
-        <span class="material-symbols-outlined text-[15px]">confirmation_number</span>
-        Coupon Discount{% if order.coupon_code %} ({{ order.coupon_code }}){% endif %}
-      </span>
-      <span>− ₹{{ order.discount_amount|floatformat:2 }}</span>
-    </div>
-    {% endif %}
+            <div class="flex items-center justify-between pt-2.5 border-t border-border-green/10">
+              <span class="text-sm font-black text-text-main">Total Paid</span>
+              <span class="text-base font-black text-text-main">₹{{ order.total_amount|floatformat:2 }}</span>
+            </div>
+          </div>
+        </div>
 
-    <div class="flex items-center justify-between pt-2.5 border-t border-border-green/10">
-      <span class="text-sm font-black text-text-main">Total Paid</span>
-      <span class="text-base font-black text-text-main">₹{{ order.total_amount|floatformat:2 }}</span>
-    </div>
-
-  </div>
-</div>
         <!-- Payment method -->
         <div class="px-5 py-4 border-b border-border-green/10">
           <h4 class="text-xs font-black text-text-main mb-3">Payment Mode</h4>
@@ -338,8 +405,7 @@
             <div class="flex items-center gap-2">
               <div class="size-8 rounded-lg bg-primary-light flex items-center justify-center">
                 <span class="material-symbols-outlined text-[16px] text-primary icon-filled">
-                  {% if order.payment_method == 'cod' %}payments
-                  {% else %}credit_card{% endif %}
+                  {% if order.payment_method == 'cod' %}payments{% else %}credit_card{% endif %}
                 </span>
               </div>
               <div>
@@ -357,6 +423,7 @@
           </div>
         </div>
 
+        <!-- Return / Track Return buttons in sidebar -->
         {% if order.status == 'delivered' %}
         <div class="px-5 py-3">
           <a href="{% url 'home:return_request' order.id %}" class="flex items-center gap-2 text-xs font-bold text-primary hover:text-primary-hover transition-colors">
@@ -364,8 +431,20 @@
             Return / Exchange
           </a>
         </div>
+        {% elif order.status == 'return_requested' %}
+        <div class="px-5 py-3">
+          {% with return_req=order.return_requests.first %}
+          {% if return_req %}
+          <a href="{% url 'home:return_status' return_req.id %}" class="flex items-center gap-2 text-xs font-bold text-orange-600 hover:text-orange-700 transition-colors">
+            <span class="material-symbols-outlined text-[15px]">track_changes</span>
+            Track Return Status
+          </a>
+          {% endif %}
+          {% endwith %}
+        </div>
         {% endif %}
-      </div>
+
+      </div><!-- end order summary card -->
 
       <!-- Delivery address card -->
       {% if order.address %}
@@ -405,9 +484,10 @@
         </div>
       </div>
 
-    </div>
-  </div>
-</div>
+    </div><!-- end RIGHT -->
+
+  </div><!-- end two-column layout -->
+</div><!-- end PAGE -->
 
 <!-- FOOTER -->
 <footer class="bg-primary-hover text-white py-6 mt-auto">

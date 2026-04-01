@@ -1,0 +1,268 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Privacy Policy — vólke shoppe</title>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: 'Manrope', sans-serif; }
+    .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  </style>
+</head>
+<body class="bg-[#f6faf8] text-[#022c22] min-h-screen flex flex-col">
+
+<!-- HEADER -->
+<header class="sticky top-0 z-50 bg-[#1e4433]">
+  <div class="px-4 lg:px-10 py-3 flex items-center justify-between">
+    <a href="{% url 'home:home' %}" class="flex flex-col" style="line-height:1;">
+      <span style="font-family:'Georgia',serif;font-size:22px;font-weight:700;letter-spacing:0.15em;color:#fff;">vólke</span>
+      <span style="font-size:8px;letter-spacing:0.18em;color:#fff;text-transform:uppercase;">shoppe</span>
+    </a>
+    <a href="{% url 'home:home' %}"
+      class="flex items-center gap-1.5 text-xs font-semibold text-white/70 hover:text-white transition-colors">
+      <span class="material-symbols-outlined text-[16px]">arrow_back</span>
+      Back to Store
+    </a>
+  </div>
+</header>
+
+<!-- HERO BANNER -->
+<div class="bg-[#1e4433]">
+  <div class="max-w-3xl mx-auto px-6 py-14 text-center">
+    <div class="inline-flex items-center justify-center size-14 rounded-2xl bg-white/10 mb-5">
+      <span class="material-symbols-outlined text-3xl text-[#36e27b]">policy</span>
+    </div>
+    <h1 class="text-3xl md:text-4xl font-black text-white tracking-tight mb-3">Privacy Policy</h1>
+  </div>
+</div>
+
+<!-- CONTENT -->
+<div class="flex-grow max-w-3xl mx-auto w-full px-6 py-14">
+
+  <div class="bg-white rounded-2xl border border-green-100 shadow-sm overflow-hidden">
+
+    <!-- Intro -->
+    <div class="px-8 py-8 border-b border-green-50">
+      <p class="text-[#064e3b]/80 leading-relaxed text-sm">
+        This Privacy Policy describes how <strong class="text-[#022c22]">vólke shoppe</strong> collects, uses, and protects your personal
+        information when you visit or make a purchase from our store. By using our services, you agree to
+        the collection and use of information as described here.
+      </p>
+    </div>
+
+    <!-- Sections -->
+    <div class="divide-y divide-green-50">
+
+      {% for icon, title, content in sections %}
+      <div class="px-8 py-7">
+        <div class="flex items-start gap-4">
+          <div class="size-9 rounded-xl bg-[#f0fdf4] flex items-center justify-center shrink-0 mt-0.5">
+            <span class="material-symbols-outlined text-[18px] text-[#064e3b]">{{ icon }}</span>
+          </div>
+          <div>
+            <h2 class="text-base font-black text-[#022c22] mb-2">{{ title }}</h2>
+            <p class="text-sm text-[#064e3b]/70 leading-relaxed">{{ content }}</p>
+          </div>
+        </div>
+      </div>
+      {% empty %}
+
+      <!-- Information We Collect -->
+      <div class="px-8 py-7">
+        <div class="flex items-start gap-4">
+          <div class="size-9 rounded-xl bg-[#f0fdf4] flex items-center justify-center shrink-0 mt-0.5">
+            <span class="material-symbols-outlined text-[18px] text-[#064e3b]">person</span>
+          </div>
+          <div>
+            <h2 class="text-base font-black text-[#022c22] mb-2">Information We Collect</h2>
+            <p class="text-sm text-[#064e3b]/70 leading-relaxed">
+              We collect information you provide directly — such as your name, email address, delivery address,
+              and payment details — when you create an account, place an order, or contact us. We also automatically
+              collect usage data such as your IP address, browser type, and pages visited through cookies and
+              similar technologies.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- How We Use It -->
+      <div class="px-8 py-7">
+        <div class="flex items-start gap-4">
+          <div class="size-9 rounded-xl bg-[#f0fdf4] flex items-center justify-center shrink-0 mt-0.5">
+            <span class="material-symbols-outlined text-[18px] text-[#064e3b]">settings</span>
+          </div>
+          <div>
+            <h2 class="text-base font-black text-[#022c22] mb-2">How We Use Your Information</h2>
+            <p class="text-sm text-[#064e3b]/70 leading-relaxed">
+              We use your information to process orders, manage your account, send order confirmations and
+              delivery updates, and improve our services. We may also use it for marketing purposes such as
+              sending promotional emails — you can opt out at any time using the unsubscribe link included in
+              every email we send.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sharing -->
+      <div class="px-8 py-7">
+        <div class="flex items-start gap-4">
+          <div class="size-9 rounded-xl bg-[#f0fdf4] flex items-center justify-center shrink-0 mt-0.5">
+            <span class="material-symbols-outlined text-[18px] text-[#064e3b]">share</span>
+          </div>
+          <div>
+            <h2 class="text-base font-black text-[#022c22] mb-2">Sharing Your Information</h2>
+            <p class="text-sm text-[#064e3b]/70 leading-relaxed">
+              We share your information only with trusted partners who help us operate our business — including
+              payment processors, logistics and shipping partners, and analytics providers. We do not sell your
+              personal information under any circumstances. We may disclose information when required by law or
+              to protect our legal rights.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cookies -->
+      <div class="px-8 py-7">
+        <div class="flex items-start gap-4">
+          <div class="size-9 rounded-xl bg-[#f0fdf4] flex items-center justify-center shrink-0 mt-0.5">
+            <span class="material-symbols-outlined text-[18px] text-[#064e3b]">cookie</span>
+          </div>
+          <div>
+            <h2 class="text-base font-black text-[#022c22] mb-2">Cookies</h2>
+            <p class="text-sm text-[#064e3b]/70 leading-relaxed">
+              We use cookies to improve your browsing experience, remember your preferences, and understand
+              how visitors interact with our store. You can disable cookies through your browser settings,
+              though some features — such as keeping items in your cart — may not function correctly as a result.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Your Rights -->
+      <div class="px-8 py-7">
+        <div class="flex items-start gap-4">
+          <div class="size-9 rounded-xl bg-[#f0fdf4] flex items-center justify-center shrink-0 mt-0.5">
+            <span class="material-symbols-outlined text-[18px] text-[#064e3b]">verified_user</span>
+          </div>
+          <div>
+            <h2 class="text-base font-black text-[#022c22] mb-2">Your Rights</h2>
+            <p class="text-sm text-[#064e3b]/70 leading-relaxed">
+              You have the right to access, correct, or request deletion of your personal information at any time.
+              You may also request a copy of the data we hold about you. To exercise any of these rights, please
+              reach out to us using the contact details below and we will respond promptly.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Data Security -->
+      <div class="px-8 py-7">
+        <div class="flex items-start gap-4">
+          <div class="size-9 rounded-xl bg-[#f0fdf4] flex items-center justify-center shrink-0 mt-0.5">
+            <span class="material-symbols-outlined text-[18px] text-[#064e3b]">lock</span>
+          </div>
+          <div>
+            <h2 class="text-base font-black text-[#022c22] mb-2">Data Security</h2>
+            <p class="text-sm text-[#064e3b]/70 leading-relaxed">
+              We take reasonable technical and organisational steps to protect your information from unauthorised
+              access, loss, or misuse. All payment transactions are encrypted using SSL technology. However,
+              no method of transmission over the internet is 100% secure, and we cannot guarantee absolute security.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Children -->
+      <div class="px-8 py-7">
+        <div class="flex items-start gap-4">
+          <div class="size-9 rounded-xl bg-[#f0fdf4] flex items-center justify-center shrink-0 mt-0.5">
+            <span class="material-symbols-outlined text-[18px] text-[#064e3b]">child_care</span>
+          </div>
+          <div>
+            <h2 class="text-base font-black text-[#022c22] mb-2">Children</h2>
+            <p class="text-sm text-[#064e3b]/70 leading-relaxed">
+              vólke shoppe is not intended for children under 13. We do not knowingly collect personal information
+              from minors. If you believe a child has submitted their information to us, please contact us
+              immediately and we will remove it from our records.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Changes -->
+      <div class="px-8 py-7">
+        <div class="flex items-start gap-4">
+          <div class="size-9 rounded-xl bg-[#f0fdf4] flex items-center justify-center shrink-0 mt-0.5">
+            <span class="material-symbols-outlined text-[18px] text-[#064e3b]">update</span>
+          </div>
+          <div>
+            <h2 class="text-base font-black text-[#022c22] mb-2">Changes to This Policy</h2>
+            <p class="text-sm text-[#064e3b]/70 leading-relaxed">
+              We may update this Privacy Policy from time to time to reflect changes in our practices or for
+              legal reasons. Any updates will be posted on this page with a revised date. We encourage you to
+              review this page periodically to stay informed.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contact -->
+      <div class="px-8 py-7 bg-[#f0fdf4] rounded-b-2xl">
+        <div class="flex items-start gap-4">
+          <div class="size-9 rounded-xl bg-white border border-green-100 flex items-center justify-center shrink-0 mt-0.5">
+            <span class="material-symbols-outlined text-[18px] text-[#064e3b]">mail</span>
+          </div>
+          <div>
+            <h2 class="text-base font-black text-[#022c22] mb-2">Contact Us</h2>
+            <p class="text-sm text-[#064e3b]/70 leading-relaxed mb-4">
+              If you have any questions, concerns, or requests regarding this Privacy Policy, please don't
+              hesitate to get in touch with us.
+            </p>
+            <div class="flex flex-col gap-2">
+              <a href="mailto:support@volkeshoppe.com"
+                class="inline-flex items-center gap-2 text-sm font-bold text-[#064e3b] hover:text-[#022c22] transition-colors">
+                <span class="material-symbols-outlined text-[16px]">mail</span>
+                support@volkeshoppe.com
+              </a>
+              <span class="inline-flex items-start gap-2 text-sm text-[#064e3b]/70">
+                <span class="material-symbols-outlined text-[16px] mt-0.5 shrink-0">location_on</span>
+                vólke shoppe, Kozhikode, Kerala, India
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Back link -->
+  <div class="mt-8 text-center">
+    <a href="{% url 'home:home' %}"
+      class="inline-flex items-center gap-2 text-sm font-bold text-[#064e3b] hover:text-[#022c22] transition-colors">
+      <span class="material-symbols-outlined text-[16px]">arrow_back</span>
+      Back to Store
+    </a>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer class="bg-[#1e4433] text-white py-6">
+  <div class="max-w-3xl mx-auto px-6 flex flex-col sm:flex-row justify-between items-center gap-3">
+    <div class="flex flex-col" style="line-height:1;">
+      <span style="font-family:'Georgia',serif;font-size:18px;font-weight:700;letter-spacing:0.15em;color:#fff;">vólke</span>
+      <span style="font-size:7px;letter-spacing:0.18em;color:#a7f3d0;text-transform:uppercase;">shoppe</span>
+    </div>
+    <p class="text-white/30 text-[10px] font-bold uppercase tracking-widest">© {% now "Y" %} vólke shoppe. All rights reserved.</p>
+    <a href="{% url 'home:home' %}" class="text-[10px] font-bold uppercase tracking-widest text-white/40 hover:text-white transition-colors">Home</a>
+  </div>
+</footer>
+
+</body>
+</html>

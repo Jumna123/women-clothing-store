@@ -1,0 +1,287 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Terms of Service — vólke shoppe</title>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: 'Manrope', sans-serif; }
+    .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    .prose h2 { font-size: 0.95rem; font-weight: 800; color: #022c22; margin-top: 2rem; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    .prose p  { font-size: 0.875rem; color: rgba(6,78,59,0.75); line-height: 1.8; margin-bottom: 0.75rem; }
+  </style>
+</head>
+<body class="bg-[#f6faf8] text-[#022c22] min-h-screen flex flex-col">
+
+<!-- HEADER -->
+<header class="sticky top-0 z-50 bg-[#1e4433]">
+  <div class="px-4 lg:px-10 py-3 flex items-center justify-between">
+    <a href="{% url 'home:home' %}" class="flex flex-col" style="line-height:1;">
+      <span style="font-family:'Georgia',serif;font-size:22px;font-weight:700;letter-spacing:0.15em;color:#fff;">vólke</span>
+      <span style="font-size:8px;letter-spacing:0.18em;color:#fff;text-transform:uppercase;">shoppe</span>
+    </a>
+    <a href="{% url 'home:home' %}"
+      class="flex items-center gap-1.5 text-xs font-semibold text-white/70 hover:text-white transition-colors">
+      <span class="material-symbols-outlined text-[16px]">arrow_back</span>
+      Back to Store
+    </a>
+  </div>
+</header>
+
+<!-- HERO -->
+<div class="bg-[#1e4433]">
+  <div class="max-w-3xl mx-auto px-6 py-14 text-center">
+    <div class="inline-flex items-center justify-center size-14 rounded-2xl bg-white/10 mb-5">
+      <span class="material-symbols-outlined text-3xl text-[#36e27b]">gavel</span>
+    </div>
+    <h1 class="text-3xl md:text-4xl font-black text-white tracking-tight mb-3">Terms of Service</h1>
+    <p class="text-white/50 text-sm font-medium">Last updated: January 2026</p>
+  </div>
+</div>
+
+<!-- CONTENT -->
+<div class="flex-grow max-w-3xl mx-auto w-full px-6 py-14">
+  <div class="bg-white rounded-2xl border border-green-100 shadow-sm px-8 py-10 prose">
+
+    <p>
+      Welcome to <strong>vólke shoppe</strong>. The terms "we", "us", and "our" refer to vólke shoppe.
+      We operate this store and website, including all related information, content, features, products,
+      and services, in order to provide you — the customer — with a curated shopping experience (the "Services").
+    </p>
+    <p>
+      Please read these Terms of Service carefully. They describe your rights and responsibilities when using
+      our Services and include important information about warranty disclaimers and limitations of liability.
+      By visiting, interacting with, or using our Services, you agree to be bound by these Terms and our
+      <a href="{% url 'home:privacy' %}" class="text-[#064e3b] font-semibold underline underline-offset-2">Privacy Policy</a>.
+      If you do not agree, please do not use or access our Services.
+    </p>
+
+    <h2>Section 1 — Access and Account</h2>
+    <p>
+      By agreeing to these Terms, you represent that you are at least the age of majority in your state or
+      province of residence. To use the Services, you may be asked to provide information such as your email
+      address, billing, payment, and shipping details. You warrant that all information you provide is correct,
+      current, and complete.
+    </p>
+    <p>
+      You are solely responsible for maintaining the security of your account credentials and for all activity
+      under your account. You may not transfer, sell, assign, or license your account to any other person.
+    </p>
+
+    <h2>Section 2 — Our Products</h2>
+    <p>
+      We have made every effort to accurately represent our products on the store. However, colours and product
+      appearance may differ from how they appear on your screen due to your device type, settings, and
+      configuration. We do not warrant that the quality of any product purchased will meet your expectations
+      exactly as depicted.
+    </p>
+    <p>
+      All product descriptions are subject to change at any time at our sole discretion. We reserve the right
+      to discontinue any product and may limit quantities offered to any person, region, or jurisdiction on a
+      case-by-case basis.
+    </p>
+
+    <h2>Section 3 — Orders</h2>
+    <p>
+      When you place an order, you are making an offer to purchase. vólke shoppe reserves the right to accept
+      or decline any order at its discretion. Your order is not accepted until we confirm it. We must receive
+      and process your payment before your order is accepted. Please review your order carefully before
+      submitting, as we may be unable to accommodate cancellation requests after an order is accepted.
+    </p>
+    <p>
+      In the event we do not accept or cancel an order, we will attempt to notify you via the email, billing
+      address, or phone number provided. Your purchases are subject to our
+      <a href="{% url 'home:refund_policy' %}" class="text-[#064e3b] font-semibold underline underline-offset-2">Refund Policy</a>.
+      Purchases are for personal or household use only and not for commercial resale or export.
+    </p>
+
+    <h2>Section 4 — Prices and Billing</h2>
+    <p>
+      Prices, discounts, and promotions are subject to change without notice. The price charged will be the
+      price in effect at the time the order is placed, as confirmed in your order confirmation email. Unless
+      otherwise stated, posted prices do not include taxes, shipping, or handling charges.
+    </p>
+    <p>
+      You agree to provide current, complete, and accurate payment and account information for all purchases.
+      You represent that the payment information you provide is true and correct, that you are authorised to
+      use it, and that you will pay all charges incurred including applicable taxes and shipping fees.
+    </p>
+
+    <h2>Section 5 — Shipping and Delivery</h2>
+    <p>
+      We are not liable for shipping and delivery delays. All delivery times are estimates only and are not
+      guaranteed. We are not responsible for delays caused by shipping carriers, weather, or events outside
+      our control. Once we transfer products to the carrier, risk of loss passes to you. Please refer to our
+      <a href="{% url 'home:shipping_policy' %}" class="text-[#064e3b] font-semibold underline underline-offset-2">Shipping Policy</a>
+      for full details on timelines and regional rates.
+    </p>
+
+    <h2>Section 6 — Intellectual Property</h2>
+    <p>
+      Our Services — including all trademarks, text, images, graphics, product descriptions, video, and audio,
+      and the design, selection, and arrangement thereof — are owned by vólke shoppe or its licensors and are
+      protected by applicable intellectual property laws.
+    </p>
+    <p>
+      These Terms permit you to use the Services for your personal, non-commercial use only. You must not
+      reproduce, distribute, modify, create derivative works of, publicly display, republish, or transmit any
+      material from the Services without our prior written consent. Unauthorised use may be a violation of
+      applicable intellectual property laws. All rights not expressly granted are reserved by vólke shoppe.
+    </p>
+
+    <h2>Section 7 — Third-Party Links</h2>
+    <p>
+      The Services may contain hyperlinks to third-party websites. We are not responsible for the content or
+      accuracy of any third-party websites. If you choose to leave our Services to access these links, you do
+      so at your own risk. We are not liable for any harm or damages related to third-party content, products,
+      or services. Please review the policies of any third-party before engaging in a transaction.
+    </p>
+
+    <h2>Section 8 — Privacy Policy</h2>
+    <p>
+      All personal information we collect through the Services is subject to our
+      <a href="{% url 'home:privacy' %}" class="text-[#064e3b] font-semibold underline underline-offset-2">Privacy Policy</a>.
+      By using the Services, you acknowledge that you have read and agree to our privacy practices as
+      described therein.
+    </p>
+
+    <h2>Section 9 — Feedback</h2>
+    <p>
+      If you submit ideas, suggestions, reviews, or other feedback to us, you grant vólke shoppe a perpetual,
+      worldwide, royalty-free licence to use, reproduce, modify, publish, and display such feedback in any
+      medium for any purpose, including to improve and promote the Services. We are under no obligation to
+      maintain your feedback in confidence or to pay compensation for it.
+    </p>
+    <p>
+      You represent that you own or have all necessary rights to any feedback you submit, and that it will
+      not violate any third-party rights or applicable laws. You are solely responsible for the accuracy and
+      content of any feedback you provide.
+    </p>
+
+    <h2>Section 10 — Errors, Inaccuracies and Omissions</h2>
+    <p>
+      Occasionally there may be information on the Services that contains typographical errors, inaccuracies,
+      or omissions related to product descriptions, pricing, promotions, shipping charges, or availability.
+      We reserve the right to correct any errors, update information, or cancel orders if any information is
+      inaccurate at any time without prior notice.
+    </p>
+
+    <h2>Section 11 — Prohibited Uses</h2>
+    <p>
+      You may access and use the Services for lawful purposes only. You may not use the Services for any
+      unlawful or malicious purpose; to infringe on our intellectual property or that of others; to harass,
+      abuse, or harm any person; to transmit false or misleading information; or to send spam or unsolicited
+      promotional material. You also agree not to upload malicious code, scrape or harvest data, or interfere
+      with the security or operation of the Services in any way.
+    </p>
+    <p>
+      We reserve the right to suspend or terminate your account at any time without notice if we determine
+      you have violated any part of these Terms.
+    </p>
+
+    <h2>Section 12 — Termination</h2>
+    <p>
+      We may terminate this agreement or your access to the Services at any time without notice at our sole
+      discretion. You will remain liable for all amounts due up to and including the date of termination.
+      Provisions relating to intellectual property, feedback, disclaimers, limitation of liability, and
+      indemnification will survive any termination.
+    </p>
+
+    <h2>Section 13 — Disclaimer of Warranties</h2>
+    <p>
+      The Services and all products offered through the Services are provided "as is" and "as available"
+      without any representations, warranties, or conditions of any kind, either express or implied. We do
+      not guarantee that your use of the Services will be uninterrupted, timely, secure, or error-free.
+      Some jurisdictions do not allow the disclaimer of implied warranties, so the above may not apply to you.
+    </p>
+
+    <h2>Section 14 — Limitation of Liability</h2>
+    <p>
+      To the fullest extent permitted by law, vólke shoppe, its partners, directors, employees, affiliates,
+      agents, and service providers shall not be liable for any injury, loss, claim, or any direct, indirect,
+      incidental, punitive, special, or consequential damages of any kind arising from your use of the
+      Services or any products procured through the Services. This includes but is not limited to lost
+      profits, lost revenue, loss of data, or replacement costs.
+    </p>
+
+    <h2>Section 15 — Indemnification</h2>
+    <p>
+      You agree to indemnify, defend, and hold harmless vólke shoppe and its affiliates, partners, officers,
+      directors, employees, agents, contractors, and service providers from any losses, damages, liabilities,
+      or claims — including reasonable legal fees — arising out of your breach of these Terms, your violation
+      of any law or third-party rights, or your access to and use of the Services.
+    </p>
+
+    <h2>Section 16 — Severability</h2>
+    <p>
+      If any provision of these Terms is determined to be unlawful, void, or unenforceable, that provision
+      shall be enforced to the fullest extent permitted by law, and the unenforceable portion shall be deemed
+      severed. This shall not affect the validity and enforceability of any remaining provisions.
+    </p>
+
+    <h2>Section 17 — Entire Agreement</h2>
+    <p>
+      These Terms of Service, together with our Privacy Policy and any other policies posted by us on the
+      site, constitute the entire agreement between you and vólke shoppe and govern your use of the Services,
+      superseding any prior agreements, communications, or proposals between you and us.
+    </p>
+
+    <h2>Section 18 — Governing Law</h2>
+    <p>
+      These Terms of Service shall be governed by and construed in accordance with the laws of India,
+      with exclusive jurisdiction in the courts of Kozhikode, Kerala. You consent to the personal
+      jurisdiction of such courts for any disputes arising from these Terms or your use of the Services.
+    </p>
+
+    <h2>Section 19 — Changes to Terms of Service</h2>
+    <p>
+      We reserve the right to update, change, or replace any part of these Terms at any time by posting
+      updates on this page. It is your responsibility to review this page periodically. Your continued use
+      of the Services following any changes constitutes acceptance of the revised Terms.
+    </p>
+
+    <h2>Section 20 — Contact Information</h2>
+    <p>
+      Questions about these Terms of Service should be directed to us at:
+    </p>
+    <p>
+      <strong class="text-[#022c22]">vólke shoppe</strong><br/>
+      <a href="mailto:support@volkeshoppe.com" class="text-[#064e3b] font-semibold underline underline-offset-2">support@volkeshoppe.com</a><br/>
+      Kozhikode, Kerala — 673602, India
+    </p>
+
+  </div>
+
+  <!-- Back link -->
+  <div class="mt-8 text-center">
+    <a href="{% url 'home:home' %}"
+      class="inline-flex items-center gap-2 text-sm font-bold text-[#064e3b] hover:text-[#022c22] transition-colors">
+      <span class="material-symbols-outlined text-[16px]">arrow_back</span>
+      Back to Store
+    </a>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer class="bg-[#1e4433] text-white py-6">
+  <div class="max-w-3xl mx-auto px-6 flex flex-col sm:flex-row justify-between items-center gap-3">
+    <div class="flex flex-col" style="line-height:1;">
+      <span style="font-family:'Georgia',serif;font-size:18px;font-weight:700;letter-spacing:0.15em;color:#fff;">vólke</span>
+      <span style="font-size:7px;letter-spacing:0.18em;color:#a7f3d0;text-transform:uppercase;">shoppe</span>
+    </div>
+    <p class="text-white/30 text-[10px] font-bold uppercase tracking-widest">© {% now "Y" %} vólke shoppe. All rights reserved.</p>
+    <div class="flex gap-4">
+      <a href="{% url 'home:privacy' %}" class="text-[10px] font-bold uppercase tracking-widest text-white/40 hover:text-white transition-colors">Privacy</a>
+      <a href="{% url 'home:refund_policy' %}" class="text-[10px] font-bold uppercase tracking-widest text-white/40 hover:text-white transition-colors">Refunds</a>
+      <a href="{% url 'home:shipping_policy' %}" class="text-[10px] font-bold uppercase tracking-widest text-white/40 hover:text-white transition-colors">Shipping</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

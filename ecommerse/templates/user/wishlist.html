@@ -400,60 +400,30 @@
 <!-- ══════════════════════════════════════════
      FOOTER
 ══════════════════════════════════════════ -->
-<footer class="bg-primary-hover text-white pt-16 pb-8">
-  <div class="max-w-[1440px] mx-auto px-4 lg:px-8">
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-16">
+<footer class="bg-[#1e4433] border-t border-[#254632] py-8">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="flex flex-col sm:flex-row items-center justify-between gap-6">
 
       <!-- Brand -->
-      <div class="lg:col-span-1">
-        <div class="flex flex-col mb-6" style="line-height:1;">
-          <span style="font-family:'Georgia',serif;font-size:22px;font-weight:700;letter-spacing:0.15em;color:#fff;">vólke</span>
-          <span style="font-size:7px;letter-spacing:0.18em;color:#a7f3d0;text-transform:uppercase;">shoppe</span>
-        </div>
-        <p class="text-white/50 text-sm leading-relaxed">Elevating sustainable fashion with consciously crafted designs that don't compromise on style or ethics.</p>
+      <div style="line-height:1;">
+        <div style="font-family:'Georgia',serif;font-size:18px;font-weight:700;letter-spacing:0.15em;color:#ffffff;">vólke</div>
+        <div style="font-size:7px;letter-spacing:0.18em;color:#9ca3af;text-transform:uppercase;">shoppe</div>
       </div>
 
-      <!-- Help -->
-      <div>
-        <h3 class="text-xs font-bold uppercase tracking-widest text-white/40 mb-6">Help</h3>
-        <ul class="space-y-3">
-          <li><a class="text-sm text-white/60 hover:text-white transition-colors" href="#">Track Your Order</a></li>
-          <li><a class="text-sm text-white/60 hover:text-white transition-colors" href="#">FAQs</a></li>
-          <li><a class="text-sm text-white/60 hover:text-white transition-colors" href="#">Returns &amp; Exchanges</a></li>
-          <li><a class="text-sm text-white/60 hover:text-white transition-colors" href="#">Shipping Info</a></li>
-        </ul>
+      <!-- Links -->
+      <div class="flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs text-gray-500">
+        <a class="hover:text-primary transition-colors" href="{% url 'home:user_orders' %}">Order Status</a>
+        <a class="hover:text-primary transition-colors" href="{% url 'home:refund_policy' %}">Refund Policy</a>
+        <a class="hover:text-primary transition-colors" href="{% url 'home:contact_info' %}">Contact</a>
+        <span class="text-[#254632]">|</span>
+        <a class="hover:text-primary transition-colors" href="{% url 'home:privacy_policy' %}">Privacy Policy</a>
+        <a class="hover:text-primary transition-colors" href="{% url 'home:shipping_policy' %}">Shipping Policy</a>
+        <a class="hover:text-primary transition-colors" href="{% url 'home:terms-of-service' %}">Terms of Service</a>
       </div>
 
-      <!-- Shop -->
-      <div>
-        <h3 class="text-xs font-bold uppercase tracking-widest text-white/40 mb-6">Shop By</h3>
-        <ul class="space-y-3">
-          <li><a class="text-sm text-white/60 hover:text-white transition-colors" href="#">New Arrivals</a></li>
-          <li><a class="text-sm text-white/60 hover:text-white transition-colors" href="#">Women's Collection</a></li>
-          <li><a class="text-sm text-white/60 hover:text-white transition-colors" href="#">Best Sellers</a></li>
-          <li><a class="text-sm text-white/60 hover:text-white transition-colors" href="#">Sale</a></li>
-        </ul>
-      </div>
+      <!-- Copyright -->
+      <p class="text-xs text-gray-600 whitespace-nowrap">© 2024 VOLKE®</p>
 
-      <!-- Social -->
-      <div>
-        <h3 class="text-xs font-bold uppercase tracking-widest text-white/40 mb-6">Follow Us</h3>
-        <ul class="space-y-3">
-          <li><a class="text-sm text-white/60 hover:text-white transition-colors" href="#">Instagram</a></li>
-          <li><a class="text-sm text-white/60 hover:text-white transition-colors" href="#">Facebook</a></li>
-          <li><a class="text-sm text-white/60 hover:text-white transition-colors" href="#">Pinterest</a></li>
-          <li><a class="text-sm text-white/60 hover:text-white transition-colors" href="#">Twitter / X</a></li>
-        </ul>
-      </div>
-
-    </div>
-
-    <div class="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4">
-      <p class="text-white/30 text-[10px] font-bold uppercase tracking-widest">vólke shoppe © {% now "Y" %}. All rights reserved.</p>
-      <div class="flex gap-6">
-        <a class="text-[10px] font-bold uppercase tracking-widest text-white/30 hover:text-white transition-colors" href="#">Privacy Policy</a>
-        <a class="text-[10px] font-bold uppercase tracking-widest text-white/30 hover:text-white transition-colors" href="#">Terms of Service</a>
-      </div>
     </div>
   </div>
 </footer>

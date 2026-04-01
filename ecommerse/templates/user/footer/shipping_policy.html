@@ -1,0 +1,248 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Shipping Policy — vólke shoppe</title>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: 'Manrope', sans-serif; }
+    .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  </style>
+</head>
+<body class="bg-[#f6faf8] text-[#022c22] min-h-screen flex flex-col">
+
+<!-- HEADER -->
+<header class="sticky top-0 z-50 bg-[#1e4433]">
+  <div class="px-4 lg:px-10 py-3 flex items-center justify-between">
+    <a href="{% url 'home:home' %}" class="flex flex-col" style="line-height:1;">
+      <span style="font-family:'Georgia',serif;font-size:22px;font-weight:700;letter-spacing:0.15em;color:#fff;">vólke</span>
+      <span style="font-size:8px;letter-spacing:0.18em;color:#fff;text-transform:uppercase;">shoppe</span>
+    </a>
+    <a href="{% url 'home:home' %}"
+      class="flex items-center gap-1.5 text-xs font-semibold text-white/70 hover:text-white transition-colors">
+      <span class="material-symbols-outlined text-[16px]">arrow_back</span>
+      Back to Store
+    </a>
+  </div>
+</header>
+
+<!-- HERO -->
+<div class="bg-[#1e4433]">
+  <div class="max-w-3xl mx-auto px-6 py-14 text-center">
+    <div class="inline-flex items-center justify-center size-14 rounded-2xl bg-white/10 mb-5">
+      <span class="material-symbols-outlined text-3xl text-[#36e27b]">local_shipping</span>
+    </div>
+    <h1 class="text-3xl md:text-4xl font-black text-white tracking-tight mb-3">Shipping Policy</h1>
+    <p class="text-white/50 text-sm font-medium">Last updated: January 2026</p>
+  </div>
+</div>
+
+<!-- CONTENT -->
+<div class="flex-grow max-w-3xl mx-auto w-full px-6 py-14">
+  <div class="bg-white rounded-2xl border border-green-100 shadow-sm overflow-hidden">
+
+    <!-- Intro -->
+    <div class="px-8 py-8 border-b border-green-50">
+      <p class="text-[#064e3b]/80 leading-relaxed text-sm">
+        At <strong class="text-[#022c22]">vólke shoppe</strong>, we are committed to getting your order to you as quickly
+        and safely as possible. Please read our shipping policy carefully to understand how we handle dispatch,
+        delivery, and any issues that may arise along the way.
+      </p>
+    </div>
+
+    <!-- Order Processing -->
+    <div class="px-8 py-7 border-b border-green-50">
+      <div class="flex items-start gap-4">
+        <div class="size-9 rounded-xl bg-[#f0fdf4] flex items-center justify-center shrink-0 mt-0.5">
+          <span class="material-symbols-outlined text-[18px] text-[#064e3b]">receipt_long</span>
+        </div>
+        <div>
+          <h2 class="text-base font-black text-[#022c22] mb-2">Order Processing</h2>
+          <p class="text-sm text-[#064e3b]/70 leading-relaxed">
+            Orders are processed and shipped only after full payment confirmation. We work with trusted
+            third-party shipping partners to deliver across India. Once your order is dispatched, you will
+            receive a notification via email or SMS containing your tracking details.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dispatch Time -->
+    <div class="px-8 py-7 border-b border-green-50">
+      <div class="flex items-start gap-4">
+        <div class="size-9 rounded-xl bg-[#f0fdf4] flex items-center justify-center shrink-0 mt-0.5">
+          <span class="material-symbols-outlined text-[18px] text-[#064e3b]">schedule</span>
+        </div>
+        <div class="flex-1">
+          <h2 class="text-base font-black text-[#022c22] mb-2">Dispatch & Delivery Time</h2>
+          <p class="text-sm text-[#064e3b]/70 leading-relaxed mb-4">
+            All products are dispatched after manufacturing is complete. Estimated dispatch and delivery
+            timelines are as follows:
+          </p>
+          <div class="grid grid-cols-2 gap-3">
+            <div class="rounded-xl bg-[#f0fdf4] border border-green-100 px-4 py-4 text-center">
+              <p class="text-xs font-bold text-[#064e3b] uppercase tracking-wide mb-1">Minimum</p>
+              <p class="text-2xl font-black text-[#022c22]">10</p>
+              <p class="text-xs text-[#064e3b]/60 font-medium">working days</p>
+            </div>
+            <div class="rounded-xl bg-[#f0fdf4] border border-green-100 px-4 py-4 text-center">
+              <p class="text-xs font-bold text-[#064e3b] uppercase tracking-wide mb-1">Maximum</p>
+              <p class="text-2xl font-black text-[#022c22]">20</p>
+              <p class="text-xs text-[#064e3b]/60 font-medium">working days</p>
+            </div>
+          </div>
+          <p class="text-xs text-[#064e3b]/50 mt-3">
+            * Timelines may vary depending on the specific product and manufacturing conditions.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tracking & Complaints -->
+    <div class="px-8 py-7 border-b border-green-50">
+      <div class="flex items-start gap-4">
+        <div class="size-9 rounded-xl bg-[#f0fdf4] flex items-center justify-center shrink-0 mt-0.5">
+          <span class="material-symbols-outlined text-[18px] text-[#064e3b]">track_changes</span>
+        </div>
+        <div>
+          <h2 class="text-base font-black text-[#022c22] mb-2">Tracking & Complaints</h2>
+          <p class="text-sm text-[#064e3b]/70 leading-relaxed mb-3">
+            Tracking information is shared with you via email or SMS once your order is dispatched. Please
+            note the following complaint windows:
+          </p>
+          <div class="space-y-2">
+            <div class="flex items-center gap-3 bg-yellow-50 border border-yellow-100 rounded-xl px-4 py-3">
+              <span class="material-symbols-outlined text-[15px] text-yellow-600 shrink-0">warning</span>
+              <p class="text-xs font-semibold text-yellow-800">
+                Shipment complaints must be raised within <strong>2 days</strong> from the dispatch date.
+              </p>
+            </div>
+            <div class="flex items-center gap-3 bg-yellow-50 border border-yellow-100 rounded-xl px-4 py-3">
+              <span class="material-symbols-outlined text-[15px] text-yellow-600 shrink-0">warning</span>
+              <p class="text-xs font-semibold text-yellow-800">
+                Issues upon receipt must be reported within <strong>24 hours</strong> of delivery.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Special Considerations -->
+    <div class="px-8 py-7 border-b border-green-50">
+      <div class="flex items-start gap-4">
+        <div class="size-9 rounded-xl bg-[#f0fdf4] flex items-center justify-center shrink-0 mt-0.5">
+          <span class="material-symbols-outlined text-[18px] text-[#064e3b]">cloud</span>
+        </div>
+        <div>
+          <h2 class="text-base font-black text-[#022c22] mb-2">Special Considerations</h2>
+          <p class="text-sm text-[#064e3b]/70 leading-relaxed mb-3">
+            Delays may occasionally occur due to circumstances beyond our control, including:
+          </p>
+          <ul class="text-sm text-[#064e3b]/70 space-y-1.5 leading-relaxed">
+            <li class="flex items-start gap-2">
+              <span class="mt-1.5 size-1.5 rounded-full bg-[#064e3b]/30 shrink-0"></span>
+              Natural calamities, power outages, or extreme weather conditions.
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="mt-1.5 size-1.5 rounded-full bg-[#064e3b]/30 shrink-0"></span>
+              Peak holiday seasons — particularly August, September, and October — including Diwali and Durga Puja.
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="mt-1.5 size-1.5 rounded-full bg-[#064e3b]/30 shrink-0"></span>
+              Hartals, public holidays, Saturdays, and Sundays — no shipments or deliveries occur on these days.
+            </li>
+          </ul>
+          <div class="mt-4 flex items-start gap-2 bg-orange-50 border border-orange-100 rounded-xl px-4 py-3">
+            <span class="material-symbols-outlined text-[15px] text-orange-500 shrink-0 mt-0.5">info</span>
+            <p class="text-xs text-orange-800 font-medium">
+              If you do not receive your order within the promised timeframe, please contact our support team immediately and we will resolve it for you.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Damaged Packages -->
+    <div class="px-8 py-7 border-b border-green-50">
+      <div class="flex items-start gap-4">
+        <div class="size-9 rounded-xl bg-[#f0fdf4] flex items-center justify-center shrink-0 mt-0.5">
+          <span class="material-symbols-outlined text-[18px] text-[#064e3b]">report</span>
+        </div>
+        <div>
+          <h2 class="text-base font-black text-[#022c22] mb-2">Damaged Packages</h2>
+          <p class="text-sm text-[#064e3b]/70 leading-relaxed">
+            If your package appears visibly damaged upon delivery, <strong class="text-[#022c22]">please do not accept it.</strong>
+            Initiate a return immediately by providing a detailed video showing the condition of the package
+            at the time of delivery. This will help us process your case quickly and effectively.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Customer Support -->
+    <div class="px-8 py-7 bg-[#f0fdf4] rounded-b-2xl">
+      <div class="flex items-start gap-4">
+        <div class="size-9 rounded-xl bg-white border border-green-100 flex items-center justify-center shrink-0 mt-0.5">
+          <span class="material-symbols-outlined text-[18px] text-[#064e3b]">support_agent</span>
+        </div>
+        <div>
+          <h2 class="text-base font-black text-[#022c22] mb-2">Customer Support</h2>
+          <p class="text-sm text-[#064e3b]/70 leading-relaxed mb-4">
+            Our support team is available to assist with payment issues, order complaints, general inquiries,
+            international shipping queries, and customisation requests.
+          </p>
+          <div class="flex flex-col gap-2.5">
+            <div class="flex items-center gap-2 text-sm text-[#064e3b]/70 font-medium">
+              <span class="material-symbols-outlined text-[16px] text-[#064e3b]">schedule</span>
+              Monday – Friday &nbsp;·&nbsp; 10:30 AM – 1:30 PM &nbsp;&amp;&nbsp; 2:30 PM – 6:30 PM
+            </div>
+            <a href="tel:+918891643808"
+              class="inline-flex items-center gap-2 text-sm font-bold text-[#064e3b] hover:text-[#022c22] transition-colors">
+              <span class="material-symbols-outlined text-[16px]">call</span>
+              +91 88916 43808
+            </a>
+            <a href="mailto:support@volkeshoppe.com"
+              class="inline-flex items-center gap-2 text-sm font-bold text-[#064e3b] hover:text-[#022c22] transition-colors">
+              <span class="material-symbols-outlined text-[16px]">mail</span>
+              support@volkeshoppe.com
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Back link -->
+  <div class="mt-8 text-center">
+    <a href="{% url 'home:home' %}"
+      class="inline-flex items-center gap-2 text-sm font-bold text-[#064e3b] hover:text-[#022c22] transition-colors">
+      <span class="material-symbols-outlined text-[16px]">arrow_back</span>
+      Back to Store
+    </a>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer class="bg-[#1e4433] text-white py-6">
+  <div class="max-w-3xl mx-auto px-6 flex flex-col sm:flex-row justify-between items-center gap-3">
+    <div class="flex flex-col" style="line-height:1;">
+      <span style="font-family:'Georgia',serif;font-size:18px;font-weight:700;letter-spacing:0.15em;color:#fff;">vólke</span>
+      <span style="font-size:7px;letter-spacing:0.18em;color:#a7f3d0;text-transform:uppercase;">shoppe</span>
+    </div>
+    <p class="text-white/30 text-[10px] font-bold uppercase tracking-widest">© {% now "Y" %} vólke shoppe. All rights reserved.</p>
+    <div class="flex gap-4">
+      <a href="{% url 'home:refund_policy' %}" class="text-[10px] font-bold uppercase tracking-widest text-white/40 hover:text-white transition-colors">Refunds</a>
+      <a href="{% url 'home:home' %}" class="text-[10px] font-bold uppercase tracking-widest text-white/40 hover:text-white transition-colors">Home</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact — vólke shoppe</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #1a1410;
+    --paper: #f5f0e8;
+    --muted: #8a7f72;
+    --accent: #4e7a5e;
+    --border: #d8d0c4;
+    --card: #fffdf9;
+  }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 48px 24px;
+  }
+
+  /* Subtle grain overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 520px;
+  }
+
+  /* Header */
+  .brand {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: 13px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+
+  h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: clamp(42px, 8vw, 58px);
+    line-height: 1;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    margin-bottom: 6px;
+  }
+
+  h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .tagline {
+    font-size: 13px;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+    margin-bottom: 48px;
+  }
+
+  /* Divider */
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 36px;
+  }
+  .divider::before, .divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+  .divider-dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--accent);
+    opacity: 0.6;
+  }
+
+  /* Contact cards */
+  .cards {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    transition: border-color 0.2s, background 0.2s;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .card:first-child { border-radius: 12px 12px 0 0; }
+  .card:last-child  { border-radius: 0 0 12px 12px; }
+  .card:only-child  { border-radius: 12px; }
+
+  .card:hover {
+    border-color: var(--accent);
+    background: #f9fdf9;
+    z-index: 1;
+  }
+
+  .card-icon {
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #eef5f0;
+    border-radius: 8px;
+  }
+
+  .card-icon svg {
+    width: 16px;
+    height: 16px;
+    stroke: var(--accent);
+    fill: none;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .card-body {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .card-label {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 3px;
+  }
+
+  .card-value {
+    font-size: 14px;
+    color: var(--ink);
+    font-weight: 400;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .card-arrow {
+    color: var(--border);
+    font-size: 16px;
+    transition: color 0.2s, transform 0.2s;
+  }
+
+  .card:hover .card-arrow {
+    color: var(--accent);
+    transform: translateX(3px);
+  }
+
+  /* Static card (no hover) */
+  .card.static { cursor: default; }
+  .card.static:hover {
+    border-color: var(--border);
+    background: var(--card);
+  }
+  .card.static:hover .card-arrow { transform: none; color: var(--border); }
+
+  /* Footer note */
+  .footer-note {
+    text-align: center;
+    margin-top: 32px;
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.8;
+  }
+
+  /* Animations */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .container { animation: fadeUp 0.5s ease both; }
+  .card:nth-child(1) { animation: fadeUp 0.5s 0.1s ease both; }
+  .card:nth-child(2) { animation: fadeUp 0.5s 0.18s ease both; }
+  .card:nth-child(3) { animation: fadeUp 0.5s 0.26s ease both; }
+  .card:nth-child(4) { animation: fadeUp 0.5s 0.34s ease both; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <p class="brand">vólke shoppe</p>
+  <h1>Get in <em>touch</em></h1>
+  <p class="tagline">We're here to help — reach us any way you like.</p>
+
+  <div class="divider"><span class="divider-dot"></span></div>
+
+  <div class="cards">
+
+    <a class="card" href="tel:+918078123287">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.29h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6.06 6.06l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92Z"/></svg>
+      </div>
+      <div class="card-body">
+        <div class="card-label">Phone</div>
+        <div class="card-value">+91 80781 23287</div>
+      </div>
+      <span class="card-arrow">→</span>
+    </a>
+
+    <a class="card" href="mailto:hello@volkeshoppe.com">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+      </div>
+      <div class="card-body">
+        <div class="card-label">Email</div>
+        <div class="card-value">hello@volkeshoppe.com</div>
+      </div>
+      <span class="card-arrow">→</span>
+    </a>
+
+    <div class="card static">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+      </div>
+      <div class="card-body">
+        <div class="card-label">Address</div>
+        <div class="card-value">Volke Shoppe, Koduvally, Kozhikode</div>
+      </div>
+    </div>
+
+    <div class="card static">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      </div>
+      <div class="card-body">
+        <div class="card-label">Store hours</div>
+        <div class="card-value">Mon – Sat &nbsp;·&nbsp; 10 AM – 9 PM</div>
+      </div>
+    </div>
+
+  </div>
+
+  <p class="footer-note">
+    Kerala, India &nbsp;·&nbsp; KL 673572<br>
+    Usually responds within a few hours.
+  </p>
+
+</div>
+</body>
+</html>

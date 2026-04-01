@@ -1,0 +1,192 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Return / Exchange — vólke shoppe</title>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#064e3b", "primary-light": "#ecfdf5",
+            "surface-light": "#f0fdf4", "border-green": "#059669",
+            "text-main": "#022c22", "text-secondary": "#064e3b",
+          },
+          fontFamily: { "display": ["Manrope", "sans-serif"] },
+        },
+      },
+    }
+  </script>
+  <style>
+    body { font-family: 'Manrope', sans-serif; }
+    .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    .icon-filled { font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  </style>
+</head>
+<body class="bg-[#f6faf8] text-text-main antialiased min-h-screen flex flex-col">
+
+<!-- HEADER -->
+<header class="sticky top-0 z-50 bg-[#1e4433]">
+  <div class="px-4 lg:px-10 py-3 flex items-center justify-between">
+    <a href="{% url 'home:home' %}" class="flex flex-col" style="line-height:1;">
+      <span style="font-family:'Georgia',serif;font-size:22px;font-weight:700;letter-spacing:0.15em;color:#fff;">vólke</span>
+      <span style="font-size:8px;letter-spacing:0.18em;color:#fff;text-transform:uppercase;">shoppe</span>
+    </a>
+  </div>
+</header>
+
+<div class="flex-grow w-full max-w-2xl mx-auto px-4 py-10">
+
+  <!-- Breadcrumb -->
+  <nav class="flex items-center gap-1.5 text-sm font-medium text-text-secondary/60 mb-8">
+    <a href="{% url 'home:user_orders' %}" class="hover:text-primary transition-colors">My Orders</a>
+    <span class="material-symbols-outlined text-sm">chevron_right</span>
+    <a href="{% url 'home:order_detail' order.id %}" class="hover:text-primary transition-colors">#{{ order.id }}</a>
+    <span class="material-symbols-outlined text-sm">chevron_right</span>
+    <span class="text-primary font-bold">Return / Exchange</span>
+  </nav>
+
+  <!-- SINGLE FORM wrapping everything -->
+  <form method="POST" action="{% url 'home:return_request' order.id %}">
+    {% csrf_token %}
+
+    <!-- Item selector — INSIDE the form -->
+    <div class="bg-white rounded-2xl border border-border-green/10 overflow-hidden mb-6">
+      <div class="px-5 py-4 border-b border-border-green/10 bg-surface-light/60">
+        <h2 class="text-xs font-black text-text-main uppercase tracking-wider">Select Items to Return / Exchange</h2>
+        <p class="text-xs text-text-secondary/50 font-medium mt-0.5">You can select one or more items from this order.</p>
+      </div>
+      <div class="divide-y divide-border-green/10">
+        {% for item in eligible_items %}
+        <label class="flex items-center gap-4 px-5 py-4 cursor-pointer hover:bg-surface-light has-[:checked]:bg-primary-light transition-all">
+          <input type="checkbox" name="item_ids" value="{{ item.id }}"
+            class="rounded text-primary focus:ring-primary shrink-0"/>
+          <div class="size-14 rounded-xl overflow-hidden bg-surface-light shrink-0">
+            {% with item.product.images.first as img %}
+              {% if img %}<img src="{{ img.image.url }}" class="w-full h-full object-cover"/>{% endif %}
+            {% endwith %}
+          </div>
+          <div class="flex-1 min-w-0">
+            <p class="text-sm font-bold text-text-main truncate">{{ item.product.product_name }}</p>
+            <p class="text-xs text-text-secondary/60 font-medium">
+              {% if item.size %}Size: {{ item.size }} · {% endif %}Qty: {{ item.quantity }}
+            </p>
+            <p class="text-xs font-bold text-text-main mt-0.5">₹{{ item.subtotal|floatformat:2 }}</p>
+          </div>
+        </label>
+        {% empty %}
+        <div class="px-5 py-6 text-center text-sm text-text-secondary/50 font-medium">
+          No eligible items for return/exchange.
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Return type + reason + details -->
+    <div class="bg-white rounded-2xl border border-border-green/10 overflow-hidden">
+
+      <div class="px-6 py-5 border-b border-border-green/10 bg-surface-light/60">
+        <h1 class="text-base font-black text-text-main">Request Return or Exchange</h1>
+        <p class="text-xs text-text-secondary/60 font-medium mt-1">Tell us what happened and we'll sort it out.</p>
+      </div>
+
+      <div class="px-6 py-6 space-y-6">
+
+        <!-- Type -->
+        <div>
+          <label class="block text-xs font-black text-text-main mb-3 uppercase tracking-wider">What would you like?</label>
+          <div class="grid grid-cols-2 gap-3">
+            <label class="flex items-center gap-3 rounded-xl border-2 border-border-green/20 p-4 cursor-pointer has-[:checked]:border-primary has-[:checked]:bg-primary-light transition-all">
+              <input type="radio" name="return_type" value="return" checked class="text-primary focus:ring-primary"/>
+              <div>
+                <p class="text-sm font-bold text-text-main">Return</p>
+                <p class="text-xs text-text-secondary/60">Get a refund</p>
+              </div>
+            </label>
+            <label class="flex items-center gap-3 rounded-xl border-2 border-border-green/20 p-4 cursor-pointer has-[:checked]:border-primary has-[:checked]:bg-primary-light transition-all">
+              <input type="radio" name="return_type" value="exchange" class="text-primary focus:ring-primary"/>
+              <div>
+                <p class="text-sm font-bold text-text-main">Exchange</p>
+                <p class="text-xs text-text-secondary/60">Get a replacement</p>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- Reason -->
+        <div>
+          <label class="block text-xs font-black text-text-main mb-3 uppercase tracking-wider">Reason <span class="text-red-400">*</span></label>
+          <div class="space-y-2">
+            {% for value, label in reasons %}
+            <label class="flex items-center gap-3 rounded-xl border border-border-green/15 px-4 py-3 cursor-pointer hover:bg-surface-light has-[:checked]:border-primary has-[:checked]:bg-primary-light transition-all">
+              <input type="radio" name="reason" value="{{ value }}" class="text-primary focus:ring-primary"/>
+              <span class="text-sm font-semibold text-text-main">{{ label }}</span>
+            </label>
+            {% endfor %}
+          </div>
+        </div>
+
+        <!-- Details -->
+        <div>
+          <label class="block text-xs font-black text-text-main mb-2 uppercase tracking-wider">
+            Additional Details <span class="text-text-secondary/40 font-medium normal-case">(optional)</span>
+          </label>
+          <textarea name="details" rows="3" placeholder="Describe the issue in more detail..."
+            class="w-full rounded-xl border border-border-green/20 bg-surface-light px-4 py-3 text-sm text-text-main placeholder-text-secondary/30 focus:outline-none focus:ring-2 focus:ring-primary/20 resize-none font-medium"></textarea>
+        </div>
+
+      </div>
+
+      <!-- Actions -->
+      <div class="px-6 py-5 border-t border-border-green/10 bg-surface-light/40 flex gap-3">
+        <button type="submit"
+          class="flex-1 flex items-center justify-center gap-2 rounded-xl bg-primary py-3.5 text-sm font-bold text-white hover:bg-primary-hover transition-colors shadow-sm">
+          <span class="material-symbols-outlined text-[18px]">assignment_return</span>
+          Submit Request
+        </button>
+        <a href="{% url 'home:order_detail' order.id %}"
+          class="px-5 py-3.5 rounded-xl border border-border-green/20 text-sm font-bold text-text-secondary hover:bg-surface-light transition-colors">
+          Cancel
+        </a>
+      </div>
+
+    </div>
+  </form><!-- end single form -->
+
+</div>
+
+<footer class="bg-[#1e4433] border-t border-[#254632] py-8">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="flex flex-col sm:flex-row items-center justify-between gap-6">
+
+      <!-- Brand -->
+      <div style="line-height:1;">
+        <div style="font-family:'Georgia',serif;font-size:18px;font-weight:700;letter-spacing:0.15em;color:#ffffff;">vólke</div>
+        <div style="font-size:7px;letter-spacing:0.18em;color:#9ca3af;text-transform:uppercase;">shoppe</div>
+      </div>
+
+      <!-- Links -->
+      <div class="flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs text-gray-500">
+        <a class="hover:text-primary transition-colors" href="{% url 'home:user_orders' %}">Order Status</a>
+        <a class="hover:text-primary transition-colors" href="{% url 'home:refund_policy' %}">Refund Policy</a>
+        <a class="hover:text-primary transition-colors" href="{% url 'home:contact_info' %}">Contact</a>
+        <span class="text-[#254632]">|</span>
+        <a class="hover:text-primary transition-colors" href="{% url 'home:privacy_policy' %}">Privacy Policy</a>
+        <a class="hover:text-primary transition-colors" href="{% url 'home:shipping_policy' %}">Shipping Policy</a>
+        <a class="hover:text-primary transition-colors" href="{% url 'home:terms-of-service' %}">Terms of Service</a>
+      </div>
+
+      <!-- Copyright -->
+      <p class="text-xs text-gray-600 whitespace-nowrap">© 2024 VOLKE®</p>
+
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

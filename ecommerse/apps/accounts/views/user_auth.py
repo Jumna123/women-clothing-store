@@ -134,16 +134,24 @@ def verify_email_view(request):
 
         # ---------------login--------------
 def userlogin(request):
+    # Clear stale messages
+    storage = messages.get_messages(request)
+    for _ in storage:
+        pass
+
+    if request.user.is_authenticated:
+        return redirect('accounts:profile')
+
     if request.method == "POST":
         email = request.POST.get("email")
         password = request.POST.get("password")
 
-        # Authenticate user
         user = authenticate(request, username=email, password=password)
 
         if user is not None:
             login(request, user, backend='django.contrib.auth.backends.ModelBackend')
-            return render(request,"accounts/profile.html")  
+            next_url = request.POST.get('next') or request.GET.get('next') or 'accounts:profile'
+            return redirect(next_url)
         else:
             messages.error(request, "Invalid email or password")
             return render(request, "accounts/user_login.html")
