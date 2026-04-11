@@ -1,0 +1,48 @@
+{% comment %}
+  Paste this block just before </body> in both:
+    - user/order_details.html
+    - user/orders.html
+  The view already pops 'order_confirmed' from the session and passes
+  it as `order_confirmed_id` to both templates.
+{% endcomment %}
+
+{% if order_confirmed_id %}
+<div id="order-confirmed-overlay"
+     style="position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:9999;
+            display:flex;align-items:center;justify-content:center;">
+  <div style="background:#fff;border-radius:16px;padding:2.5rem 2rem;
+              max-width:420px;width:90%;text-align:center;
+              box-shadow:0 20px 60px rgba(0,0,0,.25);position:relative;">
+
+    <!-- animated tick -->
+    <svg viewBox="0 0 52 52" style="width:72px;height:72px;margin-bottom:1rem;">
+      <circle cx="26" cy="26" r="25" fill="none" stroke="#22c55e" stroke-width="2"
+              stroke-dasharray="157" stroke-dashoffset="157"
+              style="animation:dash .6s ease forwards;transform-origin:center;transform:rotate(-90deg)"/>
+      <path fill="none" stroke="#22c55e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
+            d="M14 27l8 8 16-16"
+            stroke-dasharray="32" stroke-dashoffset="32"
+            style="animation:dash .4s .55s ease forwards"/>
+    </svg>
+
+    <h2 style="margin:0 0 .4rem;font-size:1.4rem;font-weight:700;color:#111;">
+      Order Confirmed!
+    </h2>
+    <p style="margin:0 0 1.5rem;color:#555;font-size:.95rem;">
+      Order <strong>#{{ order_confirmed_id }}</strong> has been placed successfully.
+      We'll send you a confirmation email shortly.
+    </p>
+
+    <button onclick="document.getElementById('order-confirmed-overlay').remove()"
+            style="background:#111;color:#fff;border:none;border-radius:8px;
+                   padding:.65rem 2rem;font-size:.95rem;cursor:pointer;
+                   transition:background .2s;">
+      Got it
+    </button>
+  </div>
+</div>
+
+<style>
+@keyframes dash { to { stroke-dashoffset: 0; } }
+</style>
+{% endif %}

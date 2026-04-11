@@ -44,11 +44,7 @@
 
 <body class="bg-background-base text-text-main font-display antialiased min-h-screen flex flex-col selection:bg-primary-light selection:text-primary">
 
-<!-- ══════════════════════════════════════════
-     HEADER — white navbar matching orders/wishlist
-══════════════════════════════════════════ -->
 <!-- HEADER -->
-  <!-- HEADER -->
 <header class="sticky top-0 z-50 bg-[#1e4433]">
   <div class="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
 
@@ -63,20 +59,15 @@
     <!-- Progress Stepper -->
     <div class="flex items-center">
 
-      <!-- Step 1: Bag (completed) -->
-<!-- Step 1: Bag (inactive) -->
-<a href="{% url 'home:cart_view' %}" class="flex flex-col items-center gap-1 min-w-[72px]">
-  <div class="flex size-8 items-center justify-center rounded-full bg-gray-700 text-gray-400">
-    <span class="material-symbols-outlined text-[18px]">shopping_bag</span>
-  </div>
-  <span class="text-[10px] font-semibold text-gray-400 tracking-wider uppercase">Bag</span>
-</a>
+      <a href="{% url 'home:cart_view' %}" class="flex flex-col items-center gap-1 min-w-[72px]">
+        <div class="flex size-8 items-center justify-center rounded-full bg-gray-700 text-gray-400">
+          <span class="material-symbols-outlined text-[18px]">shopping_bag</span>
+        </div>
+        <span class="text-[10px] font-semibold text-gray-400 tracking-wider uppercase">Bag</span>
+      </a>
 
-      <!-- Line (completed) -->
       <div class="w-16 h-[2px] bg-gray-600 mx-2"></div>
 
-
-      <!-- Step 2: Delivery (active) -->
       <div class="flex flex-col items-center gap-1 min-w-[88px]">
         <div class="flex size-8 items-center justify-center rounded-full bg-primary text-[#112117] shadow">
           <span class="material-symbols-outlined text-[18px]">local_shipping</span>
@@ -84,10 +75,8 @@
         <span class="text-[10px] font-bold text-white tracking-wider uppercase">Delivery</span>
       </div>
 
-      <!-- Line (inactive) -->
       <div class="w-16 h-[2px] bg-gray-600 mx-2"></div>
 
-      <!-- Step 3: Payment (inactive) -->
       <div class="flex flex-col items-center gap-1 min-w-[72px]">
         <div class="flex size-8 items-center justify-center rounded-full bg-gray-700 text-gray-400">
           <span class="material-symbols-outlined text-[18px]">payments</span>
@@ -97,128 +86,32 @@
 
     </div>
 
-    <!-- Right spacer -->
     <div class="shrink-0 w-[120px]"></div>
 
   </div>
 </header>
 
-
-<!-- ══════════════════════════════════════════
-     PAGE WRAPPER
-══════════════════════════════════════════ -->
+<!-- PAGE WRAPPER -->
 <div class="flex-grow w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-10">
 
   <nav class="flex items-center gap-1.5 text-sm font-medium text-text-secondary/60 mb-8">
-  {% if from_profile %}
-    <a href="{% url 'accounts:profile' %}" class="hover:text-primary transition-colors">Account</a>
-    <span class="material-symbols-outlined text-sm">chevron_right</span>
-  {% else %}
-    <a href="{% url 'home:home' %}" class="hover:text-primary transition-colors">Home</a>
-    <span class="material-symbols-outlined text-sm">chevron_right</span>
-  {% endif %}
-  <span class="text-primary font-bold">Shopping Bag</span>
-</nav>
-
+    {% if from_profile %}
+      <a href="{% url 'accounts:profile' %}" class="hover:text-primary transition-colors">Account</a>
+      <span class="material-symbols-outlined text-sm">chevron_right</span>
+    {% else %}
+      <a href="{% url 'home:home' %}" class="hover:text-primary transition-colors">Home</a>
+      <span class="material-symbols-outlined text-sm">chevron_right</span>
+    {% endif %}
+    <span class="text-primary font-bold">Shopping Bag</span>
+  </nav>
 
   <div class="flex flex-col lg:flex-row gap-8 lg:gap-10">
 
-    <!-- ══════════════════════════════════════════
-         SIDEBAR — only when from_profile
-    ══════════════════════════════════════════ -->
 {% if from_profile %}
- <!-- SIDEBAR -->
-<aside class="w-full lg:w-64 flex-shrink-0">
-  <div class="bg-white rounded-2xl border border-border-green/10 shadow-sm overflow-hidden sticky top-24">
-
-    <div class="p-6 bg-gradient-to-br from-primary to-accent-dark text-white">
-      <div class="flex items-center gap-3 mb-1">
-        {% if user.profile_picture %}
-          <img src="{{ user.profile_picture.url }}" class="size-12 rounded-full object-cover border-2 border-white/30" alt="{{ user.username }}"/>
-        {% else %}
-          <div class="size-12 rounded-full bg-white/10 border border-white/20 flex items-center justify-center">
-            <span class="material-symbols-outlined icon-filled text-2xl">account_circle</span>
-          </div>
-        {% endif %}
-        <div>
-          <p class="font-bold text-sm leading-tight">{{ user.get_full_name|default:user.username }}</p>
-          <p class="text-white/60 text-xs truncate max-w-[140px]">{{ user.email }}</p>
-        </div>
-      </div>
-    </div>
-
-    <nav class="p-3 space-y-1">
-      {% with url_name=request.resolver_match.url_name %}
-
-      <a href="{% url 'accounts:profile' %}"
-        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all
-        {% if request.resolver_match.app_name == 'accounts' and url_name == 'profile' %}bg-primary-light text-primary
-        {% else %}text-text-secondary hover:bg-surface-light hover:text-primary{% endif %}">
-        <span class="material-symbols-outlined text-[20px] {% if request.resolver_match.app_name == 'accounts' and url_name == 'profile' %}icon-filled{% endif %}">dashboard</span>
-        Dashboard
-      </a>
-
-      <a href="{% url 'home:user_orders' %}"
-        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all
-        {% if url_name == 'user_orders' or url_name == 'order_detail' %}bg-primary-light text-primary
-        {% else %}text-text-secondary hover:bg-surface-light hover:text-primary{% endif %}">
-        <span class="material-symbols-outlined text-[20px] {% if url_name == 'user_orders' or url_name == 'order_detail' %}icon-filled{% endif %}">package_2</span>
-        My Orders
-        {% if active_orders_count %}
-          <span class="ml-auto bg-primary text-white text-[10px] font-bold px-2 py-0.5 rounded-full">{{ active_orders_count }}</span>
-        {% endif %}
-      </a>
-
-      <a href="{% url 'home:wishlist_view' %}?from=profile"
-
-        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all
-        {% if url_name == 'wishlist_view' %}bg-primary-light text-primary
-        {% else %}text-text-secondary hover:bg-surface-light hover:text-primary{% endif %}">
-        <span class="material-symbols-outlined text-[20px] {% if url_name == 'wishlist_view' %}icon-filled{% endif %}">favorite</span>
-        Wishlist
-        {% if wishlist_count %}
-          <span class="ml-auto bg-primary text-white text-[10px] font-bold px-2 py-0.5 rounded-full">{{ wishlist_count }}</span>
-        {% endif %}
-      </a>
-
-      <!-- My Cart — always active on this page -->
-      <a href="{% url 'home:cart_view' %}"
-        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all bg-primary-light text-primary">
-        <span class="material-symbols-outlined text-[20px] icon-filled">shopping_bag</span>
-        My Cart
-        {% if cart_count %}
-          <span class="ml-auto bg-primary text-white text-[10px] font-bold px-2 py-0.5 rounded-full">{{ cart_count }}</span>
-        {% endif %}
-      </a>
-
-      <a href="{% url 'accounts:address_list' %}"
-        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all
-        {% if url_name == 'address_list' %}bg-primary-light text-primary
-        {% else %}text-text-secondary hover:bg-surface-light hover:text-primary{% endif %}">
-        <span class="material-symbols-outlined text-[20px] {% if url_name == 'address_list' %}icon-filled{% endif %}">location_on</span>
-        Shipping Addresses
-      </a>
-
-      <div class="border-t border-border-green/10 my-2 mx-1"></div>
-
-      
-
-      <a href="{% url 'accounts:logout' %}"
-        onclick="return confirm('Are you sure you want to sign out?')"
-        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-red-500 hover:bg-red-50 transition-all">
-        <span class="material-symbols-outlined text-[20px]">logout</span>
-        Sign Out
-      </a>
-
-      {% endwith %}
-    </nav>
-  </div>
-</aside>
+  {% include 'accounts/profile_sidebar.html' %}
 {% endif %}
 
-    <!-- ══════════════════════════════════════════
-         ORIGINAL CART CONTENT — untouched
-    ══════════════════════════════════════════ -->
+    <!-- CART CONTENT -->
     <div class="flex-1 min-w-0">
 
       <div class="mb-6 flex items-end justify-between border-b border-gray-200 pb-5">
@@ -516,23 +409,22 @@
   </div><!-- end sidebar + content row -->
 </div><!-- end page wrapper -->
 
-
-<!-- ══════════════════════════════════════════
-     FOOTER — original cart footer
-══════════════════════════════════════════ -->
+<!-- FOOTER -->
 <footer class="bg-[#1e4433] border-t border-[#254632] py-8">
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
     <div class="flex flex-col sm:flex-row items-center justify-between gap-6">
 
-      <!-- Brand -->
       <div style="line-height:1;">
         <div style="font-family:'Georgia',serif;font-size:18px;font-weight:700;letter-spacing:0.15em;color:#ffffff;">vólke</div>
         <div style="font-size:7px;letter-spacing:0.18em;color:#9ca3af;text-transform:uppercase;">shoppe</div>
       </div>
 
-      <!-- Links -->
       <div class="flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs text-gray-500">
+        {% if user.is_authenticated %}
         <a class="hover:text-primary transition-colors" href="{% url 'home:user_orders' %}">Order Status</a>
+        {% else %}
+        <a class="hover:text-primary transition-colors" href="{% url 'accounts:userlogin' %}">Order Status</a>
+        {% endif %}
         <a class="hover:text-primary transition-colors" href="{% url 'home:refund_policy' %}">Refund Policy</a>
         <a class="hover:text-primary transition-colors" href="{% url 'home:contact_info' %}">Contact</a>
         <span class="text-[#254632]">|</span>
@@ -541,13 +433,12 @@
         <a class="hover:text-primary transition-colors" href="{% url 'home:terms-of-service' %}">Terms of Service</a>
       </div>
 
-      <!-- Copyright -->
-      <p class="text-xs text-gray-600 whitespace-nowrap">© 2024 VOLKE®</p>
+      <!-- ✅ FIX: Year updated to 2025 -->
+      <p class="text-xs text-gray-600 whitespace-nowrap">© 2025 VOLKE®</p>
 
     </div>
   </div>
 </footer>
-
 
 <!-- REMOVE MODAL -->
 <div id="removeModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50 backdrop-blur-sm">
@@ -604,39 +495,38 @@
 </div>
 
 <script>
-const removeUrls = {
-  remove: "{% url 'home:remove_cart_item' 99999 %}".replace('99999', '{}'),
-  moveToWishlist: "{% url 'home:move_to_wishlist' 99999 %}".replace('99999', '{}'),
-};
-function openRemoveModal(cartItemId) {
-  const modal = document.getElementById("removeModal");
-  modal.classList.remove("hidden"); modal.classList.add("flex");
-  document.getElementById("confirmRemoveForm").action = removeUrls.remove.replace('{}', cartItemId);
-  document.getElementById("moveWishlistForm").action = removeUrls.moveToWishlist.replace('{}', cartItemId);
-}
-function closeRemoveModal() {
-  const modal = document.getElementById("removeModal");
-  modal.classList.add("hidden"); modal.classList.remove("flex");
-}
-document.getElementById("removeModal").addEventListener("click", function(e) { if (e.target === this) closeRemoveModal(); });
+  // ✅ bfcache fix — forces reload when user hits back button after logout
+  window.addEventListener('pageshow', function(event) {
+    if (event.persisted) {
+      window.location.reload();
+    }
+  });
 
-function openLoginPrompt() {
-  const m = document.getElementById('loginPromptModal');
-  m.classList.remove('hidden'); m.classList.add('flex');
-}
-function closeLoginPrompt() {
-  const m = document.getElementById('loginPromptModal');
-  m.classList.add('hidden'); m.classList.remove('flex');
-}
-document.getElementById('loginPromptModal').addEventListener('click', function(e) { if (e.target === this) closeLoginPrompt(); });
+  const removeUrls = {
+    remove: "{% url 'home:remove_cart_item' 99999 %}".replace('99999', '{}'),
+    moveToWishlist: "{% url 'home:move_to_wishlist' 99999 %}".replace('99999', '{}'),
+  };
+  function openRemoveModal(cartItemId) {
+    const modal = document.getElementById("removeModal");
+    modal.classList.remove("hidden"); modal.classList.add("flex");
+    document.getElementById("confirmRemoveForm").action = removeUrls.remove.replace('{}', cartItemId);
+    document.getElementById("moveWishlistForm").action = removeUrls.moveToWishlist.replace('{}', cartItemId);
+  }
+  function closeRemoveModal() {
+    const modal = document.getElementById("removeModal");
+    modal.classList.add("hidden"); modal.classList.remove("flex");
+  }
+  document.getElementById("removeModal").addEventListener("click", function(e) { if (e.target === this) closeRemoveModal(); });
 
-function toggleDropdown() {
-  document.getElementById('dropdownMenu').classList.toggle('hidden');
-}
-document.addEventListener('click', function(e) {
-  const d = document.getElementById('profileDropdown');
-  if (d && !d.contains(e.target)) document.getElementById('dropdownMenu').classList.add('hidden');
-});
+  function openLoginPrompt() {
+    const m = document.getElementById('loginPromptModal');
+    m.classList.remove('hidden'); m.classList.add('flex');
+  }
+  function closeLoginPrompt() {
+    const m = document.getElementById('loginPromptModal');
+    m.classList.add('hidden'); m.classList.remove('flex');
+  }
+  document.getElementById('loginPromptModal').addEventListener('click', function(e) { if (e.target === this) closeLoginPrompt(); });
 </script>
 
 </body>

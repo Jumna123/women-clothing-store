@@ -76,131 +76,75 @@
 
   </div>
 
-  <!-- Chart + Recent Orders -->
-  <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
-
-    <!-- Revenue Chart -->
-    <div class="xl:col-span-2 bg-white rounded-xl border border-[#d1e6d9] p-6 shadow-sm">
-      <div class="flex flex-wrap justify-between items-center mb-6 gap-4">
-        <div>
-          <h3 class="text-text-main text-lg font-bold">Sales Revenue</h3>
-          <p class="text-text-muted text-sm">Revenue analytics for current month</p>
-        </div>
-        <div class="flex items-center gap-2 text-text-main">
-          <span class="text-3xl font-bold">₹{{ monthly_revenue|floatformat:2 }}</span>
-        </div>
-      </div>
-
-      <!-- Dynamic SVG chart -->
-      <div class="relative h-64 w-full">
-        {% if chart_points %}
-        {% with p=chart_points %}
-        <svg class="w-full h-full overflow-visible" preserveAspectRatio="none" viewBox="0 0 800 200">
-          <defs>
-            <linearGradient id="chartGradient" x1="0" x2="0" y1="0" y2="1">
-              <stop offset="0%" stop-color="#19b357" stop-opacity="0.15"></stop>
-              <stop offset="100%" stop-color="#19b357" stop-opacity="0"></stop>
-            </linearGradient>
-          </defs>
-
-          {% with x0="0" x1="266" x2="533" x3="800" %}
-          <path d="M{{ x0 }},{{ p.0 }} C100,{{ p.0 }} 166,{{ p.1 }} {{ x1 }},{{ p.1 }} C366,{{ p.1 }} 433,{{ p.2 }} {{ x2 }},{{ p.2 }} C633,{{ p.2 }} 700,{{ p.3 }} {{ x3 }},{{ p.3 }} V200 H0 Z"
-                fill="url(#chartGradient)"></path>
-          <path d="M{{ x0 }},{{ p.0 }} C100,{{ p.0 }} 166,{{ p.1 }} {{ x1 }},{{ p.1 }} C366,{{ p.1 }} 433,{{ p.2 }} {{ x2 }},{{ p.2 }} C633,{{ p.2 }} 700,{{ p.3 }} {{ x3 }},{{ p.3 }}"
-                fill="none" stroke="#19b357" stroke-linecap="round" stroke-width="3"></path>
-
-          <circle cx="{{ x0 }}" cy="{{ p.0 }}" fill="white" r="4" stroke="#19b357" stroke-width="3"></circle>
-          <circle cx="{{ x1 }}" cy="{{ p.1 }}" fill="white" r="4" stroke="#19b357" stroke-width="3"></circle>
-          <circle cx="{{ x2 }}" cy="{{ p.2 }}" fill="white" r="4" stroke="#19b357" stroke-width="3"></circle>
-          <circle cx="{{ x3 }}" cy="{{ p.3 }}" fill="#19b357" r="6" stroke="white" stroke-width="2"></circle>
-          {% endwith %}
-
-        </svg>
-        {% endwith %}
-        {% else %}
-        <div class="flex items-center justify-center h-full text-text-muted text-sm">No revenue data yet</div>
-        {% endif %}
-      </div>
-
-      <div class="flex justify-between mt-4 px-2 text-xs font-bold text-text-muted uppercase tracking-wider">
-        <span>Week 1</span>
-        <span>Week 2</span>
-        <span>Week 3</span>
-        <span>Week 4</span>
-      </div>
+ <!-- Recent Orders -->
+  <div class="bg-white rounded-xl border border-[#d1e6d9] p-6 shadow-sm flex flex-col">
+    <div class="flex justify-between items-center mb-6">
+      <h3 class="text-text-main text-lg font-bold">Recent Orders</h3>
+      <a href="{% url 'adminpanel:orders' %}" class="text-primary text-sm font-bold hover:underline">View All</a>
     </div>
 
-    <!-- Recent Orders -->
-    <div class="bg-white rounded-xl border border-[#d1e6d9] p-6 shadow-sm flex flex-col">
-      <div class="flex justify-between items-center mb-6">
-        <h3 class="text-text-main text-lg font-bold">Recent Orders</h3>
-        <a href="{% url 'adminpanel:orders' %}" class="text-primary text-sm font-bold hover:underline">View All</a>
-      </div>
-
-      <div class="overflow-x-auto flex-1">
-        <table class="w-full text-left">
-          <thead>
-            <tr class="border-b border-gray-100">
-              <th class="pb-3 text-xs font-bold text-text-muted uppercase tracking-wider">Product</th>
-              <th class="pb-3 text-xs font-bold text-text-muted uppercase tracking-wider text-right">Total</th>
-              <th class="pb-3 text-xs font-bold text-text-muted uppercase tracking-wider text-right">Status</th>
-            </tr>
-          </thead>
-          <tbody class="text-sm divide-y divide-gray-50">
-            {% for order in recent_orders %}
-            <tr>
-              <td class="py-3 pr-2">
-                <div class="flex items-center gap-3">
-                  {% with first_item=order.items.first %}
-                  {% if first_item %}
-                    {% with img=first_item.product.images.first %}
-                    <div class="h-10 w-10 rounded-lg bg-gray-100 bg-cover bg-center shrink-0"
-                         {% if img %}style="background-image: url('{{ img.image.url }}');"{% endif %}>
-                    </div>
-                    {% endwith %}
-                    <div class="min-w-0">
-                      <p class="font-medium text-text-main line-clamp-1 text-xs">{{ first_item.product.product_name }}</p>
-                      <p class="text-xs text-text-muted">#ORD-{{ order.id }}</p>
-                    </div>
-                  {% else %}
-                    <div class="h-10 w-10 rounded-lg bg-gray-100 shrink-0 flex items-center justify-center">
-                      <span class="material-symbols-outlined text-[16px] text-gray-400">inventory_2</span>
-                    </div>
-                    <div>
-                      <p class="text-xs text-text-muted">#ORD-{{ order.id }}</p>
-                    </div>
-                  {% endif %}
+    <div class="overflow-x-auto flex-1">
+      <table class="w-full text-left">
+        <thead>
+          <tr class="border-b border-gray-100">
+            <th class="pb-3 text-xs font-bold text-text-muted uppercase tracking-wider">Product</th>
+            <th class="pb-3 text-xs font-bold text-text-muted uppercase tracking-wider text-right">Total</th>
+            <th class="pb-3 text-xs font-bold text-text-muted uppercase tracking-wider text-right">Status</th>
+          </tr>
+        </thead>
+        <tbody class="text-sm divide-y divide-gray-50">
+          {% for order in recent_orders %}
+          <tr>
+            <td class="py-3 pr-2">
+              <div class="flex items-center gap-3">
+                {% with first_item=order.items.first %}
+                {% if first_item %}
+                  {% with img=first_item.product.images.first %}
+                  <div class="h-10 w-10 rounded-lg bg-gray-100 bg-cover bg-center shrink-0"
+                       {% if img %}style="background-image: url('{{ img.image.url }}');"{% endif %}>
+                  </div>
                   {% endwith %}
-                </div>
-              </td>
-              <td class="py-3 text-right font-medium text-text-main text-xs">₹{{ order.total_amount }}</td>
-              <td class="py-3 text-right">
-                {% if order.status == 'delivered' %}
-                  <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-bold bg-[#e6f4ea] text-[#137a34]">Delivered</span>
-                {% elif order.status == 'shipped' %}
-                  <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-bold bg-blue-50 text-blue-700">Shipped</span>
-                {% elif order.status == 'pending' %}
-                  <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-bold bg-yellow-50 text-yellow-700">Pending</span>
-                {% elif order.status == 'processing' %}
-                  <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-bold bg-purple-50 text-purple-700">Processing</span>
-                {% elif order.status == 'cancelled' %}
-                  <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-bold bg-red-50 text-red-700">Cancelled</span>
-                {% elif order.status == 'return_requested' %}
-                  <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-bold bg-orange-50 text-orange-700">Return</span>
+                  <div class="min-w-0">
+                    <p class="font-medium text-text-main line-clamp-1 text-xs">{{ first_item.product.product_name }}</p>
+                    <p class="text-xs text-text-muted">#ORD-{{ order.id }}</p>
+                  </div>
+                {% else %}
+                  <div class="h-10 w-10 rounded-lg bg-gray-100 shrink-0 flex items-center justify-center">
+                    <span class="material-symbols-outlined text-[16px] text-gray-400">inventory_2</span>
+                  </div>
+                  <div>
+                    <p class="text-xs text-text-muted">#ORD-{{ order.id }}</p>
+                  </div>
                 {% endif %}
-              </td>
-            </tr>
-            {% empty %}
-            <tr>
-              <td colspan="3" class="py-8 text-center text-text-muted text-sm">
-                No orders yet
-              </td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
+                {% endwith %}
+              </div>
+            </td>
+            <td class="py-3 text-right font-medium text-text-main text-xs">₹{{ order.total_amount }}</td>
+            <td class="py-3 text-right">
+              {% if order.status == 'delivered' %}
+                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-bold bg-[#e6f4ea] text-[#137a34]">Delivered</span>
+              {% elif order.status == 'shipped' %}
+                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-bold bg-blue-50 text-blue-700">Shipped</span>
+              {% elif order.status == 'pending' %}
+                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-bold bg-yellow-50 text-yellow-700">Pending</span>
+              {% elif order.status == 'processing' %}
+                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-bold bg-purple-50 text-purple-700">Processing</span>
+              {% elif order.status == 'cancelled' %}
+                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-bold bg-red-50 text-red-700">Cancelled</span>
+              {% elif order.status == 'return_requested' %}
+                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-bold bg-orange-50 text-orange-700">Return</span>
+              {% endif %}
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="3" class="py-8 text-center text-text-muted text-sm">No orders yet</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
     </div>
+  </div>
 
   </div>
 

@@ -309,7 +309,7 @@
       </div><!-- end shipment-card -->
       {% endfor %}
 
-      <!-- Order tracking timeline — hidden when delivered, cancelled, or returned -->
+      <!-- Order tracking timeline -->
       {% if order.status != 'cancelled' and order.status != 'returned' and order.status != 'delivered' and order.status != 'return_requested' %}
       <div class="bg-white rounded-2xl border border-border-green/10 p-5 fade-in" id="tracking">
         <h3 class="text-sm font-black text-text-main mb-5 flex items-center gap-2">
@@ -415,7 +415,7 @@
                   {% else %}{{ order.payment_method|title }}{% endif %}
                 </p>
                 <p class="text-[10px] text-text-secondary/50 font-medium">
-                  {% if order.payment_method == 'cod' %}Pay on delivery{% else %}Paid via Stripe{% endif %}
+                  {% if order.payment_method == 'cod' %}Pay on delivery{% else %}Paid via Razorpay{% endif %}
                 </p>
               </div>
             </div>
@@ -490,16 +490,23 @@
 </div><!-- end PAGE -->
 
 <!-- FOOTER -->
-<footer class="bg-primary-hover text-white py-6 mt-auto">
-  <div class="max-w-[1200px] mx-auto px-4 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-3">
-    <div class="flex flex-col" style="line-height:1;">
-      <span style="font-family:'Georgia',serif;font-size:18px;font-weight:700;letter-spacing:0.15em;color:#fff;">vólke</span>
-      <span style="font-size:7px;letter-spacing:0.18em;color:#a7f3d0;text-transform:uppercase;">shoppe</span>
-    </div>
-    <p class="text-white/30 text-[10px] font-bold uppercase tracking-widest">© {% now "Y" %} vólke shoppe. All rights reserved.</p>
-    <div class="flex gap-5">
-      <a class="text-[10px] font-bold uppercase tracking-widest text-white/30 hover:text-white transition-colors" href="#">Privacy</a>
-      <a class="text-[10px] font-bold uppercase tracking-widest text-white/30 hover:text-white transition-colors" href="#">Terms</a>
+<footer class="bg-[#1e4433] border-t border-[#254632] py-8">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="flex flex-col sm:flex-row items-center justify-between gap-6">
+      <div style="line-height:1;">
+        <div style="font-family:'Georgia',serif;font-size:18px;font-weight:700;letter-spacing:0.15em;color:#ffffff;">vólke</div>
+        <div style="font-size:7px;letter-spacing:0.18em;color:#9ca3af;text-transform:uppercase;">shoppe</div>
+      </div>
+      <div class="flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs text-gray-500">
+        <a class="hover:text-primary transition-colors" href="{% url 'home:user_orders' %}">Order Status</a>
+        <a class="hover:text-primary transition-colors" href="{% url 'home:refund_policy' %}">Refund Policy</a>
+        <a class="hover:text-primary transition-colors" href="{% url 'home:contact_info' %}">Contact</a>
+        <span class="text-[#254632]">|</span>
+        <a class="hover:text-primary transition-colors" href="{% url 'home:privacy_policy' %}">Privacy Policy</a>
+        <a class="hover:text-primary transition-colors" href="{% url 'home:shipping_policy' %}">Shipping Policy</a>
+        <a class="hover:text-primary transition-colors" href="{% url 'home:terms-of-service' %}">Terms of Service</a>
+      </div>
+      <p class="text-xs text-gray-600 whitespace-nowrap">© 2024 VOLKE®</p>
     </div>
   </div>
 </footer>
@@ -515,6 +522,61 @@
     }
   });
 </script>
+<script>
+  window.addEventListener('pageshow', function(event) {
+    if (event.persisted) { window.location.reload(); }
+  });
+</script>
+
+{% if order_confirmed_id %}
+<div id="orderPopup" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm px-4">
+  <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden">
+
+    <div class="bg-[#1e4433] px-6 py-6 flex flex-col items-center text-center">
+      <div class="flex size-16 items-center justify-center rounded-full bg-[#36e27b] mb-3">
+        <span class="material-symbols-outlined text-[32px] text-[#112117]" style="font-variation-settings:'FILL' 1,'wght' 700,'GRAD' 0,'opsz' 24">check_circle</span>
+      </div>
+      <h2 class="text-white text-xl font-black tracking-tight">Order Confirmed!</h2>
+      <p class="text-green-300 text-xs mt-1 font-medium">Thank you for shopping with vólke</p>
+    </div>
+
+    <div class="px-6 py-6 text-center space-y-3">
+      <p class="text-[#112117] text-sm font-semibold">
+        Order <span class="font-black">#{{ order_confirmed_id }}</span> has been placed successfully.
+      </p>
+      <p class="text-gray-400 text-xs leading-relaxed">
+        You'll receive a confirmation email shortly. Track your order anytime from your orders page.
+      </p>
+
+      <div class="flex flex-col gap-2 pt-3">
+        <button onclick="document.getElementById('orderPopup').remove()"
+           class="flex items-center justify-center gap-2 w-full rounded-xl bg-[#1e4433] text-white py-3 text-sm font-bold hover:bg-[#112117] transition-all">
+          <span class="material-symbols-outlined text-[18px]">check</span>
+          Got it
+        </button>
+        <a href="{% url 'home:home' %}"
+           class="flex items-center justify-center gap-2 w-full rounded-xl border border-gray-200 text-gray-500 py-3 text-sm font-semibold hover:bg-gray-50 transition-all">
+          Continue Shopping
+        </a>
+      </div>
+    </div>
+
+    <!-- Close X -->
+    <button onclick="document.getElementById('orderPopup').remove()"
+      class="absolute top-3 right-3 flex size-7 items-center justify-center rounded-full bg-white/10 text-white hover:bg-white/20 transition-all">
+      <span class="material-symbols-outlined text-[16px]">close</span>
+    </button>
+
+  </div>
+</div>
+
+<script>
+  setTimeout(function() {
+    const p = document.getElementById('orderPopup');
+    if (p) p.remove();
+  }, 15000);
+</script>
+{% endif %}
 
 </body>
 </html>

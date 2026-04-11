@@ -123,9 +123,7 @@
       <!-- Form -->
       <form action="{% url 'accounts:userlogin' %}" class="space-y-5" method="POST">
         {% csrf_token %}
-        {% if request.GET.next %}
-          <input type="hidden" name="next" value="{{ request.GET.next }}">
-        {% endif %}
+      <input type="hidden" name="next" value="{{ next }}">
 
         <!-- Email -->
         <div class="space-y-1">

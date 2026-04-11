@@ -1,0 +1,343 @@
+{% extends "adminpanel/admin_base.html" %}
+{% block title %}Order #ORD-{{ order.id }}{% endblock %}
+{% block content %}
+
+<div class="flex flex-col h-full bg-[#112117] rounded-2xl overflow-hidden">
+<div class="flex flex-col w-full h-full bg-white rounded-2xl shadow-xl overflow-hidden border border-[#d0e7d9]">
+
+  <!-- HEADER -->
+  <div class="flex-none px-8 pt-8 pb-6 border-b border-[#e7f3ec]">
+    <div class="flex flex-wrap justify-between items-center gap-4">
+      <div class="flex items-center gap-4">
+        <a href="{% url 'adminpanel:orders' %}"
+           class="flex items-center justify-center h-9 w-9 rounded-xl border border-[#d0e7d9] bg-white text-[#4e7a5e] hover:bg-[#f0f9f4] hover:text-[#112117] transition-all">
+          <span class="material-symbols-outlined text-[20px]">arrow_back</span>
+        </a>
+        <div>
+          <h1 class="text-[#112117] text-2xl font-black leading-tight tracking-[-0.033em]">Order #ORD-{{ order.id }}</h1>
+          <p class="text-[#4e7a5e] text-sm mt-0.5">Placed on {{ order.created_at|date:"F d, Y · g:i A" }}</p>
+        </div>
+      </div>
+
+      <!-- Status badge -->
+      <div class="flex items-center gap-3">
+        {% if order.status == 'delivered' %}
+          <span class="inline-flex items-center gap-1.5 rounded-full bg-green-100 px-3 py-1.5 text-xs font-bold text-green-800">
+            <span class="h-2 w-2 rounded-full bg-green-600"></span>Delivered
+          </span>
+        {% elif order.status == 'shipped' %}
+          <span class="inline-flex items-center gap-1.5 rounded-full bg-blue-100 px-3 py-1.5 text-xs font-bold text-blue-800">
+            <span class="h-2 w-2 rounded-full bg-blue-600"></span>Shipped
+          </span>
+        {% elif order.status == 'pending' %}
+          <span class="inline-flex items-center gap-1.5 rounded-full bg-yellow-100 px-3 py-1.5 text-xs font-bold text-yellow-800">
+            <span class="h-2 w-2 rounded-full bg-yellow-500"></span>Pending
+          </span>
+        {% elif order.status == 'processing' %}
+          <span class="inline-flex items-center gap-1.5 rounded-full bg-purple-100 px-3 py-1.5 text-xs font-bold text-purple-800">
+            <span class="h-2 w-2 rounded-full bg-purple-500"></span>Processing
+          </span>
+          {% elif order.status == 'return_requested' %}
+            {% with rr=order.return_requests.first %}
+            <span class="inline-flex items-center gap-1.5 rounded-full bg-orange-100 px-3 py-1.5 text-xs font-bold text-orange-800">
+              <span class="h-2 w-2 rounded-full bg-orange-500"></span>
+              {% if rr and rr.return_type == 'exchange' %}Exchange Requested{% else %}Return Requested{% endif %}
+            </span>
+            {% endwith %}
+        {% elif order.status == 'returned' %}
+          <span class="inline-flex items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1.5 text-xs font-bold text-gray-600">
+            <span class="h-2 w-2 rounded-full bg-gray-400"></span>Returned
+          </span>
+        {% elif order.status == 'cancelled' %}
+          <span class="inline-flex items-center gap-1.5 rounded-full bg-red-100 px-3 py-1.5 text-xs font-bold text-red-800">
+            <span class="h-2 w-2 rounded-full bg-red-500"></span>Cancelled
+          </span>
+        {% else %}
+          <span class="inline-flex items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1.5 text-xs font-bold text-gray-600">
+            <span class="h-2 w-2 rounded-full bg-gray-400"></span>{{ order.get_status_display }}
+          </span>
+        {% endif %}
+
+        <!-- Update status inline -->
+        {% if order.status != 'return_requested' and order.status != 'returned' and order.status != 'cancelled' %}
+        <form method="POST" action="{% url 'adminpanel:update-order-status' order.id %}" class="flex items-center gap-2">
+          {% csrf_token %}
+          <select name="status"
+                  class="text-xs rounded-lg border border-[#d0e7d9] px-2 py-1.5 text-[#112117] focus:outline-none focus:ring-2 focus:ring-[#112117]/20 bg-white">
+            {% for value, label in order.STATUS_CHOICES %}
+              {% if value != 'return_requested' and value != 'returned' %}
+                <option value="{{ value }}" {% if order.status == value %}selected{% endif %}>{{ label }}</option>
+              {% endif %}
+            {% endfor %}
+          </select>
+          <button type="submit"
+                  class="text-xs px-3 py-1.5 rounded-lg bg-[#112117] text-white hover:bg-[#1c3326] transition-colors font-semibold">
+            Update
+          </button>
+        </form>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <!-- BODY -->
+  <div class="flex-1 overflow-y-auto">
+    <div class="max-w-6xl mx-auto p-8 grid grid-cols-1 xl:grid-cols-3 gap-6">
+
+      <!-- LEFT: Items + Payment Summary -->
+      <div class="xl:col-span-2 flex flex-col gap-6">
+
+        <!-- Order Items -->
+        <div class="bg-white rounded-xl border border-[#d0e7d9] overflow-hidden shadow-sm">
+          <div class="px-6 py-4 border-b border-[#e7f3ec] flex items-center gap-2">
+            <span class="material-symbols-outlined text-[#4e7a5e] text-[20px]">shopping_bag</span>
+            <h2 class="text-[#112117] font-bold text-base">Order Items</h2>
+            <span class="ml-auto text-xs text-[#4e7a5e] font-medium">{{ order.items.count }} item{{ order.items.count|pluralize }}</span>
+          </div>
+
+          <div class="divide-y divide-[#e7f3ec]">
+            {% for item in order.items.all %}
+            <div class="flex items-start gap-4 px-6 py-4">
+              <!-- Product image -->
+              {% with img=item.product.images.first %}
+              <div class="h-16 w-16 rounded-xl bg-[#f0f9f4] bg-cover bg-center shrink-0 border border-[#d0e7d9]"
+                   {% if img %}style="background-image: url('{{ img.image.url }}');"{% endif %}>
+                {% if not img %}
+                  <div class="h-full flex items-center justify-center">
+                    <span class="material-symbols-outlined text-[#4e7a5e] text-[24px]">inventory_2</span>
+                  </div>
+                {% endif %}
+              </div>
+              {% endwith %}
+
+              <div class="flex-1 min-w-0">
+                <p class="text-[#112117] font-semibold text-sm">{{ item.product.product_name }}</p>
+                <div class="flex flex-wrap gap-3 mt-1">
+                  {% if item.size %}
+                    <span class="text-xs text-[#4e7a5e]">Size: <strong>{{ item.size }}</strong></span>
+                  {% endif %}
+                  <span class="text-xs text-[#4e7a5e]">Qty: <strong>{{ item.quantity }}</strong></span>
+                  <span class="text-xs text-[#4e7a5e]">Price: <strong>₹{{ item.price }}</strong></span>
+                </div>
+
+                <!-- Return status if any -->
+                {% if item.return_status != 'none' %}
+                <div class="mt-2">
+                  <span class="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-orange-50 text-orange-700 border border-orange-200">
+                    <span class="material-symbols-outlined text-[12px]">assignment_return</span>
+                    {{ item.get_return_status_display }}
+                  </span>
+                  {% if item.return_reason %}
+                    <p class="text-xs text-[#4e7a5e] mt-1">Reason: {{ item.return_reason }}</p>
+                  {% endif %}
+                </div>
+                {% endif %}
+              </div>
+
+              <div class="text-right shrink-0">
+                <p class="text-[#112117] font-bold text-sm">₹{{ item.subtotal }}</p>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+
+        <!-- Payment Summary -->
+        <div class="bg-white rounded-xl border border-[#d0e7d9] shadow-sm overflow-hidden">
+          <div class="px-6 py-4 border-b border-[#e7f3ec] flex items-center gap-2">
+            <span class="material-symbols-outlined text-[#4e7a5e] text-[20px]">receipt</span>
+            <h2 class="text-[#112117] font-bold text-base">Payment Summary</h2>
+          </div>
+          <div class="px-6 py-4 space-y-3">
+            <div class="flex justify-between text-sm">
+              <span class="text-[#4e7a5e]">Subtotal</span>
+              <span class="text-[#112117] font-medium">
+                ₹{% with subtotal=0 %}
+                  {% for item in order.items.all %}{{ item.subtotal|add:subtotal }}{% endfor %}
+                {% endwith %}
+                {{ order.total_amount|add:order.discount_amount|add:"-"|add:order.shipping_amount|add:"-"|add:order.tax_amount }}
+              </span>
+            </div>
+            {% if order.discount_amount %}
+            <div class="flex justify-between text-sm">
+              <span class="text-[#4e7a5e]">Discount
+                {% if order.coupon_code %}<span class="ml-1 text-xs font-bold text-green-700 bg-green-50 px-1.5 py-0.5 rounded">{{ order.coupon_code }}</span>{% endif %}
+              </span>
+              <span class="text-green-700 font-medium">− ₹{{ order.discount_amount }}</span>
+            </div>
+            {% endif %}
+            {% if order.shipping_amount %}
+            <div class="flex justify-between text-sm">
+              <span class="text-[#4e7a5e]">Shipping</span>
+              <span class="text-[#112117] font-medium">₹{{ order.shipping_amount }}</span>
+            </div>
+            {% endif %}
+            {% if order.tax_amount %}
+            <div class="flex justify-between text-sm">
+              <span class="text-[#4e7a5e]">Tax</span>
+              <span class="text-[#112117] font-medium">₹{{ order.tax_amount }}</span>
+            </div>
+            {% endif %}
+            <div class="border-t border-[#e7f3ec] pt-3 flex justify-between">
+              <span class="text-[#112117] font-bold">Total</span>
+              <span class="text-[#112117] font-black text-lg">₹{{ order.total_amount }}</span>
+            </div>
+            <div class="flex justify-between text-sm pt-1">
+              <span class="text-[#4e7a5e]">Payment Method</span>
+              <span class="text-[#112117] font-semibold">{{ order.get_payment_method_display }}</span>
+            </div>
+            {% if order.razorpay_payment_id %}
+            <div class="flex justify-between text-sm">
+              <span class="text-[#4e7a5e]">Razorpay ID</span>
+              <span class="text-[#112117] font-mono text-xs">{{ order.razorpay_payment_id }}</span>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- Return Request (if any) -->
+        {% with return_req=order.return_requests.first %}
+        {% if return_req %}
+        <div class="bg-white rounded-xl border border-orange-200 shadow-sm overflow-hidden">
+          <div class="px-6 py-4 border-b border-orange-100 flex items-center gap-2 bg-orange-50">
+          <span class="material-symbols-outlined text-orange-600 text-[20px]">
+            {% if return_req.return_type == 'exchange' %}swap_horiz{% else %}assignment_return{% endif %}
+          </span>
+          <h2 class="text-orange-800 font-bold text-base">
+            {% if return_req.return_type == 'exchange' %}Exchange{% else %}Return{% endif %} Request #{{ return_req.id }}
+          </h2>
+          <span class="ml-auto text-xs font-bold px-2 py-0.5 rounded-full bg-orange-100 text-orange-700">
+            {{ return_req.display_status }}
+          </span>
+        </div>
+        <div class="px-6 py-4 grid grid-cols-2 gap-4 text-sm">
+          <div>
+            <p class="text-[#4e7a5e] text-xs mb-1">Type</p>
+            <p class="text-[#112117] font-semibold">{{ return_req.get_return_type_display }}</p>
+          </div>
+          <div>
+            <p class="text-[#4e7a5e] text-xs mb-1">Reason</p>
+            <p class="text-[#112117] font-semibold">{{ return_req.reason }}</p>
+          </div>
+          {% if return_req.details %}
+          <div class="col-span-2">
+            <p class="text-[#4e7a5e] text-xs mb-1">Details</p>
+            <p class="text-[#112117]">{{ return_req.details }}</p>
+          </div>
+          {% endif %}
+          {% if return_req.return_type == 'return' and return_req.refund_amount %}
+          <div>
+            <p class="text-[#4e7a5e] text-xs mb-1">Refund Amount</p>
+            <p class="text-green-700 font-bold">₹{{ return_req.refund_amount }}</p>
+          </div>
+          {% endif %}
+          {% if return_req.return_type == 'exchange' %}
+          <div class="col-span-2">
+            <p class="text-[#4e7a5e] text-xs mb-1">Exchange Info</p>
+            {% for item in return_req.items.all %}
+              {% if item.return_reason %}
+                <p class="text-[#112117] text-xs font-medium">{{ item.return_reason }}</p>
+              {% endif %}
+            {% endfor %}
+          </div>
+          {% endif %}
+          {% if return_req.rejected_reason %}
+          <div class="col-span-2">
+            <p class="text-[#4e7a5e] text-xs mb-1">Rejection Reason</p>
+            <p class="text-red-700">{{ return_req.rejected_reason }}</p>
+          </div>
+          {% endif %}
+        </div>
+                </div>
+                {% endif %}
+                {% endwith %}
+
+      </div>
+
+      <!-- RIGHT: Customer + Address -->
+      <div class="flex flex-col gap-6">
+
+        <!-- Customer Info -->
+        <div class="bg-white rounded-xl border border-[#d0e7d9] shadow-sm overflow-hidden">
+          <div class="px-6 py-4 border-b border-[#e7f3ec] flex items-center gap-2">
+            <span class="material-symbols-outlined text-[#4e7a5e] text-[20px]">person</span>
+            <h2 class="text-[#112117] font-bold text-base">Customer</h2>
+          </div>
+          <div class="px-6 py-4 flex items-start gap-4">
+          <div class="h-12 w-12 rounded-full bg-[#d0e7d9] flex items-center justify-center text-[#112117] font-black text-lg shrink-0">
+            {% if order.user.first_name or order.user.last_name %}
+              {{ order.user.first_name|first|upper }}{{ order.user.last_name|first|upper }}
+            {% else %}
+              {{ order.user.email|first|upper }}
+            {% endif %}
+          </div>
+            <div class="min-w-0">
+              <p class="text-[#112117] font-bold text-sm">{{ order.user.first_name }} {{ order.user.last_name }}</p>
+              <p class="text-[#4e7a5e] text-xs mt-0.5 break-all">{{ order.user.email }}</p>
+              {% if order.user.phone %}
+                <p class="text-[#4e7a5e] text-xs mt-0.5">{{ order.user.phone }}</p>
+              {% endif %}
+              <a href="{% url 'adminpanel:users' %}?q={{ order.user.email }}"
+                 class="inline-flex items-center gap-1 text-xs text-[#112117] font-semibold mt-2 hover:underline">
+                View profile <span class="material-symbols-outlined text-[13px]">arrow_forward</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Shipping Address -->
+        <div class="bg-white rounded-xl border border-[#d0e7d9] shadow-sm overflow-hidden">
+          <div class="px-6 py-4 border-b border-[#e7f3ec] flex items-center gap-2">
+            <span class="material-symbols-outlined text-[#4e7a5e] text-[20px]">location_on</span>
+            <h2 class="text-[#112117] font-bold text-base">Shipping Address</h2>
+          </div>
+          <div class="px-6 py-4 text-sm text-[#112117] space-y-1">
+            {% if order.address %}
+              {% if order.address.full_name %}<p class="font-semibold">{{ order.address.full_name }}</p>{% endif %}
+              {% if order.address.phone %}<p class="text-[#4e7a5e]">{{ order.address.phone }}</p>{% endif %}
+              <p>{{ order.address.address_line1 }}</p>
+              {% if order.address.address_line2 %}<p>{{ order.address.address_line2 }}</p>{% endif %}
+              <p>{{ order.address.city }}{% if order.address.state %}, {{ order.address.state }}{% endif %} {{ order.address.pincode }}</p>
+              {% if order.address.country %}<p>{{ order.address.country }}</p>{% endif %}
+            {% else %}
+              <p class="text-[#4e7a5e] italic">No address on record</p>
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- Order Meta -->
+        <div class="bg-white rounded-xl border border-[#d0e7d9] shadow-sm overflow-hidden">
+          <div class="px-6 py-4 border-b border-[#e7f3ec] flex items-center gap-2">
+            <span class="material-symbols-outlined text-[#4e7a5e] text-[20px]">info</span>
+            <h2 class="text-[#112117] font-bold text-base">Order Info</h2>
+          </div>
+          <div class="px-6 py-4 space-y-3 text-sm">
+            <div class="flex justify-between">
+              <span class="text-[#4e7a5e]">Order ID</span>
+              <span class="text-[#112117] font-bold">#ORD-{{ order.id }}</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-[#4e7a5e]">Placed</span>
+              <span class="text-[#112117] font-medium">{{ order.created_at|date:"M d, Y" }}</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-[#4e7a5e]">Last Updated</span>
+              <span class="text-[#112117] font-medium">{{ order.updated_at|date:"M d, Y" }}</span>
+            </div>
+            {% if order.coupon_code %}
+            <div class="flex justify-between">
+              <span class="text-[#4e7a5e]">Coupon</span>
+              <span class="text-green-700 font-bold">{{ order.coupon_code }}</span>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+{% endblock %}

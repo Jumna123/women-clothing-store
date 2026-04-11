@@ -4,19 +4,22 @@ from django.contrib import messages
 from django.http import JsonResponse
 from django.db.models import Q, Prefetch
 from django.core.paginator import Paginator
-from django.views.decorators.http import require_POST  
+from django.views.decorators.http import require_POST
+from django.views.decorators.cache import never_cache, cache_control
 from decimal import Decimal
 from django.utils import timezone
 from django.db.models import Q, Sum
 from datetime import timedelta
+from apps.home.tasks import send_order_confirmation_email
 
-from apps.adminpanel.models import Category, Product, ProductImage, Collection
-from apps.adminpanel.models import Category, Product, ProductImage, Collection, ProductSize
+from apps.adminpanel.models import Category, Product, ProductImage, Collection, ProductSize,StoreSettings
 from apps.accounts.models import Address
 from .models import Wishlist, Cart, Order, OrderItem, ReturnRequest
 
+
+@never_cache
 def home(request):
-    from apps.adminpanel.models import Category, Collection, StoreSettings
+    from apps.adminpanel.models import Category, Collection, StoreSettings, PromoCode
     from django.db.models import Count
 
     categories = Category.objects.filter(is_active=True)
@@ -32,13 +35,23 @@ def home(request):
     store_settings = StoreSettings.get_settings()
     marquee_items = [item.strip() for item in store_settings.marquee_text.split('|')]
 
+    # ← add this
+    promo_banners = PromoCode.objects.filter(
+        show_on_homepage=True,
+        is_active=True,
+        image__isnull=False
+    ).exclude(image='')
+
     return render(request, "user/home.html", {
         "categories": categories,
         "collections": collections,
         "marquee_items": marquee_items,
         "trending_products": trending_products,
+        "promo_banners": promo_banners,  # ← add this
     })
 
+
+@never_cache
 def category_products(request, slug):
     category = get_object_or_404(Category, slug=slug, is_active=True)
 
@@ -76,6 +89,8 @@ def category_products(request, slug):
         "current_sort": sort,
     })
 
+
+@never_cache
 def collection_products(request, pk):
     collection = get_object_or_404(Collection, pk=pk, is_active=True)
 
@@ -101,6 +116,7 @@ def collection_products(request, pk):
     })
 
 
+@never_cache
 @login_required(login_url='accounts:userlogin')
 def add_to_wishlist(request, product_id):
     product = get_object_or_404(Product, id=product_id)
@@ -118,6 +134,8 @@ def add_to_wishlist(request, product_id):
 
     return redirect(request.META.get('HTTP_REFERER') or 'home:index')
 
+
+@never_cache
 @login_required(login_url='accounts:userlogin')
 def wishlist_view(request):
     from apps.adminpanel.models import Category
@@ -136,6 +154,8 @@ def wishlist_view(request):
         'categories': categories,
     })
 
+
+@never_cache
 @login_required(login_url='accounts:userlogin')
 def add_to_cart(request, product_id):
     product = get_object_or_404(Product, id=product_id)
@@ -170,6 +190,8 @@ def add_to_cart(request, product_id):
     messages.success(request, f"Added '{product.product_name}' (Size: {size}) to your bag.")
     return redirect(request.META.get('HTTP_REFERER') or 'home:cart_view')
 
+
+@never_cache
 @login_required(login_url='accounts:userlogin')
 def cart_view(request):
     from apps.adminpanel.models import StoreSettings, PromoCode
@@ -227,9 +249,13 @@ def cart_view(request):
         "coupon_code": coupon_code,
         "coupon_msg": coupon_msg,
         "coupon_error": coupon_error,
-        "from_profile": from_profile,
+        "from_profile": from_profile,  
+        "cart_count": item_count,       
+        "wishlist_count": Wishlist.objects.filter(user=request.user).count(), 
     })
 
+
+@never_cache
 @login_required
 def apply_coupon(request):
     from apps.adminpanel.models import StoreSettings, PromoCode
@@ -254,6 +280,7 @@ def apply_coupon(request):
     return redirect('home:cart_view')
 
 
+@never_cache
 @login_required
 def remove_coupon(request):
     request.session.pop('coupon_code', None)
@@ -261,6 +288,7 @@ def remove_coupon(request):
     return redirect('home:cart_view')
 
 
+@never_cache
 @login_required(login_url='accounts:userlogin')
 def update_cart(request, item_id):
     cart_item = get_object_or_404(Cart, id=item_id, user=request.user)
@@ -287,6 +315,7 @@ def update_cart(request, item_id):
     return redirect('home:cart_view')
 
 
+# No cache not needed — pure JSON API response, browsers don't cache POST
 def get_product_sizes(request, product_id):
     product = get_object_or_404(Product, id=product_id)
 
@@ -304,6 +333,8 @@ def get_product_sizes(request, product_id):
         "sizes": sizes
     })
 
+
+@never_cache
 @login_required
 def move_to_cart(request, product_id):
     if request.method == "POST":
@@ -335,12 +366,15 @@ def move_to_cart(request, product_id):
     return redirect("home:wishlist_view")
 
 
+@never_cache
 @login_required
 def remove_cart_item(request, item_id):
     if request.method == "POST":
         Cart.objects.filter(id=item_id, user=request.user).delete()
     return redirect("home:cart_view")
 
+
+@never_cache
 @login_required
 def move_to_wishlist(request, item_id):
     if request.method == "POST":
@@ -351,6 +385,8 @@ def move_to_wishlist(request, item_id):
         cart_item.delete()
     return redirect("home:cart_view")
 
+
+@never_cache
 def product_detail(request, slug):
     product = get_object_or_404(Product, slug=slug)
     images = product.images.all()
@@ -371,6 +407,8 @@ def product_detail(request, slug):
     if request.user.is_authenticated:
         is_wishlisted = Wishlist.objects.filter(user=request.user, product=product).exists()
 
+    store = StoreSettings.get_settings()  # ← add this
+
     return render(request, "user/product_view.html", {
         "product": product,
         "images": images,
@@ -378,9 +416,12 @@ def product_detail(request, slug):
         "related_products": related_products,
         "is_wishlisted": is_wishlisted,
         "discount_percentage": product.discount_percentage,
+        "store": store,  # ← add this
     })
 
 
+
+@never_cache
 @login_required(login_url='accounts:userlogin')
 def checkout(request):
     from apps.adminpanel.models import StoreSettings, PromoCode
@@ -434,6 +475,7 @@ def checkout(request):
             "buy_now_size":       size,
         })
 
+    # ── Cart items ─────────────────────────────────────────────────────────────
     cart_items = Cart.objects.filter(
         user=request.user
     ).select_related("product").prefetch_related("product__images")
@@ -454,33 +496,60 @@ def checkout(request):
     tax = round(subtotal * Decimal("0.05"), 2)
 
     coupon_code = request.session.get('coupon_code', '')
-    discount = Decimal("0")
-    coupon_msg = ""
+    discount    = Decimal("0")
+    coupon_msg  = ""
 
     if coupon_code and store_settings.discounts_enabled:
         promo = PromoCode.objects.filter(code=coupon_code).first()
         if promo and promo.is_valid:
-            discount = round(subtotal * Decimal(promo.discount_percent) / 100, 2)
+            discount   = round(subtotal * Decimal(promo.discount_percent) / 100, 2)
             coupon_msg = f'"{coupon_code}" applied — {promo.discount_percent}% off'
 
     total = subtotal + shipping + tax - discount
 
-    addresses = Address.objects.filter(user=request.user).order_by('-is_default', '-created_at')
+    addresses       = Address.objects.filter(user=request.user).order_by('-is_default', '-created_at')
     default_address = addresses.filter(is_default=True).first()
 
     if request.method == 'POST':
         address_id = request.POST.get('address_id')
         delivery   = request.POST.get('delivery', 'standard')
 
+        # ── No saved address selected — try to create a new one ────────────
         if not address_id:
-            messages.error(request, "Please select a delivery address.", extra_tags='checkout')
-            return redirect("home:checkout")
+            full_name  = request.POST.get('new_full_name', '').strip()
+            phone      = request.POST.get('new_phone', '').strip()
+            house_name = request.POST.get('new_house_name', '').strip()
+            street     = request.POST.get('new_street', '').strip()
+            city       = request.POST.get('new_city', '').strip()
+            state      = request.POST.get('new_state', '').strip()
+            pincode    = request.POST.get('new_pincode', '').strip()
 
+            if not all([full_name, phone, house_name, street, city, state, pincode]):
+                messages.error(request, "Please fill in all address fields.")
+                return redirect("home:checkout")
+
+            is_first = not Address.objects.filter(user=request.user).exists()
+            save_address = request.POST.get('save_new_address')  # checkbox
+
+            new_address = Address.objects.create(
+                user=request.user,
+                full_name=full_name,
+                phone=phone,
+                house_name=house_name,
+                street=street,
+                city=city,
+                state=state,
+                pincode=pincode,
+                is_default=is_first,
+            )
+            address_id = new_address.id
+
+        # ── Validate selected/created address belongs to user ──────────────
         if not Address.objects.filter(id=address_id, user=request.user).exists():
-            messages.error(request, "Invalid address selected.", extra_tags='checkout')
+            messages.error(request, "Invalid address selected.")
             return redirect("home:checkout")
 
-        request.session['checkout_address_id'] = address_id
+        request.session['checkout_address_id'] = str(address_id)
         request.session['checkout_delivery']   = delivery
         return redirect('home:checkout_payment')
 
@@ -500,20 +569,13 @@ def checkout(request):
     })
 
 
-# ── Replace your checkout_payment view and add razorpay_callback below it ─────
-# Also add these imports at the top of views.py if not already present:
-#
-#   import razorpay
-#   from django.conf import settings
-#   from django.views.decorators.csrf import csrf_exempt
-#   import hmac, hashlib, json
-
 import razorpay
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 import hmac, hashlib, json
 
 
+@never_cache
 @login_required(login_url='accounts:userlogin')
 def checkout_payment(request):
     from apps.adminpanel.models import StoreSettings, PromoCode
@@ -556,7 +618,6 @@ def checkout_payment(request):
 
     total = subtotal + shipping + tax - discount
 
-    # ── COD: place order immediately ──────────────────────────────────────────
     if request.method == 'POST':
         payment_method = request.POST.get('payment_method', 'cod')
 
@@ -587,16 +648,17 @@ def checkout_payment(request):
             cart_items.delete()
             request.session.pop('checkout_address_id', None)
             request.session.pop('checkout_delivery', None)
+            request.session['order_confirmed'] = order.id
 
+            send_order_confirmation_email.delay(order.id)
             messages.success(request, f"Order #{order.id} placed successfully!", extra_tags='checkout')
             return redirect('home:user_orders')
 
-        # ── Razorpay: create Razorpay order, render page with JS ──────────────
         elif payment_method == 'razorpay':
             client = razorpay.Client(
                 auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET)
             )
-            amount_paise = int(total * 100)   # Razorpay takes paise
+            amount_paise = int(total * 100)
 
             razorpay_order = client.order.create({
                 "amount":   amount_paise,
@@ -604,7 +666,6 @@ def checkout_payment(request):
                 "payment_capture": 1,
             })
 
-            # Persist pending order so we can confirm after payment
             order = Order.objects.create(
                 user=request.user,
                 address=address,
@@ -626,31 +687,28 @@ def checkout_payment(request):
                     size=item.size,
                 )
 
-            # Store in session so callback can verify
             request.session['pending_order_id'] = order.id
 
             return render(request, "user/payment.html", {
-                "address":          address,
-                "delivery":         delivery,
-                "cart_items":       cart_items,
-                "subtotal":         subtotal,
-                "shipping":         shipping,
-                "tax":              tax,
-                "discount":         discount,
-                "coupon_msg":       coupon_msg,
-                "total":            total,
-                "store_settings":   store_settings,
-                # Razorpay context
-                "razorpay":         True,
-                "razorpay_key":     settings.RAZORPAY_KEY_ID,
+                "address":           address,
+                "delivery":          delivery,
+                "cart_items":        cart_items,
+                "subtotal":          subtotal,
+                "shipping":          shipping,
+                "tax":               tax,
+                "discount":          discount,
+                "coupon_msg":        coupon_msg,
+                "total":             total,
+                "store_settings":    store_settings,
+                "razorpay":          True,
+                "razorpay_key":      settings.RAZORPAY_KEY_ID,
                 "razorpay_order_id": razorpay_order['id'],
-                "razorpay_amount":  amount_paise,
-                "user_name":        request.user.get_full_name() or request.user.email,
-                "user_email":       request.user.email,
-                "user_phone":       getattr(address, 'phone', ''),
+                "razorpay_amount":   amount_paise,
+                "user_name":         request.user.get_full_name() or request.user.email,
+                "user_email":        request.user.email,
+                "user_phone":        getattr(address, 'phone', ''),
             })
 
-    # ── GET: render payment selection page ────────────────────────────────────
     return render(request, "user/payment.html", {
         "address":        address,
         "delivery":       delivery,
@@ -666,20 +724,21 @@ def checkout_payment(request):
     })
 
 
+# csrf_exempt kept — Razorpay posts here directly, never_cache still applied
+@never_cache
 @csrf_exempt
 def razorpay_callback(request):
-    """Called by Razorpay after payment — verifies signature and confirms order."""
     from apps.adminpanel.models import PromoCode
     from django.db.models import F
+    from apps.home.tasks import send_order_confirmation_email, send_payment_failed_email
 
     if request.method != 'POST':
         return redirect('home:user_orders')
 
-    razorpay_payment_id  = request.POST.get('razorpay_payment_id', '')
-    razorpay_order_id    = request.POST.get('razorpay_order_id', '')
-    razorpay_signature   = request.POST.get('razorpay_signature', '')
+    razorpay_payment_id = request.POST.get('razorpay_payment_id', '')
+    razorpay_order_id   = request.POST.get('razorpay_order_id', '')
+    razorpay_signature  = request.POST.get('razorpay_signature', '')
 
-    # Verify signature
     key_secret = settings.RAZORPAY_KEY_SECRET.encode()
     msg        = f"{razorpay_order_id}|{razorpay_payment_id}".encode()
     expected   = hmac.new(key_secret, msg, hashlib.sha256).hexdigest()
@@ -691,36 +750,38 @@ def razorpay_callback(request):
         return redirect('home:user_orders')
 
     if hmac.compare_digest(expected, razorpay_signature):
-        # Payment verified
-        order.status                = "confirmed"
-        order.razorpay_payment_id   = razorpay_payment_id
-        order.razorpay_signature    = razorpay_signature
+        order.status              = "confirmed"
+        order.razorpay_payment_id = razorpay_payment_id
+        order.razorpay_signature  = razorpay_signature
         order.save()
 
-        # Clear cart
         Cart.objects.filter(user=order.user).delete()
 
-        # Use coupon
         if order.coupon_code:
             PromoCode.objects.filter(code=order.coupon_code).update(used_count=F('used_count') + 1)
 
-        # Clean session
         request.session.pop('coupon_code', None)
         request.session.pop('checkout_address_id', None)
         request.session.pop('checkout_delivery', None)
         request.session.pop('pending_order_id', None)
+        request.session['order_confirmed'] = order.id
+
+        send_order_confirmation_email.delay(order.id)
 
         messages.success(request, f"Payment successful! Order #{order.id} confirmed.")
         return redirect('home:order_detail', order_id=order.id)
 
     else:
-        # Signature mismatch — mark as failed
         order.status = "payment_failed"
         order.save()
+
+        send_payment_failed_email.delay(order.id)
+
         messages.error(request, "Payment verification failed. Please contact support.")
         return redirect('home:user_orders')
 
 
+@never_cache
 @login_required
 def user_orders(request):
     orders = Order.objects.select_related('user').prefetch_related(
@@ -737,6 +798,13 @@ def user_orders(request):
     elif selected_period in ['2023', '2024', '2025']:
         orders = orders.filter(created_at__year=int(selected_period))
 
+    now = timezone.now()
+    for order in orders:
+        if order.status == 'delivered' and order.delivered_at:
+            order.return_eligible = (now - order.delivered_at).days <= 10
+        else:
+            order.return_eligible = order.status == 'delivered'
+
     paginator   = Paginator(orders, 10)
     page        = request.GET.get('page', 1)
     orders_page = paginator.get_page(page)
@@ -750,15 +818,22 @@ def user_orders(request):
         status__in=['pending', 'confirmed', 'processing', 'shipped', 'in_transit']
     ).count()
 
+    order_confirmed_id = request.session.pop('order_confirmed', None)
+    from_profile = request.GET.get('from') == 'profile'  
+
     return render(request, "user/orders.html", {
         "orders":              orders_page,
         "selected_period":     selected_period,
         "cart_count":          cart_count,
         "wishlist_count":      wishlist_count,
         "active_orders_count": active_orders_count,
+        "order_confirmed_id":  order_confirmed_id,
+        "from_profile":        from_profile,  
     })
 
 
+
+@never_cache
 @login_required
 def order_detail(request, order_id):
     order = get_object_or_404(Order, id=order_id, user=request.user)
@@ -767,11 +842,16 @@ def order_detail(request, order_id):
         total=Sum('quantity')
     )['total'] or 0
 
+    order_confirmed_id = request.session.pop('order_confirmed', None)
+
     return render(request, "user/order_details.html", {
-        "order":      order,
-        "cart_count": cart_count,
+        "order":              order,
+        "cart_count":         cart_count,
+        "order_confirmed_id": order_confirmed_id,
     })
 
+
+@never_cache
 def search_products(request):
     query    = request.GET.get('q', '').strip()
     products = []
@@ -815,17 +895,16 @@ RETURN_REASONS = [
 ]
 
 
+@never_cache
 @login_required(login_url='accounts:userlogin')
 def request_return(request, order_id):
     from apps.adminpanel.models import StoreSettings
     order = get_object_or_404(Order, id=order_id, user=request.user)
 
-    # Guard: only delivered orders
     if order.status != 'delivered':
         messages.error(request, "Only delivered orders can be returned or exchanged.")
         return redirect('home:order_detail', order_id=order_id)
 
-    # Guard: return window (7 days)
     store_settings = StoreSettings.get_settings()
     window_days = getattr(store_settings, 'return_window_days', 7)
     days_since = (timezone.now() - order.updated_at).days
@@ -833,7 +912,6 @@ def request_return(request, order_id):
         messages.error(request, f"Return window of {window_days} days has passed.")
         return redirect('home:order_detail', order_id=order_id)
 
-    # Guard: no duplicate active return request
     existing = order.return_requests.exclude(
         status__in=['rejected', 'inspection_failed']
     ).first()
@@ -844,40 +922,58 @@ def request_return(request, order_id):
     eligible_items = order.items.filter(return_status='none')
 
     if request.method == 'POST':
-        return_type    = request.POST.get('return_type', 'return')
-        reason         = request.POST.get('reason', '').strip()
-        details        = request.POST.get('details', '').strip()
-        selected_ids   = request.POST.getlist('item_ids')
-
-        if not reason:
-            messages.error(request, "Please select a reason.")
-            return redirect('home:return_request', order_id=order_id)
+        return_type  = request.POST.get('return_type', 'return')
+        reason       = request.POST.get('reason', '').strip()
+        details      = request.POST.get('details', '').strip()
+        selected_ids = request.POST.getlist('item_ids')
 
         if not selected_ids:
             messages.error(request, "Please select at least one item.")
             return redirect('home:return_request', order_id=order_id)
 
+        # Reason is only required for returns, not exchanges
+        if return_type == 'return' and not reason:
+            messages.error(request, "Please select a reason.")
+            return redirect('home:return_request', order_id=order_id)
+
+        # Exchange: validate a new size is chosen for every selected item
+        if return_type == 'exchange':
+            for item_id in selected_ids:
+                size = request.POST.get(f'exchange_size_{item_id}', '').strip()
+                if not size:
+                    messages.error(request, "Please select a new size for each item you want to exchange.")
+                    return redirect('home:return_request', order_id=order_id)
+
         selected_items = order.items.filter(id__in=selected_ids, return_status='none')
 
-        # Create ReturnRequest
         return_req = ReturnRequest.objects.create(
             order=order,
             user=request.user,
             return_type=return_type,
-            reason=reason,
+            reason=reason if return_type == 'return' else 'size_exchange',
             details=details,
             status='requested',
         )
         return_req.items.set(selected_items)
 
-        # Mark items
-        selected_items.update(
-            return_status='return_requested' if return_type == 'return' else 'exchange_requested',
-            return_reason=f"[{return_type.upper()}] {reason}" + (f" — {details}" if details else ""),
-            return_requested_at=timezone.now(),
-        )
+        # Save per-item status and reason (with exchange size appended)
+        for item in selected_items:
+            if return_type == 'return':
+                reason_str = f"[RETURN] {reason}"
+                if details:
+                    reason_str += f" — {details}"
+                item.return_status = 'return_requested'
+            else:
+                exchange_size = request.POST.get(f'exchange_size_{item.id}', '').strip()
+                reason_str = f"[EXCHANGE] Size exchange: {item.size} → {exchange_size}"
+                if details:
+                    reason_str += f" — {details}"
+                item.return_status = 'exchange_requested'
 
-        # Update order status
+            item.return_reason = reason_str
+            item.return_requested_at = timezone.now()
+            item.save()
+
         order.status = 'return_requested'
         order.save()
 
@@ -899,12 +995,11 @@ def request_return(request, order_id):
         'reasons':        reasons,
     })
 
-
+@never_cache
 @login_required(login_url='accounts:userlogin')
 def return_status(request, return_id):
     return_req = get_object_or_404(ReturnRequest, id=return_id, user=request.user)
 
-    # If approved and self-ship: allow uploading tracking info
     if request.method == 'POST' and return_req.status == 'approved':
         tracking = request.POST.get('tracking_number', '').strip()
         courier  = request.POST.get('courier_name', '').strip()
@@ -919,6 +1014,7 @@ def return_status(request, return_id):
     return render(request, 'user/return_status.html', {'return_req': return_req})
 
 
+@never_cache
 @login_required(login_url='accounts:userlogin')
 def return_success(request, order_id):
     order = get_object_or_404(Order, id=order_id, user=request.user)
@@ -928,11 +1024,9 @@ def return_success(request, order_id):
     return render(request, 'user/return_success.html', {'order': order})
 
 
-
-
+@never_cache
 @login_required(login_url='accounts:userlogin')
 def upload_return_tracking(request, item_id):
-    """Customer uploads courier tracking info after self-shipping their return."""
     item = get_object_or_404(OrderItem, id=item_id, order__user=request.user)
 
     if item.return_status != 'return_approved':
@@ -958,8 +1052,7 @@ def upload_return_tracking(request, item_id):
     return render(request, 'user/upload_tracking.html', {'item': item})
 
 
-# ── Remaining views ────────────────────────────────────────────────────────────
-
+@never_cache
 @login_required
 def cancel_order(request, order_id):
     order = get_object_or_404(Order, id=order_id, user=request.user)
@@ -972,20 +1065,76 @@ def cancel_order(request, order_id):
             messages.error(request, 'This order cannot be cancelled.')
     return redirect('home:user_orders')
 
+
+@never_cache
 @login_required
 def order_invoice(request, order_id):
     order = get_object_or_404(Order, id=order_id, user=request.user)
     return render(request, 'user/order_invoice.html', {'order': order})
 
+
+# Footer pages — static content, light cache is fine but never_cache is safe too
+@never_cache
 def privacy_policy(request):
     return render(request, 'user/footer/privacy_policy.html')
 
+@never_cache
 def refund_policy(request):
     return render(request, 'user/footer/refund_policy.html')
 
+@never_cache
 def shipping_policy(request):
     return render(request, 'user/footer/shipping_policy.html')
+
+@never_cache
 def terms_of_service(request):
     return render(request, 'user/footer/terms_of_service.html')
+
+@never_cache
 def contact_info(request):
     return render(request, 'user/footer/contact_info.html')
+
+
+# ── Webhook ────────────────────────────────────────────────────────────────────
+from django.http import HttpResponse
+
+@csrf_exempt  # Razorpay webhook — MUST stay csrf_exempt, no never_cache needed (not a page)
+def razorpay_webhook(request):
+    if request.method == 'POST':
+        webhook_secret     = settings.RAZORPAY_WEBHOOK_SECRET
+        razorpay_signature = request.headers.get('X-Razorpay-Signature')
+        body               = request.body
+
+        expected_signature = hmac.new(
+            webhook_secret.encode(),
+            body,
+            hashlib.sha256
+        ).hexdigest()
+
+        if not hmac.compare_digest(expected_signature, razorpay_signature or ''):
+            return HttpResponse(status=400)
+
+        payload = json.loads(body)
+        event   = payload.get('event')
+
+        if event == 'payment.captured':
+            payment_id = payload['payload']['payment']['entity']['id']
+            order_id   = payload['payload']['payment']['entity']['order_id']
+            try:
+                order = Order.objects.get(razorpay_order_id=order_id)
+                order.status              = 'confirmed'
+                order.razorpay_payment_id = payment_id
+                order.save()
+            except Order.DoesNotExist:
+                pass
+
+        elif event == 'payment.failed':
+            order_id = payload['payload']['payment']['entity']['order_id']
+            try:
+                order = Order.objects.get(razorpay_order_id=order_id)
+                order.status = 'payment_failed'
+                order.save()
+            except Order.DoesNotExist:
+                pass
+
+        return HttpResponse(status=200)

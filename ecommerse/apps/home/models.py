@@ -63,16 +63,15 @@ class Order(models.Model):
         ("in_transit",       "In Transit"),
         ("delivered",        "Delivered"),
         ("cancelled",        "Cancelled"),
-        ("payment_failed",   "Payment Failed"),   # ← add this
+        ("payment_failed",   "Payment Failed"),
         ("return_requested", "Return Requested"),
         ("returned",         "Returned"),
     ]
 
     PAYMENT_METHOD_CHOICES = [
         ("cod",      "Cash on Delivery"),
-        ("razorpay", "Online Payment"),    
+        ("razorpay", "Online Payment"),
     ]
-
 
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -84,19 +83,20 @@ class Order(models.Model):
         on_delete=models.SET_NULL,
         null=True, blank=True
     )
-    payment_method    = models.CharField(max_length=20, choices=PAYMENT_METHOD_CHOICES, default="cod")
-    return_reason     = models.TextField(blank=True, null=True)
+    payment_method      = models.CharField(max_length=20, choices=PAYMENT_METHOD_CHOICES, default="cod")
+    return_reason       = models.TextField(blank=True, null=True)
     return_requested_at = models.DateTimeField(null=True, blank=True)
-    total_amount      = models.DecimalField(max_digits=10, decimal_places=2)
-    status            = models.CharField(max_length=20, choices=STATUS_CHOICES, default="pending")
-    created_at        = models.DateTimeField(auto_now_add=True)
-    updated_at        = models.DateTimeField(auto_now=True)
-    discount_amount   = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-    shipping_amount   = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-    tax_amount        = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-    coupon_code       = models.CharField(max_length=50, blank=True, null=True)
+    total_amount        = models.DecimalField(max_digits=10, decimal_places=2)
+    status              = models.CharField(max_length=20, choices=STATUS_CHOICES, default="pending")
+    created_at          = models.DateTimeField(auto_now_add=True)
+    updated_at          = models.DateTimeField(auto_now=True)
+    discount_amount     = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    shipping_amount     = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    tax_amount          = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    coupon_code         = models.CharField(max_length=50, blank=True, null=True)
+    delivered_at        = models.DateTimeField(null=True, blank=True)  # set when status → delivered
 
-    # ── Razorpay ──────────────────────────────────────────────────────────────────
+    # ── Razorpay ──────────────────────────────────────────────────────────────
     razorpay_order_id   = models.CharField(max_length=100, blank=True, null=True)
     razorpay_payment_id = models.CharField(max_length=100, blank=True, null=True)
     razorpay_signature  = models.CharField(max_length=200, blank=True, null=True)
@@ -110,12 +110,11 @@ class Order(models.Model):
 
     @property
     def can_return(self):
-        """True only if delivered within 7 days and has eligible items."""
+        """True only if delivered within 10 days."""
         from django.utils import timezone
-        if self.status != 'delivered':
+        if self.status != 'delivered' or not self.delivered_at:
             return False
-        days_since = (timezone.now() - self.updated_at).days
-        return days_since <= 7
+        return (timezone.now() - self.delivered_at).days <= 10
 
 
 class OrderItem(models.Model):
@@ -139,8 +138,8 @@ class OrderItem(models.Model):
         ('exchanged',             'Exchanged'),
     ]
 
-    order   = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="items")
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    order    = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="items")
+    product  = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField()
     price    = models.DecimalField(max_digits=10, decimal_places=2)
     size     = models.CharField(max_length=10, blank=True, null=True)
@@ -170,17 +169,17 @@ class OrderItem(models.Model):
 
     @property
     def is_returnable(self):
+        """True only if delivered within 10 days and not already in a return flow."""
         from django.utils import timezone
         if self.return_status != 'none':
             return False
-        if self.order.status != 'delivered':
+        if self.order.status != 'delivered' or not self.order.delivered_at:
             return False
-        days = (timezone.now() - self.order.updated_at).days
-        return days <= 7
+        return (timezone.now() - self.order.delivered_at).days <= 10
 
     def __str__(self):
         return f"{self.product.product_name} ({self.quantity})"
-    
+
 
 class ReturnRequest(models.Model):
 
@@ -243,31 +242,43 @@ class ReturnRequest(models.Model):
 
     @property
     def timeline_steps(self):
-        all_steps = [
-            ('requested',         'Return Requested',       'assignment_return'),
-            ('approved',          'Admin Approved',          'thumb_up'),
-            ('pickup_scheduled',  'Pickup Scheduled',        'local_shipping'),
-            ('picked_up',         'Picked Up',               'inventory_2'),
-            ('in_transit',        'In Transit',              'directions_car'),
-            ('received',          'Received at Warehouse',   'warehouse'),
-            ('inspection_passed', 'Inspection Passed',       'verified'),
-            ('refund_initiated',  'Refund Initiated',        'payments'),
-            ('refund_processing', 'Refund Processing',       'autorenew'),
-            ('refunded',          'Refunded',                'check_circle'),
-        ]
+        if self.return_type == 'exchange':
+            all_steps = [
+                ('requested',         'Exchange Requested',    'assignment_return'),
+                ('approved',          'Admin Approved',        'thumb_up'),
+                ('pickup_scheduled',  'Pickup Scheduled',      'local_shipping'),
+                ('picked_up',         'Picked Up',             'inventory_2'),
+                ('in_transit',        'In Transit',            'directions_car'),
+                ('received',          'Received at Warehouse', 'warehouse'),
+                ('inspection_passed', 'Inspection Passed',     'verified'),
+                ('refund_initiated',  'Exchange Processing',   'swap_horiz'),
+                ('refunded',          'Completed',             'check_circle'),
+            ]
+        else:
+            all_steps = [
+                ('requested',         'Return Requested',      'assignment_return'),
+                ('approved',          'Admin Approved',        'thumb_up'),
+                ('pickup_scheduled',  'Pickup Scheduled',      'local_shipping'),
+                ('picked_up',         'Picked Up',             'inventory_2'),
+                ('in_transit',        'In Transit',            'directions_car'),
+                ('received',          'Received at Warehouse', 'warehouse'),
+                ('inspection_passed', 'Inspection Passed',     'verified'),
+                ('refund_initiated',  'Refund Initiated',      'payments'),
+                ('refund_processing', 'Refund Processing',     'autorenew'),
+                ('refunded',          'Refunded',              'check_circle'),
+            ]
 
-        # Failed paths
         failed_statuses = ['rejected', 'inspection_failed']
         if self.status in failed_statuses:
             return [{
-                'label':   'Return Requested', 'icon': 'assignment_return',
-                'done': True, 'current': False,
+                'label': 'Exchange Requested' if self.return_type == 'exchange' else 'Return Requested',
+                'icon': 'assignment_return', 'done': True, 'current': False,
             }, {
-                'label':   'Rejected' if self.status == 'rejected' else 'Inspection Failed',
-                'icon':    'cancel', 'done': False, 'current': True,
+                'label': 'Rejected' if self.status == 'rejected' else 'Inspection Failed',
+                'icon': 'cancel', 'done': False, 'current': True,
             }]
 
-        order_map = {s[0]: i for i, s in enumerate(all_steps)}
+        order_map     = {s[0]: i for i, s in enumerate(all_steps)}
         current_index = order_map.get(self.status, 0)
 
         return [
@@ -279,3 +290,15 @@ class ReturnRequest(models.Model):
             }
             for key, label, icon in all_steps
         ]
+
+    @property
+    def display_status(self):
+        if self.return_type == 'exchange':
+            mapping = {
+                'refunded':          'Completed',
+                'refund_initiated':  'Exchange Processing',
+                'refund_processing': 'Exchange Processing',
+                'inspection_passed': 'Inspection Passed',
+            }
+            return mapping.get(self.status, self.get_status_display())
+        return self.get_status_display()

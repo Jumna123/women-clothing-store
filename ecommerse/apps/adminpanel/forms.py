@@ -17,13 +17,21 @@ class ProductForm(forms.ModelForm):
     stock_quantity = forms.IntegerField(
         required=False,
         initial=0,
-        min_value=0,  
+        min_value=0,
         widget=forms.NumberInput(attrs={
-            "min": "0",   
-            "step": "1",  
+            "min": "0",
+            "step": "1",
             "class": "w-full h-12 bg-[#f8fcfa] border border-border-green rounded-xl px-4 focus:border-primary focus:ring-0 transition-colors",
         })
     )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance and self.instance.pk:
+            if self.instance.price:
+                self.initial['price'] = '{:f}'.format(self.instance.price.normalize())
+            if self.instance.discount_price:
+                self.initial['discount_price'] = '{:f}'.format(self.instance.discount_price.normalize())
 
     class Meta:
         model = Product
@@ -35,9 +43,13 @@ class ProductForm(forms.ModelForm):
             }),
             "price": forms.NumberInput(attrs={
                 "class": "w-full h-14 bg-[#f8fcfa] border border-border-green rounded-xl pl-8 pr-4 focus:border-primary focus:ring-0 transition-colors",
+                "step": "any",
+                "placeholder": "e.g. 499",
             }),
             "discount_price": forms.NumberInput(attrs={
                 "class": "w-full h-14 bg-[#f8fcfa] border border-border-green rounded-xl pl-8 pr-4 focus:border-primary focus:ring-0 transition-colors",
+                "step": "any",
+                "placeholder": "e.g. 399",
             }),
             "description": forms.Textarea(attrs={
                 "class": "w-full h-32 bg-transparent border-none p-4 resize-none",

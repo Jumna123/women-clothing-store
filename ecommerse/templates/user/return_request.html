@@ -26,6 +26,27 @@
     body { font-family: 'Manrope', sans-serif; }
     .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
     .icon-filled { font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    .size-btn {
+      border: 2px solid #d1fae5;
+      border-radius: 8px;
+      padding: 6px 14px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      background: #fff;
+      color: #064e3b;
+      transition: all 0.15s;
+    }
+    .size-btn:hover { border-color: #059669; background: #f0fdf4; }
+    .size-btn.selected { border-color: #064e3b; background: #064e3b; color: #fff; }
+    .size-btn.current-size { opacity: 0.35; cursor: not-allowed; border-style: dashed; }
+    .exchange-panel {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease, opacity 0.3s ease;
+      opacity: 0;
+    }
+    .exchange-panel.open { max-height: 200px; opacity: 1; }
   </style>
 </head>
 <body class="bg-[#f6faf8] text-text-main antialiased min-h-screen flex flex-col">
@@ -51,34 +72,102 @@
     <span class="text-primary font-bold">Return / Exchange</span>
   </nav>
 
-  <!-- SINGLE FORM wrapping everything -->
   <form method="POST" action="{% url 'home:return_request' order.id %}">
     {% csrf_token %}
 
-    <!-- Item selector — INSIDE the form -->
+    <!-- ── Return type selector ── -->
     <div class="bg-white rounded-2xl border border-border-green/10 overflow-hidden mb-6">
       <div class="px-5 py-4 border-b border-border-green/10 bg-surface-light/60">
-        <h2 class="text-xs font-black text-text-main uppercase tracking-wider">Select Items to Return / Exchange</h2>
-        <p class="text-xs text-text-secondary/50 font-medium mt-0.5">You can select one or more items from this order.</p>
+        <h2 class="text-xs font-black text-text-main uppercase tracking-wider">What would you like?</h2>
       </div>
-      <div class="divide-y divide-border-green/10">
-        {% for item in eligible_items %}
-        <label class="flex items-center gap-4 px-5 py-4 cursor-pointer hover:bg-surface-light has-[:checked]:bg-primary-light transition-all">
-          <input type="checkbox" name="item_ids" value="{{ item.id }}"
-            class="rounded text-primary focus:ring-primary shrink-0"/>
-          <div class="size-14 rounded-xl overflow-hidden bg-surface-light shrink-0">
-            {% with item.product.images.first as img %}
-              {% if img %}<img src="{{ img.image.url }}" class="w-full h-full object-cover"/>{% endif %}
-            {% endwith %}
-          </div>
-          <div class="flex-1 min-w-0">
-            <p class="text-sm font-bold text-text-main truncate">{{ item.product.product_name }}</p>
-            <p class="text-xs text-text-secondary/60 font-medium">
-              {% if item.size %}Size: {{ item.size }} · {% endif %}Qty: {{ item.quantity }}
-            </p>
-            <p class="text-xs font-bold text-text-main mt-0.5">₹{{ item.subtotal|floatformat:2 }}</p>
+      <div class="p-5 grid grid-cols-2 gap-3">
+        <label class="flex items-center gap-3 rounded-xl border-2 border-border-green/20 p-4 cursor-pointer has-[:checked]:border-primary has-[:checked]:bg-primary-light transition-all">
+          <input type="radio" name="return_type" value="return" checked
+                 class="text-primary focus:ring-primary" onchange="handleTypeChange('return')"/>
+          <div>
+            <p class="text-sm font-bold text-text-main">Return</p>
+            <p class="text-xs text-text-secondary/60">Get a refund</p>
           </div>
         </label>
+        <label class="flex items-center gap-3 rounded-xl border-2 border-border-green/20 p-4 cursor-pointer has-[:checked]:border-primary has-[:checked]:bg-primary-light transition-all">
+          <input type="radio" name="return_type" value="exchange"
+                 class="text-primary focus:ring-primary" onchange="handleTypeChange('exchange')"/>
+          <div>
+            <p class="text-sm font-bold text-text-main">Exchange</p>
+            <p class="text-xs text-text-secondary/60">Get a different size</p>
+          </div>
+        </label>
+      </div>
+    </div>
+
+    <!-- ── Item selector ── -->
+    <div class="bg-white rounded-2xl border border-border-green/10 overflow-hidden mb-6">
+      <div class="px-5 py-4 border-b border-border-green/10 bg-surface-light/60">
+        <h2 class="text-xs font-black text-text-main uppercase tracking-wider">Select Items</h2>
+        <p class="text-xs text-text-secondary/50 font-medium mt-0.5">
+          <span id="item-hint-return">Select one or more items to return.</span>
+          <span id="item-hint-exchange" class="hidden">Select the item and choose a new size.</span>
+        </p>
+      </div>
+
+      <div class="divide-y divide-border-green/10">
+        {% for item in eligible_items %}
+        <div class="item-row" data-item-id="{{ item.id }}">
+          <label class="flex items-center gap-4 px-5 py-4 cursor-pointer hover:bg-surface-light has-[:checked]:bg-primary-light transition-all">
+            <input type="checkbox" name="item_ids" value="{{ item.id }}"
+                   class="item-checkbox rounded text-primary focus:ring-primary shrink-0"
+                   onchange="handleItemCheck(this, {{ item.id }})"/>
+            <div class="size-14 rounded-xl overflow-hidden bg-surface-light shrink-0">
+              {% with item.product.images.first as img %}
+                {% if img %}<img src="{{ img.image.url }}" class="w-full h-full object-cover"/>{% endif %}
+              {% endwith %}
+            </div>
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-bold text-text-main truncate">{{ item.product.product_name }}</p>
+              <p class="text-xs text-text-secondary/60 font-medium">
+                {% if item.size %}Size: <strong class="text-text-main">{{ item.size }}</strong> · {% endif %}Qty: {{ item.quantity }}
+              </p>
+              <p class="text-xs font-bold text-text-main mt-0.5">₹{{ item.subtotal|floatformat:2 }}</p>
+            </div>
+          </label>
+
+          <!-- Exchange size picker -->
+          <div class="exchange-panel px-5 pb-0" id="size-panel-{{ item.id }}">
+            <div class="pb-4 pt-1">
+              <p class="text-xs font-black text-text-main mb-2 uppercase tracking-wider flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-[14px] text-primary">swap_horiz</span>
+                Choose a new size <span class="text-red-400">*</span>
+              </p>
+              <input type="hidden" name="exchange_size_{{ item.id }}" id="exchange-size-input-{{ item.id }}" value="">
+              <div class="flex flex-wrap gap-2">
+                {% for size_obj in item.product.product_sizes.all %}
+                  {% if size_obj.stock_quantity > 0 %}
+                    {% if size_obj.size == item.size %}
+                      <button type="button" class="size-btn current-size" disabled>
+                        {{ size_obj.size }}<span class="text-[9px] font-normal ml-1">(current)</span>
+                      </button>
+                    {% else %}
+                      <button type="button" class="size-btn"
+                              onclick="selectSize(this, {{ item.id }}, '{{ size_obj.size }}')">
+                        {{ size_obj.size }}
+                      </button>
+                    {% endif %}
+                  {% else %}
+                    <button type="button" class="size-btn current-size" disabled>
+                      {{ size_obj.size }}<span class="text-[9px] font-normal ml-1">(OOS)</span>
+                    </button>
+                  {% endif %}
+                {% empty %}
+                  <p class="text-xs text-text-secondary/50 font-medium">No other sizes available.</p>
+                {% endfor %}
+              </div>
+              <p class="text-[11px] text-text-secondary/40 font-medium mt-2">
+                Only in-stock sizes shown. Your current size is greyed out.
+              </p>
+            </div>
+          </div>
+
+        </div>
         {% empty %}
         <div class="px-5 py-6 text-center text-sm text-text-secondary/50 font-medium">
           No eligible items for return/exchange.
@@ -87,51 +176,26 @@
       </div>
     </div>
 
-    <!-- Return type + reason + details -->
-    <div class="bg-white rounded-2xl border border-border-green/10 overflow-hidden">
-
+    <!-- ── Reason + details — only shown for Return ── -->
+    <div id="reason-section" class="bg-white rounded-2xl border border-border-green/10 overflow-hidden">
       <div class="px-6 py-5 border-b border-border-green/10 bg-surface-light/60">
-        <h1 class="text-base font-black text-text-main">Request Return or Exchange</h1>
-        <p class="text-xs text-text-secondary/60 font-medium mt-1">Tell us what happened and we'll sort it out.</p>
+        <h2 class="text-base font-black text-text-main">Tell us why</h2>
+        <p class="text-xs text-text-secondary/60 font-medium mt-1">We'll use this to process your request quickly.</p>
       </div>
-
       <div class="px-6 py-6 space-y-6">
-
-        <!-- Type -->
         <div>
-          <label class="block text-xs font-black text-text-main mb-3 uppercase tracking-wider">What would you like?</label>
-          <div class="grid grid-cols-2 gap-3">
-            <label class="flex items-center gap-3 rounded-xl border-2 border-border-green/20 p-4 cursor-pointer has-[:checked]:border-primary has-[:checked]:bg-primary-light transition-all">
-              <input type="radio" name="return_type" value="return" checked class="text-primary focus:ring-primary"/>
-              <div>
-                <p class="text-sm font-bold text-text-main">Return</p>
-                <p class="text-xs text-text-secondary/60">Get a refund</p>
-              </div>
-            </label>
-            <label class="flex items-center gap-3 rounded-xl border-2 border-border-green/20 p-4 cursor-pointer has-[:checked]:border-primary has-[:checked]:bg-primary-light transition-all">
-              <input type="radio" name="return_type" value="exchange" class="text-primary focus:ring-primary"/>
-              <div>
-                <p class="text-sm font-bold text-text-main">Exchange</p>
-                <p class="text-xs text-text-secondary/60">Get a replacement</p>
-              </div>
-            </label>
-          </div>
-        </div>
-
-        <!-- Reason -->
-        <div>
-          <label class="block text-xs font-black text-text-main mb-3 uppercase tracking-wider">Reason <span class="text-red-400">*</span></label>
+          <label class="block text-xs font-black text-text-main mb-3 uppercase tracking-wider">
+            Reason <span class="text-red-400">*</span>
+          </label>
           <div class="space-y-2">
             {% for value, label in reasons %}
             <label class="flex items-center gap-3 rounded-xl border border-border-green/15 px-4 py-3 cursor-pointer hover:bg-surface-light has-[:checked]:border-primary has-[:checked]:bg-primary-light transition-all">
-              <input type="radio" name="reason" value="{{ value }}" class="text-primary focus:ring-primary"/>
+              <input type="radio" name="reason" value="{{ value }}" class="text-primary focus:ring-primary reason-radio"/>
               <span class="text-sm font-semibold text-text-main">{{ label }}</span>
             </label>
             {% endfor %}
           </div>
         </div>
-
-        <!-- Details -->
         <div>
           <label class="block text-xs font-black text-text-main mb-2 uppercase tracking-wider">
             Additional Details <span class="text-text-secondary/40 font-medium normal-case">(optional)</span>
@@ -139,13 +203,10 @@
           <textarea name="details" rows="3" placeholder="Describe the issue in more detail..."
             class="w-full rounded-xl border border-border-green/20 bg-surface-light px-4 py-3 text-sm text-text-main placeholder-text-secondary/30 focus:outline-none focus:ring-2 focus:ring-primary/20 resize-none font-medium"></textarea>
         </div>
-
       </div>
-
-      <!-- Actions -->
       <div class="px-6 py-5 border-t border-border-green/10 bg-surface-light/40 flex gap-3">
-        <button type="submit"
-          class="flex-1 flex items-center justify-center gap-2 rounded-xl bg-primary py-3.5 text-sm font-bold text-white hover:bg-primary-hover transition-colors shadow-sm">
+        <button type="submit" onclick="return validateForm()"
+          class="flex-1 flex items-center justify-center gap-2 rounded-xl bg-primary py-3.5 text-sm font-bold text-white hover:bg-[#022c22] transition-colors shadow-sm">
           <span class="material-symbols-outlined text-[18px]">assignment_return</span>
           Submit Request
         </button>
@@ -154,23 +215,34 @@
           Cancel
         </a>
       </div>
-
     </div>
-  </form><!-- end single form -->
 
+    <!-- ── Submit button for Exchange (no reason section) ── -->
+    <div id="actions-exchange" class="hidden">
+      <div class="flex gap-3">
+        <button type="submit" onclick="return validateForm()"
+          class="flex-1 flex items-center justify-center gap-2 rounded-xl bg-primary py-3.5 text-sm font-bold text-white hover:bg-[#022c22] transition-colors shadow-sm">
+          <span class="material-symbols-outlined text-[18px]">swap_horiz</span>
+          Submit Exchange Request
+        </button>
+        <a href="{% url 'home:order_detail' order.id %}"
+          class="px-5 py-3.5 rounded-xl border border-border-green/20 text-sm font-bold text-text-secondary hover:bg-surface-light transition-colors">
+          Cancel
+        </a>
+      </div>
+    </div>
+
+  </form>
 </div>
 
+<!-- FOOTER -->
 <footer class="bg-[#1e4433] border-t border-[#254632] py-8">
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
     <div class="flex flex-col sm:flex-row items-center justify-between gap-6">
-
-      <!-- Brand -->
       <div style="line-height:1;">
         <div style="font-family:'Georgia',serif;font-size:18px;font-weight:700;letter-spacing:0.15em;color:#ffffff;">vólke</div>
         <div style="font-size:7px;letter-spacing:0.18em;color:#9ca3af;text-transform:uppercase;">shoppe</div>
       </div>
-
-      <!-- Links -->
       <div class="flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs text-gray-500">
         <a class="hover:text-primary transition-colors" href="{% url 'home:user_orders' %}">Order Status</a>
         <a class="hover:text-primary transition-colors" href="{% url 'home:refund_policy' %}">Refund Policy</a>
@@ -180,13 +252,98 @@
         <a class="hover:text-primary transition-colors" href="{% url 'home:shipping_policy' %}">Shipping Policy</a>
         <a class="hover:text-primary transition-colors" href="{% url 'home:terms-of-service' %}">Terms of Service</a>
       </div>
-
-      <!-- Copyright -->
       <p class="text-xs text-gray-600 whitespace-nowrap">© 2024 VOLKE®</p>
-
     </div>
   </div>
 </footer>
+
+<script>
+  window.addEventListener('pageshow', function(e) {
+    if (e.persisted) window.location.reload();
+  });
+
+  let currentType = 'return';
+
+  function handleTypeChange(type) {
+    currentType = type;
+    const isExchange = type === 'exchange';
+
+    // Show/hide reason section and exchange actions
+    document.getElementById('reason-section').classList.toggle('hidden', isExchange);
+    document.getElementById('actions-exchange').classList.toggle('hidden', !isExchange);
+
+    // Toggle hints
+    document.getElementById('item-hint-return').classList.toggle('hidden', isExchange);
+    document.getElementById('item-hint-exchange').classList.toggle('hidden', !isExchange);
+
+    // Open/close size panels for already-checked items
+    document.querySelectorAll('.item-checkbox').forEach(function(cb) {
+      const panel = document.getElementById('size-panel-' + cb.value);
+      if (!panel) return;
+      if (isExchange && cb.checked) {
+        panel.classList.add('open');
+      } else {
+        panel.classList.remove('open');
+        clearSizeSelection(cb.value);
+      }
+    });
+  }
+
+  function handleItemCheck(checkbox, itemId) {
+    const panel = document.getElementById('size-panel-' + itemId);
+    if (!panel) return;
+    if (currentType === 'exchange' && checkbox.checked) {
+      panel.classList.add('open');
+    } else {
+      panel.classList.remove('open');
+      clearSizeSelection(itemId);
+    }
+  }
+
+  function selectSize(btn, itemId, size) {
+    const panel = document.getElementById('size-panel-' + itemId);
+    panel.querySelectorAll('.size-btn:not(.current-size)').forEach(function(b) {
+      b.classList.remove('selected');
+    });
+    btn.classList.add('selected');
+    document.getElementById('exchange-size-input-' + itemId).value = size;
+  }
+
+  function clearSizeSelection(itemId) {
+    const panel = document.getElementById('size-panel-' + itemId);
+    if (!panel) return;
+    panel.querySelectorAll('.size-btn').forEach(function(b) { b.classList.remove('selected'); });
+    const input = document.getElementById('exchange-size-input-' + itemId);
+    if (input) input.value = '';
+  }
+
+  function validateForm() {
+    const checkedItems = document.querySelectorAll('.item-checkbox:checked');
+    if (checkedItems.length === 0) {
+      alert('Please select at least one item.');
+      return false;
+    }
+
+    if (currentType === 'return') {
+      if (!document.querySelector('input[name="reason"]:checked')) {
+        alert('Please select a reason.');
+        return false;
+      }
+    }
+
+    if (currentType === 'exchange') {
+      for (const cb of checkedItems) {
+        const sizeInput = document.getElementById('exchange-size-input-' + cb.value);
+        if (!sizeInput || !sizeInput.value) {
+          alert('Please select a new size for each item you want to exchange.');
+          return false;
+        }
+      }
+    }
+
+    return true;
+  }
+</script>
 
 </body>
 </html>

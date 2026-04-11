@@ -146,8 +146,9 @@ class StoreSettings(models.Model):
     free_shipping_threshold = models.DecimalField(max_digits=10, decimal_places=2, default=1000)
     standard_shipping_cost = models.DecimalField(max_digits=10, decimal_places=2, default=50)
     express_shipping_cost = models.DecimalField(max_digits=10, decimal_places=2, default=15)
+    return_window_days = models.PositiveIntegerField(default=10)  # ← add this
     updated_at = models.DateTimeField(auto_now=True)
-
+    
     class Meta:
         verbose_name = "Store Settings"
 

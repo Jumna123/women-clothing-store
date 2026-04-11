@@ -86,8 +86,17 @@
       </div>
 
       <div class="flex gap-2">
-        <a href="{% url 'home:cart_view' %}" class="relative flex items-center justify-center p-2 rounded-lg text-white/80 hover:bg-white/10 hover:text-white transition-colors">
-          <span class="material-symbols-outlined">shopping_bag</span>
+
+      <div class="flex gap-2">
+
+        <!-- Home icon -->
+        <a href="{% url 'home:home' %}" class="relative flex size-9 md:size-10 items-center justify-center rounded-full text-white hover:bg-white/10 transition-colors">
+          <span class="material-symbols-outlined text-xl md:text-2xl">home</span>
+        </a>
+
+        <!-- Cart -->
+        <a href="{% url 'home:cart_view' %}" class="relative flex size-9 md:size-10 items-center justify-center rounded-full text-white hover:bg-white/10 transition-colors">
+          <span class="material-symbols-outlined text-xl md:text-2xl">shopping_cart</span>
           {% if cart_count %}
           <span class="absolute top-1 right-1 size-2 bg-green-400 rounded-full ring-2 ring-[#1e4433]"></span>
           {% endif %}
@@ -111,7 +120,7 @@
             <a href="{% url 'home:user_orders' %}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-text-main hover:bg-surface-light hover:text-primary transition-colors">
               <span class="material-symbols-outlined text-[18px]">package_2</span> My Orders
             </a>
-            <a href="{% url 'home:wishlist_view' %}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-text-main hover:bg-surface-light hover:text-primary transition-colors">
+            <a href="{% url 'home:wishlist_view' %}?from=profile" class="flex items-center gap-3 px-4 py-2.5 text-sm text-text-main hover:bg-surface-light hover:text-primary transition-colors">
               <span class="material-symbols-outlined text-[18px]">favorite</span> Wishlist
             </a>
             <div class="border-t border-border-green/10 my-1"></div>
@@ -133,7 +142,7 @@
   <div class="flex flex-col lg:flex-row gap-8 lg:gap-10">
 
     <!-- ── Sidebar ── -->
-    {% include "accounts/profile_sidebar.html" %}
+    {% include 'accounts/profile_sidebar.html' %}
 
     <!-- ── Main content ── -->
     <main class="flex-1 flex flex-col gap-8 min-w-0">
@@ -194,22 +203,7 @@
           </p>
         </a>
 
-        <!-- Total Orders -->
-        <a href="{% url 'home:user_orders' %}"
-          class="bg-white rounded-2xl p-6 border border-border-green/10 shadow-sm flex flex-col gap-1 hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 group">
-          <div class="flex items-center justify-between mb-2">
-            <span class="text-text-secondary font-bold text-xs tracking-widest uppercase">Total Orders</span>
-            <span class="material-symbols-outlined text-primary bg-primary-light p-2 rounded-xl group-hover:scale-110 transition-transform">receipt_long</span>
-          </div>
-          <p class="text-text-main text-3xl font-black">{{ total_orders_count|default:"0" }}</p>
-          <p class="text-text-secondary/60 text-xs font-medium">
-            {% if total_spent %}
-              ₹{{ total_spent|floatformat:2 }} total spent
-            {% else %}
-              No orders yet
-            {% endif %}
-          </p>
-        </a>
+        
 
       </div>
 
@@ -241,51 +235,22 @@
 
             <!-- Order details -->
             <div class="flex-grow space-y-2 min-w-0">
-              <div class="flex flex-wrap items-center gap-2 justify-between">
-                <!-- Status badge -->
-                <span class="text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wide
-                  {% if order.status == 'delivered' %}bg-green-100 text-green-700
-                  {% elif order.status == 'cancelled' %}bg-red-100 text-red-600
-                  {% elif order.status == 'shipped' or order.status == 'in_transit' %}bg-blue-100 text-blue-700
-                  {% else %}bg-primary-light text-primary{% endif %}">
-                  {{ order.get_status_display }}
-                </span>
-                <span class="text-text-secondary/50 text-xs font-medium">Order #{{ order.order_number }}</span>
-              </div>
-
+              <span class="text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wide
+                {% if order.status == 'delivered' %}bg-green-100 text-green-700
+                {% elif order.status == 'cancelled' %}bg-red-100 text-red-600
+                {% elif order.status == 'shipped' or order.status == 'in_transit' %}bg-blue-100 text-blue-700
+                {% else %}bg-primary-light text-primary{% endif %}">
+                {{ order.get_status_display }}
+              </span>
               <h3 class="text-text-main font-bold text-base truncate">
-                {{ order.items.first.product.name }}
+                {{ order.items.first.product.product_name }}
                 {% if order.items.count > 1 %}
                   <span class="text-text-secondary/60 font-medium text-sm">+{{ order.items.count|add:"-1" }} more</span>
                 {% endif %}
               </h3>
-
               <p class="text-text-secondary/70 text-sm">
-                Placed {{ order.created_at|date:"d M Y" }}
-                &nbsp;·&nbsp;
-                ₹{{ order.total_amount|floatformat:2 }}
+                Placed {{ order.created_at|date:"d M Y" }} &nbsp;·&nbsp; ₹{{ order.total_amount|floatformat:2 }}
               </p>
-
-              <!-- Progress bar -->
-              {% if order.status != 'cancelled' %}
-              <div class="pt-2">
-                <div class="relative w-full h-1.5 bg-emerald-100 rounded-full overflow-hidden">
-                  <div class="absolute top-0 left-0 h-full bg-primary rounded-full transition-all duration-500
-                    {% if order.status == 'pending' %}w-1/4
-                    {% elif order.status == 'confirmed' %}w-2/4
-                    {% elif order.status == 'shipped' or order.status == 'in_transit' %}w-3/4
-                    {% elif order.status == 'delivered' %}w-full
-                    {% else %}w-1/4{% endif %}">
-                  </div>
-                </div>
-                <div class="flex justify-between mt-1.5">
-                  <span class="text-[9px] font-bold text-primary uppercase tracking-wide">Placed</span>
-                  <span class="text-[9px] font-bold {% if order.status == 'confirmed' or order.status == 'shipped' or order.status == 'in_transit' or order.status == 'delivered' %}text-primary{% else %}text-text-secondary/30{% endif %} uppercase tracking-wide">Confirmed</span>
-                  <span class="text-[9px] font-bold {% if order.status == 'shipped' or order.status == 'in_transit' or order.status == 'delivered' %}text-primary{% else %}text-text-secondary/30{% endif %} uppercase tracking-wide">Shipped</span>
-                  <span class="text-[9px] font-bold {% if order.status == 'delivered' %}text-primary{% else %}text-text-secondary/30{% endif %} uppercase tracking-wide">Delivered</span>
-                </div>
-              </div>
-              {% endif %}
             </div>
 
             <!-- Actions -->
@@ -294,12 +259,6 @@
                 class="flex-1 md:flex-none text-center bg-primary text-white font-bold py-2.5 px-5 rounded-lg text-sm hover:bg-primary-hover transition-colors shadow-sm">
                 Order Details
               </a>
-              {% if order.status == 'shipped' or order.status == 'in_transit' %}
-              <a href="{% url 'home:order_detail' order.id %}"
-                class="flex-1 md:flex-none text-center border border-primary text-primary font-bold py-2.5 px-5 rounded-lg text-sm hover:bg-primary-light transition-colors">
-                Track
-              </a>
-              {% endif %}
             </div>
 
           </div>
@@ -310,7 +269,7 @@
             </div>
             <p class="text-text-main font-bold text-base mb-1">No orders yet</p>
             <p class="text-text-secondary/60 text-sm mb-5">When you place an order, it will appear here.</p>
-            <a href="#"
+            <a href="{% url 'home:home' %}"
               class="bg-primary text-white font-bold py-2.5 px-6 rounded-xl text-sm hover:bg-primary-hover transition-colors shadow-md shadow-primary/10">
               Start Shopping
             </a>
@@ -417,6 +376,13 @@
     const dropdown = document.getElementById('profileDropdown');
     if (!dropdown.contains(e.target)) {
       document.getElementById('dropdownMenu').classList.add('hidden');
+    }
+  });
+</script>
+<script>
+  window.addEventListener('pageshow', function(event) {
+    if (event.persisted) {
+      window.location.reload();
     }
   });
 </script>

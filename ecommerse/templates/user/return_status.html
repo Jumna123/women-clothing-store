@@ -53,7 +53,11 @@
         {% elif return_req.status == 'rejected' or return_req.status == 'inspection_failed' %}bg-red-100 text-red-700
         {% elif return_req.status == 'refunded' %}bg-emerald-100 text-emerald-800
         {% else %}bg-blue-100 text-blue-800{% endif %}">
-        {{ return_req.get_status_display }}
+        {% if return_req.return_type == 'exchange' and return_req.status == 'refunded' %}
+          Completed
+        {% else %}
+          {{ return_req.get_status_display }}
+        {% endif %}
       </span>
     </div>
 
@@ -105,7 +109,7 @@
     </div>
 
     <!-- Refund amount -->
-    {% if return_req.status in "inspection_passed,refund_initiated,refund_processing,refunded" %}
+    {% if return_req.return_type == 'return' and return_req.status in "inspection_passed,refund_initiated,refund_processing,refunded" %}
     <div class="px-6 py-4 bg-green-50 border-t border-green-100">
       <div class="flex items-center justify-between">
         <span class="text-sm font-bold text-[#022c22]">Refund Amount</span>
@@ -130,8 +134,9 @@
     </div>
     {% endif %}
 
-    <!-- Self-ship tracking upload (shown when approved but no tracking yet) -->
-    {% if return_req.status == 'approved' and not return_req.tracking_number %}
+    <!-- Self-ship tracking upload -->
+    {% if return_req.status == 'approved' and return_req.return_type == 'return' and not return_req.tracking_number %}
+
     <div class="px-6 py-5 border-t border-green-100 bg-blue-50">
       <p class="text-sm font-bold text-[#022c22] mb-1">Ship the item back to us</p>
       <p class="text-xs text-[#064e3b]/60 mb-4">Please ship the item and enter the tracking details below.</p>
@@ -151,7 +156,8 @@
     </div>
     {% endif %}
 
-    {% if return_req.status == 'approved' and return_req.tracking_number %}
+    {% if return_req.status == 'approved' and return_req.return_type == 'return' and return_req.tracking_number %}
+
     <div class="px-6 py-4 border-t border-green-100 bg-blue-50">
       <p class="text-xs font-bold text-blue-700">Tracking submitted: {{ return_req.courier_name }} — {{ return_req.tracking_number }}</p>
     </div>
@@ -176,14 +182,10 @@
 <footer class="bg-[#1e4433] border-t border-[#254632] py-8">
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
     <div class="flex flex-col sm:flex-row items-center justify-between gap-6">
-
-      <!-- Brand -->
       <div style="line-height:1;">
         <div style="font-family:'Georgia',serif;font-size:18px;font-weight:700;letter-spacing:0.15em;color:#ffffff;">vólke</div>
         <div style="font-size:7px;letter-spacing:0.18em;color:#9ca3af;text-transform:uppercase;">shoppe</div>
       </div>
-
-      <!-- Links -->
       <div class="flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs text-gray-500">
         <a class="hover:text-primary transition-colors" href="{% url 'home:user_orders' %}">Order Status</a>
         <a class="hover:text-primary transition-colors" href="{% url 'home:refund_policy' %}">Refund Policy</a>
@@ -193,12 +195,19 @@
         <a class="hover:text-primary transition-colors" href="{% url 'home:shipping_policy' %}">Shipping Policy</a>
         <a class="hover:text-primary transition-colors" href="{% url 'home:terms-of-service' %}">Terms of Service</a>
       </div>
-
-      <!-- Copyright -->
       <p class="text-xs text-gray-600 whitespace-nowrap">© 2024 VOLKE®</p>
-
     </div>
   </div>
 </footer>
+
+<!-- bfcache fix -->
+<script>
+  window.addEventListener('pageshow', function(event) {
+    if (event.persisted) {
+      window.location.reload();
+    }
+  });
+</script>
+
 </body>
 </html>

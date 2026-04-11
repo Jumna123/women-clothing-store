@@ -18,6 +18,7 @@ def admin_settings(request):
             settings.free_shipping_threshold = request.POST.get('free_shipping_threshold', settings.free_shipping_threshold)
             settings.standard_shipping_cost = request.POST.get('standard_shipping_cost', settings.standard_shipping_cost)
             settings.express_shipping_cost = request.POST.get('express_shipping_cost', settings.express_shipping_cost)
+            settings.return_window_days = int(request.POST.get('return_window_days', 10))  # ← add this
             settings.save()
             messages.success(request, "Settings saved successfully.")
             return redirect('adminpanel:settings')
@@ -27,18 +28,24 @@ def admin_settings(request):
             discount = request.POST.get('discount_percent', 0)
             usage_limit = request.POST.get('usage_limit', 0)
             expires_at = request.POST.get('expires_at') or None
+            show_on_homepage = 'show_on_homepage' in request.POST  # ← add
+            promo_image = request.FILES.get('promo_image')          # ← add
 
             if not code:
                 messages.error(request, "Promo code cannot be empty.")
             elif PromoCode.objects.filter(code=code).exists():
                 messages.error(request, f"Code '{code}' already exists.")
             else:
-                PromoCode.objects.create(
+                promo = PromoCode.objects.create(
                     code=code,
                     discount_percent=discount,
                     usage_limit=usage_limit,
                     expires_at=expires_at,
+                    show_on_homepage=show_on_homepage,  # ← add
                 )
+                if promo_image:                          # ← add
+                    promo.image = promo_image
+                    promo.save()
                 messages.success(request, f"Promo code '{code}' created.")
             return redirect('adminpanel:settings')
 

@@ -47,4 +47,7 @@ urlpatterns = [
     path('shipping-policy/', views.shipping_policy, name='shipping_policy'),
     path('terms-of-services/', views.terms_of_service, name='terms-of-service'),
     path('contact-info/', views.contact_info, name='contact_info'),
+
+    path('razorpay/webhook/', views.razorpay_webhook, name='razorpay_webhook'),
+
 ]

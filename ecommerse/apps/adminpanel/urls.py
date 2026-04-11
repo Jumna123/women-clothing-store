@@ -43,8 +43,6 @@ urlpatterns = [
     # ── Returns ───────────────────────────────────────────────────────────────
     path('returns/',                             return_requests,         name='return_requests'),
     path('orders/handle-return/<int:pk>/',       handle_return,           name='handle-return'),
-    path('returns/item/<int:item_id>/action/',   handle_return_item,      name='handle-return-item'),
-
     # ── Settings / Promos ─────────────────────────────────────────────────────
     path('settings/promo/toggle/<int:pk>/',      toggle_promo,            name='toggle-promo'),
     path('settings/promo/delete/<int:pk>/',      delete_promo,            name='delete-promo'),

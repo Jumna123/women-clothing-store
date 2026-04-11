@@ -84,13 +84,12 @@
       </div>
 
       <div class="flex gap-2">
-        <a href="{% url 'home:cart_view' %}" class="relative flex items-center justify-center p-2 rounded-lg text-white/80 hover:bg-white/10 hover:text-white transition-colors">
-          <span class="material-symbols-outlined">shopping_bag</span>
-          {% if cart_count %}
-          <span class="absolute top-1 right-1 size-2 bg-green-400 rounded-full ring-2 ring-[#1e4433]"></span>
-          {% endif %}
-        </a>
-
+        <a href="{% url 'home:cart_view' %}" class="relative flex size-9 md:size-10 items-center justify-center rounded-full text-white hover:bg-[#1c3326] transition-colors">
+        <span class="material-symbols-outlined text-xl md:text-2xl">shopping_cart</span>
+        {% if cart_count %}
+        <span class="absolute top-1 right-1 size-2 bg-green-400 rounded-full ring-2 ring-[#1e4433]"></span>
+        {% endif %}
+      </a>
         <div class="relative" id="profileDropdown">
           <button onclick="toggleDropdown()" class="flex items-center gap-2 p-2 rounded-lg text-white/80 hover:bg-white/10 hover:text-white transition-colors">
             {% if user.profile_picture %}
@@ -147,99 +146,7 @@
          SIDEBAR — only shown when coming from profile
     ══════════════════════════════════════════ -->
 {% if from_profile %}
-
-<!-- SIDEBAR -->
-<aside class="w-full lg:w-64 flex-shrink-0">
-  <div class="bg-white rounded-2xl border border-border-green/10 shadow-sm overflow-hidden sticky top-24">
-
-    <!-- User card -->
-    <div class="p-6 bg-gradient-to-br from-primary to-accent-dark text-white">
-      <div class="flex items-center gap-3 mb-1">
-        {% if user.profile_picture %}
-          <img src="{{ user.profile_picture.url }}" class="size-12 rounded-full object-cover border-2 border-white/30" alt="{{ user.username }}"/>
-        {% else %}
-          <div class="size-12 rounded-full bg-white/10 border border-white/20 flex items-center justify-center">
-            <span class="material-symbols-outlined icon-filled text-2xl">account_circle</span>
-          </div>
-        {% endif %}
-        <div>
-          <p class="font-bold text-sm leading-tight">{{ user.get_full_name|default:user.username }}</p>
-          <p class="text-white/60 text-xs truncate max-w-[140px]">{{ user.email }}</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Nav links -->
-    <nav class="p-3 space-y-1">
-      {% with url_name=request.resolver_match.url_name %}
-
-      <a href="{% url 'accounts:profile' %}"
-        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all
-        {% if request.resolver_match.app_name == 'accounts' and url_name == 'profile' %}bg-primary-light text-primary
-        {% else %}text-text-secondary hover:bg-surface-light hover:text-primary{% endif %}">
-        <span class="material-symbols-outlined text-[20px] {% if request.resolver_match.app_name == 'accounts' and url_name == 'profile' %}icon-filled{% endif %}">dashboard</span>
-        Dashboard
-      </a>
-
-      <a href="{% url 'home:user_orders' %}"
-        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all
-        {% if url_name == 'user_orders' or url_name == 'order_detail' %}bg-primary-light text-primary
-        {% else %}text-text-secondary hover:bg-surface-light hover:text-primary{% endif %}">
-        <span class="material-symbols-outlined text-[20px] {% if url_name == 'user_orders' or url_name == 'order_detail' %}icon-filled{% endif %}">package_2</span>
-        My Orders
-        {% if active_orders_count %}
-          <span class="ml-auto bg-primary text-white text-[10px] font-bold px-2 py-0.5 rounded-full">{{ active_orders_count }}</span>
-        {% endif %}
-      </a>
-
-      <!-- Wishlist — always active on this page -->
-      <a href="{% url 'home:wishlist_view' %}"
-        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all bg-primary-light text-primary">
-        <span class="material-symbols-outlined text-[20px] icon-filled">favorite</span>
-        Wishlist
-        {% if wishlist_count %}
-          <span class="ml-auto bg-primary text-white text-[10px] font-bold px-2 py-0.5 rounded-full">{{ wishlist_count }}</span>
-        {% endif %}
-      </a>
-
-      <a href="{% url 'home:cart_view' %}"
-        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all
-        {% if url_name == 'cart_view' %}bg-primary-light text-primary
-        {% else %}text-text-secondary hover:bg-surface-light hover:text-primary{% endif %}">
-        <span class="material-symbols-outlined text-[20px] {% if url_name == 'cart_view' %}icon-filled{% endif %}">shopping_bag</span>
-        My Cart
-        {% if cart_count %}
-          <span class="ml-auto bg-primary text-white text-[10px] font-bold px-2 py-0.5 rounded-full">{{ cart_count }}</span>
-        {% endif %}
-      </a>
-
-      <a href="{% url 'accounts:address_list' %}"
-        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all
-        {% if url_name == 'address_list' %}bg-primary-light text-primary
-        {% else %}text-text-secondary hover:bg-surface-light hover:text-primary{% endif %}">
-        <span class="material-symbols-outlined text-[20px] {% if url_name == 'address_list' %}icon-filled{% endif %}">location_on</span>
-        Shipping Addresses
-      </a>
-
-      <div class="border-t border-border-green/10 my-2 mx-1"></div>
-
-      <a href="{% url 'accounts:profile' %}"
-        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all text-text-secondary hover:bg-surface-light hover:text-primary">
-        <span class="material-symbols-outlined text-[20px]">settings</span>
-        Settings
-      </a>
-
-      <a href="{% url 'accounts:logout' %}"
-        onclick="return confirm('Are you sure you want to sign out?')"
-        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-red-500 hover:bg-red-50 transition-all">
-        <span class="material-symbols-outlined text-[20px]">logout</span>
-        Sign Out
-      </a>
-
-      {% endwith %}
-    </nav>
-  </div>
-</aside>
+  {% include 'accounts/profile_sidebar.html' %}
 {% endif %}
 
     <!-- ══════════════════════════════════════════
@@ -524,6 +431,14 @@
 
   document.getElementById("sizeModal").addEventListener("click", function(e) {
     if (e.target === this) closeSizeModal();
+  });
+</script>
+<!-- bfcache fix -->
+<script>
+  window.addEventListener('pageshow', function(event) {
+    if (event.persisted) {
+      window.location.reload();
+    }
   });
 </script>
 

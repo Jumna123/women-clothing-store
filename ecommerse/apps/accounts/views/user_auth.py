@@ -9,6 +9,7 @@ from django.contrib.auth import authenticate, login,logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
+from django.views.decorators.cache import never_cache
 
 from ..forms import SignupForm,AddressForm
 from ..utils import generate_otp
@@ -134,12 +135,14 @@ def verify_email_view(request):
 
         # ---------------login--------------
 def userlogin(request):
-    # Clear stale messages
     storage = messages.get_messages(request)
     for _ in storage:
         pass
 
     if request.user.is_authenticated:
+        next_url = request.GET.get('next')
+        if next_url:
+            return redirect(next_url)
         return redirect('accounts:profile')
 
     if request.method == "POST":
@@ -154,14 +157,60 @@ def userlogin(request):
             return redirect(next_url)
         else:
             messages.error(request, "Invalid email or password")
-            return render(request, "accounts/user_login.html")
+            return render(request, "accounts/user_login.html", {
+                'next': request.POST.get('next', '')
+            })
 
-    return render(request, "accounts/user_login.html")
+    return render(request, "accounts/user_login.html", {
+        'next': request.GET.get('next', '')
+    })
 
-@login_required(login_url='accounts:userlogin')  
+
+from apps.home.models import Order, OrderItem, Wishlist, Cart, Product
+from django.db.models import Sum
+@never_cache
+@login_required(login_url='accounts:userlogin')
 def profile(request):
+    user = request.user
+
+    # Orders
+    all_orders = Order.objects.filter(user=user).order_by('-created_at')
+    active_statuses = ['pending', 'confirmed', 'shipped', 'in_transit']
+    active_orders = all_orders.filter(status__in=active_statuses)
+    recent_orders = all_orders[:5]
+    latest_order = active_orders.first()
+    total_spent = all_orders.filter(status='delivered').aggregate(
+        total=Sum('total_amount')
+    )['total'] or 0
+
+    # Wishlist
+    wishlist_count = Wishlist.objects.filter(user=user).count()
+    wishlist_ids = list(Wishlist.objects.filter(user=user).values_list('product_id', flat=True))
+
+    # Cart
+    cart_count = Cart.objects.filter(user=user).count()
+
+    # Categories for nav
+    from apps.adminpanel.models import Category
+
+    categories = Category.objects.filter(is_active=True)
+
+    # Recommended products (simple: latest active products)
+    recommended_products = Product.objects.filter(is_available=True).order_by('-created_at')[:4]
+
+
     return render(request, 'accounts/profile.html', {
-        'user': request.user
+        'user': user,
+        'recent_orders': recent_orders,
+        'active_orders_count': active_orders.count(),
+        'total_orders_count': all_orders.count(),
+        'latest_order': latest_order,
+        'total_spent': total_spent,
+        'wishlist_count': wishlist_count,
+        'wishlist_ids': wishlist_ids,
+        'cart_count': cart_count,
+        'categories': categories,
+        'recommended_products': recommended_products,
     })
 
 def user_logout(request):
@@ -251,9 +300,13 @@ def reset_password(request):
 def address_list(request):
     addresses = Address.objects.filter(user=request.user).order_by('-created_at')
     form = AddressForm()
+    from_profile = request.GET.get('from') == 'profile'
     return render(request, "accounts/user_addresss.html", {
         "addresses": addresses,
         "form": form,
+        "from_profile": from_profile,  # ← add this
+        "cart_count": Cart.objects.filter(user=request.user).count(),
+        "wishlist_count": Wishlist.objects.filter(user=request.user).count(),
     })
 
 

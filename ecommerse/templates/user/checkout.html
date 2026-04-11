@@ -224,11 +224,7 @@
 
           </div>
 
-          <!-- RIGHT COLUMN — ORDER SUMMARY -->
-          <div class="w-full lg:sticky lg:top-28 lg:max-w-[380px]">
-            <div class="rounded-xl bg-card-bg p-6 shadow-sm border border-border-color">
-
-              <h2 class="mb-6 text-xl font-bold text-primary">Order Summary</h2>
+          
 
               <!-- CART ITEMS -->
 <!-- RIGHT COLUMN — ORDER SUMMARY -->
@@ -368,6 +364,15 @@
     });
   });
 </script>
+
+<script>
+    window.addEventListener('pageshow', function(event) {
+      if (event.persisted) {
+        window.location.reload();
+      }
+    });
+  </script>
+
 
 </body>
 </html>
