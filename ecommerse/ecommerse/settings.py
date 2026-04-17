@@ -26,24 +26,21 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-$m1&s0btd#-8vob0#f1^h-9387qsd8-t%m7te-5pb@nlg1x4ol'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 # settings.py
 
-ALLOWED_HOSTS = [
-    "127.0.0.1",
-    "localhost",
-    ".ngrok-free.dev",
-]
+ALLOWED_HOSTS = ['volkeshoppe.online', 'www.volkeshoppe.online']
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://*.ngrok-free.dev",
+    'https://volkeshoppe.online',        
+    'https://www.volkeshoppe.online'     
 ]
 
-
+SOCIAL_AUTH_GOOGLE_OAUTH2_REDIRECT_URI = 'https://volkeshoppe.online/accounts/google/login/callback/'
 # Application definition
 
 INSTALLED_APPS = [
@@ -224,6 +221,10 @@ CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
 CELERY_TIMEZONE = 'Asia/Kolkata'
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 
+# ----------------------------------------------------------------------
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
 
-
-
+STATIC_ROOT = BASE_DIR / 'staticfiles'
