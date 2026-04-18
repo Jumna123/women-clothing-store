@@ -29,18 +29,18 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 # settings.py
 
-ALLOWED_HOSTS = ['volkeshoppe.online', 'www.volkeshoppe.online']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'volkeshoppe.online', 'www.volkeshoppe.online']
 
 CSRF_TRUSTED_ORIGINS = [
     'https://volkeshoppe.online',        
     'https://www.volkeshoppe.online'     
 ]
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_REDIRECT_URI = 'https://volkeshoppe.online/accounts/google/login/callback/'
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -221,10 +221,6 @@ CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
 CELERY_TIMEZONE = 'Asia/Kolkata'
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 
-# ----------------------------------------------------------------------
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-SECURE_SSL_REDIRECT = True
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
 
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+
