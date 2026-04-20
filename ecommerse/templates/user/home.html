@@ -443,33 +443,30 @@
 </main>
 
 <!-- FOOTER -->
-<footer class="bg-background-dark border-t border-[#254632] pt-10 sm:pt-12 md:pt-16 pb-8 bg-gradient-to-b from-[#141a17] to-[#0d1811]">
+<footer class="bg-background-dark border-t border-[#254632] pt-8 pb-6 bg-gradient-to-b from-[#141a17] to-[#0d1811]">
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-    <!-- FIX: 1 col on mobile, 2 on sm, 4 on lg -->
-    <div class="grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
 
-      <!-- Brand -->
-      <div class="sm:col-span-2 lg:col-span-1 space-y-4">
+    <!-- Mobile: brand full width on top, then 3 cols below -->
+    <!-- Desktop: all 4 cols in one row -->
+    <div class="grid gap-6 grid-cols-3 sm:grid-cols-4">
+
+      <!-- Brand: full width on mobile, 1 col on sm+ -->
+      <div class="col-span-3 sm:col-span-1 space-y-2 mb-2 sm:mb-0">
         <div style="line-height:1;">
-          <div style="font-family:'Georgia',serif;font-size:20px;font-weight:700;letter-spacing:0.15em;color:#ffffff;">vólke</div>
+          <div style="font-family:'Georgia',serif;font-size:18px;font-weight:700;letter-spacing:0.15em;color:#ffffff;">vólke</div>
           <div style="font-size:7px;letter-spacing:0.18em;color:#9ca3af;text-transform:uppercase;">shoppe</div>
         </div>
-        <p class="text-sm text-gray-500 leading-relaxed max-w-xs">
-          Redefining women's fashion with a blend of modern trends and timeless elegance. Quality you can trust, style you will love.
+        <p class="text-xs text-gray-500 leading-relaxed">
+          Quality you can trust, style you will love.
         </p>
       </div>
 
       <!-- Shop -->
       <div>
-        <h4 class="mb-4 md:mb-6 font-bold text-white">Shop</h4>
-        <ul class="space-y-2 md:space-y-3 text-sm text-gray-500">
+        <h4 class="mb-3 text-xs font-bold text-white uppercase tracking-wider">Shop</h4>
+        <ul class="space-y-1.5 text-xs text-gray-500">
           {% for collection in collections %}
-          <li>
-            <a class="hover:text-primary transition-colors"
-               href="{% url 'home:collection_products' collection.pk %}">
-              {{ collection.name }}
-            </a>
-          </li>
+          <li><a class="hover:text-primary transition-colors" href="{% url 'home:collection_products' collection.pk %}">{{ collection.name }}</a></li>
           {% empty %}
           <li class="text-gray-600">No collections yet</li>
           {% endfor %}
@@ -478,31 +475,31 @@
 
       <!-- Support -->
       <div>
-        <h4 class="mb-4 md:mb-6 font-bold text-white">Support</h4>
-        <ul class="space-y-2 md:space-y-3 text-sm text-gray-500">
+        <h4 class="mb-3 text-xs font-bold text-white uppercase tracking-wider">Support</h4>
+        <ul class="space-y-1.5 text-xs text-gray-500">
           {% if user.is_authenticated %}
-          <li><a class="hover:text-primary transition-colors" href="{% url 'home:user_orders' %}">Order Status</a></li>
+          <li><a class="hover:text-primary transition-colors" href="{% url 'home:user_orders' %}">Orders</a></li>
           {% else %}
-          <li><a class="hover:text-primary transition-colors" href="{% url 'accounts:userlogin' %}">Order Status</a></li>
+          <li><a class="hover:text-primary transition-colors" href="{% url 'accounts:userlogin' %}">Orders</a></li>
           {% endif %}
-          <li><a class="hover:text-primary transition-colors" href="{% url 'home:refund_policy' %}">Refund Policy</a></li>
-          <li><a class="hover:text-primary transition-colors" href="{% url 'home:contact_info' %}">Contact Information</a></li>
+          <li><a class="hover:text-primary transition-colors" href="{% url 'home:refund_policy' %}">Refunds</a></li>
+          <li><a class="hover:text-primary transition-colors" href="{% url 'home:contact_info' %}">Contact</a></li>
         </ul>
       </div>
 
       <!-- Legal -->
       <div>
-        <h4 class="mb-4 md:mb-6 font-bold text-white">Legal</h4>
-        <ul class="space-y-2 md:space-y-3 text-sm text-gray-500">
-          <li><a class="hover:text-primary transition-colors" href="{% url 'home:privacy_policy' %}">Privacy Policy</a></li>
-          <li><a class="hover:text-primary transition-colors" href="{% url 'home:shipping_policy' %}">Shipping Policy</a></li>
-          <li><a class="hover:text-primary transition-colors" href="{% url 'home:terms-of-service' %}">Terms of Service</a></li>
+        <h4 class="mb-3 text-xs font-bold text-white uppercase tracking-wider">Legal</h4>
+        <ul class="space-y-1.5 text-xs text-gray-500">
+          <li><a class="hover:text-primary transition-colors" href="{% url 'home:privacy_policy' %}">Privacy</a></li>
+          <li><a class="hover:text-primary transition-colors" href="{% url 'home:shipping_policy' %}">Shipping</a></li>
+          <li><a class="hover:text-primary transition-colors" href="{% url 'home:terms-of-service' %}">Terms</a></li>
         </ul>
       </div>
 
     </div>
 
-    <div class="mt-8 md:mt-12 border-t border-[#254632] pt-8 text-center text-sm text-gray-600">
+    <div class="mt-6 border-t border-[#254632] pt-5 text-center text-xs text-gray-600">
       <p>© 2025 VOLKE® Fashion. All rights reserved.</p>
     </div>
   </div>
