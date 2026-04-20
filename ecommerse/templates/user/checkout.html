@@ -48,43 +48,37 @@
       <span style="font-size: 8px; letter-spacing: 0.18em; color: #ffffff; text-transform: uppercase; font-family: var(--font-sans);">shoppe</span>
     </div>
 
-    <!-- Progress Stepper -->
-    <div class="flex items-center">
+    <!-- Progress Stepper — responsive -->
+    <div class="flex items-center gap-0">
 
-      <!-- Step 1: Bag (completed) -->
-      <a href="{% url 'home:cart_view' %}" class="flex flex-col items-center gap-1 min-w-[72px]">
-        <div class="flex size-8 items-center justify-center rounded-full bg-green-600 text-white shadow">
-          <span class="material-symbols-outlined text-[18px]">check</span>
+      <a href="{% url 'home:cart_view' %}" class="flex flex-col items-center gap-0.5 min-w-0">
+        <div class="flex size-7 items-center justify-center rounded-full bg-green-600 text-white shadow">
+          <span class="material-symbols-outlined text-[15px]">check</span>
         </div>
-        <span class="text-[10px] font-semibold text-green-400 tracking-wider uppercase">Bag</span>
+        <span class="text-[9px] font-semibold text-green-400 uppercase hidden sm:block">Bag</span>
       </a>
 
-      <!-- Line (completed) -->
-      <div class="w-16 h-[2px] bg-green-600 mx-2"></div>
+      <div class="w-6 sm:w-10 h-[2px] bg-green-600 mx-1"></div>
 
-      <!-- Step 2: Delivery (active) -->
-      <div class="flex flex-col items-center gap-1 min-w-[88px]">
-        <div class="flex size-8 items-center justify-center rounded-full bg-primary text-[#112117] shadow">
-          <span class="material-symbols-outlined text-[18px]">local_shipping</span>
+      <div class="flex flex-col items-center gap-0.5 min-w-0">
+        <div class="flex size-7 items-center justify-center rounded-full bg-primary text-white shadow">
+          <span class="material-symbols-outlined text-[15px]">local_shipping</span>
         </div>
-        <span class="text-[10px] font-bold text-white tracking-wider uppercase">Delivery</span>
+        <span class="text-[9px] font-bold text-white uppercase hidden sm:block">Delivery</span>
       </div>
 
-      <!-- Line (inactive) -->
-      <div class="w-16 h-[2px] bg-gray-600 mx-2"></div>
+      <div class="w-6 sm:w-10 h-[2px] bg-gray-600 mx-1"></div>
 
-      <!-- Step 3: Payment (inactive) -->
-      <div class="flex flex-col items-center gap-1 min-w-[72px]">
-        <div class="flex size-8 items-center justify-center rounded-full bg-gray-700 text-gray-400">
-          <span class="material-symbols-outlined text-[18px]">payments</span>
+      <div class="flex flex-col items-center gap-0.5 min-w-0">
+        <div class="flex size-7 items-center justify-center rounded-full bg-gray-700 text-gray-400">
+          <span class="material-symbols-outlined text-[15px]">payments</span>
         </div>
-        <span class="text-[10px] font-semibold text-gray-400 tracking-wider uppercase">Payment</span>
+        <span class="text-[9px] font-semibold text-gray-400 uppercase hidden sm:block">Payment</span>
       </div>
 
     </div>
 
-    <!-- Right spacer -->
-    <div class="shrink-0 w-[120px]"></div>
+    <div class="shrink-0 w-6 sm:w-[80px]"></div>
 
   </div>
 </header>
