@@ -50,7 +50,7 @@ def addproduct(request):
                     "form": form,
                     "categories": categories,
                     "collections": collections,
-                    "is_edit": False
+                    "is_edit": False,
                 })
 
             product = form.save(commit=False)
@@ -59,21 +59,21 @@ def addproduct(request):
             product.is_trending = bool(request.POST.get("is_trending"))
             product.tags = request.POST.get("tags", "").strip()
 
-            # ✅ Derive is_available and stock_quantity from size stocks
             size_names = request.POST.getlist('size_name')
             size_stocks = request.POST.getlist('size_stock')
-            total_stock = sum(
-                int(s) for s in size_stocks if s.isdigit()
-            )
-            product.stock_quantity = total_stock
-            product.is_available = total_stock > 0
 
-            # Store size names as comma-separated (keeps your existing field intact)
+            if size_names:
+                total_stock = sum(int(s) for s in size_stocks if s.isdigit())
+                product.stock_quantity = total_stock
+                product.is_available = total_stock > 0
+            else:
+                # No sizes added — fall back to form values
+                product.stock_quantity = form.cleaned_data.get('stock_quantity', 0)
+                product.is_available = form.cleaned_data.get('is_available', False)
+
             product.size = ",".join(n for n in size_names if n)
-
             product.save()
 
-            # ✅ Save per-size stock records
             for name, stock in zip(size_names, size_stocks):
                 if name:
                     ProductSize.objects.create(
@@ -83,10 +83,17 @@ def addproduct(request):
                     )
 
             selected_collections = request.POST.getlist("collections")
-            product.collections.set(selected_collections) if selected_collections else product.collections.clear()
+            if selected_collections:
+                product.collections.set(selected_collections)
+            else:
+                product.collections.clear()
 
             for index, image in enumerate(images):
-                ProductImage.objects.create(product=product, image=image, is_primary=(index == 0))
+                ProductImage.objects.create(
+                    product=product,
+                    image=image,
+                    is_primary=(index == 0)
+                )
 
             messages.success(request, "Product added successfully")
             return redirect("adminpanel:product")
@@ -99,7 +106,7 @@ def addproduct(request):
         "form": form,
         "categories": categories,
         "collections": collections,
-        "is_edit": False
+        "is_edit": False,
     })
 
 
@@ -112,6 +119,7 @@ def edit_product(request, pk):
         if form.is_valid():
             new_images = request.FILES.getlist("images")
             existing_images = product.images.exists()
+
             if not new_images and not existing_images:
                 messages.error(request, "Please upload at least one product image.")
                 return render(request, "adminpanel/addproduct.html", {
@@ -122,41 +130,48 @@ def edit_product(request, pk):
                     "sizes": product.size.split(",") if product.size else [],
                 })
 
-            product = form.save(commit=False)
-            product.color_hex = request.POST.get("color_hex")
-            product.color_name = request.POST.get("color_name")
-            product.is_trending = bool(request.POST.get("is_trending"))
-            product.tags = request.POST.get("tags", "").strip()
+            # Use a different variable to avoid overwriting the original `product`
+            updated_product = form.save(commit=False)
+            updated_product.color_hex = request.POST.get("color_hex")
+            updated_product.color_name = request.POST.get("color_name")
+            updated_product.is_trending = bool(request.POST.get("is_trending"))
+            updated_product.tags = request.POST.get("tags", "").strip()
 
-            # ✅ Clear old size records and rebuild from POST data
+            # Delete old size records using the ORIGINAL product reference
             product.product_sizes.all().delete()
 
             size_names = request.POST.getlist('size_name')
             size_stocks = request.POST.getlist('size_stock')
-            total_stock = sum(
-                int(s) for s in size_stocks if s.isdigit()
-            )
-            product.stock_quantity = total_stock
-            product.is_available = total_stock > 0
-            product.size = ",".join(n for n in size_names if n)
 
-            product.save()
+            if size_names:
+                total_stock = sum(int(s) for s in size_stocks if s.isdigit())
+                updated_product.stock_quantity = total_stock
+                updated_product.is_available = total_stock > 0
+            else:
+                # No sizes — fall back to form values
+                updated_product.stock_quantity = form.cleaned_data.get('stock_quantity', 0)
+                updated_product.is_available = form.cleaned_data.get('is_available', False)
 
-            # ✅ Save updated per-size stock records
+            updated_product.size = ",".join(n for n in size_names if n)
+            updated_product.save()
+
             for name, stock in zip(size_names, size_stocks):
                 if name:
                     ProductSize.objects.create(
-                        product=product,
+                        product=updated_product,
                         size=name,
                         stock_quantity=int(stock) if stock.isdigit() else 0
                     )
 
             selected_collections = request.POST.getlist("collections")
-            product.collections.set(selected_collections) if selected_collections else product.collections.clear()
+            if selected_collections:
+                updated_product.collections.set(selected_collections)
+            else:
+                updated_product.collections.clear()
 
             for index, image in enumerate(new_images):
                 ProductImage.objects.create(
-                    product=product,
+                    product=updated_product,
                     image=image,
                     is_primary=(index == 0 and not existing_images)
                 )
@@ -173,7 +188,6 @@ def edit_product(request, pk):
     sizes = product.size.split(",") if product.size else []
     sizes = sorted(sizes, key=lambda x: SIZE_ORDER.index(x) if x in SIZE_ORDER else 999)
 
-    # ✅ Pass existing per-size stock data to the template for pre-filling
     existing_size_stocks = {
         ps.size: ps.stock_quantity
         for ps in product.product_sizes.all()
@@ -186,7 +200,7 @@ def edit_product(request, pk):
         "collections": collections,
         "is_edit": True,
         "product_tags": product.tags if product.tags else "",
-        "existing_size_stocks": existing_size_stocks,  # ✅ for pre-filling stock inputs
+        "existing_size_stocks": existing_size_stocks,
     })
 
 

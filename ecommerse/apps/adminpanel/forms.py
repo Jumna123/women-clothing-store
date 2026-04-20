@@ -59,7 +59,7 @@ class ProductForm(forms.ModelForm):
                 "class": "w-full h-12 bg-white border border-border-green rounded-xl px-4 focus:border-primary focus:ring-0 transition-colors cursor-pointer",
             }),
             "is_available": forms.CheckboxInput(attrs={
-                "class": "peer hidden",
+                "class": "sr-only peer",
             }),
             "color_hex": forms.HiddenInput(),
             "color_name": forms.TextInput(attrs={
