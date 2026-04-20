@@ -138,13 +138,49 @@
 <!-- ══════════════════════════════════════════
      PAGE BODY
 ══════════════════════════════════════════ -->
-<div class="flex-grow w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-10">
-  <div class="flex flex-col lg:flex-row gap-8 lg:gap-10">
+<div class="flex flex-col lg:flex-row gap-6 lg:gap-10">
 
-    <!-- ── Sidebar ── -->
-    {% include 'accounts/profile_sidebar.html' %}
+    <!-- Sidebar: hidden on mobile, shown on lg -->
+    <div class="hidden lg:block">
+      {% include 'accounts/profile_sidebar.html' %}
+    </div>
 
-    <!-- ── Main content ── -->
+    <!-- Mobile nav: horizontal scrollable bar -->
+    <div class="lg:hidden bg-white border border-border-green/10 rounded-2xl overflow-hidden shadow-sm">
+      <div class="flex items-center gap-3 px-4 py-3 bg-primary">
+        {% if user.profile_picture %}
+          <img src="{{ user.profile_picture.url }}" class="size-8 rounded-full object-cover border-2 border-white/30"/>
+        {% else %}
+          <span class="material-symbols-outlined text-white icon-filled">account_circle</span>
+        {% endif %}
+        <div>
+          <p class="text-white font-bold text-sm">{{ user.get_full_name|default:user.username }}</p>
+          <p class="text-white/60 text-xs">{{ user.email }}</p>
+        </div>
+      </div>
+      <div class="flex overflow-x-auto hide-scrollbar border-t border-border-green/10">
+        <a href="{% url 'accounts:profile' %}" class="flex items-center gap-1.5 px-4 py-3 text-xs font-bold text-primary whitespace-nowrap border-r border-border-green/10 hover:bg-surface-light">
+          <span class="material-symbols-outlined text-[16px]">dashboard</span> Dashboard
+        </a>
+        <a href="{% url 'home:user_orders' %}" class="flex items-center gap-1.5 px-4 py-3 text-xs font-bold text-text-main whitespace-nowrap border-r border-border-green/10 hover:bg-surface-light">
+          <span class="material-symbols-outlined text-[16px]">package_2</span> Orders
+        </a>
+        <a href="{% url 'home:wishlist_view' %}" class="flex items-center gap-1.5 px-4 py-3 text-xs font-bold text-text-main whitespace-nowrap border-r border-border-green/10 hover:bg-surface-light">
+          <span class="material-symbols-outlined text-[16px]">favorite</span> Wishlist
+        </a>
+        <a href="{% url 'home:cart_view' %}" class="flex items-center gap-1.5 px-4 py-3 text-xs font-bold text-text-main whitespace-nowrap border-r border-border-green/10 hover:bg-surface-light">
+          <span class="material-symbols-outlined text-[16px]">shopping_bag</span> Cart
+        </a>
+        <a href="{% url 'accounts:address_list' %}" class="flex items-center gap-1.5 px-4 py-3 text-xs font-bold text-text-main whitespace-nowrap border-r border-border-green/10 hover:bg-surface-light">
+          <span class="material-symbols-outlined text-[16px]">location_on</span> Addresses
+        </a>
+        <a href="{% url 'accounts:logout' %}" class="flex items-center gap-1.5 px-4 py-3 text-xs font-bold text-red-500 whitespace-nowrap hover:bg-red-50">
+          <span class="material-symbols-outlined text-[16px]">logout</span> Sign Out
+        </a>
+      </div>
+    </div>
+
+    <!-- Main content -->
     <main class="flex-1 flex flex-col gap-8 min-w-0">
 
       
