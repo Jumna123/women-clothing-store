@@ -409,16 +409,7 @@
             </div>
           </div>
         </a>
-        {% if rp.stock_quantity != 0 %}
-        <div class="px-4 pb-4 mt-auto pt-1">
-          <a href="{% url 'home:add_to_cart' rp.id %}"
-             class="flex w-full items-center justify-center gap-1 rounded-lg bg-dark-green py-2.5 text-xs font-bold text-white
-                    hover:bg-surface-dark transition-all opacity-0 group-hover:opacity-100 -translate-y-1 group-hover:translate-y-0 duration-200">
-            <span class="material-symbols-outlined text-[15px]">shopping_bag</span>
-            Add to Bag
-          </a>
-        </div>
-        {% else %}
+        {% if rp.stock_quantity == 0 %}
         <div class="px-4 pb-4 pt-1">
           <button disabled class="flex w-full items-center justify-center rounded-lg bg-gray-100 py-2.5 text-xs font-bold text-gray-400 cursor-not-allowed">Sold Out</button>
         </div>
@@ -462,16 +453,15 @@
 </footer>
 
 <!-- Toast -->
-<!-- With this: -->
 <div id="toast" class="flex items-center gap-4 bg-[#112117] text-white px-5 py-3.5 rounded-2xl shadow-2xl text-sm font-semibold">
-  <div class="flex size-9 items-center justify-center rounded-full bg-primary shrink-0">
+  <div id="toastIcon" class="flex size-9 items-center justify-center rounded-full bg-primary shrink-0">
     <span class="material-symbols-outlined text-[#112117] text-[18px]">check</span>
   </div>
   <div class="flex flex-col leading-tight">
     <span class="text-sm font-bold" id="toastMsg">Added to cart!</span>
-    <span class="text-xs text-gray-400">Item is in your bag</span>
+    <span class="text-xs text-gray-400" id="toastSub">Item is in your bag</span>
   </div>
-  <a href="{% url 'home:cart_view' %}"
+  <a id="toastCartLink" href="{% url 'home:cart_view' %}"
     class="ml-2 shrink-0 rounded-xl bg-primary text-[#112117] px-4 py-2 text-xs font-extrabold hover:opacity-90 transition-all pointer-events-auto">
     Go to Cart
   </a>
@@ -508,9 +498,28 @@
     document.querySelectorAll('input[name="quantity"]').forEach(el => el.value = 1);
   }
 
-  function showToast(msg) {
+  function showToast(msg, isError = false) {
     const t = document.getElementById('toast');
     document.getElementById('toastMsg').textContent = msg || 'Added to cart!';
+
+    const icon = document.getElementById('toastIcon');
+    const sub = document.getElementById('toastSub');
+    const cartLink = document.getElementById('toastCartLink');
+
+    if (isError) {
+      // Error state: red icon, no subtitle, hide Go to Cart
+      icon.className = 'flex size-9 items-center justify-center rounded-full bg-red-500 shrink-0';
+      icon.innerHTML = '<span class="material-symbols-outlined text-white text-[18px]">error</span>';
+      sub.classList.add('hidden');
+      cartLink.classList.add('hidden');
+    } else {
+      // Success state: green icon, subtitle, show Go to Cart
+      icon.className = 'flex size-9 items-center justify-center rounded-full bg-primary shrink-0';
+      icon.innerHTML = '<span class="material-symbols-outlined text-[#112117] text-[18px]">check</span>';
+      sub.classList.remove('hidden');
+      cartLink.classList.remove('hidden');
+    }
+
     t.classList.add('show');
     clearTimeout(window._toastTimer);
     window._toastTimer = setTimeout(closeToast, 4000);
@@ -561,7 +570,7 @@
       const selector = document.getElementById('sizeSelector');
       selector.classList.add('ring-2', 'ring-red-400', 'ring-offset-2', 'rounded-xl', 'p-1');
       selector.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      showToast('Please select a size first');
+      showToast('Please select a size first', true);
       setTimeout(() => selector.classList.remove('ring-2', 'ring-red-400', 'ring-offset-2', 'rounded-xl', 'p-1'), 2000);
       return;
     }
@@ -585,7 +594,7 @@
       const selector = document.getElementById('sizeSelector');
       selector.classList.add('ring-2', 'ring-red-400', 'ring-offset-2', 'rounded-xl', 'p-1');
       selector.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      showToast('Please select a size first');
+      showToast('Please select a size first', true);
       setTimeout(() => selector.classList.remove('ring-2', 'ring-red-400', 'ring-offset-2', 'rounded-xl', 'p-1'), 2000);
       return false;
     }

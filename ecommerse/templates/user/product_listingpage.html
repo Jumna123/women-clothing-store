@@ -330,7 +330,7 @@
     <div id="modalContent" class="mb-4"></div>
     <div id="sizeOptions" class="flex gap-2 flex-wrap mb-6"></div>
 
-    <form method="GET" id="addToCartForm">
+    <form method="GET" id="addToCartForm" onsubmit="return validateSize(event)">
       <input type="hidden" name="size" id="selectedSize"/>
       <input type="hidden" name="quantity" value="1"/>
       <button type="submit"
@@ -391,6 +391,24 @@
     button.classList.add("bg-[#1e4433]", "text-white", "border-[#1e4433]");
     document.getElementById("selectedSize").value = size;
   }
+  function validateSize(e) {
+  const size = document.getElementById("selectedSize").value;
+  if (!size) {
+    e.preventDefault();
+    const sizeOptions = document.getElementById("sizeOptions");
+    sizeOptions.classList.add("ring-2", "ring-red-400", "rounded-xl", "p-2");
+    const existing = document.getElementById("size-error");
+    if (!existing) {
+      const err = document.createElement("p");
+      err.id = "size-error";
+      err.className = "text-xs text-red-500 font-semibold mt-1";
+      err.textContent = "Please select a size first!";
+      sizeOptions.after(err);
+    }
+    return false;
+  }
+  return true;
+}
 
   document.getElementById("sizeModal").addEventListener("click", function(e) {
     if (e.target === this) closeSizeModal();
