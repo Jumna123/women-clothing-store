@@ -69,19 +69,7 @@
       </nav>
     </div>
 
-      <div class="hidden md:flex flex-1 max-w-xl mx-6">
-        <div class="relative w-full">
-          <form method="GET" action="{% url 'home:search_products' %}" class="relative w-full">
-            <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-white/50">
-              <span class="material-symbols-outlined text-xl">search</span>
-            </div>
-            <input name="q"
-              class="block w-full rounded-full border-none bg-white/10 py-2.5 pl-11 pr-4 text-sm text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-white/20 focus:bg-white/15 transition-all hover:bg-white/15"
-              placeholder="Search styles..."
-              type="text" autocomplete="off"/>
-          </form>
-        </div>
-      </div>
+    
 
       <div class="flex gap-2">
         <a href="{% url 'home:cart_view' %}" class="relative flex size-9 md:size-10 items-center justify-center rounded-full text-white hover:bg-[#1c3326] transition-colors">
@@ -282,7 +270,7 @@
      TRUST BADGES
 ══════════════════════════════════════════ -->
 <div class="bg-white border-t border-border-green/10 py-12 mt-auto">
-  <div class="max-w-[1440px] mx-auto px-4 lg:px-8 grid grid-cols-1 md:grid-cols-3 gap-8">
+  <div class="max-w-[1440px] mx-auto px-4 lg:px-8 grid grid-cols-3 gap-8">
     <div class="flex flex-col items-center text-center">
       <div class="size-14 rounded-full bg-surface-light flex items-center justify-center text-primary mb-4">
         <span class="material-symbols-outlined text-2xl">keyboard_return</span>
@@ -403,12 +391,12 @@
           sizeContainer.innerHTML = `<p class="text-xs text-text-secondary/50">No sizes available</p>`;
         } else {
           data.sizes.forEach(size => {
-            sizeContainer.innerHTML += `
-              <button type="button"
-                      onclick="selectSize(this, '${size}')"
-                      class="size-btn px-4 py-2 rounded-xl border-2 border-border-green/20 text-sm font-semibold text-text-main hover:border-primary hover:text-primary transition-all">
-                ${size}
-              </button>`;
+          sizeContainer.innerHTML += `
+            <button type="button"
+                    onclick="selectSize(this, '${size}')"
+                    class="size-btn min-w-[48px] px-4 py-2 rounded-xl border-2 border-border-green/20 text-sm font-semibold text-text-main hover:border-primary hover:bg-primary/10 hover:text-primary transition-all">
+              ${size}
+            </button>`;
           });
         }
 
@@ -422,12 +410,12 @@
   }
 
   function selectSize(button, size) {
-    document.querySelectorAll(".size-btn").forEach(btn => {
-      btn.classList.remove("bg-primary", "text-white", "border-primary");
-    });
-    button.classList.add("bg-primary", "text-white", "border-primary");
-    document.getElementById("selectedSize").value = size;
-  }
+      document.querySelectorAll("#sizeOptions .size-btn").forEach(btn => {
+        btn.classList.remove("bg-primary", "text-white", "border-primary");
+      });
+      button.classList.add("bg-primary", "text-white", "border-primary");
+      document.getElementById("selectedSize").value = size;
+    }
 
   document.getElementById("sizeModal").addEventListener("click", function(e) {
     if (e.target === this) closeSizeModal();
