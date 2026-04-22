@@ -50,19 +50,15 @@ class AddressForm(forms.ModelForm):
         widgets = {
             'full_name': forms.TextInput(attrs={
                 'class': 'w-full rounded-lg border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark text-text-main dark:text-white px-4 py-2.5 focus:ring-primary focus:border-primary',
-                'placeholder': 'e.g. Jane Doe'
             }),
             'phone': forms.TextInput(attrs={
                 'class': 'w-full rounded-lg border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark text-text-main dark:text-white px-4 py-2.5 focus:ring-primary focus:border-primary',
-                'placeholder': '+91 00000 00000'
             }),
             'house_name': forms.TextInput(attrs={
                 'class': 'w-full rounded-lg border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark text-text-main dark:text-white px-4 py-2.5 focus:ring-primary focus:border-primary',
-                'placeholder': 'House / Flat No.'
             }),
             'street': forms.TextInput(attrs={
                 'class': 'w-full rounded-lg border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark text-text-main dark:text-white px-4 py-2.5 focus:ring-primary focus:border-primary',
-                'placeholder': 'Street name'
             }),
             'city': forms.TextInput(attrs={
                 'class': 'w-full rounded-lg border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark text-text-main dark:text-white px-4 py-2.5 focus:ring-primary focus:border-primary',
@@ -72,24 +68,38 @@ class AddressForm(forms.ModelForm):
             }),
             'pincode': forms.TextInput(attrs={
                 'class': 'w-full rounded-lg border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark text-text-main dark:text-white px-4 py-2.5 focus:ring-primary focus:border-primary',
-                'placeholder': '000000'
             }),
-            # ✅ hide is_default — handled via checkbox in template manually
             'is_default': forms.HiddenInput(),
         }
 
     def clean_phone(self):
         phone = self.cleaned_data.get('phone', '').strip()
         digits = ''.join(filter(str.isdigit, phone))
-        if len(digits) < 10:
-            raise forms.ValidationError("Enter a valid phone number with at least 10 digits.")
-        return phone
+        if len(digits) != 10:
+            raise forms.ValidationError("Enter a valid 10-digit phone number.")
+        if digits[0] not in '6789':
+            raise forms.ValidationError("Enter a valid Indian mobile number starting with 6, 7, 8, or 9.")
+        return digits
 
     def clean_pincode(self):
         pincode = self.cleaned_data.get('pincode', '').strip()
         if not pincode.isdigit() or len(pincode) != 6:
             raise forms.ValidationError("Enter a valid 6-digit pincode.")
+        if pincode[0] == '0':
+            raise forms.ValidationError("Pincode cannot start with 0.")
         return pincode
+
+    def clean_city(self):
+        city = self.cleaned_data.get('city', '').strip()
+        if not all(c.isalpha() or c.isspace() for c in city):
+            raise forms.ValidationError("City should contain only letters.")
+        return city.title()
+
+    def clean_state(self):
+        state = self.cleaned_data.get('state', '').strip()
+        if not all(c.isalpha() or c.isspace() for c in state):
+            raise forms.ValidationError("State should contain only letters.")
+        return state.title()
     
 @login_required
 def add_address(request):
@@ -99,7 +109,6 @@ def add_address(request):
             address = form.save(commit=False)
             address.user = request.user
 
-            # ✅ handle set_default checkbox from template
             if request.POST.get('set_default') or not Address.objects.filter(user=request.user).exists():
                 Address.objects.filter(user=request.user).update(is_default=False)
                 address.is_default = True

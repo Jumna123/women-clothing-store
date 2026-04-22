@@ -1,31 +1,52 @@
 <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
   <div class="md:col-span-2">
     <label class="mb-1.5 block text-sm font-semibold text-primary">Full Name</label>
-    <input type="text" name="new_full_name" class="w-full rounded-lg border border-primary/20 bg-white py-2.5 px-3 text-sm text-primary focus:border-primary focus:ring-primary"/>
+    <input type="text" name="new_full_name" required minlength="3" maxlength="100"
+           pattern="[A-Za-z\s]+"
+           title="Name should contain only letters and spaces"
+           class="w-full rounded-lg border border-primary/20 bg-white py-2.5 px-3 text-sm text-primary focus:border-primary focus:ring-primary"/>
   </div>
   <div>
     <label class="mb-1.5 block text-sm font-semibold text-primary">Phone</label>
-    <input type="tel" name="new_phone" class="w-full rounded-lg border border-primary/20 bg-white py-2.5 px-3 text-sm text-primary focus:border-primary focus:ring-primary" />
+    <input type="tel" name="new_phone" required
+           pattern="[6-9][0-9]{9}"
+           maxlength="10"
+           title="Enter a valid 10-digit Indian mobile number"
+           class="w-full rounded-lg border border-primary/20 bg-white py-2.5 px-3 text-sm text-primary focus:border-primary focus:ring-primary"/>
   </div>
   <div>
     <label class="mb-1.5 block text-sm font-semibold text-primary">House / Flat No.</label>
-    <input type="text" name="new_house_name" class="w-full rounded-lg border border-primary/20 bg-white py-2.5 px-3 text-sm text-primary focus:border-primary focus:ring-primary"/>
+    <input type="text" name="new_house_name" required minlength="2" maxlength="100"
+           title="Enter your house or flat number"
+           class="w-full rounded-lg border border-primary/20 bg-white py-2.5 px-3 text-sm text-primary focus:border-primary focus:ring-primary"/>
   </div>
   <div class="md:col-span-2">
     <label class="mb-1.5 block text-sm font-semibold text-primary">Street</label>
-    <input type="text" name="new_street" class="w-full rounded-lg border border-primary/20 bg-white py-2.5 px-3 text-sm text-primary focus:border-primary focus:ring-primary"/>
+    <input type="text" name="new_street" required minlength="5" maxlength="200"
+           title="Enter your street address"
+           class="w-full rounded-lg border border-primary/20 bg-white py-2.5 px-3 text-sm text-primary focus:border-primary focus:ring-primary"/>
   </div>
   <div>
     <label class="mb-1.5 block text-sm font-semibold text-primary">City</label>
-    <input type="text" name="new_city" class="w-full rounded-lg border border-primary/20 bg-white py-2.5 px-3 text-sm text-primary focus:border-primary focus:ring-primary"/>
+    <input type="text" name="new_city" required minlength="2" maxlength="100"
+           pattern="[A-Za-z\s]+"
+           title="City should contain only letters"
+           class="w-full rounded-lg border border-primary/20 bg-white py-2.5 px-3 text-sm text-primary focus:border-primary focus:ring-primary"/>
   </div>
   <div>
     <label class="mb-1.5 block text-sm font-semibold text-primary">State</label>
-    <input type="text" name="new_state" class="w-full rounded-lg border border-primary/20 bg-white py-2.5 px-3 text-sm text-primary focus:border-primary focus:ring-primary"/>
+    <input type="text" name="new_state" required minlength="2" maxlength="100"
+           pattern="[A-Za-z\s]+"
+           title="State should contain only letters"
+           class="w-full rounded-lg border border-primary/20 bg-white py-2.5 px-3 text-sm text-primary focus:border-primary focus:ring-primary"/>
   </div>
   <div>
     <label class="mb-1.5 block text-sm font-semibold text-primary">Pincode</label>
-    <input type="text" name="new_pincode" class="w-full rounded-lg border border-primary/20 bg-white py-2.5 px-3 text-sm text-primary focus:border-primary focus:ring-primary" />
+    <input type="text" name="new_pincode" required
+           pattern="[1-9][0-9]{5}"
+           maxlength="6"
+           title="Enter a valid 6-digit Indian pincode"
+           class="w-full rounded-lg border border-primary/20 bg-white py-2.5 px-3 text-sm text-primary focus:border-primary focus:ring-primary"/>
   </div>
   <div class="md:col-span-2 flex items-center gap-2 mt-1">
     <input type="checkbox" name="save_new_address" id="save_new_address" class="text-primary focus:ring-primary"/>
