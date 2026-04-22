@@ -49,24 +49,41 @@ class AddressForm(forms.ModelForm):
         exclude = ['user']
         widgets = {
             'full_name': forms.TextInput(attrs={
+                'type': 'text',
+                'autocomplete': 'name',
                 'class': 'w-full rounded-lg border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark text-text-main dark:text-white px-4 py-2.5 focus:ring-primary focus:border-primary',
             }),
             'phone': forms.TextInput(attrs={
+                'type': 'tel',
+                'autocomplete': 'tel',
+                'inputmode': 'numeric',
                 'class': 'w-full rounded-lg border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark text-text-main dark:text-white px-4 py-2.5 focus:ring-primary focus:border-primary',
             }),
             'house_name': forms.TextInput(attrs={
+                'type': 'text',
+                'autocomplete': 'address-line1',
                 'class': 'w-full rounded-lg border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark text-text-main dark:text-white px-4 py-2.5 focus:ring-primary focus:border-primary',
             }),
             'street': forms.TextInput(attrs={
+                'type': 'text',
+                'autocomplete': 'address-line2',
                 'class': 'w-full rounded-lg border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark text-text-main dark:text-white px-4 py-2.5 focus:ring-primary focus:border-primary',
             }),
             'city': forms.TextInput(attrs={
+                'type': 'text',
+                'autocomplete': 'address-level2',
                 'class': 'w-full rounded-lg border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark text-text-main dark:text-white px-4 py-2.5 focus:ring-primary focus:border-primary',
             }),
             'state': forms.TextInput(attrs={
+                'type': 'text',
+                'autocomplete': 'address-level1',
                 'class': 'w-full rounded-lg border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark text-text-main dark:text-white px-4 py-2.5 focus:ring-primary focus:border-primary',
             }),
             'pincode': forms.TextInput(attrs={
+                'type': 'text',
+                'autocomplete': 'postal-code',
+                'inputmode': 'numeric',
+                'maxlength': '6',
                 'class': 'w-full rounded-lg border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark text-text-main dark:text-white px-4 py-2.5 focus:ring-primary focus:border-primary',
             }),
             'is_default': forms.HiddenInput(),
