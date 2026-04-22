@@ -54,9 +54,81 @@
 </head>
 
 <body class="bg-background-green text-text-main font-display antialiased">
-<div class="flex h-screen w-full p-4 md:p-6 gap-4 md:gap-6">
 
-  <!-- SIDEBAR -->
+<!-- Mobile top nav bar -->
+<div class="md:hidden flex items-center justify-between bg-white px-4 py-3 shadow-sm">
+  <div class="flex flex-col" style="line-height:1;">
+    <span style="font-family:'Playfair Display',Georgia,serif;font-size:22px;font-weight:700;color:#111111;">vólke</span>
+    <span style="font-size:8px;letter-spacing:0.16em;color:#6b7280;text-transform:lowercase;">shoppe</span>
+  </div>
+  <button onclick="document.getElementById('mobileSidebar').classList.toggle('hidden')"
+    class="flex items-center justify-center size-9 rounded-full bg-secondary text-primary">
+    <span class="material-symbols-outlined text-[22px]">menu</span>
+  </button>
+</div>
+
+<!-- Mobile sidebar drawer -->
+<div id="mobileSidebar" class="hidden md:hidden fixed inset-0 z-50 flex">
+  <div class="w-72 bg-white h-full shadow-xl flex flex-col p-6 overflow-y-auto">
+    <div class="flex items-center justify-between mb-8">
+      <div style="line-height:1;">
+        <span style="font-family:'Playfair Display',Georgia,serif;font-size:26px;font-weight:700;color:#111111;">vólke</span>
+        <div style="font-size:9px;letter-spacing:0.16em;color:#6b7280;text-transform:lowercase;">shoppe</div>
+      </div>
+      <button onclick="document.getElementById('mobileSidebar').classList.add('hidden')"
+        class="flex size-8 items-center justify-center rounded-full bg-secondary text-primary">
+        <span class="material-symbols-outlined text-[20px]">close</span>
+      </button>
+    </div>
+    <nav class="flex flex-col gap-2 flex-1">
+      <a href="{% url 'adminpanel:dashboard' %}" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-full transition-colors group">
+        <span class="material-symbols-outlined text-text-muted group-hover:text-primary">grid_view</span>
+        <span class="font-medium text-sm">Dashboard</span>
+      </a>
+      <a href="{% url 'adminpanel:product' %}" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-full transition-colors group">
+        <span class="material-symbols-outlined text-text-muted group-hover:text-primary">sell</span>
+        <span class="font-medium text-sm">Products</span>
+      </a>
+      <a href="{% url 'adminpanel:category' %}" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-full transition-colors group">
+        <span class="material-symbols-outlined text-text-muted group-hover:text-primary">category</span>
+        <span class="font-medium text-sm">Categories</span>
+      </a>
+      <a href="{% url 'adminpanel:collections' %}" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-full transition-colors group">
+        <span class="material-symbols-outlined text-text-muted group-hover:text-primary">layers</span>
+        <span class="font-medium text-sm">Collections</span>
+      </a>
+      <a href="{% url 'adminpanel:orders' %}" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-full transition-colors group">
+        <span class="material-symbols-outlined text-text-muted group-hover:text-primary">shopping_bag</span>
+        <span class="font-medium text-sm">Orders</span>
+      </a>
+      <a href="{% url 'adminpanel:users' %}" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-full transition-colors group">
+        <span class="material-symbols-outlined text-text-muted group-hover:text-primary">group</span>
+        <span class="font-medium text-sm">Users</span>
+      </a>
+      <a href="{% url 'adminpanel:settings' %}" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-full transition-colors group">
+        <span class="material-symbols-outlined text-text-muted group-hover:text-primary">settings</span>
+        <span class="font-medium text-sm">Settings</span>
+      </a>
+    </nav>
+    <div class="pt-4 border-t border-[#d1e6d9] mt-4">
+      <div class="flex items-center gap-3">
+        <div class="h-10 w-10 rounded-full bg-[#d1e6d9] flex items-center justify-center text-text-main font-bold text-sm shrink-0">
+          {{ request.user.first_name|first|upper }}{{ request.user.last_name|first|upper }}
+        </div>
+        <div class="flex flex-col min-w-0">
+          <p class="text-sm font-bold text-text-main truncate">{{ request.user.get_full_name|default:request.user.email }}</p>
+          <p class="text-xs text-text-muted">{% if request.user.is_superuser %}Superuser{% else %}Staff{% endif %}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Backdrop -->
+  <div class="flex-1 bg-black/40" onclick="document.getElementById('mobileSidebar').classList.add('hidden')"></div>
+</div>
+
+<div class="flex h-screen w-full p-2 md:p-6 gap-4 md:gap-6">
+
+  <!-- SIDEBAR desktop -->
   <aside class="w-72 hidden md:flex flex-col bg-white rounded-2xl h-full shrink-0 shadow-lg shadow-black/10">
 
     <!-- Top: logo + nav -->
@@ -101,20 +173,32 @@
     </div>
 
     <!-- Bottom: profile (always visible) -->
-<div class="shrink-0 p-6 border-t border-[#d1e6d9]">
-  <div class="flex items-center gap-3">
+  <div class="shrink-0 p-6 border-t border-[#d1e6d9]">
+    <div class="flex items-center gap-3 mb-3">
     <div class="h-10 w-10 rounded-full bg-[#d1e6d9] flex items-center justify-center text-text-main font-bold text-sm shrink-0">
-      {{ request.user.first_name|first|upper }}{{ request.user.last_name|first|upper }}
+      {% if request.user.first_name %}
+        {{ request.user.first_name|first|upper }}{{ request.user.last_name|first|upper }}
+      {% elif request.user.email %}
+        {{ request.user.email|first|upper }}
+      {% else %}
+        A
+      {% endif %}
     </div>
-    <div class="flex flex-col min-w-0">
-      <p class="text-sm font-bold text-text-main truncate">
-        {{ request.user.get_full_name|default:request.user.email }}
-      </p>
-      <p class="text-xs text-text-muted">
-        {% if request.user.is_superuser %}Superuser{% else %}Staff{% endif %}
-      </p>
+      <div class="flex flex-col min-w-0">
+        <p class="text-sm font-bold text-text-main truncate">
+          {{ request.user.get_full_name|default:request.user.email }}
+        </p>
+        <p class="text-xs text-text-muted">
+          {% if request.user.is_superuser %}Superuser{% else %}Staff{% endif %}
+        </p>
+      </div>
     </div>
-  </div>
+  <a href="{% url 'accounts:logout' %}"
+     onclick="return confirm('Sign out of admin panel?')"
+     class="flex items-center gap-2 w-full px-4 py-2.5 rounded-full text-sm font-semibold text-red-500 hover:bg-red-50 transition-colors">
+    <span class="material-symbols-outlined text-[20px]">logout</span>
+    Sign Out
+  </a>
 </div>
 
   </aside>

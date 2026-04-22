@@ -43,7 +43,8 @@ def addproduct(request):
     if request.method == "POST":
         form = ProductForm(request.POST, request.FILES)
         if form.is_valid():
-            images = request.FILES.getlist("images")
+            # ✅ FIX: use "product_images" to match the renamed template input
+            images = request.FILES.getlist("product_images")
             if not images:
                 messages.error(request, "Please upload at least one product image.")
                 return render(request, "adminpanel/addproduct.html", {
@@ -67,7 +68,6 @@ def addproduct(request):
                 product.stock_quantity = total_stock
                 product.is_available = total_stock > 0
             else:
-                # No sizes added — fall back to form values
                 product.stock_quantity = form.cleaned_data.get('stock_quantity', 0)
                 product.is_available = form.cleaned_data.get('is_available', False)
 
@@ -117,7 +117,8 @@ def edit_product(request, pk):
     if request.method == "POST":
         form = ProductForm(request.POST, request.FILES, instance=product)
         if form.is_valid():
-            new_images = request.FILES.getlist("images")
+            # ✅ FIX: use "product_images" to match the renamed template input
+            new_images = request.FILES.getlist("product_images")
             existing_images = product.images.exists()
 
             if not new_images and not existing_images:
@@ -148,7 +149,6 @@ def edit_product(request, pk):
                 updated_product.stock_quantity = total_stock
                 updated_product.is_available = total_stock > 0
             else:
-                # No sizes — fall back to form values
                 updated_product.stock_quantity = form.cleaned_data.get('stock_quantity', 0)
                 updated_product.is_available = form.cleaned_data.get('is_available', False)
 

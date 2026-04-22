@@ -69,17 +69,17 @@
       <p class="text-[#88a594] max-w-2xl">Create a new product listing for your store. Fill out the details below to ensure accurate inventory management and customer information.</p>
     </div>
 
-        {% if messages %}
-          {% for message in messages %}
-            {% if 'cart' not in message.message|lower and 'bag' not in message.message|lower %}
-            <div class="mb-4 px-4 py-3 rounded-xl text-sm font-medium
-              {% if message.tags == 'error' %}bg-red-100 text-red-700 border border-red-300
-              {% else %}bg-green-100 text-green-700 border border-green-300{% endif %}">
-              {{ message }}
-            </div>
-            {% endif %}
-          {% endfor %}
+    {% if messages %}
+      {% for message in messages %}
+        {% if 'cart' not in message.message|lower and 'bag' not in message.message|lower %}
+        <div class="mb-4 px-4 py-3 rounded-xl text-sm font-medium
+          {% if message.tags == 'error' %}bg-red-100 text-red-700 border border-red-300
+          {% else %}bg-green-100 text-green-700 border border-green-300{% endif %}">
+          {{ message }}
+        </div>
         {% endif %}
+      {% endfor %}
+    {% endif %}
 
     <form method="POST" enctype="multipart/form-data">
       {% csrf_token %}
@@ -103,14 +103,12 @@
             <label class="block">
               <span class="text-text-main font-medium mb-2 block">Price</span>
               <div class="relative">
-                <span class="absolute left-4 top-1/2 -translate-y-1/2 text-text-secondary"></span>
                 {{ form.price }}
               </div>
             </label>
             <label class="block">
               <span class="text-text-main font-medium mb-2 block">Discount Price (Optional)</span>
               <div class="relative">
-                <span class="absolute left-4 top-1/2 -translate-y-1/2 text-text-secondary"></span>
                 {{ form.discount_price }}
               </div>
             </label>
@@ -141,7 +139,7 @@
 
           <label
             id="uploadBox"
-            for="productImage"
+            for="productImages"
             class="border-2 border-dashed border-border-green rounded-xl p-8 flex flex-col items-center justify-center text-center cursor-pointer hover:bg-[#f8fcfa] dark:hover:bg-[#152e20] transition-colors group"
           >
             <div class="bg-[#e7f3ec] rounded-full p-4 mb-4 group-hover:scale-110 transition-transform">
@@ -149,7 +147,8 @@
             </div>
             <p class="text-text-main dark:text-white font-medium mb-1">Click to upload or drag and drop</p>
             <p class="text-text-secondary text-sm">SVG, PNG, JPG or GIF</p>
-            <input type="file" name="images" id="productImage" accept="image/*" multiple class="hidden" />
+            <!-- ✅ FIX: renamed from "images" to "product_images" to avoid conflict with form's image field -->
+            <input type="file" name="product_images" id="productImages" accept="image/*" multiple class="hidden" />
           </label>
 
           <div class="flex gap-4 mt-6 overflow-x-auto pb-2" id="imagePreviewContainer">
@@ -176,7 +175,7 @@
             {% endif %}
 
             <label
-              for="productImage"
+              for="productImages"
               class="relative shrink-0 size-24 rounded-lg overflow-hidden border border-border-green flex items-center justify-center bg-[#f8fcfa] dark:bg-[#152e20] cursor-pointer hover:bg-[#eef6f1]"
             >
               <span class="material-symbols-outlined text-border-green">add_photo_alternate</span>
@@ -195,21 +194,31 @@
                 <span class="text-sm font-bold text-text-main dark:text-white">In Stock</span>
                 <span class="text-xs text-text-secondary">Visible to customers</span>
               </div>
-            <label class="relative inline-flex items-center cursor-pointer">
-              <input type="checkbox" name="is_available" id="id_is_available"
-                class="sr-only peer"
-                {% if form.is_available.value %}checked{% endif %} />
-              <div class="w-11 h-6 bg-gray-200 rounded-full relative peer-checked:bg-primary dark:bg-gray-700
-                after:content-[''] after:absolute after:top-[2px] after:left-[2px]
-                after:bg-white after:border after:rounded-full after:h-5 after:w-5
-                after:transition-all peer-checked:after:translate-x-full"></div>
-            </label>
+              <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" name="is_available" id="id_is_available"
+                  class="sr-only peer"
+                  {% if form.is_available.value %}checked{% endif %} />
+                <div class="w-11 h-6 bg-gray-200 rounded-full relative peer-checked:bg-primary dark:bg-gray-700
+                  after:content-[''] after:absolute after:top-[2px] after:left-[2px]
+                  after:bg-white after:border after:rounded-full after:h-5 after:w-5
+                  after:transition-all peer-checked:after:translate-x-full"></div>
+              </label>
             </div>
 
+            <!-- ✅ FIX: Stock quantity is now read-only — auto-calculated from sizes, not manually entered -->
             <div class="bg-white dark:bg-[#0b1a12] p-6 rounded-2xl shadow-sm border border-[#e7f3ec] dark:border-[#1a3826]">
               <label class="block">
-                <span class="text-text-main dark:text-white font-medium mb-2 block">Stock Quantity</span>
-                {{ form.stock_quantity }}
+                <span class="text-text-main dark:text-white font-medium mb-2 block">
+                  Total Stock <span class="text-xs text-text-secondary font-normal">(auto-calculated from sizes)</span>
+                </span>
+                <input
+                  type="number"
+                  id="totalStockDisplay"
+                  name="stock_quantity"
+                  value="{% if is_edit %}{{ product.stock_quantity }}{% else %}0{% endif %}"
+                  readonly
+                  class="w-full h-12 bg-[#f0f0f0] dark:bg-[#0b1a12] border border-border-green rounded-xl px-4 text-text-main dark:text-white cursor-not-allowed opacity-70"
+                />
               </label>
             </div>
           </div>
@@ -226,49 +235,49 @@
           </div>
 
           <!-- Sizes with individual stock -->
-      <div class="bg-white dark:bg-[#0b1a12] p-6 rounded-2xl shadow-sm border border-[#e7f3ec] dark:border-[#1a3826]">
-        <span class="text-text-main dark:text-white font-medium mb-4 block">Available Sizes & Stock</span>
-        
-        <div id="sizeContainer" class="flex flex-col gap-3 mb-4">
-          {% if is_edit %}
-            {% for ps in product.product_sizes.all %}
-            <div class="size-row flex items-center gap-3 bg-[#f8fcfa] dark:bg-[#152e20] px-4 py-3 rounded-xl border border-border-green">
-              <span class="text-sm font-bold text-text-main dark:text-white w-12">{{ ps.size }}</span>
-              <input type="hidden" name="size_name" value="{{ ps.size }}">
-              <div class="flex items-center gap-2 flex-1">
-                <label class="text-xs text-text-secondary">Stock:</label>
-                <input type="number" name="size_stock" value="{{ ps.stock_quantity }}" min="0" step="1"
-                  class="w-24 h-8 bg-white dark:bg-[#0b1a12] border border-border-green rounded-lg px-3 text-sm font-semibold text-text-main focus:ring-0 focus:border-primary"/>
+          <div class="bg-white dark:bg-[#0b1a12] p-6 rounded-2xl shadow-sm border border-[#e7f3ec] dark:border-[#1a3826]">
+            <span class="text-text-main dark:text-white font-medium mb-4 block">Available Sizes & Stock</span>
+
+            <div id="sizeContainer" class="flex flex-col gap-3 mb-4">
+              {% if is_edit %}
+                {% for ps in product.product_sizes.all %}
+                <div class="size-row flex items-center gap-3 bg-[#f8fcfa] dark:bg-[#152e20] px-4 py-3 rounded-xl border border-border-green">
+                  <span class="text-sm font-bold text-text-main dark:text-white w-12">{{ ps.size }}</span>
+                  <input type="hidden" name="size_name" value="{{ ps.size }}">
+                  <div class="flex items-center gap-2 flex-1">
+                    <label class="text-xs text-text-secondary">Stock:</label>
+                    <input type="number" name="size_stock" value="{{ ps.stock_quantity }}" min="0" step="1"
+                      class="size-stock-input w-24 h-8 bg-white dark:bg-[#0b1a12] border border-border-green rounded-lg px-3 text-sm font-semibold text-text-main focus:ring-0 focus:border-primary"/>
+                  </div>
+                  <button type="button" class="text-text-secondary hover:text-red-500 remove-size-row">
+                    <span class="material-symbols-outlined text-[18px]">close</span>
+                  </button>
+                </div>
+                {% endfor %}
+              {% endif %}
+            </div>
+
+            <div class="flex gap-3">
+              <div class="relative flex-1">
+                <select id="sizeSelect"
+                  class="w-full h-12 bg-[#f8fcfa] dark:bg-[#152e20] border border-border-green dark:border-[#2a4d38] rounded-xl px-4 text-text-main dark:text-white focus:ring-0 focus:border-primary transition-colors appearance-none">
+                  <option disabled selected value="">Select size to add...</option>
+                  <option value="XS">XS</option>
+                  <option value="S">S</option>
+                  <option value="M">M</option>
+                  <option value="L">L</option>
+                  <option value="XL">XL</option>
+                  <option value="XXL">XXL</option>
+                  <option value="One Size">One Size</option>
+                </select>
+                <span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none">expand_more</span>
               </div>
-              <button type="button" class="text-text-secondary hover:text-red-500 remove-size-row">
-                <span class="material-symbols-outlined text-[18px]">close</span>
+              <button type="button" onclick="addSizeRow()"
+                class="h-12 px-5 bg-primary text-white rounded-xl font-semibold text-sm hover:opacity-90 transition">
+                Add
               </button>
             </div>
-            {% endfor %}
-          {% endif %}
-        </div>
-
-        <div class="flex gap-3">
-          <div class="relative flex-1">
-            <select id="sizeSelect"
-              class="w-full h-12 bg-[#f8fcfa] dark:bg-[#152e20] border border-border-green dark:border-[#2a4d38] rounded-xl px-4 text-text-main dark:text-white focus:ring-0 focus:border-primary transition-colors appearance-none">
-              <option disabled selected value="">Select size to add...</option>
-              <option value="XS">XS</option>
-              <option value="S">S</option>
-              <option value="M">M</option>
-              <option value="L">L</option>
-              <option value="XL">XL</option>
-              <option value="XXL">XXL</option>
-              <option value="One Size">One Size</option>
-            </select>
-            <span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none">expand_more</span>
           </div>
-          <button type="button" onclick="addSizeRow()"
-            class="h-12 px-5 bg-primary text-white rounded-xl font-semibold text-sm hover:opacity-90 transition">
-            Add
-          </button>
-        </div>
-      </div>
 
           <!-- Color -->
           <div class="bg-white dark:bg-[#0b1a12] p-6 rounded-2xl shadow-sm border border-[#e7f3ec] dark:border-[#1a3826]">
@@ -345,7 +354,7 @@
               </div>
             </div>
 
-            <!-- Tags — fixed for edit mode -->
+            <!-- Tags -->
             <div class="bg-white dark:bg-[#0b1a12] p-6 rounded-2xl shadow-sm border border-[#e7f3ec] dark:border-[#1a3826]">
               <label class="block">
                 <span class="text-text-main dark:text-white font-medium mb-2 block">Tags</span>
@@ -355,7 +364,6 @@
                   placeholder="Type a tag and press Enter or comma"
                   type="text"
                 />
-                {# Pass tags from Django as a safe JSON-like string so JS can parse it reliably #}
                 <input type="hidden" name="tags" id="tags-hidden" value="{{ product_tags }}">
                 <div id="tagContainer" class="flex flex-wrap gap-2 mt-3"></div>
               </label>
@@ -386,7 +394,8 @@
 <script>
 
 // ─── IMAGE PREVIEW ───────────────────────────────────────────────
-const imageInput = document.getElementById("productImage");
+// ✅ FIX: updated ID to match renamed input "productImages"
+const imageInput = document.getElementById("productImages");
 const previewContainer = document.getElementById("imagePreviewContainer");
 
 imageInput.addEventListener("change", function () {
@@ -416,14 +425,23 @@ document.addEventListener("click", function (e) {
   }
 });
 
-// ─── SIZES ───────────────────────────────────────────────────────
-// ─── SIZES WITH STOCK ─────────────────────────────────────────────
+// ─── SIZES WITH STOCK ────────────────────────────────────────────
+function recalcTotalStock() {
+  // ✅ FIX: sum all size_stock inputs and update the readonly total field
+  const inputs = document.querySelectorAll('input[name="size_stock"]');
+  let total = 0;
+  inputs.forEach(inp => {
+    const val = parseInt(inp.value, 10);
+    if (!isNaN(val) && val > 0) total += val;
+  });
+  document.getElementById('totalStockDisplay').value = total;
+}
+
 function addSizeRow() {
   const select = document.getElementById('sizeSelect');
   const size = select.value;
   if (!size) return;
 
-  // Prevent duplicates
   if (document.querySelector(`input[name="size_name"][value="${size}"]`)) {
     select.value = "";
     return;
@@ -437,7 +455,7 @@ function addSizeRow() {
     <div class="flex items-center gap-2 flex-1">
       <label class="text-xs text-text-secondary">Stock:</label>
       <input type="number" name="size_stock" value="0" min="0" step="1"
-        class="w-24 h-8 bg-white dark:bg-[#0b1a12] border border-border-green rounded-lg px-3 text-sm font-semibold text-text-main focus:ring-0 focus:border-primary"/>
+        class="size-stock-input w-24 h-8 bg-white dark:bg-[#0b1a12] border border-border-green rounded-lg px-3 text-sm font-semibold text-text-main focus:ring-0 focus:border-primary"/>
     </div>
     <button type="button" class="text-text-secondary hover:text-red-500 remove-size-row">
       <span class="material-symbols-outlined text-[18px]">close</span>
@@ -445,13 +463,23 @@ function addSizeRow() {
   `;
   document.getElementById('sizeContainer').appendChild(row);
   select.value = "";
+  recalcTotalStock();
 }
+
+// ✅ FIX: recalc total on any size_stock input change
+document.addEventListener('input', function(e) {
+  if (e.target.name === 'size_stock') recalcTotalStock();
+});
 
 document.addEventListener('click', function(e) {
   if (e.target.closest('.remove-size-row')) {
     e.target.closest('.size-row').remove();
+    recalcTotalStock();
   }
 });
+
+// Run once on page load to set correct total for edit mode
+recalcTotalStock();
 
 // ─── COLOR PICKER ────────────────────────────────────────────────
 const colorPicker = document.getElementById('colorPicker');
@@ -484,36 +512,23 @@ document.querySelector('form').addEventListener('submit', function () {
   hiddenDesc.value = quill.root.innerHTML;
 });
 
-// ─── TAGS (FIXED) ────────────────────────────────────────────────
+// ─── TAGS ────────────────────────────────────────────────────────
 const tagInput = document.getElementById('tagInput');
 const tagContainer = document.getElementById('tagContainer');
 const tagsHidden = document.getElementById('tags-hidden');
 
 function parseTags(raw) {
   if (!raw || !raw.trim()) return [];
-
   const trimmed = raw.trim();
-
-  // Handle Python list format: ['tag1', 'tag2'] or ["tag1", "tag2"]
   if (trimmed.startsWith('[') && trimmed.endsWith(']')) {
     try {
-      // Replace single quotes with double quotes for valid JSON
       const jsonStr = trimmed.replace(/'/g, '"');
       const parsed = JSON.parse(jsonStr);
-      if (Array.isArray(parsed)) {
-        return parsed.map(t => String(t).trim()).filter(Boolean);
-      }
+      if (Array.isArray(parsed)) return parsed.map(t => String(t).trim()).filter(Boolean);
     } catch (e) {
-      // Fallback: strip brackets and split manually
-      return trimmed
-        .slice(1, -1)
-        .split(',')
-        .map(t => t.trim().replace(/^['"]|['"]$/g, ''))
-        .filter(Boolean);
+      return trimmed.slice(1, -1).split(',').map(t => t.trim().replace(/^['"]|['"]$/g, '')).filter(Boolean);
     }
   }
-
-  // Plain comma-separated: tag1, tag2, tag3
   return trimmed.split(',').map(t => t.trim()).filter(Boolean);
 }
 
@@ -530,7 +545,6 @@ function renderTags() {
       </button>`;
     tagContainer.appendChild(span);
   });
-  // Always save as clean comma-separated so it round-trips correctly
   tagsHidden.value = tags.join(',');
 }
 
@@ -554,7 +568,6 @@ tagContainer.addEventListener('click', function (e) {
   }
 });
 
-// Render existing tags immediately on page load
 renderTags();
 
 </script>
