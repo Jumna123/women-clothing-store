@@ -472,6 +472,14 @@
     if (e.target === this) closeEditModal();
   });
 </script>
+<script>
+  // Push a state so back button is intercepted
+  history.pushState(null, '', window.location.href);
+  
+  window.addEventListener('popstate', function () {
+    history.pushState(null, '', window.location.href);
+  });
+</script>
 
 </body>
 </html>
