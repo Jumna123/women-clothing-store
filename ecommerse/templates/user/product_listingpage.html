@@ -347,6 +347,13 @@
     fetch(`/cart/get-sizes/${productId}/`)
       .then(r => r.json())
       .then(data => {
+
+        // No sizes configured — add to cart directly without modal
+        if (!data.has_sizes) {
+          window.location.href = `/cart/add/${productId}/?quantity=1`;
+          return;
+        }
+
         document.getElementById("sizeModal").classList.remove("hidden");
         document.getElementById("sizeModal").classList.add("flex");
 
@@ -362,18 +369,14 @@
         const sizeContainer = document.getElementById("sizeOptions");
         sizeContainer.innerHTML = "";
 
-        if (data.sizes.length === 0) {
-          sizeContainer.innerHTML = `<p class="text-xs text-gray-400">No sizes available</p>`;
-        } else {
-          data.sizes.forEach(size => {
-            sizeContainer.innerHTML += `
-              <button type="button"
-                      onclick="selectSize(this, '${size}')"
-                      class="size-btn px-4 py-2 rounded-xl border-2 border-gray-200 text-sm font-semibold text-dark-green hover:border-dark-green transition-all">
-                ${size}
-              </button>`;
-          });
-        }
+        data.sizes.forEach(size => {
+          sizeContainer.innerHTML += `
+            <button type="button"
+                    onclick="selectSize(this, '${size}')"
+                    class="size-btn px-4 py-2 rounded-xl border-2 border-gray-200 text-sm font-semibold text-dark-green hover:border-dark-green transition-all">
+              ${size}
+            </button>`;
+        });
 
         document.getElementById("addToCartForm").action = `/cart/add/${productId}/`;
       });
@@ -391,24 +394,25 @@
     button.classList.add("bg-[#1e4433]", "text-white", "border-[#1e4433]");
     document.getElementById("selectedSize").value = size;
   }
+
   function validateSize(e) {
-  const size = document.getElementById("selectedSize").value;
-  if (!size) {
-    e.preventDefault();
-    const sizeOptions = document.getElementById("sizeOptions");
-    sizeOptions.classList.add("ring-2", "ring-red-400", "rounded-xl", "p-2");
-    const existing = document.getElementById("size-error");
-    if (!existing) {
-      const err = document.createElement("p");
-      err.id = "size-error";
-      err.className = "text-xs text-red-500 font-semibold mt-1";
-      err.textContent = "Please select a size first!";
-      sizeOptions.after(err);
+    const size = document.getElementById("selectedSize").value;
+    if (!size) {
+      e.preventDefault();
+      const sizeOptions = document.getElementById("sizeOptions");
+      sizeOptions.classList.add("ring-2", "ring-red-400", "rounded-xl", "p-2");
+      const existing = document.getElementById("size-error");
+      if (!existing) {
+        const err = document.createElement("p");
+        err.id = "size-error";
+        err.className = "text-xs text-red-500 font-semibold mt-1";
+        err.textContent = "Please select a size first!";
+        sizeOptions.after(err);
+      }
+      return false;
     }
-    return false;
+    return true;
   }
-  return true;
-}
 
   document.getElementById("sizeModal").addEventListener("click", function(e) {
     if (e.target === this) closeSizeModal();

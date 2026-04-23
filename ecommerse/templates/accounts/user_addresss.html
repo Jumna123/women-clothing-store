@@ -473,12 +473,7 @@
   });
 </script>
 <script>
-  // Push a state so back button is intercepted
-  history.pushState(null, '', window.location.href);
-  
-  window.addEventListener('popstate', function () {
-    history.pushState(null, '', window.location.href);
-  });
+  history.replaceState(null, '', window.location.href);
 </script>
 
 </body>

@@ -35,7 +35,6 @@ def home(request):
     store_settings = StoreSettings.get_settings()
     marquee_items = [item.strip() for item in store_settings.marquee_text.split('|')]
 
-    # ← add this
     promo_banners = PromoCode.objects.filter(
         show_on_homepage=True,
         is_active=True,
@@ -47,7 +46,7 @@ def home(request):
         "collections": collections,
         "marquee_items": marquee_items,
         "trending_products": trending_products,
-        "promo_banners": promo_banners,  # ← add this
+        "promo_banners": promo_banners, 
     })
 
 
@@ -330,7 +329,8 @@ def get_product_sizes(request, product_id):
         "name": product.product_name,
         "price": product.price,
         "image": image_url,
-        "sizes": sizes
+        "sizes": sizes,
+        "has_sizes": len(sizes) > 0,
     })
 
 
