@@ -103,6 +103,22 @@
 </header>
 
 <main class="flex-grow">
+  <!-- Toast Notification -->
+<div id="cartToast" class="fixed top-20 right-4 z-50 hidden">
+  <div class="flex items-center gap-4 bg-white border border-gray-100 rounded-2xl shadow-xl px-5 py-4 min-w-[280px]">
+    <div class="flex size-10 shrink-0 items-center justify-center rounded-full bg-[#1e4433]/10 text-[#1e4433]">
+      <span class="material-symbols-outlined text-[20px]">check_circle</span>
+    </div>
+    <div class="flex-1">
+      <p class="text-sm font-bold text-dark-green">Added to cart!</p>
+      <p class="text-xs text-gray-400 mt-0.5">Item added to your bag</p>
+    </div>
+    <a href="{% url 'home:cart_view' %}"
+       class="shrink-0 text-xs font-bold text-white bg-[#1e4433] hover:bg-[#1c3326] px-3 py-1.5 rounded-lg transition-colors">
+      View Cart
+    </a>
+  </div>
+</div>
 
   <!-- Page Heading --> 
   <section class="mx-auto max-w-7xl px-4 pt-8 pb-4 sm:px-6 lg:px-8">
@@ -348,14 +364,25 @@
       .then(r => r.json())
       .then(data => {
 
-        // No sizes configured — add to cart directly without modal
+        // No sizes — add to cart via fetch, show toast
         if (!data.has_sizes) {
-          window.location.href = `/cart/add/${productId}/?quantity=1`;
+          {% if user.is_authenticated %}
+            fetch(`/cart/add/${productId}/?quantity=1`, { method: 'GET' })
+              .then(() => showCartToast());
+          {% else %}
+            window.location.href = "{% url 'accounts:userlogin' %}?next={{ request.path|urlencode }}";
+          {% endif %}
           return;
         }
 
+        // Has sizes — open modal
         document.getElementById("sizeModal").classList.remove("hidden");
         document.getElementById("sizeModal").classList.add("flex");
+
+        // Clear previous error if any
+        const prevErr = document.getElementById("size-error");
+        if (prevErr) prevErr.remove();
+        document.getElementById("sizeOptions").classList.remove("ring-2", "ring-red-400", "rounded-xl", "p-2");
 
         document.getElementById("modalContent").innerHTML = `
           <div class="flex gap-4 items-center p-3 bg-gray-50 rounded-xl border border-gray-100">
@@ -368,6 +395,7 @@
 
         const sizeContainer = document.getElementById("sizeOptions");
         sizeContainer.innerHTML = "";
+        document.getElementById("selectedSize").value = "";
 
         data.sizes.forEach(size => {
           sizeContainer.innerHTML += `
@@ -414,6 +442,37 @@
     return true;
   }
 
+  function showCartToast() {
+    const toast = document.getElementById("cartToast");
+    toast.classList.remove("hidden");
+    toast.classList.add("flex");
+    setTimeout(() => {
+      toast.classList.add("hidden");
+      toast.classList.remove("flex");
+    }, 4000);
+  }
+
+  // Intercept size modal form submit — use fetch, show toast instead of redirecting
+  document.getElementById("addToCartForm").addEventListener("submit", function(e) {
+    const size = document.getElementById("selectedSize").value;
+    if (!size) return; // validateSize handles the error UI
+
+    e.preventDefault();
+    const action = this.action;
+    const quantity = this.querySelector('[name="quantity"]').value;
+
+    fetch(`${action}?size=${size}&quantity=${quantity}`)
+      .then(() => {
+        closeSizeModal();
+        document.getElementById("selectedSize").value = "";
+        document.querySelectorAll(".size-btn").forEach(btn => {
+          btn.classList.remove("bg-[#1e4433]", "text-white", "border-[#1e4433]");
+        });
+        showCartToast();
+      });
+  });
+
+  // Close modal on backdrop click
   document.getElementById("sizeModal").addEventListener("click", function(e) {
     if (e.target === this) closeSizeModal();
   });
