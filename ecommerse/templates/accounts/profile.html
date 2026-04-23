@@ -194,7 +194,6 @@
               {{ user.get_full_name|default:user.username }}
             </h1>
             <p class="text-emerald-100/80 text-sm max-w-md mt-1">
-              Member since {{ user.date_joined|date:"F Y" }} &nbsp;·&nbsp;
               {% if user.email %}{{ user.email }}{% endif %}
             </p>
           </div>
@@ -322,9 +321,6 @@
             <h2 class="text-text-main font-bold text-xl">Recommended for You</h2>
             <p class="text-text-secondary/60 text-sm">Curated picks based on your taste</p>
           </div>
-          <a href="#" class="text-primary font-bold text-sm hover:underline underline-offset-2 flex items-center gap-1">
-            Browse All <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
-          </a>
         </div>
 
         <div class="grid grid-cols-2 md:grid-cols-4 gap-5">
@@ -381,24 +377,33 @@
 </div>
 
 
-<!-- ══════════════════════════════════════════
-     FOOTER
-══════════════════════════════════════════ -->
-<footer class="mt-auto bg-surface-light py-10 border-t border-border-green/10">
-  <div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex flex-col md:flex-row justify-between items-center gap-6">
-      <div class="flex items-center gap-2">
-        <div class="flex flex-col" style="line-height:1;">
-          <span style="font-family:'Georgia',serif;font-size:16px;font-weight:700;letter-spacing:0.15em;color:#022c22;">vólke</span>
-          <span style="font-size:6px;letter-spacing:0.18em;color:#064e3b;text-transform:uppercase;">shoppe</span>
-        </div>
-        <span class="text-text-secondary/40 text-xs ml-2">© {% now "Y" %}</span>
+<!-- FOOTER -->
+<footer class="bg-[#1e4433] border-t border-[#254632] py-8">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="flex flex-col sm:flex-row items-center justify-between gap-6">
+
+      <div style="line-height:1;">
+        <div style="font-family:'Georgia',serif;font-size:18px;font-weight:700;letter-spacing:0.15em;color:#ffffff;">vólke</div>
+        <div style="font-size:7px;letter-spacing:0.18em;color:#9ca3af;text-transform:uppercase;">shoppe</div>
       </div>
-      <div class="flex gap-8">
-        <a class="text-text-secondary/60 text-xs font-semibold hover:text-primary transition-colors" href="#">Privacy Policy</a>
-        <a class="text-text-secondary/60 text-xs font-semibold hover:text-primary transition-colors" href="#">Terms of Service</a>
-        <a class="text-text-secondary/60 text-xs font-semibold hover:text-primary transition-colors" href="#">Contact Us</a>
+
+      <div class="flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs text-gray-500">
+        {% if user.is_authenticated %}
+        <a class="hover:text-primary transition-colors" href="{% url 'home:user_orders' %}">Order Status</a>
+        {% else %}
+        <a class="hover:text-primary transition-colors" href="{% url 'accounts:userlogin' %}">Order Status</a>
+        {% endif %}
+        <a class="hover:text-primary transition-colors" href="{% url 'home:refund_policy' %}">Refund Policy</a>
+        <a class="hover:text-primary transition-colors" href="{% url 'home:contact_info' %}">Contact</a>
+        <span class="text-[#254632]">|</span>
+        <a class="hover:text-primary transition-colors" href="{% url 'home:privacy_policy' %}">Privacy Policy</a>
+        <a class="hover:text-primary transition-colors" href="{% url 'home:shipping_policy' %}">Shipping Policy</a>
+        <a class="hover:text-primary transition-colors" href="{% url 'home:terms-of-service' %}">Terms of Service</a>
       </div>
+
+      <!-- ✅ FIX: Year updated to 2025 -->
+      <p class="text-xs text-gray-600 whitespace-nowrap">© 2026 VOLKE®</p>
+
     </div>
   </div>
 </footer>

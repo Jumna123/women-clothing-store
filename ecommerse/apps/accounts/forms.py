@@ -60,23 +60,23 @@ class AddressForm(forms.ModelForm):
                 'class': 'w-full rounded-lg border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark text-text-main dark:text-white px-4 py-2.5 focus:ring-primary focus:border-primary',
             }),
             'house_name': forms.TextInput(attrs={
-                'type': 'text',
-                'autocomplete': 'address-line1',
-                'class': 'w-full rounded-lg border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark text-text-main dark:text-white px-4 py-2.5 focus:ring-primary focus:border-primary',
-            }),
+            'type': 'text',
+            'autocomplete': 'off',
+            'class': 'w-full rounded-lg border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark text-text-main dark:text-white px-4 py-2.5 focus:ring-primary focus:border-primary',
+                    }),
             'street': forms.TextInput(attrs={
                 'type': 'text',
-                'autocomplete': 'address-line2',
+                'autocomplete': 'off',
                 'class': 'w-full rounded-lg border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark text-text-main dark:text-white px-4 py-2.5 focus:ring-primary focus:border-primary',
             }),
             'city': forms.TextInput(attrs={
                 'type': 'text',
-                'autocomplete': 'address-level2',
+                'autocomplete': 'off',
                 'class': 'w-full rounded-lg border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark text-text-main dark:text-white px-4 py-2.5 focus:ring-primary focus:border-primary',
             }),
             'state': forms.TextInput(attrs={
                 'type': 'text',
-                'autocomplete': 'address-level1',
+                'autocomplete': 'off',
                 'class': 'w-full rounded-lg border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark text-text-main dark:text-white px-4 py-2.5 focus:ring-primary focus:border-primary',
             }),
             'pincode': forms.TextInput(attrs={
